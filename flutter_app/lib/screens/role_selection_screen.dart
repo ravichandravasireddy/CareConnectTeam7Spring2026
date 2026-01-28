@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'create_account_screen.dart';
+import '../theme/app_colors.dart';
 
 class RoleSelectionScreen extends StatelessWidget {
   const RoleSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: colorScheme.surface,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -20,7 +21,7 @@ class RoleSelectionScreen extends StatelessWidget {
         title: Text(
           'Select Your Role',
           style: TextStyle(
-            color: Colors.black,
+            color: colorScheme.onSurface,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
@@ -41,7 +42,7 @@ class RoleSelectionScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: colorScheme.onSurface,
                   height: 1.2,
                 ),
               ),
@@ -53,7 +54,7 @@ class RoleSelectionScreen extends StatelessWidget {
                 'Select the option that best describes you',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey[600],
+                  color: colorScheme.onSurfaceVariant,
                 ),
               ),
               
@@ -62,8 +63,8 @@ class RoleSelectionScreen extends StatelessWidget {
               // Care Recipient Card
               RoleCard(
                 icon: Icons.favorite,
-                iconColor: Color(0xFF4F6FFF),
-                backgroundColor: Color(0xFFE3EBFF),
+                iconColor: colorScheme.primary,
+                backgroundColor: AppColors.primary100,
                 title: 'Care Recipient',
                 description: 'I\'m managing my\nown health and tasks',
                 onTap: () {
@@ -82,8 +83,8 @@ class RoleSelectionScreen extends StatelessWidget {
               // Caregiver Card
               RoleCard(
                 icon: Icons.people,
-                iconColor: Color(0xFF9B5FFF),
-                backgroundColor: Color(0xFFF0E8FF),
+                iconColor: colorScheme.tertiary,
+                backgroundColor: AppColors.accent100,
                 title: 'Caregiver',
                 description: 'I\'m caring for one or\nmore people',
                 onTap: () {
@@ -104,10 +105,10 @@ class RoleSelectionScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Color(0xFFF5F8FF),
+                  color: colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: Color(0xFFE3EBFF),
+                    color: colorScheme.outline,
                     width: 1,
                   ),
                 ),
@@ -116,7 +117,7 @@ class RoleSelectionScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[700],
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
               ),
@@ -151,16 +152,17 @@ class RoleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: Colors.grey[300]!,
+            color: colorScheme.outline,
             width: 1.5,
           ),
         ),
@@ -193,7 +195,7 @@ class RoleCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                   SizedBox(height: 4),
@@ -201,7 +203,7 @@ class RoleCard extends StatelessWidget {
                     description,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey[600],
+                      color: colorScheme.onSurfaceVariant,
                       height: 1.3,
                     ),
                   ),
@@ -212,7 +214,7 @@ class RoleCard extends StatelessWidget {
             // Chevron arrow
             Icon(
               Icons.chevron_right,
-              color: Colors.grey[400],
+              color: colorScheme.onSurfaceVariant,
               size: 28,
             ),
           ],
