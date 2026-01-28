@@ -29,7 +29,7 @@ class AppColors {
   // Semantic - Warning
   static const warning700 = Color(0xFFEF6C00);
   static const warning500 = Color(0xFFFF9800);
-  static const warning100 = Color(0xFFFFEOB2);
+  static const warning100 = Color(0xFFFFE0B2);
 
   // Semantic - Error
   static const error700 = Color(0xFFC62828);
