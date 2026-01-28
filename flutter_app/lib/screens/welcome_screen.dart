@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'role_selection_screen.dart';
+import 'calendar_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -111,7 +112,10 @@ class WelcomeScreen extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () {
                       // TODO: Navigate to sign in screen
-                      print('Sign In pressed');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const CalendarScreen()),
+                      );
                     },
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.white,
