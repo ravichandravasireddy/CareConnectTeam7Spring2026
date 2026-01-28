@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'CareConnect',
+      themeMode: ThemeMode.system,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: const ColorScheme(
@@ -51,9 +52,45 @@ class MyApp extends StatelessWidget {
               displayColor: AppColors.gray900,
             ),
       ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: const ColorScheme(
+          brightness: Brightness.dark,
+          primary: AppColors.primary600,
+          onPrimary: AppColors.white,
+          primaryContainer: AppColors.darkBgElevated,
+          onPrimaryContainer: AppColors.darkTextPrimary,
+          secondary: AppColors.secondary600,
+          onSecondary: AppColors.white,
+          secondaryContainer: AppColors.darkBgElevated,
+          onSecondaryContainer: AppColors.darkTextPrimary,
+          tertiary: AppColors.accent600,
+          onTertiary: AppColors.white,
+          tertiaryContainer: AppColors.darkBgElevated,
+          onTertiaryContainer: AppColors.darkTextPrimary,
+          error: AppColors.error700,
+          onError: AppColors.white,
+          errorContainer: AppColors.error700,
+          onErrorContainer: AppColors.white,
+          background: AppColors.darkBgPrimary,
+          onBackground: AppColors.darkTextPrimary,
+          surface: AppColors.darkBgSecondary,
+          onSurface: AppColors.darkTextPrimary,
+          surfaceVariant: AppColors.darkBgElevated,
+          onSurfaceVariant: AppColors.darkTextSecondary,
+          outline: AppColors.darkBorder,
+          shadow: Colors.black,
+          inverseSurface: AppColors.white,
+          onInverseSurface: AppColors.gray900,
+          inversePrimary: AppColors.primary100,
+        ),
+        scaffoldBackgroundColor: AppColors.darkBgPrimary,
+        textTheme: ThemeData.dark().textTheme.apply(
+              bodyColor: AppColors.darkTextPrimary,
+              displayColor: AppColors.darkTextPrimary,
+            ),
+      ),
       home: const WelcomeScreen(),
     );
   }
 }
-
-    
