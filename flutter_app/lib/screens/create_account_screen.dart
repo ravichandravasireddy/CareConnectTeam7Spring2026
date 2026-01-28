@@ -61,19 +61,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: colorScheme.surface,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Create Account',
           style: TextStyle(
-            color: Colors.black,
+            color: colorScheme.onSurface,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
@@ -94,7 +95,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 
@@ -104,7 +105,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   'Create your account to get started',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey[600],
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
                 
@@ -122,7 +123,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: Colors.black,
+                              color: colorScheme.onSurface,
                             ),
                           ),
                           SizedBox(height: 8),
@@ -130,20 +131,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             controller: _firstNameController,
                             decoration: InputDecoration(
                               hintText: 'John',
-                              hintStyle: TextStyle(color: Colors.grey[400]),
+                              hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
                               filled: true,
-                              fillColor: Colors.grey[50],
+                              fillColor: colorScheme.surfaceContainer,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.grey[300]!),
+                                borderSide: BorderSide(color: colorScheme.outline),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.grey[300]!),
+                                borderSide: BorderSide(color: colorScheme.outline),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Color(0xFF4F6FFF), width: 2),
+                                borderSide: BorderSide(color: colorScheme.primary, width: 2),
                               ),
                               contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                             ),
@@ -167,7 +168,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: Colors.black,
+                              color: colorScheme.onSurface,
                             ),
                           ),
                           SizedBox(height: 8),
@@ -175,20 +176,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             controller: _lastNameController,
                             decoration: InputDecoration(
                               hintText: 'Doe',
-                              hintStyle: TextStyle(color: Colors.grey[400]),
+                              hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
                               filled: true,
-                              fillColor: Colors.grey[50],
+                              fillColor: colorScheme.surfaceContainer,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.grey[300]!),
+                                borderSide: BorderSide(color: colorScheme.outline),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.grey[300]!),
+                                borderSide: BorderSide(color: colorScheme.outline),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Color(0xFF4F6FFF), width: 2),
+                                borderSide: BorderSide(color: colorScheme.primary, width: 2),
                               ),
                               contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                             ),
@@ -213,7 +214,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 SizedBox(height: 8),
@@ -222,20 +223,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: 'your.email@example.com',
-                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
                     filled: true,
-                    fillColor: Colors.grey[50],
+                    fillColor: colorScheme.surfaceContainer,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey[300]!),
+                      borderSide: BorderSide(color: colorScheme.outline),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey[300]!),
+                      borderSide: BorderSide(color: colorScheme.outline),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Color(0xFF4F6FFF), width: 2),
+                      borderSide: BorderSide(color: colorScheme.primary, width: 2),
                     ),
                     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   ),
@@ -258,7 +259,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 SizedBox(height: 8),
@@ -267,20 +268,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     hintText: '(555) 123-4567',
-                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
                     filled: true,
-                    fillColor: Colors.grey[50],
+                    fillColor: colorScheme.surfaceContainer,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey[300]!),
+                      borderSide: BorderSide(color: colorScheme.outline),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey[300]!),
+                      borderSide: BorderSide(color: colorScheme.outline),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Color(0xFF4F6FFF), width: 2),
+                      borderSide: BorderSide(color: colorScheme.primary, width: 2),
                     ),
                     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   ),
@@ -300,7 +301,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 SizedBox(height: 8),
@@ -309,26 +310,26 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   obscureText: !_passwordVisible,
                   decoration: InputDecoration(
                     hintText: 'Create a strong password',
-                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
                     filled: true,
-                    fillColor: Colors.grey[50],
+                    fillColor: colorScheme.surfaceContainer,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey[300]!),
+                      borderSide: BorderSide(color: colorScheme.outline),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey[300]!),
+                      borderSide: BorderSide(color: colorScheme.outline),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Color(0xFF4F6FFF), width: 2),
+                      borderSide: BorderSide(color: colorScheme.primary, width: 2),
                     ),
                     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                        color: Colors.grey[600],
+                        color: colorScheme.onSurfaceVariant,
                       ),
                       onPressed: () {
                         setState(() {
@@ -352,7 +353,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   'At least 8 characters with letters and numbers',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[600],
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
                 
@@ -364,7 +365,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 SizedBox(height: 8),
@@ -373,26 +374,26 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   obscureText: !_confirmPasswordVisible,
                   decoration: InputDecoration(
                     hintText: 'Re-enter your password',
-                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
                     filled: true,
-                    fillColor: Colors.grey[50],
+                    fillColor: colorScheme.surfaceContainer,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey[300]!),
+                      borderSide: BorderSide(color: colorScheme.outline),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey[300]!),
+                      borderSide: BorderSide(color: colorScheme.outline),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Color(0xFF4F6FFF), width: 2),
+                      borderSide: BorderSide(color: colorScheme.primary, width: 2),
                     ),
                     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _confirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                        color: Colors.grey[600],
+                        color: colorScheme.onSurfaceVariant,
                       ),
                       onPressed: () {
                         setState(() {
@@ -418,9 +419,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Color(0xFFF5F8FF),
+                    color: colorScheme.inversePrimary,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Color(0xFFE3EBFF)),
+                    border: Border.all(color: colorScheme.outline),
                   ),
                   child: Row(
                     children: [
@@ -431,18 +432,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             _termsAccepted = value ?? false;
                           });
                         },
-                        activeColor: Color(0xFF4F6FFF),
+                        activeColor: colorScheme.primary,
                       ),
                       Expanded(
                         child: RichText(
                           text: TextSpan(
-                            style: TextStyle(fontSize: 14, color: Colors.black87),
+                            style: TextStyle(fontSize: 14, color: colorScheme.onSurface),
                             children: [
                               TextSpan(text: 'I agree to the '),
                               TextSpan(
                                 text: 'Terms of Service',
                                 style: TextStyle(
-                                  color: Color(0xFF4F6FFF),
+                                  color: colorScheme.primary,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -450,7 +451,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                               TextSpan(
                                 text: 'Privacy Policy',
                                 style: TextStyle(
-                                  color: Color(0xFF4F6FFF),
+                                  color: colorScheme.primary,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -471,8 +472,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   child: ElevatedButton(
                     onPressed: _createAccount,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF4F6FFF),
-                      foregroundColor: Colors.white,
+                      backgroundColor: colorScheme.primary,
+                      foregroundColor: colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -494,13 +495,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 Center(
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: 16, color: colorScheme.onSurfaceVariant),
                       children: [
                         TextSpan(text: 'Already have an account? '),
                         TextSpan(
                           text: 'Sign In',
                           style: TextStyle(
-                            color: Color(0xFF4F6FFF),
+                            color: colorScheme.primary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
