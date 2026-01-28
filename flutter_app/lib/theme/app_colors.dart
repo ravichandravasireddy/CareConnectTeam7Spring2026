@@ -7,7 +7,7 @@ class AppColors {
   static const primary700 = Color(0xFF2E60BE); // buttons, active states
   static const primary600 = Color(0xFF1976D2);
   static const primary500 = Color(0xFF2196F3);
-  static const primary100 = Color(0xFFBBDEFB);
+  static const primary100 = Color(0xFFE3ECFC);
 
   // Secondary
   static const secondary700 = Color(0xFF00695C);
