@@ -299,7 +299,7 @@ class _NotificationCard extends StatelessWidget {
         return Icons.calendar_today;
       case NotificationType.healthReminder:
         return Icons.monitor_heart;
-      case NotificationType.taskReminder:
+      case NotificationType.generalReminder:
         return Icons.task;
     }
   }
@@ -335,7 +335,7 @@ class _NotificationCard extends StatelessWidget {
         );
       case NotificationType.appointment:
       case NotificationType.healthReminder:
-      case NotificationType.taskReminder:
+      case NotificationType.generalReminder:
         return (
           colorScheme.secondary,
           colorScheme.surface,

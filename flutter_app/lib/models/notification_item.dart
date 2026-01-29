@@ -12,7 +12,7 @@ enum NotificationType {
   /// Links to tasks screen (e.g. health log / reminders).
   healthReminder,
   /// Links to tasks screen (e.g. task list or task detail).
-  taskReminder,
+  generalReminder,
 }
 
 /// Notification model for app-wide use (e.g. NotificationProvider).
@@ -42,7 +42,7 @@ class NotificationItem {
       case NotificationType.medication:
       case NotificationType.appointment:
       case NotificationType.healthReminder:
-      case NotificationType.taskReminder:
+      case NotificationType.generalReminder:
         return 'tasks';
       case NotificationType.message:
         return 'messages';

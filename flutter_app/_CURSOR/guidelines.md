@@ -2,6 +2,8 @@
 
 Source design doc: `https://polo-icy-51720607.figma.site` (“Design System for Mobile App V2”).
 
+**Reference for every prompt:** Use **app theme colors** only — see “Color policy” below and `lib/theme/app_colors.dart`. Do not use raw hex or `Colors.*` for UI.
+
 ## Color policy (important)
 
 - **Do not use raw hex colors or `Colors.*` for app styling.**

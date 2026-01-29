@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'screens/welcome_screen.dart';
-import 'screens/notification_screen.dart';
+import 'screens/notes_screen.dart';
 import 'theme/app_colors.dart';
 import 'providers/task_provider.dart';
 import 'providers/notification_provider.dart';
+import 'providers/note_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => TaskProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => NoteProvider()),
       ],
       child: MaterialApp(
         title: 'CareConnect',
@@ -97,7 +99,7 @@ class MyApp extends StatelessWidget {
               displayColor: AppColors.darkTextPrimary,
             ),
       ),
-        home: const NotificationScreen(),
+        home: const NotesScreen(),
       ),
     );
   }

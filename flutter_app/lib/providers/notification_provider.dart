@@ -38,7 +38,7 @@ class NotificationProvider with ChangeNotifier {
         id: 'today-2',
         title: 'Task Reminder',
         summary: 'Time for your breakfast',
-        type: NotificationType.taskReminder,
+        type: NotificationType.generalReminder,
         createdAt: now.subtract(const Duration(hours: 2)),
       ),
       NotificationItem(
@@ -68,7 +68,7 @@ class NotificationProvider with ChangeNotifier {
         id: '2-days-ago-1',
         title: 'Task Reminder',
         summary: 'Video call with Sarah Johnson (Caregiver)',
-        type: NotificationType.taskReminder,
+        type: NotificationType.generalReminder,
         createdAt: twoDaysAgo.add(const Duration(hours: 8)),
         isRead: true,
       ),
