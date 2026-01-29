@@ -1,0 +1,137 @@
+Screen Reader Reading Order
+Patient Home Screen Reading Order
+Heading: "Good morning, Sarah Johnson"
+Button: "Notifications, 1 new notification"
+Button: "Settings"
+Region: "Quick stats - 3 out of 5 tasks completed, Blood pressure 120/80, 45 points earned"
+Button: "Emergency SOS - Alerts caregivers with your location"
+Region: "Upcoming tasks"
+List item: "Take Lisinopril, due in 30 minutes, button"
+List item: "Blood pressure check, due at 2:00 PM, button"
+Navigation: "Bottom navigation - Home selected, Calendar, Messages, Profile"
+Caregiver Dashboard Reading Order
+Heading: "Caregiver Dashboard"
+Button: "Menu"
+Search: "Search patients"
+Region: "Patient overview - 8 active patients, 2 alerts, 12 pending tasks"
+List: "Patient list"
+List item: "Sarah Johnson, 2 alerts, blood pressure elevated, medication overdue"
+List item: "Michael Chen, all tasks completed, vital signs normal"
+Component Announcements
+Component	Visual Label	Screen Reader Announcement	ARIA Attributes
+SOS Button	Emergency SOS	"Emergency SOS button. Alerts all caregivers with your current location."	aria-label, role="button"
+Task Card	Take Lisinopril	"Take Lisinopril, medication task, due in 30 minutes, tap to view details"	aria-labelledby, role="button"
+Toggle Switch	Enable notifications	"Enable notifications, switch, currently on/off"	role="switch", aria-checked
+Progress Bar	Daily tasks 3/5	"Daily tasks progress, 3 of 5 completed, 60 percent"	role="progressbar", aria-valuenow
+Notification Badge	Red dot on bell icon	"Notifications, 1 unread notification"	aria-label="Notifications, 1 unread"
+Video Call Button	Video icon	"Start video call with Dr. Sarah Johnson"	aria-label
+Health Metric	120/80	"Blood pressure, 120 over 80 millimeters of mercury, normal range"	aria-label, role="status"
+Keyboard/External Keyboard Navigation
+Navigation Flow
+Tab
+Move forward through interactive elements
+Shift+Tab
+Move backward through interactive elements
+Enter/Space
+Activate buttons and toggle switches
+Arrow Keys
+Navigate within lists, radio groups, and dropdowns
+Esc
+Close modals, dialogs, and dropdowns
+Home/End
+Jump to first/last item in lists
+Focus Indicators
+✓ All interactive elements have visible 2px focus ring (blue, 4.5:1 contrast)
+✓ Focus never hidden or removed
+✓ Focus order follows logical reading order (top to bottom, left to right)
+✓ Skip links provided for main content areas
+Tablet-Specific Keyboard Navigation
+✓ External keyboard fully supported on iPad and Android tablets
+✓ Keyboard shortcuts: Cmd/Ctrl + H (Home), Cmd/Ctrl + M (Messages), Cmd/Ctrl + S (Search)
+✓ Focus visible on all interactive elements when using keyboard
+✓ Two-column layouts on tablets maintain logical tab order (left column top to bottom, then right column)
+Touch Target Sizes
+All touch targets meet or exceed platform requirements:
+
+✓ iOS: 44×44pt minimum (Apple Human Interface Guidelines)
+✓ Android: 48×48dp minimum (Material Design Guidelines)
+✓ WCAG 2.1 Level AAA: 44×44px minimum
+Component	Touch Target Size	Spacing	Meets Requirements
+Primary Button	Width: variable, Height: 48px	8px between buttons
+Yes
+Icon Button	48×48px	12px between icons
+Yes
+Text Input	Width: 100%, Height: 48px	16px vertical spacing
+Yes
+Checkbox/Radio	48×48px (24px icon + 12px padding)	8px between items
+Yes
+Toggle Switch	56×48px	Entire row tappable
+Yes
+List Item	Width: 100%, Height: 64px	1px divider
+Yes
+Bottom Nav Item	56×56px	Evenly distributed
+Yes
+SOS Button	Width: 100%, Height: 56px	16px margin
+Yes
+Color Contrast Ratios
+All color combinations meet WCAG AA standards:
+
+✓ Normal text (16px): Minimum 4.5:1 contrast ratio
+✓ Large text (24px+): Minimum 3:1 contrast ratio
+✓ Interactive elements: Minimum 3:1 contrast ratio
+✓ Many combinations exceed AAA standards (7:1 for normal text)
+Primary Blue on White
+
+Contrast: 4.6:1 (AA Pass)
+
+Black Text on White
+
+Contrast: 16.1:1 (AAA Pass)
+
+Error Red on White
+
+Contrast: 5.0:1 (AA Pass)
+
+Success Green on White
+
+Contrast: 5.7:1 (AA Pass)
+
+Text Scaling Behavior (200% Zoom)
+Behavior at 200% Text Size
+✓ All text scales proportionally using relative units (rem, em)
+✓ Layouts reflow to accommodate larger text without horizontal scrolling
+✓ No text truncation or overlapping at 200% zoom
+✓ Touch targets remain minimum 44×44px even with scaled text
+✓ Cards stack vertically on smaller screens to prevent overflow
+✓ Navigation remains accessible and readable
+Normal Size (100%)
+Body text at 16px
+
+Button Text
+Scaled (200%)
+Body text at 32px
+
+Button Text
+Responsive Adjustments
+Bottom Navigation: Icon size increases, labels remain readable
+List Items: Height increases to accommodate larger text, minimum 96px at 200%
+Forms: Input fields expand vertically, labels wrap if needed
+Cards: Content reflows, images scale proportionally
+Modals/Dialogs: Scrollable if content exceeds viewport
+Additional Accessibility Features
+Voice Control Support
+✓ All interactive elements properly labeled
+✓ Voice Control names match visible labels
+✓ Custom voice commands for critical actions
+Reduced Motion
+✓ Respects prefers-reduced-motion setting
+✓ Animations disabled or reduced for users who request it
+✓ Critical feedback still visible without motion
+Dark Mode
+✓ Maintains contrast ratios in dark mode
+✓ Reduces eye strain in low-light conditions
+✓ All colors adjusted for accessibility
+Error Prevention
+✓ Confirmation dialogs for critical actions
+✓ Clear error messages with recovery suggestions
+✓ Form validation with inline feedback

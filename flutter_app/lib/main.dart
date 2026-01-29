@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'screens/welcome_screen.dart';
-import 'screens/calendar_screen.dart';
+import 'screens/notification_screen.dart';
 import 'theme/app_colors.dart';
 import 'providers/task_provider.dart';
+import 'providers/notification_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,8 +15,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => TaskProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => TaskProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+      ],
       child: MaterialApp(
         title: 'CareConnect',
         themeMode: ThemeMode.system,
@@ -50,6 +54,7 @@ class MyApp extends StatelessWidget {
           inversePrimary: AppColors.primary100,
         ),
         scaffoldBackgroundColor: AppColors.gray100,
+        focusColor: AppColors.primary600,
         textTheme: ThemeData.light().textTheme.apply(
               bodyColor: AppColors.gray900,
               displayColor: AppColors.gray900,
@@ -86,12 +91,13 @@ class MyApp extends StatelessWidget {
           inversePrimary: AppColors.primary100,
         ),
         scaffoldBackgroundColor: AppColors.darkBgPrimary,
+        focusColor: AppColors.primary500,
         textTheme: ThemeData.dark().textTheme.apply(
               bodyColor: AppColors.darkTextPrimary,
               displayColor: AppColors.darkTextPrimary,
             ),
       ),
-        home: const CalendarScreen(),
+        home: const NotificationScreen(),
       ),
     );
   }
