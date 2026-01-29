@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'screens/welcome_screen.dart';
+import 'package:provider/provider.dart';
+// import 'screens/welcome_screen.dart';
+import 'screens/calendar_screen.dart';
 import 'theme/app_colors.dart';
+import 'providers/task_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,9 +14,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CareConnect',
-      themeMode: ThemeMode.system,
+    return ChangeNotifierProvider(
+      create: (_) => TaskProvider(),
+      child: MaterialApp(
+        title: 'CareConnect',
+        themeMode: ThemeMode.system,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: const ColorScheme(
@@ -86,7 +91,8 @@ class MyApp extends StatelessWidget {
               displayColor: AppColors.darkTextPrimary,
             ),
       ),
-      home: const WelcomeScreen(),
+        home: const CalendarScreen(),
+      ),
     );
   }
 }
