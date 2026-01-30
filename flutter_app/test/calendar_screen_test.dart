@@ -236,7 +236,7 @@ void main() {
         (tester) async {
       final provider = TaskProvider();
       provider.clearTasks();
-      final now = DateTime.now();
+      // final now = DateTime.now();
       // One task on day 5 only, so day 1 has no tasks
     //   provider.addTask(Task(
     //     id: 'only',
@@ -460,8 +460,6 @@ void main() {
     testWidgets('should maintain selection when navigating months',
         (tester) async {
       await tester.pumpWidget(createTestHarness());
-
-      final now = DateTime.now();
 
       await tester.tap(find.text('15').first);
       await tester.pumpAndSettle();

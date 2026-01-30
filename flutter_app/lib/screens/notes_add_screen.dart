@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/note.dart';
-import '../providers/note_provider.dart';
 
 /// Current user for new notes (will be linked to logged-in profile later).
 const String kCurrentUserAuthor = 'Sarah Johnson (Caregiver)';

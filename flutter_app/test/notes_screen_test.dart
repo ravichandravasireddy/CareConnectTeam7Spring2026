@@ -17,7 +17,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_app/models/note.dart';
 import 'package:flutter_app/providers/note_provider.dart';
 import 'package:flutter_app/screens/notes_screen.dart';

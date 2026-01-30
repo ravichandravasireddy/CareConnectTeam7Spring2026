@@ -1,0 +1,145 @@
+1. Create this Health Logs Screen based on the provided code. 
+2. Make log data be managed with Provider for app wide access. 
+3. Make the associated loggin feature for each item to log a add log page
+6. Make sure to use the app theme colors (please add this to the instructions doc that you will reference for every prompt)
+
+
+export function HealthLogsScreen() {
+  return (
+    <div className="h-full bg-gray-50 flex flex-col relative">
+      <TopNavBar title="Health Logs" hasNotification={false} />
+
+      <div className="flex-1 overflow-y-auto pb-20">
+        {/* Quick Log Options */}
+        <div className="bg-white border-b border-gray-200 p-4">
+          <h2 className="font-semibold text-gray-900 mb-3">
+            Quick Log
+          </h2>
+          <div className="grid grid-cols-3 gap-3">
+            <button className="p-3 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors">
+              <Smile className="w-6 h-6 text-green-600 mx-auto mb-1" />
+              <p className="text-xs font-semibold text-gray-900">
+                Mood
+              </p>
+            </button>
+            <button className="p-3 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors">
+              <Activity className="w-6 h-6 text-red-600 mx-auto mb-1" />
+              <p className="text-xs font-semibold text-gray-900">
+                Symptoms
+              </p>
+            </button>
+            <button className="p-3 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors">
+              <Utensils className="w-6 h-6 text-orange-600 mx-auto mb-1" />
+              <p className="text-xs font-semibold text-gray-900">
+                Meals
+              </p>
+            </button>
+            <button className="p-3 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors">
+              <Droplet className="w-6 h-6 text-blue-600 mx-auto mb-1" />
+              <p className="text-xs font-semibold text-gray-900">
+                Water
+              </p>
+            </button>
+            <button className="p-3 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors">
+              <Heart className="w-6 h-6 text-pink-600 mx-auto mb-1" />
+              <p className="text-xs font-semibold text-gray-900">
+                Exercise
+              </p>
+            </button>
+            <button className="p-3 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors">
+              <Clock className="w-6 h-6 text-purple-600 mx-auto mb-1" />
+              <p className="text-xs font-semibold text-gray-900">
+                Sleep
+              </p>
+            </button>
+          </div>
+        </div>
+
+        {/* Today's Logs */}
+        <div className="p-4 space-y-3">
+          <h3 className="font-semibold text-gray-900">
+            Today's Logs
+          </h3>
+
+          <div className="bg-white rounded-lg border border-gray-200 p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                <Smile className="w-5 h-5 text-green-600" />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-gray-900">
+                  Mood: Good
+                </p>
+                <p className="text-sm text-gray-600">
+                  10:30 AM
+                </p>
+              </div>
+              <span className="text-2xl">😊</span>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg border border-gray-200 p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                <Utensils className="w-5 h-5 text-orange-600" />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-gray-900">
+                  Breakfast
+                </p>
+                <p className="text-sm text-gray-600">
+                  Oatmeal with berries • 8:15 AM
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg border border-gray-200 p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <Droplet className="w-5 h-5 text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-gray-900">
+                  Water Intake
+                </p>
+                <p className="text-sm text-gray-600">
+                  3 glasses • 48 oz
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-gray-500">
+                  Goal: 64 oz
+                </p>
+                <div className="w-20 h-2 bg-gray-200 rounded-full mt-1">
+                  <div
+                    className="h-full bg-blue-600 rounded-full"
+                    style={{ width: "75%" }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg border border-gray-200 p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                <Activity className="w-5 h-5 text-red-600" />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-gray-900">
+                  Symptom Log
+                </p>
+                <p className="text-sm text-gray-600">
+                  Mild headache • 9:00 AM
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <CaregiverBottomNav activeItem="dashboard" />
+    </div>
+  );
+}
