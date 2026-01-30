@@ -219,13 +219,13 @@ void main() {
       await tester.pumpWidget(createTestHarness(taskProvider: provider));
 
       final now = DateTime.now();
-      final tasksForToday = provider.getTasksForDate(
-        DateTime(now.year, now.month, now.day)
+      // Calendar shows only scheduled (incomplete) tasks
+      final scheduledForToday = provider.getScheduledTasksForDate(
+        DateTime(now.year, now.month, now.day),
       );
 
-      // If there are tasks for today, they should be displayed (time from date)
-      if (tasksForToday.isNotEmpty) {
-        for (final task in tasksForToday) {
+      if (scheduledForToday.isNotEmpty) {
+        for (final task in scheduledForToday) {
           expect(find.text(task.title), findsOneWidget);
           expect(find.text(DateFormat.jm().format(task.date)), findsOneWidget);
         }
@@ -292,12 +292,13 @@ void main() {
       await tester.pumpWidget(createTestHarness(taskProvider: provider));
 
       final now = DateTime.now();
-      final tasksForToday = provider.getTasksForDate(
+      // Calendar shows only scheduled (incomplete) tasks
+      final scheduledForToday = provider.getScheduledTasksForDate(
         DateTime(now.year, now.month, now.day),
       );
 
-      expect(tasksForToday.isNotEmpty, true);
-      final firstTask = tasksForToday.first;
+      expect(scheduledForToday.isNotEmpty, true);
+      final firstTask = scheduledForToday.first;
 
       expect(find.byIcon(firstTask.icon), findsOneWidget);
       expect(find.text(firstTask.title), findsOneWidget);
@@ -383,12 +384,12 @@ void main() {
       await tester.pumpWidget(createTestHarness(taskProvider: provider));
 
       final now = DateTime.now();
-      final tasksForToday = provider.getTasksForDate(
-        DateTime(now.year, now.month, now.day)
+      // Calendar shows only scheduled (incomplete) tasks
+      final scheduledForToday = provider.getScheduledTasksForDate(
+        DateTime(now.year, now.month, now.day),
       );
 
-      // Each task card has a semantic label: title and formatted time from date.
-      for (final task in tasksForToday) {
+      for (final task in scheduledForToday) {
         final timeLabel = DateFormat.jm().format(task.date);
         final pattern = RegExp('${RegExp.escape(task.title)}.*${RegExp.escape(timeLabel)}');
         expect(

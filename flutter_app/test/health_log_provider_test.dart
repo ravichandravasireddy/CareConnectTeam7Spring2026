@@ -19,7 +19,7 @@ void main() {
     test('constructor initializes with mock logs', () {
       final provider = HealthLogProvider();
       expect(provider.logs.isNotEmpty, isTrue);
-      expect(provider.logs.length, 4);
+      expect(provider.logs.length, 5);
     });
 
     test('mock logs are sorted by createdAt descending', () {

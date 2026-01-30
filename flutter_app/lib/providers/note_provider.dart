@@ -73,6 +73,11 @@ class NoteProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearNotes() {
+    _notes.clear();
+    notifyListeners();
+  }
+
   /// Colors for note category chip/icon (theme-aware via context optional; here using AppColors).
   static (Color bg, Color fg) categoryColors(NoteCategory category) {
     switch (category) {

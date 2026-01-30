@@ -58,6 +58,11 @@ class HealthLogsScreen extends StatelessWidget {
         label: 'Heart Rate',
         icon: Icons.speed,
       ),
+      _QuickLogOption(
+        type: HealthLogType.general,
+        label: 'General',
+        icon: Icons.description,
+      ),
     ];
 
     return Scaffold(

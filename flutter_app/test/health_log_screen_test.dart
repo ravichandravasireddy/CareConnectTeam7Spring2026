@@ -73,12 +73,12 @@ void main() {
       expect(find.text('Quick Log'), findsOneWidget);
     });
 
-    testWidgets('should render all 8 quick log buttons', (tester) async {
+    testWidgets('should render all 9 quick log buttons', (tester) async {
       // remove logs to not have duplicate icons
       final provider = createEmptyProvider();
       await tester.pumpWidget(createTestHarness(provider: provider));
 
-      // Verify all 8 quick log option labels are present
+      // Verify all 9 quick log option labels are present
       expect(find.text('Mood'), findsOneWidget);
       expect(find.text('Symptoms'), findsOneWidget);
       expect(find.text('Meals'), findsOneWidget);
@@ -87,22 +87,23 @@ void main() {
       expect(find.text('Sleep'), findsOneWidget);
       expect(find.text('Blood Pressure'), findsOneWidget);
       expect(find.text('Heart Rate'), findsOneWidget);
+      expect(find.text('General'), findsOneWidget);
     });
 
     testWidgets('should render quick log buttons with correct icons', (tester) async {
-      // remove logs to not have duplicate icons
-      final provider = createEmptyProvider();
-      await tester.pumpWidget(createTestHarness(provider: provider));
 
-      // Icons should be present in the quick log buttons
-      expect(find.byIcon(Icons.emoji_emotions), findsOneWidget);
-      expect(find.byIcon(Icons.monitor_heart), findsOneWidget);
-      expect(find.byIcon(Icons.restaurant), findsOneWidget);
-      expect(find.byIcon(Icons.water_drop), findsOneWidget);
-      expect(find.byIcon(Icons.favorite), findsOneWidget);
-      expect(find.byIcon(Icons.bedtime), findsOneWidget);
-      expect(find.byIcon(Icons.monitor_heart_outlined), findsOneWidget);
-      expect(find.byIcon(Icons.speed), findsOneWidget);
+      await tester.pumpWidget(createTestHarness());
+
+      // Icons appear in both quick log grid and "Latest by type" placeholder cards
+      expect(find.byIcon(Icons.emoji_emotions), findsWidgets);
+      expect(find.byIcon(Icons.monitor_heart), findsWidgets);
+      expect(find.byIcon(Icons.restaurant), findsWidgets);
+      expect(find.byIcon(Icons.water_drop), findsWidgets);
+      expect(find.byIcon(Icons.favorite), findsWidgets);
+      expect(find.byIcon(Icons.bedtime), findsWidgets);
+      expect(find.byIcon(Icons.monitor_heart_outlined), findsWidgets);
+      expect(find.byIcon(Icons.speed), findsWidgets); 
+      expect(find.byIcon(Icons.description), findsWidgets);
     });
 
     testWidgets('should render "Latest by type" section header', (tester) async {
@@ -283,7 +284,9 @@ void main() {
     testWidgets('tapping Blood Pressure quick log should navigate with bloodPressure type',
         (tester) async {
       await tester.pumpWidget(createTestHarness());
-      await tester.tap(find.text('Blood Pressure'));
+      final bloodPressureButton = find.bySemanticsLabel('Blood Pressure quick log, button');
+      await tester.ensureVisible(bloodPressureButton);
+      await tester.tap(bloodPressureButton);
       await tester.pumpAndSettle();
       final addScreen = tester.widget<HealthLogAddScreen>(
         find.byType(HealthLogAddScreen),
@@ -294,7 +297,9 @@ void main() {
     testWidgets('tapping Heart Rate quick log should navigate with heartRate type',
         (tester) async {
       await tester.pumpWidget(createTestHarness());
-      await tester.tap(find.text('Heart Rate'));
+      final heartRateButton = find.bySemanticsLabel('Heart Rate quick log, button');
+      await tester.ensureVisible(heartRateButton);
+      await tester.tap(heartRateButton);
       await tester.pumpAndSettle();
       final addScreen = tester.widget<HealthLogAddScreen>(
         find.byType(HealthLogAddScreen),
@@ -309,10 +314,10 @@ void main() {
       final quickLogButtons = find.byType(OutlinedButton);
       
       // Should find 8 quick log buttons
-      expect(quickLogButtons, findsNWidgets(8));
+      expect(quickLogButtons, findsNWidgets(9));
 
       // Verify each has an onPressed callback (is enabled)
-      for (int i = 0; i < 8; i++) {
+      for (int i = 0; i < 9; i++) {
         final button = tester.widget<OutlinedButton>(quickLogButtons.at(i));
         expect(button.onPressed, isNotNull);
       }
@@ -544,7 +549,6 @@ void main() {
       await tester.pumpWidget(createTestHarness(provider: provider));
 
       expect(find.text('Quick entry'), findsOneWidget);
-      expect(find.text('Quick entry'), findsOneWidget);
     });
 
     testWidgets('log cards without emoji still display description and time',
@@ -572,6 +576,7 @@ void main() {
       ));
       await tester.pumpWidget(createTestHarness(provider: provider));
 
+      await tester.ensureVisible(find.text('General entry'));
       expect(find.text('General entry'), findsOneWidget);
       expect(find.byIcon(Icons.description), findsWidgets);
     });
@@ -712,6 +717,7 @@ void main() {
       ));
       await tester.pumpWidget(createTestHarness(provider: provider));
 
+      await tester.ensureVisible(find.text('Brief note'));
       final semanticsLabel = find.byWidgetPredicate(
         (w) =>
             w is Semantics &&
