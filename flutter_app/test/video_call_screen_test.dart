@@ -960,7 +960,6 @@ void main() {
 
       for (final combo in combinations) {
         // Set mic state
-        final currentMicIcon = combo.mic ? Icons.mic : Icons.mic_off;
         final targetMicIcon = !combo.mic ? Icons.mic : Icons.mic_off;
         
         if (find.byIcon(targetMicIcon).evaluate().isNotEmpty) {
@@ -969,7 +968,6 @@ void main() {
         }
 
         // Set video state
-        final currentVideoIcon = combo.video ? Icons.videocam : Icons.videocam_off;
         final targetVideoIcon = !combo.video ? Icons.videocam : Icons.videocam_off;
         
         if (find.byIcon(targetVideoIcon).evaluate().isNotEmpty) {

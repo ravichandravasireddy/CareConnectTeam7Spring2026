@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+// =============================================================================
+// CREATE ACCOUNT SCREEN
+// =============================================================================
+// Registration form (name, email, phone, password, terms). Validates and
+// submits; wire to auth service when backend is ready.
+// =============================================================================
+
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
 

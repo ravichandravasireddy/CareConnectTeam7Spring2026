@@ -1,3 +1,12 @@
+// =============================================================================
+// HEALTH LOG MODEL
+// =============================================================================
+// Domain model for health-related entries (mood, water, meals, blood pressure,
+// etc.). Used by [HealthLogProvider] and displayed on Health Logs and
+// Health Timeline screens. Add new [HealthLogType] values and optional fields
+// as needed; update [formatHealthLogTypeDisplay] and provider typeColors.
+// =============================================================================
+
 /// Types of health logs that can be recorded.
 enum HealthLogType {
   mood,
@@ -40,6 +49,11 @@ String heartRateCategoryLabel(int bpm) {
 }
 
 /// Health log model for quick logs and daily entries.
+///
+/// [type] determines which UI and validation apply (e.g. water goal, BP fields).
+/// [dateOnly] is used for "today" filtering; [hasProgress] / [progressRatio] for
+/// water progress bars. Blood pressure and heart rate use the category label
+/// helpers for display.
 class HealthLog {
   final String id;
   final HealthLogType type;
@@ -47,10 +61,12 @@ class HealthLog {
   final String? note;
   final DateTime createdAt;
   final String? emoji;
+  /// For water type: running total and delta for this entry; [waterGoal] for progress.
   final double? waterTotal;
   final double? waterDelta;
   final double? waterGoal;
   final double? sleepHours;
+  /// Blood pressure (mmHg); used with [bloodPressureCategoryLabel].
   final int? systolic;
   final int? diastolic;
   final int? heartRateBpm;

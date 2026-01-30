@@ -4,6 +4,13 @@ import 'package:intl/intl.dart';
 import '../models/note.dart';
 import '../providers/note_provider.dart';
 
+// =============================================================================
+// NOTE DETAIL SCREEN
+// =============================================================================
+// Read-only full view of a note by [noteId] from [NoteProvider.getById].
+// Shows title, body, author, category, and formatted date. Handles missing note.
+// =============================================================================
+
 /// Full note view (read-only).
 class NoteDetailScreen extends StatelessWidget {
   final String noteId;

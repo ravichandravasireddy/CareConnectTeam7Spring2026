@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'role_selection_screen.dart';
 import '../theme/app_colors.dart';
 
+// =============================================================================
+// WELCOME SCREEN
+// =============================================================================
+// Entry landing: gradient background, app title, and CTA to [RoleSelectionScreen].
+// =============================================================================
+
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 

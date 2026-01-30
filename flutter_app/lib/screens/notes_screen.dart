@@ -6,6 +6,14 @@ import '../providers/note_provider.dart';
 import 'notes_add_screen.dart';
 import 'notes_detail_screen.dart';
 
+// =============================================================================
+// NOTES SCREEN
+// =============================================================================
+// List of notes from [NoteProvider]; tap opens [NoteDetailScreen], FAB opens
+// [AddNoteScreen]. Uses [formatNoteTime] for list item timestamps. Notes sorted
+// by [createdAt] descending in provider.
+// =============================================================================
+
 /// Formats [createdAt]: "Today, 10:30 AM", "Yesterday, 5:15 PM", or "Jan 22, 3:30 PM".
 String formatNoteTime(DateTime createdAt) {
   final now = DateTime.now();

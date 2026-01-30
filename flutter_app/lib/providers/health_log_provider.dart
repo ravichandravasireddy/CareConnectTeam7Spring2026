@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import '../models/health_log.dart';
 import '../theme/app_colors.dart';
 
+// =============================================================================
+// HEALTH LOG PROVIDER
+// =============================================================================
+// Holds all [HealthLog] entries; used by Health Logs screen, Health Log Add
+// screen, and [HealthTimelineProvider]. [latestByType] drives "Latest by type"
+// cards (today only). Add new [HealthLogType] handling in [typeColors] and
+// [addWaterDelta] / add-log flows as needed.
+// =============================================================================
+
 /// Provider for managing health logs app-wide.
 class HealthLogProvider with ChangeNotifier {
   final List<HealthLog> _logs = [];
@@ -9,9 +18,8 @@ class HealthLogProvider with ChangeNotifier {
 
   List<HealthLog> get logs => List.unmodifiable(_logs);
 
-  /// Latest log per type for the current day only (most recent log for each
-  /// [HealthLogType] with [log.dateOnly] equal to today).
-  /// Used by Health Logs screen to show one current reading per category.
+  /// Latest log per type for the current day only (most recent per [HealthLogType]).
+  /// Used by Health Logs screen "Latest by type" section.
   Map<HealthLogType, HealthLog> get latestByType {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -75,6 +83,7 @@ class HealthLogProvider with ChangeNotifier {
     _logs.sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
+  /// All logs for a given calendar day, newest first.
   List<HealthLog> logsForDate(DateTime date) {
     final dateOnly = DateTime(date.year, date.month, date.day);
     return _logs.where((log) => log.dateOnly == dateOnly).toList()
@@ -100,6 +109,7 @@ class HealthLogProvider with ChangeNotifier {
     return waterLogs.first.waterTotal ?? 0;
   }
 
+  /// Add a water log entry; computes running total and description. Returns the new log.
   HealthLog addWaterDelta({
     required double deltaOz,
     String? note,

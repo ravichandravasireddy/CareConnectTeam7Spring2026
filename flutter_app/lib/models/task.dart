@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
 
+// =============================================================================
+// TASK MODEL
+// =============================================================================
+// Domain model for scheduled tasks/appointments. Used by [TaskProvider],
+// [CalendarScreen], and [HealthTimelineProvider]. [dateOnly] / [day] support
+// calendar filtering; [completedAt] excludes task from calendar when set.
+// =============================================================================
+
 /// Task model representing a scheduled task/appointment.
-/// [date] holds both day and time; format for display where needed (e.g. DateFormat.jm(date) for time).
+///
+/// [date] holds both day and time; use [dateOnly] for calendar day, format
+/// time with DateFormat.jm(date) where needed. [completedAt] non-null means
+/// completed; calendar shows only incomplete tasks via [getScheduledTasksForDate].
 class Task {
   final String id;
   final String title;
-  final DateTime date; // Date and time of the task
+  final DateTime date;
   final IconData icon;
   final Color iconBackground;
   final Color iconColor;
-  /// When non-null, the task is completed; used for timeline and history.
+  /// When non-null, task is completed; excluded from calendar task list.
   final DateTime? completedAt;
 
   Task({

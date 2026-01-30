@@ -14,6 +14,14 @@ import 'providers/note_provider.dart';
 import 'providers/health_log_provider.dart';
 import 'providers/health_timeline_provider.dart';
 
+// =============================================================================
+// MAIN ENTRY & APP SHELL
+// =============================================================================
+// Registers all providers (Task, Notification, Note, HealthLog, HealthTimeline)
+// and configures MaterialApp theme (light/dark from [AppColors]). Change [home]
+// to switch the initial screen; uncomment imports above for other screens.
+// =============================================================================
+
 void main() {
   runApp(const MyApp());
 }

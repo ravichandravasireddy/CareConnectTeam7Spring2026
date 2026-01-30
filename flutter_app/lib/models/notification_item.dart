@@ -1,7 +1,13 @@
 // import 'package:flutter/material.dart';
 
-/// Notification type; each value is intended to link to a specific screen when tapped.
-/// TODO: Use [destinationRoute] when implementing navigation to these screens.
+// =============================================================================
+// NOTIFICATION MODEL
+// =============================================================================
+// Domain model for in-app notifications. Used by [NotificationProvider] and
+// [NotificationScreen]. [destinationRoute] maps type to route for tap handling.
+// =============================================================================
+
+/// Notification type; each value maps to a destination via [destinationRoute].
 enum NotificationType {
   /// Links to tasks screen (e.g. task list or task detail).
   medication,

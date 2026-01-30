@@ -7,9 +7,16 @@ import '../providers/note_provider.dart';
 import '../providers/task_provider.dart';
 import '../providers/health_timeline_provider.dart';
 
+// =============================================================================
+// HEALTH TIMELINE SCREEN
+// =============================================================================
+// Unified timeline of health logs, notes, and completed tasks. Data comes from
+// [HealthTimelineProvider.events]; screen watches HealthLog, Note, Task providers
+// so it rebuilds when any change. Empty state shows message; otherwise
+// [_TimelineBody] renders a vertical timeline with [_TimelineItem] cards.
+// =============================================================================
+
 /// Health Timeline screen: unified timeline of health logs, notes, and tasks.
-/// Data is managed via Provider (HealthLogProvider, NoteProvider, TaskProvider);
-/// [HealthTimelineProvider] aggregates them for this view.
 class HealthTimelineScreen extends StatelessWidget {
   const HealthTimelineScreen({super.key});
 

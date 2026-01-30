@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import '../models/note.dart';
 import '../theme/app_colors.dart';
 
+// =============================================================================
+// NOTE PROVIDER
+// =============================================================================
+// Holds all [Note] entries; used by Notes screen, Notes Add/Detail, and
+// [HealthTimelineProvider]. Notes are sorted by [createdAt] descending.
+// Add new [NoteCategory] in [categoryColors] when extending categories.
+// =============================================================================
+
 /// Provider for managing notes app-wide.
 class NoteProvider with ChangeNotifier {
   final List<Note> _notes = [];

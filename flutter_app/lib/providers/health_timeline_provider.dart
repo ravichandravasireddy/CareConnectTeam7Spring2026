@@ -7,9 +7,18 @@ import 'health_log_provider.dart';
 import 'note_provider.dart';
 import 'task_provider.dart';
 
-/// Aggregates health logs, notes, and tasks into a single timeline for app-wide
-/// history. Listen to [HealthLogProvider], [NoteProvider], and [TaskProvider];
-/// when any change, this provider's [events] list updates.
+// =============================================================================
+// HEALTH TIMELINE PROVIDER
+// =============================================================================
+// Aggregates [HealthLog], [Note], and completed [Task] into [TimelineEvent] list
+// for [HealthTimelineScreen]. Not a ChangeNotifier; register via ProxyProvider3
+// in main.dart so it is recreated when health/note/task providers change.
+// Only tasks with [completedAt] set appear on the timeline.
+// =============================================================================
+
+/// Aggregates health logs, notes, and completed tasks into a single timeline.
+/// [events] is derived from the three source providers; update [main.dart] if
+/// dependencies change.
 class HealthTimelineProvider {
   final HealthLogProvider healthLogProvider;
   final NoteProvider noteProvider;

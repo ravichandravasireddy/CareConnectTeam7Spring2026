@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import '../models/note.dart';
 
+// =============================================================================
+// NOTES ADD SCREEN (AddNoteScreen)
+// =============================================================================
+// Form to create a new [Note] (title, body, category). Pops with the created
+// Note on save; caller (Notes screen) should add it via [NoteProvider.addNote].
+// [kCurrentUserAuthor] is placeholder until auth is wired.
+// =============================================================================
+
 /// Current user for new notes (will be linked to logged-in profile later).
 const String kCurrentUserAuthor = 'Sarah Johnson (Caregiver)';
 

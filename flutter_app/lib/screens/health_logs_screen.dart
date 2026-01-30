@@ -5,6 +5,15 @@ import '../models/health_log.dart';
 import '../providers/health_log_provider.dart';
 import 'health_log_add_screen.dart';
 
+// =============================================================================
+// HEALTH LOGS SCREEN
+// =============================================================================
+// Shows "Latest by type" (one card per [HealthLogType] for today from
+// [HealthLogProvider.latestByType]) and a Quick Log grid. Tapping a card or
+// quick log opens [HealthLogAddScreen]. Add new types to [quickLogOptions] and
+// [HealthLogProvider.typeColors] when extending.
+// =============================================================================
+
 /// Health Logs screen with quick log options and today's entries.
 class HealthLogsScreen extends StatelessWidget {
   const HealthLogsScreen({super.key});

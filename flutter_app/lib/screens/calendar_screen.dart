@@ -4,6 +4,14 @@ import 'package:intl/intl.dart';
 import '../models/task.dart';
 import '../providers/task_provider.dart';
 
+// =============================================================================
+// CALENDAR SCREEN
+// =============================================================================
+// Month calendar with selectable date; task list shows only scheduled
+// (incomplete) tasks for selected date via [TaskProvider.getScheduledTasksForDate].
+// Dots on dates indicate [hasScheduledTasksForDate]. Navigate months with arrows.
+// =============================================================================
+
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
 

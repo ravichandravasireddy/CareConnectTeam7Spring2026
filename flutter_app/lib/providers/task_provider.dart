@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import '../models/task.dart';
 import '../theme/app_colors.dart';
 
-/// Provider for managing tasks app-wide
+// =============================================================================
+// TASK PROVIDER
+// =============================================================================
+// Holds all [Task] entries; used by Calendar screen and [HealthTimelineProvider].
+// Use [getScheduledTasksForDate] / [hasScheduledTasksForDate] for calendar (excludes
+// completed tasks). Use [getTasksForDate] when completed tasks should be included.
+// =============================================================================
+
+/// Provider for managing tasks app-wide.
 class TaskProvider with ChangeNotifier {
   final List<Task> _tasks = [];
 

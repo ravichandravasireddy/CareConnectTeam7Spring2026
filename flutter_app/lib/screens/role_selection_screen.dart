@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'create_account_screen.dart';
 import '../theme/app_colors.dart';
 
+// =============================================================================
+// ROLE SELECTION SCREEN
+// =============================================================================
+// Lets user choose role (Caregiver / Patient); navigates to [CreateAccountScreen]
+// for account creation. Uses [AppColors] for cards and buttons.
+// =============================================================================
+
 class RoleSelectionScreen extends StatelessWidget {
   const RoleSelectionScreen({super.key});
 

@@ -3,6 +3,16 @@ import 'package:provider/provider.dart';
 import '../models/health_log.dart';
 import '../providers/health_log_provider.dart';
 
+// =============================================================================
+// HEALTH LOG ADD SCREEN
+// =============================================================================
+// Form to create a new [HealthLog]; [initialType] sets the log type and which
+// fields are shown (mood, water, sleep, blood pressure, heart rate, generic).
+// On save, pops with the new HealthLog; caller (e.g. Health Logs screen) adds
+// it via [HealthLogProvider.addLog]. Add new type-specific fields here and in
+// [_save] when extending [HealthLogType].
+// =============================================================================
+
 /// Screen to add a new health log. Pops with the created [HealthLog] on save.
 class HealthLogAddScreen extends StatefulWidget {
   final HealthLogType initialType;

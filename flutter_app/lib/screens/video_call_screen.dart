@@ -3,9 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
-/// Video call screen: full-screen call UI with participant view,
-/// PIP (caregiver), timer, and control buttons (mic, video, end, more).
-/// Center = patient (Robert Williams). Top-right PIP = caregiver (Sarah Johnson).
+// =============================================================================
+// VIDEO CALL SCREEN
+// =============================================================================
+// Full-screen call UI: main area = patient (Robert Williams), PIP = caregiver
+// (Sarah Johnson). Uses [AppColors] dark palette. Timer runs from screen open;
+// mic/video buttons toggle state and PIP image vs placeholder. Set
+// [patientImageAsset] / [caregiverPipImageAsset] and add assets in pubspec.
+// =============================================================================
+
+/// Video call screen: participant view, PIP, timer, and control buttons.
 class VideoCallScreen extends StatefulWidget {
   const VideoCallScreen({super.key});
 

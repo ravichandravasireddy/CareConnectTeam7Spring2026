@@ -4,6 +4,14 @@ import 'package:intl/intl.dart';
 import '../models/notification_item.dart';
 import '../providers/notification_provider.dart';
 
+// =============================================================================
+// NOTIFICATION SCREEN
+// =============================================================================
+// Lists notifications grouped by [NotificationProvider.notificationSections]
+// (Today / Yesterday / date). Tap should navigate via [NotificationItem.destinationRoute].
+// Uses [formatNotificationTime] for relative/absolute timestamps.
+// =============================================================================
+
 /// Formats [createdAt] dynamically: relative for today ("X min ago"), "Yesterday" + time, or date for older.
 String formatNotificationTime(DateTime createdAt) {
   final now = DateTime.now();

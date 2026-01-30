@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
-/// Source of a timeline event for the Health Timeline screen.
-/// Extensible for future models (e.g. appointments, vitals).
+// =============================================================================
+// TIMELINE EVENT MODEL
+// =============================================================================
+// Unified event DTO for the Health Timeline screen. Built by [HealthTimelineProvider]
+// from health logs, notes, and tasks. Add new [TimelineEventSource] values when
+// aggregating more data types.
+// =============================================================================
+
+/// Source of a timeline event; used for ordering and future filtering.
 enum TimelineEventSource {
   healthLog,
   note,

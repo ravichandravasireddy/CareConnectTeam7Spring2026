@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/notification_item.dart';
 
+// =============================================================================
+// NOTIFICATION PROVIDER
+// =============================================================================
+// Holds [NotificationItem] list and groups them by date for [NotificationScreen].
+// [notificationSections] drives the "Today" / "Yesterday" / date headers.
+// Tap handling should use [NotificationItem.destinationRoute] for navigation.
+// =============================================================================
+
 /// One section of notifications (e.g. "Today", "Yesterday", or a formatted date).
 class NotificationSection {
   final String label;
