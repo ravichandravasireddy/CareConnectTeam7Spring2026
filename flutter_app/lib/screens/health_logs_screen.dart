@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../models/health_log.dart';
 import '../providers/health_log_provider.dart';
-import '../theme/app_colors.dart';
 import 'health_log_add_screen.dart';
 
 /// Health Logs screen with quick log options and today's entries.

@@ -43,7 +43,7 @@ void main() {
         ChangeNotifierProvider.value(value: nProvider),
         ChangeNotifierProvider.value(value: tProvider),
         ProxyProvider3<HealthLogProvider, NoteProvider, TaskProvider, HealthTimelineProvider>(
-          update: (_, healthLog, note, task, __) => HealthTimelineProvider(
+          update: (_, healthLog, note, task, _) => HealthTimelineProvider(
             healthLogProvider: healthLog,
             noteProvider: note,
             taskProvider: task,
@@ -618,7 +618,7 @@ void main() {
             ChangeNotifierProvider(create: (_) => NoteProvider()),
             ChangeNotifierProvider(create: (_) => TaskProvider()),
             ProxyProvider3<HealthLogProvider, NoteProvider, TaskProvider, HealthTimelineProvider>(
-              update: (_, healthLog, note, task, __) => HealthTimelineProvider(
+              update: (_, healthLog, note, task, _) => HealthTimelineProvider(
                 healthLogProvider: healthLog,
                 noteProvider: note,
                 taskProvider: task,

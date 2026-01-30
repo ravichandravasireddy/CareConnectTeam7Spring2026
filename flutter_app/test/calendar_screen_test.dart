@@ -236,16 +236,6 @@ void main() {
         (tester) async {
       final provider = TaskProvider();
       provider.clearTasks();
-      // final now = DateTime.now();
-      // One task on day 5 only, so day 1 has no tasks
-    //   provider.addTask(Task(
-    //     id: 'only',
-    //     title: 'Only Task',
-    //     date: DateTime(now.year, now.month, 5, 10, 0),
-    //     icon: Icons.task,
-    //     iconBackground: AppColors.primary100,
-    //     iconColor: AppColors.primary700,
-    //   ));
 
       await tester.pumpWidget(createTestHarness(taskProvider: provider));
 

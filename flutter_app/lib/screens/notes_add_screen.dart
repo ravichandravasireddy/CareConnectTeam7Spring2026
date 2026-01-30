@@ -115,7 +115,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<NoteCategory>(
-                      value: _category,
+                      initialValue: _category,
                       decoration: InputDecoration(
                         labelText: 'Category',
                         border: const OutlineInputBorder(),

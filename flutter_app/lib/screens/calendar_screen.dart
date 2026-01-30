@@ -201,7 +201,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           const SizedBox(height: 8),
                           // Calendar grid
                           Semantics(
-                            label: 'Calendar, ${_monthYearText}',
+                            label: 'Calendar, $_monthYearText',
                             child: GridView.count(
                               crossAxisCount: 7,
                               shrinkWrap: true,
@@ -335,7 +335,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       textColor = colorScheme.onSurface;
     } else {
       backgroundColor = Colors.transparent;
-      textColor = colorScheme.onSurfaceVariant.withOpacity(0.6);
+      textColor = colorScheme.onSurfaceVariant.withValues(alpha: 0.6);
     }
 
     final parts = <String>['${date.day}'];

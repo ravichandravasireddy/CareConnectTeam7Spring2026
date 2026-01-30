@@ -147,7 +147,6 @@ void main() {
   group('HealthLogProvider addLog', () {
     test('inserts log at front', () {
       final provider = HealthLogProvider();
-      final firstId = provider.logs.first.id;
       provider.addLog(HealthLog(
         id: 'new-first',
         type: HealthLogType.general,
@@ -174,7 +173,6 @@ void main() {
 
   group('HealthLogProvider waterTotalForDate', () {
     test('returns 0 when no water logs for date', () {
-      final provider = HealthLogProvider();
       final empty = HealthLogProvider();
       empty.clearLogs();
       expect(empty.waterTotalForDate(DateTime.now()), 0);

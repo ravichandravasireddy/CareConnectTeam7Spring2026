@@ -123,7 +123,7 @@ class NoteDetailScreen extends StatelessWidget {
                   color: colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: colorScheme.outline.withOpacity(0.5),
+                    color: colorScheme.outline.withValues(alpha: 0.5),
                   ),
                 ),
                 child: Text(

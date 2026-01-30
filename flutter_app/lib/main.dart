@@ -3,9 +3,10 @@ import 'package:provider/provider.dart';
 // import 'screens/welcome_screen.dart';
 // import 'screens/notes_screen.dart';
 // import 'screens/health_logs_screen.dart';
-import 'screens/health_timeline_screen.dart';
+// import 'screens/health_timeline_screen.dart';
 // import 'screens/calendar_screen.dart';
 // import 'screens/notification_screen.dart';
+import 'screens/video_call_screen.dart';
 import 'theme/app_colors.dart';
 import 'providers/task_provider.dart';
 import 'providers/notification_provider.dart';
@@ -115,7 +116,7 @@ class MyApp extends StatelessWidget {
             displayColor: AppColors.darkTextPrimary,
           ),
         ),
-        home: const HealthTimelineScreen(),
+        home: const VideoCallScreen(),
       ),
     );
   }

@@ -275,7 +275,7 @@ class _NotificationCard extends StatelessWidget {
                         timeLabel,
                         style: TextStyle(
                           fontSize: 12,
-                          color: colorScheme.onSurfaceVariant.withOpacity(0.8),
+                          color: colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
                         ),
                       ),
                     ],
