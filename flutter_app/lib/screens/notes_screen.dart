@@ -12,13 +12,17 @@ String formatNoteTime(DateTime createdAt) {
   final todayStart = DateTime(now.year, now.month, now.day);
   final yesterdayStart = todayStart.subtract(const Duration(days: 1));
   final date = DateTime(createdAt.year, createdAt.month, createdAt.day);
+  final year = createdAt.year;
 
   if (date == todayStart) {
     return 'Today, ${DateFormat.jm().format(createdAt)}';
   } else if (date == yesterdayStart) {
     return 'Yesterday, ${DateFormat.jm().format(createdAt)}';
+  } else if (year == now.year) {
+    // return DateFormat('MMM d, j').format(createdAt);
+    return DateFormat('MMM d, h:mm a').format(createdAt);
   } else {
-    return DateFormat('MMM d, jm').format(createdAt);
+    return '${DateFormat.yMMMd('en_US').format(createdAt)}, ${DateFormat.jm().format(createdAt)}';
   }
 }
 

@@ -291,7 +291,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                     iconBackground: task.iconBackground,
                                     iconColor: task.iconColor,
                                     title: task.title,
-                                    time: task.time,
+                                    date: task.date,
                                   ),
                                 )),
                           ],
@@ -394,7 +394,7 @@ class _TaskCard extends StatelessWidget {
   final Color iconBackground;
   final Color iconColor;
   final String title;
-  final String time;
+  final DateTime date;
 
   const _TaskCard({
     required this.colorScheme,
@@ -402,65 +402,68 @@ class _TaskCard extends StatelessWidget {
     required this.iconBackground,
     required this.iconColor,
     required this.title,
-    required this.time,
+    required this.date,
   });
 
   @override
   Widget build(BuildContext context) {
-    // 6.4: Task card semantics (title + time)
+    final timeLabel = DateFormat.jm().format(date);
+    // Semantic label: title and formatted time from date
     return Semantics(
-      label: '$title, $time',
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: colorScheme.outline,
-            width: 1,
+      label: '$title, $timeLabel',
+      child: ExcludeSemantics(
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: colorScheme.outline,
+              width: 1,
+            ),
           ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: iconBackground,
-                shape: BoxShape.circle,
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: iconBackground,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  icon,
+                  color: iconColor,
+                  size: 22,
+                ),
               ),
-              child: Icon(
-                icon,
-                color: iconColor,
-                size: 22,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.onSurface,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    time,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: colorScheme.onSurfaceVariant,
+                    const SizedBox(height: 4),
+                    Text(
+                      timeLabel,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
