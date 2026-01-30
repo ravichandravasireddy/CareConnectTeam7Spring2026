@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'screens/welcome_screen.dart';
 // import 'screens/notes_screen.dart';
-import 'screens/health_logs_screen.dart';
+// import 'screens/health_logs_screen.dart';
+import 'screens/health_timeline_screen.dart';
 // import 'screens/calendar_screen.dart';
 // import 'screens/notification_screen.dart';
 import 'theme/app_colors.dart';
@@ -10,6 +11,7 @@ import 'providers/task_provider.dart';
 import 'providers/notification_provider.dart';
 import 'providers/note_provider.dart';
 import 'providers/health_log_provider.dart';
+import 'providers/health_timeline_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,6 +28,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
         ChangeNotifierProvider(create: (_) => NoteProvider()),
         ChangeNotifierProvider(create: (_) => HealthLogProvider()),
+        ProxyProvider3<HealthLogProvider, NoteProvider, TaskProvider,
+            HealthTimelineProvider>(
+          update: (_, health, note, task, _) =>
+              HealthTimelineProvider(
+                healthLogProvider: health,
+                noteProvider: note,
+                taskProvider: task,
+              ),
+        ),
       ],
       child: MaterialApp(
         title: 'CareConnect',
@@ -104,7 +115,7 @@ class MyApp extends StatelessWidget {
             displayColor: AppColors.darkTextPrimary,
           ),
         ),
-        home: const HealthLogsScreen(),
+        home: const HealthTimelineScreen(),
       ),
     );
   }

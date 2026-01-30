@@ -106,7 +106,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final calendarDates = _calendarDates;
     
     final selectedTasks = _selectedDate != null
-        ? taskProvider.getTasksForDate(_selectedDate!)
+        ? taskProvider.getScheduledTasksForDate(_selectedDate!)
         : <Task>[];
 
     return Scaffold(
@@ -317,7 +317,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }) {
     final isCurrentMonth = _isCurrentMonth(date);
     final isToday = _isToday(date);
-    final hasTasks = taskProvider.hasTasksForDate(date);
+    final hasTasks = taskProvider.hasScheduledTasksForDate(date);
 
     Color backgroundColor;
     Color textColor;

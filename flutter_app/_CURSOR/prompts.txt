@@ -1,137 +1,148 @@
-1. Create this Health Logs Screen based on the provided code. 
-2. Make log data be managed with Provider for app wide access. 
-3. Make the associated loggin feature for each item to log a add log page
-6. Make sure to use the app theme colors (please add this to the instructions doc that you will reference for every prompt)
+1. Create this Health History Screen based on the provided code. 
+2. Make history data be managed with Provider for app wide access. 
+3. Health log data, Created notes, Completed tasks are all connected to this screen. 
+   Anything logged there will appear on this timeline. 
+4. In the future, other models will also connect and log here.
 
 
-export function HealthLogsScreen() {
+export function HealthTimelineScreen() {
   return (
     <div className="h-full bg-gray-50 flex flex-col relative">
-      <TopNavBar title="Health Logs" hasNotification={false} />
+      <TopNavBar
+        title="Health Timeline"
+        hasNotification={false}
+      />
 
-      <div className="flex-1 overflow-y-auto pb-20">
-        {/* Quick Log Options */}
-        <div className="bg-white border-b border-gray-200 p-4">
-          <h2 className="font-semibold text-gray-900 mb-3">
-            Quick Log
-          </h2>
-          <div className="grid grid-cols-3 gap-3">
-            <button className="p-3 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors">
-              <Smile className="w-6 h-6 text-green-600 mx-auto mb-1" />
-              <p className="text-xs font-semibold text-gray-900">
-                Mood
-              </p>
-            </button>
-            <button className="p-3 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors">
-              <Activity className="w-6 h-6 text-red-600 mx-auto mb-1" />
-              <p className="text-xs font-semibold text-gray-900">
-                Symptoms
-              </p>
-            </button>
-            <button className="p-3 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors">
-              <Utensils className="w-6 h-6 text-orange-600 mx-auto mb-1" />
-              <p className="text-xs font-semibold text-gray-900">
-                Meals
-              </p>
-            </button>
-            <button className="p-3 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors">
-              <Droplet className="w-6 h-6 text-blue-600 mx-auto mb-1" />
-              <p className="text-xs font-semibold text-gray-900">
-                Water
-              </p>
-            </button>
-            <button className="p-3 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors">
-              <Heart className="w-6 h-6 text-pink-600 mx-auto mb-1" />
-              <p className="text-xs font-semibold text-gray-900">
-                Exercise
-              </p>
-            </button>
-            <button className="p-3 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors">
-              <Clock className="w-6 h-6 text-purple-600 mx-auto mb-1" />
-              <p className="text-xs font-semibold text-gray-900">
-                Sleep
-              </p>
-            </button>
-          </div>
-        </div>
+      <div className="flex-1 overflow-y-auto p-4 pb-20">
+        {/* Timeline */}
+        <div className="relative">
+          {/* Vertical Line */}
+          <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-300"></div>
 
-        {/* Today's Logs */}
-        <div className="p-4 space-y-3">
-          <h3 className="font-semibold text-gray-900">
-            Today's Logs
-          </h3>
-
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                <Smile className="w-5 h-5 text-green-600" />
+          {/* Timeline Items */}
+          <div className="space-y-6">
+            {/* Today */}
+            <div className="relative pl-16">
+              <div className="absolute left-0 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold z-10">
+                <Activity className="w-6 h-6" />
               </div>
-              <div className="flex-1">
-                <p className="font-semibold text-gray-900">
-                  Mood: Good
-                </p>
-                <p className="text-sm text-gray-600">
-                  10:30 AM
-                </p>
-              </div>
-              <span className="text-2xl">😊</span>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                <Utensils className="w-5 h-5 text-orange-600" />
-              </div>
-              <div className="flex-1">
-                <p className="font-semibold text-gray-900">
-                  Breakfast
-                </p>
-                <p className="text-sm text-gray-600">
-                  Oatmeal with berries • 8:15 AM
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <Droplet className="w-5 h-5 text-blue-600" />
-              </div>
-              <div className="flex-1">
-                <p className="font-semibold text-gray-900">
-                  Water Intake
-                </p>
-                <p className="text-sm text-gray-600">
-                  3 glasses • 48 oz
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs text-gray-500">
-                  Goal: 64 oz
-                </p>
-                <div className="w-20 h-2 bg-gray-200 rounded-full mt-1">
-                  <div
-                    className="h-full bg-blue-600 rounded-full"
-                    style={{ width: "75%" }}
-                  ></div>
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-semibold text-gray-900">
+                    Blood Pressure Reading
+                  </h3>
+                  <span className="text-xs text-gray-500">
+                    Today, 8:00 AM
+                  </span>
                 </div>
+                <p className="text-2xl font-bold text-gray-900 mb-1">
+                  120/80
+                </p>
+                <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-semibold">
+                  NORMAL
+                </span>
               </div>
             </div>
-          </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                <Activity className="w-5 h-5 text-red-600" />
+            <div className="relative pl-16">
+              <div className="absolute left-0 w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold z-10">
+                <CheckCircle className="w-6 h-6" />
               </div>
-              <div className="flex-1">
-                <p className="font-semibold text-gray-900">
-                  Symptom Log
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-semibold text-gray-900">
+                    Task Completed
+                  </h3>
+                  <span className="text-xs text-gray-500">
+                    Today, 9:05 AM
+                  </span>
+                </div>
+                <p className="text-sm text-gray-700">
+                  Took morning medication: Lisinopril 10mg
                 </p>
-                <p className="text-sm text-gray-600">
-                  Mild headache • 9:00 AM
+              </div>
+            </div>
+
+            {/* Yesterday */}
+            <div className="relative pl-16">
+              <div className="absolute left-0 w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold z-10">
+                <FileText className="w-6 h-6" />
+              </div>
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-semibold text-gray-900">
+                    Note Added
+                  </h3>
+                  <span className="text-xs text-gray-500">
+                    Yesterday, 5:15 PM
+                  </span>
+                </div>
+                <p className="text-sm text-gray-700">
+                  Completed 20-minute walk. Felt great!
+                </p>
+              </div>
+            </div>
+
+            <div className="relative pl-16">
+              <div className="absolute left-0 w-12 h-12 bg-pink-600 rounded-full flex items-center justify-center text-white font-bold z-10">
+                <Heart className="w-6 h-6" />
+              </div>
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-semibold text-gray-900">
+                    Heart Rate Reading
+                  </h3>
+                  <span className="text-xs text-gray-500">
+                    Yesterday, 8:00 AM
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-gray-900 mb-1">
+                  72 bpm
+                </p>
+                <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-semibold">
+                  NORMAL
+                </span>
+              </div>
+            </div>
+
+            {/* Jan 24 */}
+            <div className="relative pl-16">
+              <div className="absolute left-0 w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold z-10">
+                <Video className="w-6 h-6" />
+              </div>
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-semibold text-gray-900">
+                    Virtual Appointment
+                  </h3>
+                  <span className="text-xs text-gray-500">
+                    Jan 24, 3:00 PM
+                  </span>
+                </div>
+                <p className="text-sm text-gray-700">
+                  Video consultation with Dr. Helen Nowinski
+                </p>
+                <p className="text-sm text-gray-600 mt-2">
+                  Duration: 25 minutes
+                </p>
+              </div>
+            </div>
+
+            <div className="relative pl-16">
+              <div className="absolute left-0 w-12 h-12 bg-teal-600 rounded-full flex items-center justify-center text-white font-bold z-10">
+                <Pill className="w-6 h-6" />
+              </div>
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-semibold text-gray-900">
+                    Medication Taken
+                  </h3>
+                  <span className="text-xs text-gray-500">
+                    Jan 24, 9:10 AM
+                  </span>
+                </div>
+                <p className="text-sm text-gray-700">
+                  Lisinopril 10mg
                 </p>
               </div>
             </div>

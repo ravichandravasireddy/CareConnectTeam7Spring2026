@@ -9,6 +9,8 @@ class Task {
   final IconData icon;
   final Color iconBackground;
   final Color iconColor;
+  /// When non-null, the task is completed; used for timeline and history.
+  final DateTime? completedAt;
 
   Task({
     required this.id,
@@ -17,7 +19,10 @@ class Task {
     required this.icon,
     required this.iconBackground,
     required this.iconColor,
+    this.completedAt,
   });
+
+  bool get isCompleted => completedAt != null;
 
   /// Date-only (midnight) for filtering by calendar day
   DateTime get dateOnly => DateTime(date.year, date.month, date.day);
@@ -32,6 +37,7 @@ class Task {
     IconData? icon,
     Color? iconBackground,
     Color? iconColor,
+    DateTime? completedAt,
   }) {
     return Task(
       id: id ?? this.id,
@@ -40,6 +46,7 @@ class Task {
       icon: icon ?? this.icon,
       iconBackground: iconBackground ?? this.iconBackground,
       iconColor: iconColor ?? this.iconColor,
+      completedAt: completedAt ?? this.completedAt,
     );
   }
 
@@ -48,6 +55,7 @@ class Task {
       'id': id,
       'title': title,
       'date': date.toIso8601String(),
+      if (completedAt != null) 'completedAt': completedAt!.toIso8601String(),
       // Note: icon, iconBackground, iconColor are not serialized
     };
   }
