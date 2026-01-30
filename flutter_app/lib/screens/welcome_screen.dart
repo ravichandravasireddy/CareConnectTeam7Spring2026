@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'role_selection_screen.dart';
 import '../theme/app_colors.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -76,15 +75,10 @@ class WelcomeScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to role selection screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RoleSelectionScreen(),
-                        ),
-                      );
+                     onPressed: () {
+                      Navigator.pushNamed(context, '/registration');
                     },
+
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
                       foregroundColor: Theme.of(context).colorScheme.primary,
@@ -111,8 +105,7 @@ class WelcomeScreen extends StatelessWidget {
                   height: 56,
                   child: OutlinedButton(
                     onPressed: () {
-                      // TODO: Navigate to sign in screen
-                      print('Sign In pressed');
+                      Navigator.pushNamed(context, '/signin');
                     },
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,

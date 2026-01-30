@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'create_account_screen.dart';
 import '../theme/app_colors.dart';
 
 class RoleSelectionScreen extends StatelessWidget {
@@ -68,13 +67,7 @@ class RoleSelectionScreen extends StatelessWidget {
                 title: 'Care Recipient',
                 description: 'I\'m managing my\nown health and tasks',
                 onTap: () {
-                  // Navigate to Create Account screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CreateAccountScreen(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, '/registration');
                 },
               ),
               
@@ -88,13 +81,8 @@ class RoleSelectionScreen extends StatelessWidget {
                 title: 'Caregiver',
                 description: 'I\'m caring for one or\nmore people',
                 onTap: () {
-                  // Navigate to Create Account screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CreateAccountScreen(),
-                    ),
-                  );
+                  // Navigate to Dashboard (caregiver dashboard coming soon)
+                  Navigator.pushNamed(context, '/registration');
                 },
               ),
               
