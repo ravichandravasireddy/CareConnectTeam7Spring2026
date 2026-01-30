@@ -1,9 +1,43 @@
 /// Types of health logs that can be recorded.
-enum HealthLogType { mood, symptoms, meals, water, exercise, sleep, general }
+enum HealthLogType {
+  mood,
+  symptoms,
+  meals,
+  water,
+  exercise,
+  sleep,
+  general,
+  bloodPressure,
+  heartRate,
+}
 
 /// Display label for type (formatting only; add new enum values without relisting here).
-String formatHealthLogTypeDisplay(HealthLogType type) =>
-    type.name[0].toUpperCase() + type.name.substring(1);
+String formatHealthLogTypeDisplay(HealthLogType type) {
+  switch (type) {
+    case HealthLogType.bloodPressure:
+      return 'Blood Pressure';
+    case HealthLogType.heartRate:
+      return 'Heart Rate';
+    default:
+      return type.name[0].toUpperCase() + type.name.substring(1);
+  }
+}
+
+/// Blood pressure category per AHA guidelines (systolic/diastolic mmHg).
+String bloodPressureCategoryLabel(int systolic, int diastolic) {
+  if (systolic >= 180 || diastolic >= 120) return 'Hypertensive crisis';
+  if (systolic >= 140 || diastolic >= 90) return 'High (Stage 2)';
+  if (systolic >= 130 || diastolic >= 80) return 'High (Stage 1)';
+  if (systolic >= 120 && diastolic < 80) return 'Elevated';
+  return 'Normal';
+}
+
+/// Heart rate category for resting adult (bpm).
+String heartRateCategoryLabel(int bpm) {
+  if (bpm < 60) return 'Bradycardia';
+  if (bpm <= 100) return 'Normal';
+  return 'Tachycardia';
+}
 
 /// Health log model for quick logs and daily entries.
 class HealthLog {
@@ -17,6 +51,9 @@ class HealthLog {
   final double? waterDelta;
   final double? waterGoal;
   final double? sleepHours;
+  final int? systolic;
+  final int? diastolic;
+  final int? heartRateBpm;
 
   HealthLog({
     required this.id,
@@ -29,6 +66,9 @@ class HealthLog {
     this.waterDelta,
     this.waterGoal,
     this.sleepHours,
+    this.systolic,
+    this.diastolic,
+    this.heartRateBpm,
   });
 
   HealthLog copyWith({
@@ -42,6 +82,9 @@ class HealthLog {
     double? waterDelta,
     double? waterGoal,
     double? sleepHours,
+    int? systolic,
+    int? diastolic,
+    int? heartRateBpm,
   }) {
     return HealthLog(
       id: id ?? this.id,
@@ -54,6 +97,9 @@ class HealthLog {
       waterDelta: waterDelta ?? this.waterDelta,
       waterGoal: waterGoal ?? this.waterGoal,
       sleepHours: sleepHours ?? this.sleepHours,
+      systolic: systolic ?? this.systolic,
+      diastolic: diastolic ?? this.diastolic,
+      heartRateBpm: heartRateBpm ?? this.heartRateBpm,
     );
   }
 

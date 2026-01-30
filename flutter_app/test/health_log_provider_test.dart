@@ -43,6 +43,52 @@ void main() {
     });
   });
 
+  group('HealthLogProvider latestByType', () {
+    test('returns only logs from current day', () {
+      final provider = HealthLogProvider();
+      provider.clearLogs();
+      final now = DateTime.now();
+      final yesterday = now.subtract(const Duration(days: 1));
+      provider.addLog(HealthLog(
+        id: 'today-1',
+        type: HealthLogType.mood,
+        description: 'Today',
+        createdAt: now,
+      ));
+      provider.addLog(HealthLog(
+        id: 'yesterday-1',
+        type: HealthLogType.meals,
+        description: 'Yesterday',
+        createdAt: yesterday,
+      ));
+      final latest = provider.latestByType;
+      expect(latest.length, 1);
+      expect(latest[HealthLogType.mood]!.description, 'Today');
+      expect(latest.containsKey(HealthLogType.meals), isFalse);
+    });
+
+    test('returns most recent log per type when multiple today', () {
+      final provider = HealthLogProvider();
+      provider.clearLogs();
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      provider.addLog(HealthLog(
+        id: 'early',
+        type: HealthLogType.mood,
+        description: 'Early',
+        createdAt: DateTime(today.year, today.month, today.day, 8, 0),
+      ));
+      provider.addLog(HealthLog(
+        id: 'late',
+        type: HealthLogType.mood,
+        description: 'Late',
+        createdAt: DateTime(today.year, today.month, today.day, 12, 0),
+      ));
+      final latest = provider.latestByType;
+      expect(latest[HealthLogType.mood]!.description, 'Late');
+    });
+  });
+
   group('HealthLogProvider logsForDate', () {
     test('returns today\'s logs when provider has mock data', () {
       final provider = HealthLogProvider();

@@ -18,6 +18,9 @@ class _HealthLogAddScreenState extends State<HealthLogAddScreen> {
   final _descriptionController = TextEditingController();
   final _noteController = TextEditingController();
   final _waterDeltaController = TextEditingController();
+  final _systolicController = TextEditingController();
+  final _diastolicController = TextEditingController();
+  final _heartRateController = TextEditingController();
   double _sleepHours = 7;
   _MoodChoice? _selectedMood;
 
@@ -34,6 +37,9 @@ class _HealthLogAddScreenState extends State<HealthLogAddScreen> {
     _descriptionController.dispose();
     _noteController.dispose();
     _waterDeltaController.dispose();
+    _systolicController.dispose();
+    _diastolicController.dispose();
+    _heartRateController.dispose();
     super.dispose();
   }
 
@@ -83,6 +89,43 @@ class _HealthLogAddScreenState extends State<HealthLogAddScreen> {
       return;
     }
 
+    if (_type == HealthLogType.bloodPressure) {
+      final sysText = _systolicController.text.trim();
+      final diaText = _diastolicController.text.trim();
+      if (sysText.isEmpty || diaText.isEmpty) return;
+      final systolic = int.tryParse(sysText);
+      final diastolic = int.tryParse(diaText);
+      if (systolic == null || diastolic == null) return;
+      final log = HealthLog(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        type: _type,
+        description: '${formatHealthLogTypeDisplay(HealthLogType.bloodPressure)}: $systolic/$diastolic mmHg',
+        createdAt: DateTime.now(),
+        note: note.isEmpty ? null : note,
+        systolic: systolic,
+        diastolic: diastolic,
+      );
+      Navigator.pop(context, log);
+      return;
+    }
+
+    if (_type == HealthLogType.heartRate) {
+      final bpmText = _heartRateController.text.trim();
+      if (bpmText.isEmpty) return;
+      final bpm = int.tryParse(bpmText);
+      if (bpm == null) return;
+      final log = HealthLog(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        type: _type,
+        description: '${formatHealthLogTypeDisplay(HealthLogType.heartRate)}: $bpm bpm',
+        createdAt: DateTime.now(),
+        note: note.isEmpty ? null : note,
+        heartRateBpm: bpm,
+      );
+      Navigator.pop(context, log);
+      return;
+    }
+
     final computedDescription = _type == HealthLogType.sleep
       ? 'Slept ${_sleepHours.toStringAsFixed(1)} hours'
         : description;
@@ -95,7 +138,6 @@ class _HealthLogAddScreenState extends State<HealthLogAddScreen> {
       note: note.isEmpty ? null : note,
       sleepHours: _type == HealthLogType.sleep ? _sleepHours : null,
     );
-
     Navigator.pop(context, log);
   }
 
@@ -180,9 +222,26 @@ class _HealthLogAddScreenState extends State<HealthLogAddScreen> {
                         },
                       ),
                     if (_type == HealthLogType.mood) const SizedBox(height: 16),
+                    if (_type == HealthLogType.bloodPressure)
+                      _BloodPressureFields(
+                        systolicController: _systolicController,
+                        diastolicController: _diastolicController,
+                        noteController: _noteController,
+                      ),
+                    if (_type == HealthLogType.bloodPressure)
+                      const SizedBox(height: 16),
+                    if (_type == HealthLogType.heartRate)
+                      _HeartRateFields(
+                        bpmController: _heartRateController,
+                        noteController: _noteController,
+                      ),
+                    if (_type == HealthLogType.heartRate)
+                      const SizedBox(height: 16),
                     if (_type != HealthLogType.mood &&
                         _type != HealthLogType.water &&
-                        _type != HealthLogType.sleep)
+                        _type != HealthLogType.sleep &&
+                        _type != HealthLogType.bloodPressure &&
+                        _type != HealthLogType.heartRate)
                       TextFormField(
                         controller: _descriptionController,
                         decoration: InputDecoration(
@@ -199,7 +258,9 @@ class _HealthLogAddScreenState extends State<HealthLogAddScreen> {
                       ),
                     if (_type != HealthLogType.mood &&
                         _type != HealthLogType.water &&
-                        _type != HealthLogType.sleep)
+                        _type != HealthLogType.sleep &&
+                        _type != HealthLogType.bloodPressure &&
+                        _type != HealthLogType.heartRate)
                       const SizedBox(height: 16),
                     if (_type == HealthLogType.water)
                       _WaterLogFields(
@@ -372,6 +433,206 @@ class _SleepLogFields extends StatelessWidget {
   }
 }
 
+class _BloodPressureFields extends StatefulWidget {
+  final TextEditingController systolicController;
+  final TextEditingController diastolicController;
+  final TextEditingController noteController;
+
+  const _BloodPressureFields({
+    required this.systolicController,
+    required this.diastolicController,
+    required this.noteController,
+  });
+
+  @override
+  State<_BloodPressureFields> createState() => _BloodPressureFieldsState();
+}
+
+class _BloodPressureFieldsState extends State<_BloodPressureFields> {
+  String _label = '';
+
+  void _updateLabel() {
+    final sys = int.tryParse(widget.systolicController.text.trim());
+    final dia = int.tryParse(widget.diastolicController.text.trim());
+    if (sys != null && dia != null) {
+      setState(() => _label = bloodPressureCategoryLabel(sys, dia));
+    } else {
+      setState(() => _label = '');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.systolicController.addListener(_updateLabel);
+    widget.diastolicController.addListener(_updateLabel);
+  }
+
+  @override
+  void dispose() {
+    widget.systolicController.removeListener(_updateLabel);
+    widget.diastolicController.removeListener(_updateLabel);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: widget.systolicController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Systolic (upper)',
+                  hintText: '120',
+                  border: const OutlineInputBorder(),
+                  filled: true,
+                  fillColor: colorScheme.surfaceContainer,
+                ),
+                validator: (v) =>
+                    (v == null || v.trim().isEmpty) ? 'Required' : null,
+                onChanged: (_) => _updateLabel(),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: TextFormField(
+                controller: widget.diastolicController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Diastolic (lower)',
+                  hintText: '80',
+                  border: const OutlineInputBorder(),
+                  filled: true,
+                  fillColor: colorScheme.surfaceContainer,
+                ),
+                validator: (v) =>
+                    (v == null || v.trim().isEmpty) ? 'Required' : null,
+                onChanged: (_) => _updateLabel(),
+              ),
+            ),
+          ],
+        ),
+        if (_label.isNotEmpty) ...[
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              _label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: colorScheme.onPrimaryContainer,
+              ),
+            ),
+          ),
+        ],
+        const SizedBox(height: 16),
+        _NoteField(
+          controller: widget.noteController,
+          label: 'Note (optional)',
+          hint: 'Add context (e.g. before medication)',
+        ),
+      ],
+    );
+  }
+}
+
+class _HeartRateFields extends StatefulWidget {
+  final TextEditingController bpmController;
+  final TextEditingController noteController;
+
+  const _HeartRateFields({
+    required this.bpmController,
+    required this.noteController,
+  });
+
+  @override
+  State<_HeartRateFields> createState() => _HeartRateFieldsState();
+}
+
+class _HeartRateFieldsState extends State<_HeartRateFields> {
+  String _label = '';
+
+  void _updateLabel() {
+    final bpm = int.tryParse(widget.bpmController.text.trim());
+    if (bpm != null) {
+      setState(() => _label = heartRateCategoryLabel(bpm));
+    } else {
+      setState(() => _label = '');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.bpmController.addListener(_updateLabel);
+  }
+
+  @override
+  void dispose() {
+    widget.bpmController.removeListener(_updateLabel);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: widget.bpmController,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            labelText: 'Heart rate (bpm)',
+            hintText: '72',
+            border: const OutlineInputBorder(),
+            filled: true,
+            fillColor: colorScheme.surfaceContainer,
+          ),
+          validator: (v) =>
+              (v == null || v.trim().isEmpty) ? 'Enter bpm' : null,
+          onChanged: (_) => _updateLabel(),
+        ),
+        if (_label.isNotEmpty) ...[
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              _label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: colorScheme.onPrimaryContainer,
+              ),
+            ),
+          ),
+        ],
+        const SizedBox(height: 16),
+        _NoteField(
+          controller: widget.noteController,
+          label: 'Note (optional)',
+          hint: 'e.g. resting, after exercise',
+        ),
+      ],
+    );
+  }
+}
+
 class _NoteField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
@@ -413,6 +674,8 @@ String _hintForType(HealthLogType type) {
     case HealthLogType.mood:
     case HealthLogType.water:
     case HealthLogType.sleep:
+    case HealthLogType.bloodPressure:
+    case HealthLogType.heartRate:
       return 'Add details';
   }
 }

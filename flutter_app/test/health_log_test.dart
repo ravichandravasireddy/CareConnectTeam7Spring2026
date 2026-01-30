@@ -18,12 +18,49 @@ void main() {
       expect(formatHealthLogTypeDisplay(HealthLogType.exercise), 'Exercise');
       expect(formatHealthLogTypeDisplay(HealthLogType.sleep), 'Sleep');
       expect(formatHealthLogTypeDisplay(HealthLogType.general), 'General');
+      expect(formatHealthLogTypeDisplay(HealthLogType.bloodPressure), 'Blood Pressure');
+      expect(formatHealthLogTypeDisplay(HealthLogType.heartRate), 'Heart Rate');
     });
 
     test('HealthLogType has all expected values', () {
-      expect(HealthLogType.values.length, 7);
+      expect(HealthLogType.values.length, 9);
       expect(HealthLogType.values, contains(HealthLogType.mood));
       expect(HealthLogType.values, contains(HealthLogType.general));
+      expect(HealthLogType.values, contains(HealthLogType.bloodPressure));
+      expect(HealthLogType.values, contains(HealthLogType.heartRate));
+    });
+  });
+
+  group('bloodPressureCategoryLabel', () {
+    test('returns Normal for <120 and <80', () {
+      expect(bloodPressureCategoryLabel(119, 79), 'Normal');
+    });
+    test('returns Elevated for 120-129 systolic and diastolic <80', () {
+      expect(bloodPressureCategoryLabel(120, 79), 'Elevated');
+      expect(bloodPressureCategoryLabel(129, 79), 'Elevated');
+    });
+    test('returns High Stage 1 for 130-139 or 80-89', () {
+      expect(bloodPressureCategoryLabel(130, 80), 'High (Stage 1)');
+      expect(bloodPressureCategoryLabel(139, 89), 'High (Stage 1)');
+    });
+    test('returns High Stage 2 for >=140 or >=90', () {
+      expect(bloodPressureCategoryLabel(140, 90), 'High (Stage 2)');
+    });
+    test('returns Hypertensive crisis for >=180 or >=120', () {
+      expect(bloodPressureCategoryLabel(180, 120), 'Hypertensive crisis');
+    });
+  });
+
+  group('heartRateCategoryLabel', () {
+    test('returns Bradycardia for <60 bpm', () {
+      expect(heartRateCategoryLabel(59), 'Bradycardia');
+    });
+    test('returns Normal for 60-100 bpm', () {
+      expect(heartRateCategoryLabel(60), 'Normal');
+      expect(heartRateCategoryLabel(100), 'Normal');
+    });
+    test('returns Tachycardia for >100 bpm', () {
+      expect(heartRateCategoryLabel(101), 'Tachycardia');
     });
   });
 

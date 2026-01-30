@@ -32,6 +32,23 @@ void main() {
       expect(baseTask.icon, Icons.medication);
       expect(baseTask.iconBackground, AppColors.primary100);
       expect(baseTask.iconColor, AppColors.primary700);
+      expect(baseTask.completedAt, isNull);
+      expect(baseTask.isCompleted, false);
+    });
+
+    test('stores completedAt when provided', () {
+      final when = DateTime(2025, 3, 15, 9, 5);
+      final task = Task(
+        id: 't',
+        title: 'T',
+        date: DateTime(2025, 3, 15, 9, 0),
+        icon: Icons.task,
+        iconBackground: AppColors.primary100,
+        iconColor: AppColors.primary700,
+        completedAt: when,
+      );
+      expect(task.completedAt, when);
+      expect(task.isCompleted, true);
     });
 
     test('date holds both day and time', () {
@@ -159,6 +176,13 @@ void main() {
       expect(copied.iconBackground, baseTask.iconBackground);
     });
 
+    test('overrides completedAt', () {
+      final when = DateTime(2025, 3, 15, 9, 10);
+      final copied = baseTask.copyWith(completedAt: when);
+      expect(copied.completedAt, when);
+      expect(copied.isCompleted, true);
+    });
+
     test('copyWith does not mutate original', () {
       final originalDate = baseTask.date;
       baseTask.copyWith(title: 'Changed', date: DateTime(2030, 1, 1));
@@ -196,6 +220,15 @@ void main() {
       expect(json.containsKey('icon'), false);
       expect(json.containsKey('iconBackground'), false);
       expect(json.containsKey('iconColor'), false);
+    });
+
+    test('toJson includes completedAt when set', () {
+      final task = baseTask.copyWith(
+        completedAt: DateTime(2025, 3, 15, 9, 5),
+      );
+      final json = task.toJson();
+      expect(json.containsKey('completedAt'), true);
+      expect(DateTime.parse(json['completedAt'] as String), task.completedAt);
     });
   });
 }

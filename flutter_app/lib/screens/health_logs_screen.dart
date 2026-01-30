@@ -14,7 +14,7 @@ class HealthLogsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final provider = context.watch<HealthLogProvider>();
-    final todayLogs = provider.logsForDate(DateTime.now());
+    final latestByType = provider.latestByType;
     final scaffoldBackground = Theme.of(context).scaffoldBackgroundColor;
 
     final quickLogOptions = <_QuickLogOption>[
@@ -47,6 +47,16 @@ class HealthLogsScreen extends StatelessWidget {
         type: HealthLogType.sleep,
         label: 'Sleep',
         icon: Icons.bedtime,
+      ),
+      _QuickLogOption(
+        type: HealthLogType.bloodPressure,
+        label: 'Blood Pressure',
+        icon: Icons.monitor_heart_outlined,
+      ),
+      _QuickLogOption(
+        type: HealthLogType.heartRate,
+        label: 'Heart Rate',
+        icon: Icons.speed,
       ),
     ];
 
@@ -131,8 +141,9 @@ class HealthLogsScreen extends StatelessWidget {
                           const SizedBox(height: 12),
                           GridView.count(
                             crossAxisCount: 3,
-                            crossAxisSpacing: 12,
-                            mainAxisSpacing: 12,
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 8,
+                            childAspectRatio: 1.35,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             children: quickLogOptions
@@ -144,14 +155,14 @@ class HealthLogsScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // Today's Logs
+                    // Latest by type (one card per type; history is on Health Timeline)
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Today's Logs",
+                            'Latest by type',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -159,35 +170,17 @@ class HealthLogsScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          if (todayLogs.isEmpty)
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(24),
-                              decoration: BoxDecoration(
-                                color: colorScheme.surface,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: colorScheme.outline,
-                                  width: 1,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'No logs yet today. Use Quick Log to add one.',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
-                              ),
-                            )
-                          else
-                            ...todayLogs.map(
-                              (log) => Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: _HealthLogCard(log: log),
+                          ...quickLogOptions.map(
+                            (option) => Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: _LatestLogCard(
+                                type: option.type,
+                                label: option.label,
+                                icon: option.icon,
+                                latestLog: latestByType[option.type],
                               ),
                             ),
+                          ),
                         ],
                       ),
                     ),
@@ -273,6 +266,95 @@ class _QuickLogButton extends StatelessWidget {
   }
 }
 
+/// Card showing latest log for a type, or placeholder. Tappable to add/update.
+class _LatestLogCard extends StatelessWidget {
+  final HealthLogType type;
+  final String label;
+  final IconData icon;
+  final HealthLog? latestLog;
+
+  const _LatestLogCard({
+    required this.type,
+    required this.label,
+    required this.icon,
+    required this.latestLog,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: latestLog != null
+          ? '$label, ${latestLog!.description}'
+          : 'No $label logged, tap to add',
+      button: true,
+      child: InkWell(
+        onTap: () async {
+          final result = await Navigator.push<HealthLog>(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HealthLogAddScreen(initialType: type),
+            ),
+          );
+          if (result != null && context.mounted) {
+            context.read<HealthLogProvider>().addLog(result);
+          }
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: latestLog != null
+            ? _HealthLogCard(log: latestLog!)
+            : _PlaceholderCard(type: type, label: label, icon: icon),
+      ),
+    );
+  }
+}
+
+class _PlaceholderCard extends StatelessWidget {
+  final HealthLogType type;
+  final String label;
+  final IconData icon;
+
+  const _PlaceholderCard({
+    required this.type,
+    required this.label,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final (bg, fg) = HealthLogProvider.typeColors(type);
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outline, width: 1),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(color: bg, shape: BoxShape.circle),
+            child: Icon(icon, color: fg, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              'No $label logged',
+              style: TextStyle(
+                fontSize: 14,
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+          Icon(Icons.add_circle_outline, color: colorScheme.primary, size: 24),
+        ],
+      ),
+    );
+  }
+}
+
 class _HealthLogCard extends StatelessWidget {
   final HealthLog log;
 
@@ -287,6 +369,17 @@ class _HealthLogCard extends StatelessWidget {
     final semanticsLabel = log.note == null || log.note!.isEmpty
         ? '${log.description}, $timeLabel'
         : '${log.description}, ${log.note}, $timeLabel';
+
+    String displayDescription = log.description;
+    String? statusChip;
+    if (log.type == HealthLogType.bloodPressure &&
+        log.systolic != null &&
+        log.diastolic != null) {
+      statusChip = bloodPressureCategoryLabel(log.systolic!, log.diastolic!);
+    } else if (log.type == HealthLogType.heartRate &&
+        log.heartRateBpm != null) {
+      statusChip = heartRateCategoryLabel(log.heartRateBpm!);
+    }
 
     return Semantics(
       label: semanticsLabel,
@@ -312,13 +405,34 @@ class _HealthLogCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    log.description,
+                    displayDescription,
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: colorScheme.onSurface,
                     ),
                   ),
+                  if (statusChip != null) ...[
+                    const SizedBox(height: 4),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: colorScheme.secondaryContainer,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        statusChip,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onPrimaryContainer,
+                        ),
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 4),
                   if (log.note != null && log.note!.isNotEmpty)
                     Text(
@@ -328,7 +442,8 @@ class _HealthLogCard extends StatelessWidget {
                         color: colorScheme.onSurfaceVariant,
                       ),
                     ),
-                  const SizedBox(height: 4),
+                  if (log.note != null && log.note!.isNotEmpty)
+                    const SizedBox(height: 4),
                   Text(
                     timeLabel,
                     style: TextStyle(
@@ -354,7 +469,7 @@ class _HealthLogCard extends StatelessWidget {
                             child: LinearProgressIndicator(
                               value: log.progressRatio,
                               minHeight: 6,
-                              backgroundColor: AppColors.gray300,
+                              backgroundColor: colorScheme.outline,
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 colorScheme.primary,
                               ),
@@ -394,6 +509,10 @@ class _HealthLogCard extends StatelessWidget {
         return Icons.bedtime;
       case HealthLogType.general:
         return Icons.description;
+      case HealthLogType.bloodPressure:
+        return Icons.monitor_heart_outlined;
+      case HealthLogType.heartRate:
+        return Icons.favorite;
     }
   }
 }

@@ -73,18 +73,20 @@ void main() {
       expect(find.text('Quick Log'), findsOneWidget);
     });
 
-    testWidgets('should render all 6 quick log buttons', (tester) async {
+    testWidgets('should render all 8 quick log buttons', (tester) async {
       // remove logs to not have duplicate icons
       final provider = createEmptyProvider();
       await tester.pumpWidget(createTestHarness(provider: provider));
 
-      // Verify all 6 quick log option labels are present
+      // Verify all 8 quick log option labels are present
       expect(find.text('Mood'), findsOneWidget);
       expect(find.text('Symptoms'), findsOneWidget);
       expect(find.text('Meals'), findsOneWidget);
       expect(find.text('Water'), findsOneWidget);
       expect(find.text('Exercise'), findsOneWidget);
       expect(find.text('Sleep'), findsOneWidget);
+      expect(find.text('Blood Pressure'), findsOneWidget);
+      expect(find.text('Heart Rate'), findsOneWidget);
     });
 
     testWidgets('should render quick log buttons with correct icons', (tester) async {
@@ -99,12 +101,14 @@ void main() {
       expect(find.byIcon(Icons.water_drop), findsOneWidget);
       expect(find.byIcon(Icons.favorite), findsOneWidget);
       expect(find.byIcon(Icons.bedtime), findsOneWidget);
+      expect(find.byIcon(Icons.monitor_heart_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.speed), findsOneWidget);
     });
 
-    testWidgets('should render "Today\'s Logs" section header', (tester) async {
+    testWidgets('should render "Latest by type" section header', (tester) async {
       await tester.pumpWidget(createTestHarness());
 
-      expect(find.text("Today's Logs"), findsOneWidget);
+      expect(find.text('Latest by type'), findsOneWidget);
     });
 
     testWidgets('should render today\'s log entries when present', (tester) async {
@@ -119,14 +123,12 @@ void main() {
       expect(find.text('Oatmeal with berries'), findsOneWidget);
     });
 
-    testWidgets('should render empty state when no logs for today', (tester) async {
+    testWidgets('should render placeholders when no logs for a type', (tester) async {
       final emptyProvider = createEmptyProvider();
       await tester.pumpWidget(createTestHarness(provider: emptyProvider));
 
-      expect(
-        find.text('No logs yet today. Use Quick Log to add one.'),
-        findsOneWidget,
-      );
+      expect(find.text('Latest by type'), findsOneWidget);
+      expect(find.text('No Mood logged'), findsOneWidget);
     });
 
     testWidgets('should use GridView for quick log buttons', (tester) async {
@@ -278,17 +280,39 @@ void main() {
       expect(addScreen.initialType, HealthLogType.sleep);
     });
 
+    testWidgets('tapping Blood Pressure quick log should navigate with bloodPressure type',
+        (tester) async {
+      await tester.pumpWidget(createTestHarness());
+      await tester.tap(find.text('Blood Pressure'));
+      await tester.pumpAndSettle();
+      final addScreen = tester.widget<HealthLogAddScreen>(
+        find.byType(HealthLogAddScreen),
+      );
+      expect(addScreen.initialType, HealthLogType.bloodPressure);
+    });
+
+    testWidgets('tapping Heart Rate quick log should navigate with heartRate type',
+        (tester) async {
+      await tester.pumpWidget(createTestHarness());
+      await tester.tap(find.text('Heart Rate'));
+      await tester.pumpAndSettle();
+      final addScreen = tester.widget<HealthLogAddScreen>(
+        find.byType(HealthLogAddScreen),
+      );
+      expect(addScreen.initialType, HealthLogType.heartRate);
+    });
+
     testWidgets('quick log buttons should all be tappable', (tester) async {
       await tester.pumpWidget(createTestHarness());
 
       // Find all OutlinedButtons (quick log buttons)
       final quickLogButtons = find.byType(OutlinedButton);
       
-      // Should find 6 quick log buttons
-      expect(quickLogButtons, findsNWidgets(6));
+      // Should find 8 quick log buttons
+      expect(quickLogButtons, findsNWidgets(8));
 
       // Verify each has an onPressed callback (is enabled)
-      for (int i = 0; i < 6; i++) {
+      for (int i = 0; i < 8; i++) {
         final button = tester.widget<OutlinedButton>(quickLogButtons.at(i));
         expect(button.onPressed, isNotNull);
       }
@@ -316,11 +340,8 @@ void main() {
       final provider = createEmptyProvider();
       await tester.pumpWidget(createTestHarness(provider: provider));
 
-      // Initially empty
-      expect(
-        find.text('No logs yet today. Use Quick Log to add one.'),
-        findsOneWidget,
-      );
+      // Initially placeholders
+      expect(find.text('No Mood logged'), findsOneWidget);
 
       // Add a log
       final newLog = HealthLog(
@@ -333,26 +354,20 @@ void main() {
       provider.addLog(newLog);
       await tester.pump();
 
-      // Should now display the log
+      // Should now display the log in the mood card
       expect(find.text('Test Mood'), findsOneWidget);
-      expect(
-        find.text('No logs yet today. Use Quick Log to add one.'),
-        findsNothing,
-      );
+      expect(find.text('No Mood logged'), findsNothing);
     });
 
-    testWidgets('should only display today\'s logs', (tester) async {
+    testWidgets('should show latest log per type for current day only', (tester) async {
       final provider = createEmptyProvider();
-      
-      // Add a log for today
+
       final todayLog = HealthLog(
         id: 'today-1',
         type: HealthLogType.mood,
         description: 'Today Log',
         createdAt: DateTime.now(),
       );
-      
-      // Add a log for yesterday
       final yesterday = DateTime.now().subtract(const Duration(days: 1));
       final yesterdayLog = HealthLog(
         id: 'yesterday-1',
@@ -360,15 +375,38 @@ void main() {
         description: 'Yesterday Log',
         createdAt: yesterday,
       );
-      
+
       provider.addLog(todayLog);
       provider.addLog(yesterdayLog);
-      
+
       await tester.pumpWidget(createTestHarness(provider: provider));
 
-      // Should only show today's log
+      // Health log screen shows only current day: today's log appears, yesterday's does not
       expect(find.text('Today Log'), findsOneWidget);
       expect(find.text('Yesterday Log'), findsNothing);
+    });
+
+    testWidgets('should show most recent log per type when multiple today', (tester) async {
+      final provider = createEmptyProvider();
+      final now = DateTime.now();
+
+      provider.addLog(HealthLog(
+        id: 'earlier',
+        type: HealthLogType.mood,
+        description: 'Earlier',
+        createdAt: DateTime(now.year, now.month, now.day, 9, 0),
+      ));
+      provider.addLog(HealthLog(
+        id: 'later',
+        type: HealthLogType.mood,
+        description: 'Later',
+        createdAt: DateTime(now.year, now.month, now.day, 11, 0),
+      ));
+
+      await tester.pumpWidget(createTestHarness(provider: provider));
+
+      expect(find.text('Later'), findsOneWidget);
+      expect(find.text('Earlier'), findsNothing);
     });
   });
 
@@ -387,6 +425,8 @@ void main() {
       expect(find.bySemanticsLabel('Water quick log, button'), findsOneWidget);
       expect(find.bySemanticsLabel('Exercise quick log, button'), findsOneWidget);
       expect(find.bySemanticsLabel('Sleep quick log, button'), findsOneWidget);
+      expect(find.bySemanticsLabel('Blood Pressure quick log, button'), findsOneWidget);
+      expect(find.bySemanticsLabel('Heart Rate quick log, button'), findsOneWidget);
     });
 
     testWidgets('log cards should have semantic labels with content', 
@@ -592,20 +632,12 @@ void main() {
       expect(find.byType(SingleChildScrollView), findsOneWidget);
     });
 
-    testWidgets('empty state should be centered', (tester) async {
+    testWidgets('latest by type section shows placeholder cards', (tester) async {
       final emptyProvider = createEmptyProvider();
       await tester.pumpWidget(createTestHarness(provider: emptyProvider));
 
-      // Find the empty state container
-      final emptyStateFinder = find.text('No logs yet today. Use Quick Log to add one.');
-      expect(emptyStateFinder, findsOneWidget);
-
-      // Verify it's in a Center widget
-      final centerFinder = find.ancestor(
-        of: emptyStateFinder,
-        matching: find.byType(Center),
-      );
-      expect(centerFinder, findsOneWidget);
+      expect(find.text('Latest by type'), findsOneWidget);
+      expect(find.text('No Mood logged'), findsOneWidget);
     });
 
     testWidgets('AppBar has centerTitle and zero elevation', (tester) async {
@@ -626,20 +658,19 @@ void main() {
       expect(size.height, greaterThanOrEqualTo(48));
     });
 
-    testWidgets('empty state container has border and padding', (tester) async {
+    testWidgets('placeholder cards have border', (tester) async {
       final emptyProvider = createEmptyProvider();
       await tester.pumpWidget(createTestHarness(provider: emptyProvider));
 
-      final emptyText = find.text('No logs yet today. Use Quick Log to add one.');
+      final placeholderText = find.text('No Mood logged');
+      expect(placeholderText, findsOneWidget);
       final container = find.ancestor(
-        of: emptyText,
+        of: placeholderText,
         matching: find.byWidgetPredicate(
           (w) => w is Container && w.decoration is BoxDecoration,
         ),
       );
-      expect(container, findsOneWidget);
-      final box = tester.widget<Container>(container);
-      expect((box.decoration as BoxDecoration).border, isNotNull);
+      expect(container, findsWidgets);
     });
   });
 

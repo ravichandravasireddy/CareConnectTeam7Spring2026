@@ -9,6 +9,24 @@ class HealthLogProvider with ChangeNotifier {
 
   List<HealthLog> get logs => List.unmodifiable(_logs);
 
+  /// Latest log per type for the current day only (most recent log for each
+  /// [HealthLogType] with [log.dateOnly] equal to today).
+  /// Used by Health Logs screen to show one current reading per category.
+  Map<HealthLogType, HealthLog> get latestByType {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final todayLogs =
+        _logs.where((log) => log.dateOnly == today).toList();
+    final map = <HealthLogType, HealthLog>{};
+    for (final log in todayLogs) {
+      if (!map.containsKey(log.type) ||
+          log.createdAt.isAfter(map[log.type]!.createdAt)) {
+        map[log.type] = log;
+      }
+    }
+    return map;
+  }
+
   HealthLogProvider() {
     _initializeMockLogs();
   }
@@ -44,6 +62,14 @@ class HealthLogProvider with ChangeNotifier {
         type: HealthLogType.symptoms,
         description: 'Mild headache',
         createdAt: DateTime(now.year, now.month, now.day, 9, 0),
+      ),
+      HealthLog(
+        id: 'blood-pressure-1',
+        type: HealthLogType.bloodPressure,
+        description: 'Blood Pressure: 120/80 mmHg',
+        createdAt: DateTime(now.year, now.month, now.day, 9, 0),
+        systolic: 120,
+        diastolic: 80,
       ),
     ]);
     _logs.sort((a, b) => b.createdAt.compareTo(a.createdAt));
@@ -127,6 +153,10 @@ class HealthLogProvider with ChangeNotifier {
         return (AppColors.accent100, AppColors.accent600);
       case HealthLogType.general:
         return (AppColors.gray100, AppColors.gray700);
+      case HealthLogType.bloodPressure:
+        return (AppColors.error100, AppColors.error700);
+      case HealthLogType.heartRate:
+        return (AppColors.primary100, AppColors.primary700);
     }
   }
 }

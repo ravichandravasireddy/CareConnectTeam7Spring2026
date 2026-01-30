@@ -88,6 +88,24 @@ class TaskProvider with ChangeNotifier {
         iconBackground: AppColors.warning100,
         iconColor: AppColors.warning700,
       ),
+      Task(
+        id: '10',
+        title: 'Follow-up Call',
+        date: DateTime(now.year, now.month, now.day, 10, 0),
+        icon: Icons.phone,
+        iconBackground: AppColors.warning100,
+        iconColor: AppColors.warning700,
+        completedAt: DateTime(now.year, now.month, now.day, 11, 0),
+      ),
+      Task(
+        id: '11',
+        title: 'Video Call with Sarah',
+        date: DateTime(now.year, now.month, 12, 11, 0),
+        icon: Icons.phone,
+        iconBackground: AppColors.warning100,
+        iconColor: AppColors.warning700,
+        completedAt: DateTime(now.year, now.month, 12, 11, 0),
+      ),
     ]);
   }
 
@@ -99,6 +117,15 @@ class TaskProvider with ChangeNotifier {
       ..sort((a, b) => a.date.compareTo(b.date));
   }
 
+  /// Tasks for [date] that are not completed (scheduled only). Use for calendar.
+  List<Task> getScheduledTasksForDate(DateTime date) {
+    final dateOnly = DateTime(date.year, date.month, date.day);
+    return _tasks
+        .where((task) => task.dateOnly == dateOnly && task.completedAt == null)
+        .toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+  }
+
   List<Task> getTasksForDay(int day, int month, int year) {
     return getTasksForDate(DateTime(year, month, day));
   }
@@ -106,6 +133,13 @@ class TaskProvider with ChangeNotifier {
   bool hasTasksForDate(DateTime date) {
     final dateOnly = DateTime(date.year, date.month, date.day);
     return _tasks.any((task) => task.dateOnly == dateOnly);
+  }
+
+  /// True if there are scheduled (incomplete) tasks for [date]. Use for calendar dots.
+  bool hasScheduledTasksForDate(DateTime date) {
+    final dateOnly = DateTime(date.year, date.month, date.day);
+    return _tasks.any((task) =>
+        task.dateOnly == dateOnly && task.completedAt == null);
   }
 
   void addTask(Task task) {
@@ -122,6 +156,16 @@ class TaskProvider with ChangeNotifier {
     final index = _tasks.indexWhere((task) => task.id == updatedTask.id);
     if (index != -1) {
       _tasks[index] = updatedTask;
+      notifyListeners();
+    }
+  }
+
+  /// Mark a task as completed. Only completed tasks appear on the history timeline.
+  void markCompleted(String taskId, [DateTime? at]) {
+    final when = at ?? DateTime.now();
+    final index = _tasks.indexWhere((task) => task.id == taskId);
+    if (index != -1) {
+      _tasks[index] = _tasks[index].copyWith(completedAt: when);
       notifyListeners();
     }
   }
