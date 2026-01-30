@@ -19,7 +19,9 @@ class NoteDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final note = context.watch<NoteProvider>().getById(noteId);
 
     if (note == null) {
@@ -34,7 +36,7 @@ class NoteDetailScreen extends StatelessWidget {
         body: Center(
           child: Text(
             'Note not found',
-            style: TextStyle(color: colorScheme.onSurfaceVariant),
+            style: textTheme.bodySmall?.copyWith(color: colorScheme.onSurfaceVariant),
           ),
         ),
       );
@@ -49,11 +51,7 @@ class NoteDetailScreen extends StatelessWidget {
         elevation: 0,
         title: Text(
           note.title,
-          style: TextStyle(
-            color: colorScheme.onSurface,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
@@ -85,16 +83,15 @@ class NoteDetailScreen extends StatelessWidget {
                       children: [
                         Text(
                           note.author,
-                          style: TextStyle(
-                            fontSize: 14,
+                          style: textTheme.bodySmall?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           timeLabel,
-                          style: TextStyle(
-                            fontSize: 12,
+                          style: textTheme.labelSmall?.copyWith(
+                            fontWeight: FontWeight.w400,
                             color: colorScheme.onSurfaceVariant,
                           ),
                         ),
@@ -115,11 +112,7 @@ class NoteDetailScreen extends StatelessWidget {
                 ),
                 child: Text(
                   formatNoteCategoryDisplay(note.category).toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: chipFg,
-                  ),
+                  style: textTheme.labelSmall?.copyWith(color: chipFg),
                 ),
               ),
               const SizedBox(height: 20),
@@ -135,8 +128,7 @@ class NoteDetailScreen extends StatelessWidget {
                 ),
                 child: Text(
                   note.body,
-                  style: TextStyle(
-                    fontSize: 16,
+                  style: textTheme.bodyLarge?.copyWith(
                     height: 1.5,
                     color: colorScheme.onSurface,
                   ),

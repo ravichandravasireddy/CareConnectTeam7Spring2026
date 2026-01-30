@@ -18,11 +18,11 @@ class VideoCallScreen extends StatefulWidget {
 
   /// Image asset for the patient (Robert Williams) in the main area. Place image in project (e.g. images/robert.jpg).
   /// When [patientCameraOnForTesting] is true, this image is shown; when false, gradient (camera off) is shown.
-  static const String? patientImageAsset = 'assets/images/robert.jpg';
+  static const String patientImageAsset = 'assets/images/robert.jpg';
 
   /// Set to your image asset path for the caregiver (Sarah Johnson) in the top-right PIP.
   /// When user's video is on, this image is shown; when video is off, grey + icon placeholder is shown.
-  static const String? caregiverPipImageAsset = 'assets/images/sarah.jpg';
+  static const String caregiverPipImageAsset = 'assets/images/sarah.jpg';
 
   /// Toggle for testing: true = show patient's image in main area; false = show gradient (camera off).
   /// Change this in code and hot restart, or tap the main video area at runtime to toggle.
@@ -68,7 +68,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     return Scaffold(
       backgroundColor: AppColors.darkBgPrimary,
       body: SafeArea(
@@ -80,14 +82,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                 children: [
                   // Center: patient (Robert Williams) — image when camera on, gradient when off (tap to toggle for testing)
                   GestureDetector(
-                    onTap: VideoCallScreen.patientImageAsset != null
-                        ? () => setState(() => _patientCameraOn = !_patientCameraOn)
-                        : null,
-                    child: _patientCameraOn &&
-                            VideoCallScreen.patientImageAsset != null &&
-                            VideoCallScreen.patientImageAsset!.isNotEmpty
+                    onTap: () => setState(() => _patientCameraOn = !_patientCameraOn),
+                    child: _patientCameraOn
                         ? _PatientVideoView(
-                            imageAsset: VideoCallScreen.patientImageAsset!,
+                            imageAsset: VideoCallScreen.patientImageAsset,
                           )
                         : _PatientCameraOffView(),
                   ),
@@ -116,9 +114,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                       ),
                       child: Text(
                         _formattedDuration,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                        style: textTheme.labelMedium?.copyWith(
                           color: AppColors.darkTextPrimary,
                         ),
                       ),
@@ -187,14 +183,16 @@ class _PatientVideoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     return Stack(
       fit: StackFit.expand,
       children: [
         Image.asset(
           imageAsset,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => _PatientCameraOffView(),
+          errorBuilder: (_, _, _) => _PatientCameraOffView(),
         ),
         Positioned(
           left: 0,
@@ -204,9 +202,7 @@ class _PatientVideoView extends StatelessWidget {
             children: [
               Text(
                 'Robert Williams',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
+                style: textTheme.headlineLarge?.copyWith(
                   color: AppColors.darkTextPrimary,
                   shadows: [
                     Shadow(
@@ -219,9 +215,9 @@ class _PatientVideoView extends StatelessWidget {
               ),
               Text(
                 'Patient',
-                style: TextStyle(
-                  fontSize: 12,
+                style: textTheme.labelSmall?.copyWith(
                   color: AppColors.darkTextPrimary.withValues(alpha: 0.9),
+                  fontWeight: FontWeight.w400,
                   shadows: [
                     Shadow(
                       color: colorScheme.shadow,
@@ -243,6 +239,7 @@ class _PatientVideoView extends StatelessWidget {
 class _PatientCameraOffView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -276,16 +273,14 @@ class _PatientCameraOffView extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'Robert Williams',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+              style: textTheme.headlineLarge?.copyWith(
                 color: AppColors.darkTextPrimary,
               ),
             ),
             Text(
               'Patient',
-              style: TextStyle(
-                fontSize: 12,
+              style: textTheme.labelSmall?.copyWith(
+                fontWeight: FontWeight.w400,
                 color: AppColors.darkTextPrimary.withValues(alpha: 0.8),
               ),
             ),
@@ -311,6 +306,7 @@ class _CaregiverPipPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Container(
       width: 128,
       height: 160,
@@ -341,7 +337,7 @@ class _CaregiverPipPlaceholder extends StatelessWidget {
                   ? Image.asset(
                       imageAsset!,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => _placeholderContent(),
+                      errorBuilder: (_, _, _) => _placeholderContent(),
                     )
                   : _placeholderContent(),
             ),
@@ -351,9 +347,7 @@ class _CaregiverPipPlaceholder extends StatelessWidget {
               child: Text(
                 'Sarah Johnson',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+                style: textTheme.labelSmall?.copyWith(
                   color: AppColors.darkTextPrimary,
                 ),
               ),

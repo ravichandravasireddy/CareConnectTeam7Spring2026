@@ -14,7 +14,9 @@ class RoleSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorScheme.surface,
@@ -27,11 +29,7 @@ class RoleSelectionScreen extends StatelessWidget {
         ),
         title: Text(
           'Select Your Role',
-          style: TextStyle(
-            color: colorScheme.onSurface,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
         ),
         centerTitle: true,
       ),
@@ -46,9 +44,7 @@ class RoleSelectionScreen extends StatelessWidget {
               // Main heading
               Text(
                 'How will you use\nCareConnect?',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
+                style: textTheme.displayLarge?.copyWith(
                   color: colorScheme.onSurface,
                   height: 1.2,
                 ),
@@ -59,8 +55,7 @@ class RoleSelectionScreen extends StatelessWidget {
               // Subtitle
               Text(
                 'Select the option that best describes you',
-                style: TextStyle(
-                  fontSize: 16,
+                style: textTheme.bodyLarge?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                 ),
               ),
@@ -122,8 +117,7 @@ class RoleSelectionScreen extends StatelessWidget {
                 child: Text(
                   'You can change this later in your account settings',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: textTheme.bodySmall?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
                 ),
@@ -159,7 +153,9 @@ class RoleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -199,17 +195,14 @@ class RoleCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                    style: textTheme.headlineLarge?.copyWith(
                       color: colorScheme.onSurface,
                     ),
                   ),
                   SizedBox(height: 4),
                   Text(
                     description,
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: textTheme.bodySmall?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                       height: 1.3,
                     ),

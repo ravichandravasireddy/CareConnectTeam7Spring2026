@@ -51,11 +51,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       }
       
       // TODO: Handle account creation (connect to backend later)
-      print('Account created!');
-      print('Name: ${_firstNameController.text} ${_lastNameController.text}');
-      print('Email: ${_emailController.text}');
-      print('Phone: ${_phoneController.text}');
-      
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -68,7 +63,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
@@ -80,11 +77,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         ),
         title: Text(
           'Create Account',
-          style: TextStyle(
-            color: colorScheme.onSurface,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
         ),
         centerTitle: true,
       ),
@@ -99,9 +92,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 // Heading
                 Text(
                   'Join CareConnect',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
+                  style: textTheme.displayMedium?.copyWith(
                     color: colorScheme.onSurface,
                   ),
                 ),
@@ -110,8 +101,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 
                 Text(
                   'Create your account to get started',
-                  style: TextStyle(
-                    fontSize: 16,
+                  style: textTheme.bodyLarge?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
                 ),
@@ -127,9 +117,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         children: [
                           Text(
                             'First Name',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                            style: textTheme.headlineSmall?.copyWith(
                               color: colorScheme.onSurface,
                             ),
                           ),
@@ -138,7 +126,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             controller: _firstNameController,
                             decoration: InputDecoration(
                               hintText: 'John',
-                              hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+                              hintStyle: textTheme.bodySmall?.copyWith(color: colorScheme.onSurfaceVariant),
                               filled: true,
                               fillColor: colorScheme.surfaceContainer,
                               border: OutlineInputBorder(
@@ -172,9 +160,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         children: [
                           Text(
                             'Last Name',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                            style: textTheme.headlineSmall?.copyWith(
                               color: colorScheme.onSurface,
                             ),
                           ),
@@ -183,7 +169,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             controller: _lastNameController,
                             decoration: InputDecoration(
                               hintText: 'Doe',
-                              hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+                              hintStyle: textTheme.bodySmall?.copyWith(color: colorScheme.onSurfaceVariant),
                               filled: true,
                               fillColor: colorScheme.surfaceContainer,
                               border: OutlineInputBorder(
@@ -218,9 +204,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 // Email Address
                 Text(
                   'Email Address',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                  style: textTheme.headlineSmall?.copyWith(
                     color: colorScheme.onSurface,
                   ),
                 ),
@@ -230,7 +214,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: 'your.email@example.com',
-                    hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+                    hintStyle: textTheme.bodySmall?.copyWith(color: colorScheme.onSurfaceVariant),
                     filled: true,
                     fillColor: colorScheme.surfaceContainer,
                     border: OutlineInputBorder(
@@ -263,9 +247,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 // Phone Number
                 Text(
                   'Phone Number',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                  style: textTheme.headlineSmall?.copyWith(
                     color: colorScheme.onSurface,
                   ),
                 ),
@@ -275,7 +257,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     hintText: '(555) 123-4567',
-                    hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+                    hintStyle: textTheme.bodySmall?.copyWith(color: colorScheme.onSurfaceVariant),
                     filled: true,
                     fillColor: colorScheme.surfaceContainer,
                     border: OutlineInputBorder(
@@ -305,9 +287,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 // Password
                 Text(
                   'Password',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                  style: textTheme.headlineSmall?.copyWith(
                     color: colorScheme.onSurface,
                   ),
                 ),
@@ -317,7 +297,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   obscureText: !_passwordVisible,
                   decoration: InputDecoration(
                     hintText: 'Create a strong password',
-                    hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+                    hintStyle: textTheme.bodySmall?.copyWith(color: colorScheme.onSurfaceVariant),
                     filled: true,
                     fillColor: colorScheme.surfaceContainer,
                     border: OutlineInputBorder(
@@ -358,8 +338,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 SizedBox(height: 8),
                 Text(
                   'At least 8 characters with letters and numbers',
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: textTheme.bodySmall?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
                 ),
@@ -369,9 +348,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 // Confirm Password
                 Text(
                   'Confirm Password',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                  style: textTheme.headlineSmall?.copyWith(
                     color: colorScheme.onSurface,
                   ),
                 ),
@@ -381,7 +358,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   obscureText: !_confirmPasswordVisible,
                   decoration: InputDecoration(
                     hintText: 'Re-enter your password',
-                    hintStyle: TextStyle(color: colorScheme.onSurfaceVariant),
+                    hintStyle: textTheme.bodySmall?.copyWith(color: colorScheme.onSurfaceVariant),
                     filled: true,
                     fillColor: colorScheme.surfaceContainer,
                     border: OutlineInputBorder(
@@ -444,22 +421,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       Expanded(
                         child: RichText(
                           text: TextSpan(
-                            style: TextStyle(fontSize: 14, color: colorScheme.onSurface),
+                            style: textTheme.bodySmall?.copyWith(color: colorScheme.onSurface),
                             children: [
-                              TextSpan(text: 'I agree to the '),
+                              const TextSpan(text: 'I agree to the '),
                               TextSpan(
                                 text: 'Terms of Service',
-                                style: TextStyle(
+                                style: textTheme.labelMedium?.copyWith(
                                   color: colorScheme.primary,
-                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              TextSpan(text: ' and '),
+                              const TextSpan(text: ' and '),
                               TextSpan(
                                 text: 'Privacy Policy',
-                                style: TextStyle(
+                                style: textTheme.labelMedium?.copyWith(
                                   color: colorScheme.primary,
-                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
@@ -488,9 +463,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     ),
                     child: Text(
                       'Create Account',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                      style: textTheme.headlineMedium?.copyWith(
+                        color: colorScheme.onPrimary,
                       ),
                     ),
                   ),
@@ -502,14 +476,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 Center(
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(fontSize: 16, color: colorScheme.onSurfaceVariant),
+                      style: textTheme.bodyLarge?.copyWith(color: colorScheme.onSurfaceVariant),
                       children: [
-                        TextSpan(text: 'Already have an account? '),
+                        const TextSpan(text: 'Already have an account? '),
                         TextSpan(
                           text: 'Sign In',
-                          style: TextStyle(
+                          style: textTheme.headlineSmall?.copyWith(
                             color: colorScheme.primary,
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],

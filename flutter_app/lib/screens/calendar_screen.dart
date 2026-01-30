@@ -105,17 +105,44 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return 'Tasks for ${DateFormat('MMMM d').format(_selectedDate!)}';
   }
 
+  /// Breakpoint for side-by-side layout: calendar left (max 600px), tasks right.
+  static const double _wideBreakpoint = 1000;
+  static const double _calendarMaxWidth = 600;
+
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final taskProvider = Provider.of<TaskProvider>(context);
-    
+    final width = MediaQuery.sizeOf(context).width;
+
     final days = const ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     final calendarDates = _calendarDates;
-    
+
     final selectedTasks = _selectedDate != null
         ? taskProvider.getScheduledTasksForDate(_selectedDate!)
         : <Task>[];
+
+    final calendarSection = _buildCalendarSection(
+      context,
+      colorScheme: colorScheme,
+      textTheme: textTheme,
+      taskProvider: taskProvider,
+      days: days,
+      calendarDates: calendarDates,
+    );
+    final tasksSection = _buildTasksSection(
+      context,
+      colorScheme: colorScheme,
+      textTheme: textTheme,
+      selectedTasks: selectedTasks,
+    );
+
+    final useWideLayout = width >= _wideBreakpoint;
+    final calendarWidth = useWideLayout
+        ? (width * 0.5).clamp(0.0, _calendarMaxWidth)
+        : null;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -125,11 +152,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         centerTitle: true,
         title: Text(
           'Calendar',
-          style: TextStyle(
-            color: colorScheme.onSurface,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
@@ -137,179 +160,207 @@ class _CalendarScreenState extends State<CalendarScreen> {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
+        child: useWideLayout
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: calendarWidth,
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      child: calendarSection,
+                    ),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
+                      child: tasksSection,
+                    ),
+                  ),
+                ],
+              )
+            : SingleChildScrollView(
                 padding: const EdgeInsets.only(bottom: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Month header + calendar grid
-                    Container(
-                      decoration: BoxDecoration(
-                        color: colorScheme.surface,
-                        border: Border(
-                          bottom: BorderSide(
-                            color: colorScheme.outline,
-                            width: 1,
-                          ),
-                        ),
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Semantics(
-                                label: 'Previous month',
-                                button: true,
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.chevron_left,
-                                    color: colorScheme.onSurfaceVariant,
-                                    size: 28,
-                                  ),
-                                  onPressed: _previousMonth,
-                                  style: IconButton.styleFrom(
-                                    minimumSize: const Size(48, 48),
-                                  ),
-                                ),
-                              ),
-                              Semantics(
-                                label: _monthYearText,
-                                header: true,
-                                child: Text(
-                                  _monthYearText,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: colorScheme.onSurface,
-                                  ),
-                                ),
-                              ),
-                              Semantics(
-                                label: 'Next month',
-                                button: true,
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.chevron_right,
-                                    color: colorScheme.onSurfaceVariant,
-                                    size: 28,
-                                  ),
-                                  onPressed: _nextMonth,
-                                  style: IconButton.styleFrom(
-                                    minimumSize: const Size(48, 48),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          // Calendar grid
-                          Semantics(
-                            label: 'Calendar, $_monthYearText',
-                            child: GridView.count(
-                              crossAxisCount: 7,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              mainAxisSpacing: 4,
-                              crossAxisSpacing: 4,
-                              children: [
-                                // Day headers
-                                for (final day in days)
-                                  Center(
-                                    child: Text(
-                                      day,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        color: colorScheme.onSurfaceVariant,
-                                      ),
-                                    ),
-                                  ),
-                                // Date cells
-                                for (final date in calendarDates)
-                                  _buildDateCell(
-                                    date,
-                                    colorScheme: colorScheme,
-                                    taskProvider: taskProvider,
-                                    isSelected: _isSelected(date),
-                                    onTap: () {
-                                      if (_isCurrentMonth(date)) {
-                                        setState(() {
-                                          _selectedDate = date;
-                                        });
-                                      }
-                                    },
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: _calendarMaxWidth),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        calendarSection,
+                        tasksSection,
+                      ],
                     ),
-
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Semantics(
-                        label: _selectedDateText,
-                        header: true,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _selectedDateText,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onSurface,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            if (selectedTasks.isEmpty && _selectedDate != null)
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(24),
-                              decoration: BoxDecoration(
-                                color: colorScheme.surface,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: colorScheme.outline,
-                                  width: 1,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'No tasks scheduled for this day',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
-                              ),
-                            )
-                          else
-                            ...selectedTasks.map((task) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: _TaskCard(
-                                    colorScheme: colorScheme,
-                                    icon: task.icon,
-                                    iconBackground: task.iconBackground,
-                                    iconColor: task.iconColor,
-                                    title: task.title,
-                                    date: task.date,
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
+      ),
+    );
+  }
+
+  Widget _buildCalendarSection(
+    BuildContext context, {
+    required ColorScheme colorScheme,
+    required TextTheme textTheme,
+    required TaskProvider taskProvider,
+    required List<String> days,
+    required List<DateTime> calendarDates,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        border: Border(
+          bottom: BorderSide(
+            color: colorScheme.outline,
+            width: 1,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Semantics(
+                label: 'Previous month',
+                button: true,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.chevron_left,
+                    color: colorScheme.onSurfaceVariant,
+                    size: 28,
+                  ),
+                  onPressed: _previousMonth,
+                  style: IconButton.styleFrom(
+                    minimumSize: const Size(48, 48),
+                  ),
+                ),
+              ),
+              Semantics(
+                label: _monthYearText,
+                header: true,
+                child: Text(
+                  _monthYearText,
+                  style: textTheme.headlineMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              Semantics(
+                label: 'Next month',
+                button: true,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.chevron_right,
+                    color: colorScheme.onSurfaceVariant,
+                    size: 28,
+                  ),
+                  onPressed: _nextMonth,
+                  style: IconButton.styleFrom(
+                    minimumSize: const Size(48, 48),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Semantics(
+            label: 'Calendar, $_monthYearText',
+            child: GridView.count(
+              crossAxisCount: 7,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              mainAxisSpacing: 4,
+              crossAxisSpacing: 4,
+              children: [
+                for (final day in days)
+                  Center(
+                    child: Text(
+                      day,
+                      style: textTheme.labelSmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                for (final date in calendarDates)
+                  _buildDateCell(
+                    date,
+                    colorScheme: colorScheme,
+                    textTheme: textTheme,
+                    taskProvider: taskProvider,
+                    isSelected: _isSelected(date),
+                    onTap: () {
+                      if (_isCurrentMonth(date)) {
+                        setState(() {
+                          _selectedDate = date;
+                        });
+                      }
+                    },
+                  ),
+              ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTasksSection(
+    BuildContext context, {
+    required ColorScheme colorScheme,
+    required TextTheme textTheme,
+    required List<Task> selectedTasks,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Semantics(
+        label: _selectedDateText,
+        header: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _selectedDateText,
+              style: textTheme.headlineSmall?.copyWith(
+                color: colorScheme.onSurface,
+              ),
+            ),
+            const SizedBox(height: 12),
+            if (selectedTasks.isEmpty && _selectedDate != null)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: colorScheme.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: colorScheme.outline,
+                    width: 1,
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    'No tasks scheduled for this day',
+                    style: textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              )
+            else
+              ...selectedTasks.map((task) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: _TaskCard(
+                      colorScheme: colorScheme,
+                      textTheme: textTheme,
+                      icon: task.icon,
+                      iconBackground: task.iconBackground,
+                      iconColor: task.iconColor,
+                      title: task.title,
+                      date: task.date,
+                    ),
+                  )),
           ],
         ),
       ),
@@ -319,6 +370,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Widget _buildDateCell(
     DateTime date, {
     required ColorScheme colorScheme,
+    required TextTheme textTheme,
     required TaskProvider taskProvider,
     required bool isSelected,
     required VoidCallback onTap,
@@ -372,9 +424,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
             children: [
               Text(
                 isCurrentMonth ? '${date.day}' : '',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: (isToday || isSelected) ? FontWeight.bold : FontWeight.normal,
+                style: textTheme.bodySmall?.copyWith(
+                  fontWeight:
+                      (isToday || isSelected) ? FontWeight.bold : FontWeight.normal,
                   color: textColor,
                 ),
               ),
@@ -398,6 +450,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
 class _TaskCard extends StatelessWidget {
   final ColorScheme colorScheme;
+  final TextTheme textTheme;
   final IconData icon;
   final Color iconBackground;
   final Color iconColor;
@@ -406,6 +459,7 @@ class _TaskCard extends StatelessWidget {
 
   const _TaskCard({
     required this.colorScheme,
+    required this.textTheme,
     required this.icon,
     required this.iconBackground,
     required this.iconColor,
@@ -453,16 +507,14 @@ class _TaskCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
+                      style: textTheme.titleMedium?.copyWith(
                         color: colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       timeLabel,
-                      style: TextStyle(
+                      style: textTheme.bodySmall?.copyWith(
                         fontSize: 13,
                         color: colorScheme.onSurfaceVariant,
                       ),

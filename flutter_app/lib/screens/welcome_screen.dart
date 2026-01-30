@@ -13,6 +13,9 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     return Scaffold(
       body: Container(
         // Gradient background matching your Figma design
@@ -55,10 +58,9 @@ class WelcomeScreen extends StatelessWidget {
                 // App Title
                 Text(
                   'CareConnect',
-                  style: TextStyle(
+                  style: textTheme.displayLarge?.copyWith(
                     fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: colorScheme.onPrimary,
                   ),
                 ),
 
@@ -68,8 +70,7 @@ class WelcomeScreen extends StatelessWidget {
                 Text(
                   'Remote health management and coordination for patients and caregivers',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
+                  style: textTheme.titleLarge?.copyWith(
                     color: AppColors.gray300,
                     height: 1.5,
                   ),
@@ -101,9 +102,8 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                     child: Text(
                       'Get Started',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                      style: textTheme.headlineMedium?.copyWith(
+                        color: colorScheme.primary,
                       ),
                     ),
                   ),
@@ -118,7 +118,6 @@ class WelcomeScreen extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () {
                       // TODO: Navigate to sign in screen
-                      print('Sign In pressed');
                     },
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -129,9 +128,8 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                     child: Text(
                       'Sign In',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                      style: textTheme.headlineMedium?.copyWith(
+                        color: colorScheme.onPrimary,
                       ),
                     ),
                   ),
@@ -142,8 +140,7 @@ class WelcomeScreen extends StatelessWidget {
                 // HIPAA compliance text
                 Text(
                   'HIPAA-compliant • Secure • Private',
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: textTheme.bodySmall?.copyWith(
                     color: AppColors.gray300,
                   ),
                 ),

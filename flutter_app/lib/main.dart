@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'screens/welcome_screen.dart';
-// import 'screens/notes_screen.dart';
-// import 'screens/health_logs_screen.dart';
-// import 'screens/health_timeline_screen.dart';
-// import 'screens/calendar_screen.dart';
-// import 'screens/notification_screen.dart';
-import 'screens/video_call_screen.dart';
+import 'screens/temporary_screen.dart';
 import 'theme/app_colors.dart';
+import 'theme/app_typography.dart';
 import 'providers/task_provider.dart';
 import 'providers/notification_provider.dart';
 import 'providers/note_provider.dart';
@@ -82,9 +78,9 @@ class MyApp extends StatelessWidget {
           ),
           scaffoldBackgroundColor: AppColors.gray100,
           focusColor: AppColors.primary600,
-          textTheme: ThemeData.light().textTheme.apply(
-            bodyColor: AppColors.gray900,
-            displayColor: AppColors.gray900,
+          textTheme: appTextTheme(
+            ThemeData.light().textTheme,
+            AppColors.gray900,
           ),
         ),
         darkTheme: ThemeData(
@@ -119,12 +115,12 @@ class MyApp extends StatelessWidget {
           ),
           scaffoldBackgroundColor: AppColors.darkBgPrimary,
           focusColor: AppColors.primary500,
-          textTheme: ThemeData.dark().textTheme.apply(
-            bodyColor: AppColors.darkTextPrimary,
-            displayColor: AppColors.darkTextPrimary,
+          textTheme: appTextTheme(
+            ThemeData.dark().textTheme,
+            AppColors.darkTextPrimary,
           ),
         ),
-        home: const VideoCallScreen(),
+        home: const TemporaryScreen(),
       ),
     );
   }

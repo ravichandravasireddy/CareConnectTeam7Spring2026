@@ -39,7 +39,9 @@ class NotesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final noteProvider = context.watch<NoteProvider>();
     final notes = noteProvider.notes;
 
@@ -50,11 +52,7 @@ class NotesScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Notes',
-          style: TextStyle(
-            color: colorScheme.onSurface,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
@@ -100,8 +98,7 @@ class NotesScreen extends StatelessWidget {
                   ? Center(
                       child: Text(
                         'No notes yet. Tap Add New Note to create one.',
-                        style: TextStyle(
-                          fontSize: 16,
+                        style: textTheme.bodyLarge?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
                       ),
@@ -149,7 +146,9 @@ class _NoteListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final (chipBg, chipFg) = NoteProvider.categoryColors(note.category);
     final preview =
         note.body.length > 60 ? '${note.body.substring(0, 60)}…' : note.body;
@@ -204,9 +203,7 @@ class _NoteListTile extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 note.title,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
+                                style: textTheme.titleMedium?.copyWith(
                                   color: colorScheme.onSurface,
                                 ),
                                 maxLines: 1,
@@ -215,8 +212,8 @@ class _NoteListTile extends StatelessWidget {
                             ),
                             Text(
                               timeLabel,
-                              style: TextStyle(
-                                fontSize: 12,
+                              style: textTheme.labelSmall?.copyWith(
+                                fontWeight: FontWeight.w400,
                                 color: colorScheme.onSurfaceVariant,
                               ),
                             ),
@@ -225,8 +222,8 @@ class _NoteListTile extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           note.author,
-                          style: TextStyle(
-                            fontSize: 12,
+                          style: textTheme.labelSmall?.copyWith(
+                            fontWeight: FontWeight.w400,
                             color: colorScheme.onSurfaceVariant,
                           ),
                           maxLines: 1,
@@ -235,8 +232,7 @@ class _NoteListTile extends StatelessWidget {
                         const SizedBox(height: 6),
                         Text(
                           preview,
-                          style: TextStyle(
-                            fontSize: 14,
+                          style: textTheme.bodySmall?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
                           maxLines: 2,
@@ -254,9 +250,8 @@ class _NoteListTile extends StatelessWidget {
                           ),
                           child: Text(
                             formatNoteCategoryDisplay(note.category).toUpperCase(),
-                            style: TextStyle(
+                            style: textTheme.labelSmall?.copyWith(
                               fontSize: 11,
-                              fontWeight: FontWeight.w600,
                               color: chipFg,
                             ),
                           ),

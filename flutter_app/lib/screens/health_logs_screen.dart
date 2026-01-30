@@ -20,10 +20,12 @@ class HealthLogsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final provider = context.watch<HealthLogProvider>();
     final latestByType = provider.latestByType;
-    final scaffoldBackground = Theme.of(context).scaffoldBackgroundColor;
+    final scaffoldBackground = theme.scaffoldBackgroundColor;
 
     final quickLogOptions = <_QuickLogOption>[
       _QuickLogOption(
@@ -80,11 +82,7 @@ class HealthLogsScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Health Logs',
-          style: TextStyle(
-            color: colorScheme.onSurface,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
@@ -145,9 +143,7 @@ class HealthLogsScreen extends StatelessWidget {
                         children: [
                           Text(
                             'Quick Log',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                            style: textTheme.headlineSmall?.copyWith(
                               color: colorScheme.onSurface,
                             ),
                           ),
@@ -156,12 +152,18 @@ class HealthLogsScreen extends StatelessWidget {
                             crossAxisCount: 3,
                             crossAxisSpacing: 8,
                             mainAxisSpacing: 8,
-                            childAspectRatio: 1.35,
+                            childAspectRatio: 1.0,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             children: quickLogOptions
                                 .map(
-                                  (option) => _QuickLogButton(option: option),
+                                  (option) => Center(
+                                    child: SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: _QuickLogButton(option: option),
+                                    ),
+                                  ),
                                 )
                                 .toList(),
                           ),
@@ -176,9 +178,7 @@ class HealthLogsScreen extends StatelessWidget {
                         children: [
                           Text(
                             'Latest by type',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                            style: textTheme.headlineSmall?.copyWith(
                               color: colorScheme.onSurface,
                             ),
                           ),
@@ -227,7 +227,9 @@ class _QuickLogButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final (bg, fg) = HealthLogProvider.typeColors(option.type);
 
     return Semantics(
@@ -247,7 +249,9 @@ class _QuickLogButton extends StatelessWidget {
           }
         },
         style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+          minimumSize: const Size(0, 0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           side: BorderSide(color: colorScheme.outline, width: 1.5),
           backgroundColor: colorScheme.surface,
           shape: RoundedRectangleBorder(
@@ -266,9 +270,7 @@ class _QuickLogButton extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               option.label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+              style: textTheme.labelSmall?.copyWith(
                 color: colorScheme.onSurface,
               ),
             ),
@@ -334,7 +336,9 @@ class _PlaceholderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final (bg, fg) = HealthLogProvider.typeColors(type);
     return Container(
       decoration: BoxDecoration(
@@ -355,8 +359,7 @@ class _PlaceholderCard extends StatelessWidget {
           Expanded(
             child: Text(
               'No $label logged',
-              style: TextStyle(
-                fontSize: 14,
+              style: textTheme.bodySmall?.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
             ),
@@ -375,7 +378,9 @@ class _HealthLogCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final (bg, fg) = HealthLogProvider.typeColors(log.type);
     final timeLabel = DateFormat.jm().format(log.createdAt);
 
@@ -419,9 +424,7 @@ class _HealthLogCard extends StatelessWidget {
                 children: [
                   Text(
                     displayDescription,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
+                    style: textTheme.titleMedium?.copyWith(
                       color: colorScheme.onSurface,
                     ),
                   ),
@@ -438,9 +441,8 @@ class _HealthLogCard extends StatelessWidget {
                       ),
                       child: Text(
                         statusChip,
-                        style: TextStyle(
+                        style: textTheme.labelLarge?.copyWith(
                           fontSize: 11,
-                          fontWeight: FontWeight.w600,
                           color: colorScheme.onPrimaryContainer,
                         ),
                       ),
@@ -450,7 +452,7 @@ class _HealthLogCard extends StatelessWidget {
                   if (log.note != null && log.note!.isNotEmpty)
                     Text(
                       log.note!,
-                      style: TextStyle(
+                      style: textTheme.bodySmall?.copyWith(
                         fontSize: 13,
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -459,8 +461,8 @@ class _HealthLogCard extends StatelessWidget {
                     const SizedBox(height: 4),
                   Text(
                     timeLabel,
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: textTheme.labelSmall?.copyWith(
+                      fontWeight: FontWeight.w400,
                       color: colorScheme.onSurfaceVariant,
                     ),
                   ),
@@ -470,8 +472,9 @@ class _HealthLogCard extends StatelessWidget {
                       children: [
                         Text(
                           'Goal: ${log.waterGoal!.toStringAsFixed(0)} oz',
-                          style: TextStyle(
+                          style: textTheme.labelSmall?.copyWith(
                             fontSize: 11,
+                            fontWeight: FontWeight.w400,
                             color: colorScheme.onSurfaceVariant,
                           ),
                         ),
@@ -498,7 +501,10 @@ class _HealthLogCard extends StatelessWidget {
             if (log.emoji != null && log.emoji!.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(left: 8),
-                child: Text(log.emoji!, style: const TextStyle(fontSize: 22)),
+                child: Text(
+                  log.emoji!,
+                  style: textTheme.titleLarge?.copyWith(fontSize: 22),
+                ),
               ),
           ],
         ),

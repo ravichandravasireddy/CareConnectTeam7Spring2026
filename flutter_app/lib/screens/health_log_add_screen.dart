@@ -153,7 +153,9 @@ class _HealthLogAddScreenState extends State<HealthLogAddScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -161,11 +163,7 @@ class _HealthLogAddScreenState extends State<HealthLogAddScreen> {
         elevation: 0,
         title: Text(
           'New Health Log',
-          style: TextStyle(
-            color: colorScheme.onSurface,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
         ),
         leading: IconButton(
           icon: Icon(Icons.close, color: colorScheme.onSurface),
@@ -325,15 +323,15 @@ class _MoodSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Mood',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+          style: textTheme.labelMedium?.copyWith(
             color: colorScheme.onSurface,
           ),
         ),
@@ -366,7 +364,9 @@ class _WaterLogFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final provider = context.watch<HealthLogProvider>();
     final currentTotal = provider.waterTotalForDate(DateTime.now());
 
@@ -375,7 +375,9 @@ class _WaterLogFields extends StatelessWidget {
       children: [
         Text(
           'Current total: ${currentTotal.toStringAsFixed(0)} oz',
-          style: TextStyle(fontSize: 14, color: colorScheme.onSurfaceVariant),
+          style: textTheme.bodySmall?.copyWith(
+            color: colorScheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: 12),
         TextFormField(
@@ -415,14 +417,18 @@ class _SleepLogFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Sleep duration: ${hours.toStringAsFixed(1)} hours',
-          style: TextStyle(fontSize: 14, color: colorScheme.onSurfaceVariant),
+          style: textTheme.bodySmall?.copyWith(
+            color: colorScheme.onSurfaceVariant,
+          ),
         ),
         Slider(
           value: hours,
@@ -487,7 +493,9 @@ class _BloodPressureFieldsState extends State<_BloodPressureFields> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -538,9 +546,7 @@ class _BloodPressureFieldsState extends State<_BloodPressureFields> {
             ),
             child: Text(
               _label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+              style: textTheme.labelMedium?.copyWith(
                 color: colorScheme.onPrimaryContainer,
               ),
             ),
@@ -596,7 +602,9 @@ class _HeartRateFieldsState extends State<_HeartRateFields> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -624,9 +632,7 @@ class _HeartRateFieldsState extends State<_HeartRateFields> {
             ),
             child: Text(
               _label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+              style: textTheme.labelMedium?.copyWith(
                 color: colorScheme.onPrimaryContainer,
               ),
             ),

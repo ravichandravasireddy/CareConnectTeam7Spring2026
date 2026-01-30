@@ -37,7 +37,9 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final notificationProvider = context.watch<NotificationProvider>();
     final sections = notificationProvider.notificationSections;
 
@@ -49,11 +51,7 @@ class NotificationScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Notifications',
-          style: TextStyle(
-            color: colorScheme.onSurface,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
@@ -84,9 +82,7 @@ class NotificationScreen extends StatelessWidget {
                       ),
                       child: Text(
                         'Mark all as read',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                        style: textTheme.labelMedium?.copyWith(
                           color: colorScheme.primary,
                         ),
                       ),
@@ -140,7 +136,9 @@ class _NotificationSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
 
     if (notifications.isEmpty) {
       return const SizedBox.shrink();
@@ -155,9 +153,7 @@ class _NotificationSection extends StatelessWidget {
             header: true,
             child: Text(
               title,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+              style: textTheme.labelMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
             ),
@@ -196,7 +192,9 @@ class _NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
 
     final (borderColor, backgroundColor, avatarColor, iconColor) = _typeStyles(
       item.type,
@@ -249,9 +247,7 @@ class _NotificationCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               item.title,
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
+                              style: textTheme.titleMedium?.copyWith(
                                 color: colorScheme.onSurface,
                               ),
                             ),
@@ -273,16 +269,15 @@ class _NotificationCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         item.summary,
-                        style: TextStyle(
-                          fontSize: 14,
+                        style: textTheme.bodySmall?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         timeLabel,
-                        style: TextStyle(
-                          fontSize: 12,
+                        style: textTheme.labelSmall?.copyWith(
+                          fontWeight: FontWeight.w400,
                           color: colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
                         ),
                       ),

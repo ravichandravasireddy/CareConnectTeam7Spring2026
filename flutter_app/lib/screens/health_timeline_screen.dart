@@ -22,8 +22,10 @@ class HealthTimelineScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final scaffoldBackground = Theme.of(context).scaffoldBackgroundColor;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+    final scaffoldBackground = theme.scaffoldBackgroundColor;
 
     // Rebuild when any of the three source providers change
     context.watch<HealthLogProvider>();
@@ -42,11 +44,7 @@ class HealthTimelineScreen extends StatelessWidget {
           centerTitle: true,
           title: Text(
             'Health Timeline',
-            style: TextStyle(
-              color: colorScheme.onSurface,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
+            style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
           ),
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
@@ -60,8 +58,7 @@ class HealthTimelineScreen extends StatelessWidget {
               child: Text(
                 'No timeline events yet. Add health logs, notes, or tasks to see them here.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
+                style: textTheme.bodySmall?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                 ),
               ),
@@ -79,11 +76,7 @@ class HealthTimelineScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Health Timeline',
-          style: TextStyle(
-            color: colorScheme.onSurface,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
@@ -146,7 +139,9 @@ class _TimelineItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final timeLabel = _formatTimestamp(event.timestamp);
 
     return Row(
@@ -196,17 +191,15 @@ class _TimelineItem extends StatelessWidget {
                     Expanded(
                       child: Text(
                         event.title,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                        style: textTheme.titleMedium?.copyWith(
                           color: colorScheme.onSurface,
                         ),
                       ),
                     ),
                     Text(
                       timeLabel,
-                      style: TextStyle(
-                        fontSize: 12,
+                      style: textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.w400,
                         color: colorScheme.onSurfaceVariant,
                       ),
                     ),
@@ -216,8 +209,7 @@ class _TimelineItem extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     event.subtitle!,
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: textTheme.bodySmall?.copyWith(
                       color: colorScheme.onSurface,
                       height: 1.35,
                     ),
@@ -233,9 +225,8 @@ class _TimelineItem extends StatelessWidget {
                     ),
                     child: Text(
                       event.statusLabel!,
-                      style: TextStyle(
+                      style: textTheme.labelSmall?.copyWith(
                         fontSize: 11,
-                        fontWeight: FontWeight.w600,
                         color: colorScheme.onSecondaryContainer,
                       ),
                     ),
