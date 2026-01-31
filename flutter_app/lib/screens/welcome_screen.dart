@@ -30,15 +30,21 @@ class WelcomeScreen extends StatelessWidget {
           ),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Spacer to push content toward center
-                Spacer(flex: 2),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Flexible space so content stays centered when scrollable
+                        SizedBox(height: constraints.maxHeight * 0.15),
 
-                // Heart Icon in white circle
+                        // Heart Icon in white circle
                 Container(
                   width: 120,
                   height: 120,
@@ -64,9 +70,9 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 16),
+                        SizedBox(height: 16),
 
-                // Description
+                        // Description
                 Text(
                   'Remote health management and coordination for patients and caregivers',
                   textAlign: TextAlign.center,
@@ -74,11 +80,11 @@ class WelcomeScreen extends StatelessWidget {
                     color: AppColors.gray300,
                     height: 1.5,
                   ),
-                ),
+                        ),
 
-                Spacer(flex: 2),
+                        SizedBox(height: constraints.maxHeight * 0.15),
 
-                // Get Started Button (Primary)
+                        // Get Started Button (Primary)
                 SizedBox(
                   width: double.infinity,
                   height: 56,
@@ -109,9 +115,9 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 16),
+                        SizedBox(height: 16),
 
-                // Sign In Button (Outlined)
+                        // Sign In Button (Outlined)
                 SizedBox(
                   width: double.infinity,
                   height: 56,
@@ -133,21 +139,25 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
+                        ),
 
-                SizedBox(height: 32),
+                        SizedBox(height: 32),
 
-                // HIPAA compliance text
+                        // HIPAA compliance text
                 Text(
                   'HIPAA-compliant • Secure • Private',
                   style: textTheme.bodySmall?.copyWith(
                     color: AppColors.gray300,
                   ),
-                ),
+                        ),
 
-                SizedBox(height: 24),
-              ],
-            ),
+                        SizedBox(height: 24),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),

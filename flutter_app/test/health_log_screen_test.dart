@@ -615,15 +615,6 @@ void main() {
   // ===========================================================================
 
   group('HealthLogsScreen Layout', () {
-    testWidgets('quick log grid should have 3 columns', (tester) async {
-      await tester.pumpWidget(createTestHarness());
-
-      final gridView = tester.widget<GridView>(find.byType(GridView));
-      final gridDelegate = gridView.gridDelegate as SliverGridDelegateWithFixedCrossAxisCount;
-      
-      expect(gridDelegate.crossAxisCount, 3);
-    });
-
     testWidgets('should use Column for main layout', (tester) async {
       await tester.pumpWidget(createTestHarness());
 

@@ -34,98 +34,107 @@ class RoleSelectionScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 40),
-              
-              // Main heading
-              Text(
-                'How will you use\nCareConnect?',
-                style: textTheme.displayLarge?.copyWith(
-                  color: colorScheme.onSurface,
-                  height: 1.2,
-                ),
-              ),
-              
-              SizedBox(height: 16),
-              
-              // Subtitle
-              Text(
-                'Select the option that best describes you',
-                style: textTheme.bodyLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ),
-              
-              SizedBox(height: 40),
-              
-              // Care Recipient Card
-              RoleCard(
-                icon: Icons.favorite,
-                iconColor: colorScheme.primary,
-                backgroundColor: AppColors.primary100,
-                title: 'Care Recipient',
-                description: 'I\'m managing my\nown health and tasks',
-                onTap: () {
-                  // Navigate to Create Account screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CreateAccountScreen(),
-                    ),
-                  );
-                },
-              ),
-              
-              SizedBox(height: 16),
-              
-              // Caregiver Card
-              RoleCard(
-                icon: Icons.people,
-                iconColor: colorScheme.tertiary,
-                backgroundColor: AppColors.accent100,
-                title: 'Caregiver',
-                description: 'I\'m caring for one or\nmore people',
-                onTap: () {
-                  // Navigate to Create Account screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CreateAccountScreen(),
-                    ),
-                  );
-                },
-              ),
-              
-              Spacer(),
-              
-              // Info box at bottom
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: colorScheme.outline,
-                    width: 1,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: constraints.maxHeight * 0.08),
+
+                      // Main heading
+                      Text(
+                        'How will you use\nCareConnect?',
+                        style: textTheme.displayLarge?.copyWith(
+                          color: colorScheme.onSurface,
+                          height: 1.2,
+                        ),
+                      ),
+
+                      SizedBox(height: 16),
+
+                      // Subtitle
+                      Text(
+                        'Select the option that best describes you',
+                        style: textTheme.bodyLarge?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+
+                      SizedBox(height: 40),
+
+                      // Care Recipient Card
+                      RoleCard(
+                        icon: Icons.favorite,
+                        iconColor: colorScheme.primary,
+                        backgroundColor: AppColors.primary100,
+                        title: 'Care Recipient',
+                        description: 'I\'m managing my\nown health and tasks',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreateAccountScreen(),
+                            ),
+                          );
+                        },
+                      ),
+
+                      SizedBox(height: 16),
+
+                      // Caregiver Card
+                      RoleCard(
+                        icon: Icons.people,
+                        iconColor: colorScheme.tertiary,
+                        backgroundColor: AppColors.accent100,
+                        title: 'Caregiver',
+                        description: 'I\'m caring for one or\nmore people',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreateAccountScreen(),
+                            ),
+                          );
+                        },
+                      ),
+
+                      SizedBox(height: constraints.maxHeight * 0.08),
+
+                      // Info box at bottom
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: colorScheme.outline,
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          'You can change this later in your account settings',
+                          textAlign: TextAlign.center,
+                          style: textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(height: 24),
+                    ],
                   ),
                 ),
-                child: Text(
-                  'You can change this later in your account settings',
-                  textAlign: TextAlign.center,
-                  style: textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
               ),
-              
-              SizedBox(height: 24),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
