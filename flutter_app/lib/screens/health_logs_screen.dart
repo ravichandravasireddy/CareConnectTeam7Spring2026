@@ -148,24 +148,42 @@ class HealthLogsScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          GridView.count(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 8,
-                            mainAxisSpacing: 8,
-                            childAspectRatio: 1.0,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: quickLogOptions
-                                .map(
-                                  (option) => Center(
-                                    child: SizedBox(
-                                      width: 100,
-                                      height: 100,
-                                      child: _QuickLogButton(option: option),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              const spacing = 8.0;
+                              const minButtonWidth = 100.0;
+                              const maxButtonWidth = 100.0;
+                              final width = constraints.maxWidth;
+                              // Max columns so each cell >= 48px; max so each cell <= 200px.
+                              final colsForMin = (width + spacing) ~/ (minButtonWidth + spacing);
+                              final colsForMax = (width + spacing) ~/ (maxButtonWidth + spacing);
+                              final crossAxisCount = (colsForMax >= 1)
+                                  ? colsForMax.clamp(1, colsForMin)
+                                  : 1;
+                              return GridView.count(
+                                crossAxisCount: crossAxisCount,
+                                crossAxisSpacing: spacing,
+                                mainAxisSpacing: spacing,
+                                childAspectRatio: 1.0,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                children: quickLogOptions
+                                    .map(
+                                      (option) => Center(
+                                        child: ConstrainedBox(
+                                          constraints: const BoxConstraints(
+                                            minWidth: minButtonWidth,
+                                            maxWidth: maxButtonWidth,
+                                            minHeight: minButtonWidth,
+                                            maxHeight: maxButtonWidth,
+                                          ),
+                                          child: _QuickLogButton(option: option),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              );
+                            },
                           ),
                         ],
                       ),
