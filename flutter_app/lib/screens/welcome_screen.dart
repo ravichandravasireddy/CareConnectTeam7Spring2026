@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'role_selection_screen.dart';
+import 'navigation_hub_screen.dart';
 import '../theme/app_colors.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -143,6 +144,25 @@ class WelcomeScreen extends StatelessWidget {
                 ),
 
                 SizedBox(height: 24),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NavigationHubScreen(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Open Navigation Hub',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16),
               ],
             ),
           ),

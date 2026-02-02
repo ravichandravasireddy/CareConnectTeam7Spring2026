@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
+import 'screens/caregiver_analytics_screen.dart';
+import 'screens/caregiver_dashboard.dart';
+import 'screens/caregiver_patient_monitoring_screen.dart';
+import 'screens/caregiver_task_management_screen.dart';
+import 'screens/create_account_screen.dart';
+import 'screens/emergency_sos_alert.dart';
+import 'screens/emergency_sos_receive_screen.dart';
+import 'screens/navigation_hub_screen.dart';
+import 'screens/role_selection_screen.dart';
+import 'screens/task_details_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'theme/app_colors.dart';
+import 'models/task.dart';
 
 void main() {
   runApp(const MyApp());
@@ -86,7 +97,30 @@ class MyApp extends StatelessWidget {
               displayColor: AppColors.darkTextPrimary,
             ),
       ),
-      home: const WelcomeScreen(),
+      routes: {
+        '/': (_) => const WelcomeScreen(),
+        '/nav-hub': (_) => const NavigationHubScreen(),
+        '/role-selection': (_) => const RoleSelectionScreen(),
+        '/create-account': (_) => const CreateAccountScreen(),
+        '/caregiver-dashboard': (_) => const CaregiverDashboardScreen(),
+        '/caregiver-patient-monitoring': (_) =>
+            const CaregiverPatientMonitoringScreen(),
+        '/caregiver-task-management': (_) =>
+            const CaregiverTaskManagementScreen(),
+        '/caregiver-analytics': (_) => const CaregiverAnalyticsScreen(),
+        '/emergency-sos': (_) => const EmergencySOSAlertScreen(),
+        '/emergency-sos-receive': (_) => const EmergencySOSReceiveScreen(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/task-details' && settings.arguments is Task) {
+          final task = settings.arguments! as Task;
+          return MaterialPageRoute<void>(
+            builder: (_) => TaskDetailsScreen(task: task),
+          );
+        }
+        return null;
+      },
+      initialRoute: '/',
     );
   }
 }
