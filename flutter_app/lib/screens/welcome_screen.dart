@@ -40,136 +40,149 @@ class WelcomeScreen extends StatelessWidget {
                         SizedBox(height: constraints.maxHeight * 0.15),
 
                         // Heart Icon in white circle
-                Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.favorite,
-                    size: 60,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
+                        Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.favorite,
+                            size: 60,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
 
-                const SizedBox(height: 40),
+                        const SizedBox(height: 40),
 
-                // App Title
-                Text(
-                  'CareConnect',
-                  style: textTheme.displayLarge?.copyWith(
-                    fontSize: 48,
-                    color: colorScheme.onPrimary,
-                  ),
-                ),
+                        // App Title
+                        Text(
+                          'CareConnect',
+                          style: textTheme.displayLarge?.copyWith(
+                            fontSize: 48,
+                            color: colorScheme.onPrimary,
+                          ),
+                        ),
 
                         SizedBox(height: 16),
 
                         // Description
-                Text(
-                  'Remote health management and coordination for patients and caregivers',
-                  textAlign: TextAlign.center,
-                  style: textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.9),
-                    height: 1.5,
-                  ),
+                        Text(
+                          'Remote health management and coordination for patients and caregivers',
+                          textAlign: TextAlign.center,
+                          style: textTheme.titleLarge?.copyWith(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onPrimary.withValues(alpha: 0.9),
+                            height: 1.5,
+                          ),
                         ),
 
                         SizedBox(height: constraints.maxHeight * 0.15),
 
                         // Get Started Button (Primary)
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/role-selection');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.surface,
-                      foregroundColor: Theme.of(context).colorScheme.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      'Get Started',
-                      style: textTheme.headlineMedium?.copyWith(
-                        color: colorScheme.primary,
-                      ),
-                    
-                    ),
-                  ),
-                ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/role-selection');
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.surface,
+                              foregroundColor: Theme.of(
+                                context,
+                              ).colorScheme.primary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: Text(
+                              'Get Started',
+                              style: textTheme.headlineMedium?.copyWith(
+                                color: colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        ),
 
                         SizedBox(height: 16),
 
                         // Sign In Button (Outlined)
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/signin');
-                    },
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        width: 2,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      'Sign In',
-                      style: textTheme.headlineMedium?.copyWith(
-                        color: colorScheme.onPrimary,
-                      ),
-                    ),
-                  ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/signin');
+                            },
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Theme.of(
+                                context,
+                              ).colorScheme.onPrimary,
+                              side: BorderSide(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                width: 2,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Text(
+                              'Sign In',
+                              style: textTheme.headlineMedium?.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                          ),
                         ),
 
                         SizedBox(height: 32),
 
                         // HIPAA compliance text
-                Text(
-                  'HIPAA-compliant • Secure • Private',
-                  style: textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.8),
-                  ),
+                        Text(
+                          'HIPAA-compliant • Secure • Private',
+                          style: textTheme.bodySmall?.copyWith(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onPrimary.withValues(alpha: 0.8),
+                          ),
                         ),
 
-                SizedBox(height: 24),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NavigationHubScreen(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Open Navigation Hub',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      decoration: TextDecoration.underline,
+                        SizedBox(height: 24),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const NavigationHubScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Open Navigation Hub',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
     );
-    
   }
 }
