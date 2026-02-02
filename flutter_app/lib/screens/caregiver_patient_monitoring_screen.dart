@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import 'caregiver_analytics_screen.dart';
+import 'caregiver_dashboard.dart';
+import 'caregiver_task_management_screen.dart';
 
 // =============================================================================
 // CAREGIVER: PATIENT MONITORING
@@ -15,7 +18,6 @@ class CaregiverPatientMonitoringScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
-    final patients = _mockPatients;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -23,251 +25,326 @@ class CaregiverPatientMonitoringScreen extends StatelessWidget {
         backgroundColor: colorScheme.surface,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.menu, color: colorScheme.onSurface),
+          onPressed: () {},
         ),
         title: Text(
-          'Patient Monitoring',
+          'Patient Details',
           style: textTheme.headlineLarge?.copyWith(
             color: colorScheme.onSurface,
           ),
         ),
         centerTitle: true,
+        actions: [
+          _NotificationIcon(colorScheme: colorScheme),
+        ],
       ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            Semantics(
-              header: true,
-              child: Text(
-                'Overview',
-                style: textTheme.headlineSmall?.copyWith(
-                  color: colorScheme.onSurface,
+            TextButton.icon(
+              onPressed: () {},
+              icon: Icon(Icons.arrow_back, color: colorScheme.primary),
+              label: Text(
+                'Back to Patients',
+                style: textTheme.bodyLarge?.copyWith(
+                  color: colorScheme.primary,
+                  decoration: TextDecoration.underline,
                 ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Monitor vitals, alerts, and recent check-ins.',
-              style: textTheme.bodyLarge?.copyWith(
-                color: colorScheme.onSurfaceVariant,
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+                minimumSize: const Size(0, 44),
               ),
             ),
-            const SizedBox(height: 24),
-            ...patients.map((patient) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: _PatientMonitorCard(patient: patient),
-              );
-            }).toList(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _PatientMonitorCard extends StatelessWidget {
-  final PatientMonitorItem patient;
-
-  const _PatientMonitorCard({required this.patient});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final textTheme = theme.textTheme;
-    final statusColor = _statusColor(patient.alertLevel);
-    final statusBg = _statusBackground(patient.alertLevel);
-
-    return Semantics(
-      label:
-          '${patient.name}. Last check-in ${patient.lastCheckIn}. ${patient.alertLabel} alert.',
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: colorScheme.outline,
-            width: 1,
-          ),
-        ),
-        child: Row(
-          children: [
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary600,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'SJ',
+                      style: textTheme.titleMedium?.copyWith(
+                        color: colorScheme.onPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Sarah Johnson',
+                        style: textTheme.titleMedium?.copyWith(
+                          color: colorScheme.onSurface,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Age 68 • Female • Type 2 Diabetes',
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: const [
+                Expanded(
+                  child: _ActionCard(
+                    icon: Icons.call,
+                    label: 'Call',
+                    color: AppColors.primary600,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: _ActionCard(
+                    icon: Icons.videocam,
+                    label: 'Video',
+                    color: AppColors.accent500,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: _ActionCard(
+                    icon: Icons.message,
+                    label: 'Message',
+                    color: AppColors.secondary600,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
             Container(
-              width: 48,
-              height: 48,
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.primary100,
-                shape: BoxShape.circle,
+                color: colorScheme.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: colorScheme.outline, width: 1),
               ),
-              child: Icon(
-                Icons.person,
-                color: colorScheme.primary,
-                size: 26,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    patient.name,
+                    'Latest Vitals',
                     style: textTheme.titleMedium?.copyWith(
                       color: colorScheme.onSurface,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Last check-in: ${patient.lastCheckIn}',
-                    style: textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   Row(
-                    children: [
-                      _VitalChip(
-                        label: 'HR ${patient.heartRate} bpm',
-                        colorScheme: colorScheme,
-                        textTheme: textTheme,
+                    children: const [
+                      Expanded(
+                        child: _VitalTile(
+                          title: 'Blood Pressure',
+                          value: '120/80',
+                          status: 'Normal • 2h ago',
+                        ),
                       ),
-                      const SizedBox(width: 8),
-                      _VitalChip(
-                        label: 'BP ${patient.bloodPressure}',
-                        colorScheme: colorScheme,
-                        textTheme: textTheme,
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: _VitalTile(
+                          title: 'Heart Rate',
+                          value: '72 bpm',
+                          status: 'Normal • 2h ago',
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: statusBg,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                patient.alertLabel,
-                style: textTheme.labelSmall?.copyWith(
-                  color: statusColor,
-                ),
-              ),
-            ),
           ],
         ),
       ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: 1,
+        onDestinationSelected: (index) => _handleNav(context, index),
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: 'Dashboard',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.people_outline),
+            selectedIcon: Icon(Icons.people),
+            label: 'Patients',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.calendar_today_outlined),
+            selectedIcon: Icon(Icons.calendar_today),
+            label: 'Tasks',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.analytics_outlined),
+            selectedIcon: Icon(Icons.analytics),
+            label: 'Analytics',
+          ),
+        ],
+      ),
     );
-  }
-
-  Color _statusColor(AlertLevel level) {
-    switch (level) {
-      case AlertLevel.normal:
-        return AppColors.success700;
-      case AlertLevel.watch:
-        return AppColors.warning700;
-      case AlertLevel.urgent:
-        return AppColors.error700;
-    }
-  }
-
-  Color _statusBackground(AlertLevel level) {
-    switch (level) {
-      case AlertLevel.normal:
-        return AppColors.success100;
-      case AlertLevel.watch:
-        return AppColors.warning100;
-      case AlertLevel.urgent:
-        return AppColors.error100;
-    }
   }
 }
 
-class _VitalChip extends StatelessWidget {
-  final String label;
+class _NotificationIcon extends StatelessWidget {
   final ColorScheme colorScheme;
-  final TextTheme textTheme;
 
-  const _VitalChip({
+  const _NotificationIcon({required this.colorScheme});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        IconButton(
+          icon: Icon(Icons.notifications_outlined, color: colorScheme.onSurface),
+          onPressed: () {},
+        ),
+        Positioned(
+          right: 10,
+          top: 10,
+          child: Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: AppColors.error500,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ActionCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  const _ActionCard({
+    required this.icon,
     required this.label,
-    required this.colorScheme,
-    required this.textTheme,
+    required this.color,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      height: 84,
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: colorScheme.outline),
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outline, width: 1),
       ),
-      child: Text(
-        label,
-        style: textTheme.labelSmall?.copyWith(
-          fontWeight: FontWeight.w400,
-          color: colorScheme.onSurfaceVariant,
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: color, size: 26),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurface,
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-enum AlertLevel { normal, watch, urgent }
+class _VitalTile extends StatelessWidget {
+  final String title;
+  final String value;
+  final String status;
 
-class PatientMonitorItem {
-  final String name;
-  final String lastCheckIn;
-  final String heartRate;
-  final String bloodPressure;
-  final AlertLevel alertLevel;
-
-  PatientMonitorItem({
-    required this.name,
-    required this.lastCheckIn,
-    required this.heartRate,
-    required this.bloodPressure,
-    required this.alertLevel,
+  const _VitalTile({
+    required this.title,
+    required this.value,
+    required this.status,
   });
 
-  String get alertLabel {
-    switch (alertLevel) {
-      case AlertLevel.normal:
-        return 'Normal';
-      case AlertLevel.watch:
-        return 'Watch';
-      case AlertLevel.urgent:
-        return 'Urgent';
-    }
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: textTheme.headlineSmall?.copyWith(
+              color: colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            status,
+            style: textTheme.bodyMedium?.copyWith(
+              color: AppColors.success700,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
-final List<PatientMonitorItem> _mockPatients = [
-  PatientMonitorItem(
-    name: 'Robert Williams',
-    lastCheckIn: 'Today, 9:12 AM',
-    heartRate: '72',
-    bloodPressure: '118/76',
-    alertLevel: AlertLevel.normal,
-  ),
-  PatientMonitorItem(
-    name: 'Mary Johnson',
-    lastCheckIn: 'Yesterday, 6:45 PM',
-    heartRate: '94',
-    bloodPressure: '135/88',
-    alertLevel: AlertLevel.watch,
-  ),
-  PatientMonitorItem(
-    name: 'James Carter',
-    lastCheckIn: 'Today, 7:30 AM',
-    heartRate: '108',
-    bloodPressure: '142/92',
-    alertLevel: AlertLevel.urgent,
-  ),
-];
+void _handleNav(BuildContext context, int index) {
+  if (index == 0) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const CaregiverDashboardScreen()),
+    );
+  } else if (index == 1) {
+    return;
+  } else if (index == 2) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const CaregiverTaskManagementScreen(),
+      ),
+    );
+  } else if (index == 3) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const CaregiverAnalyticsScreen(),
+      ),
+    );
+  }
+}

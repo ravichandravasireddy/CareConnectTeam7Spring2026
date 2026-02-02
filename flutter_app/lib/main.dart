@@ -5,7 +5,6 @@ import 'screens/caregiver_patient_monitoring_screen.dart';
 import 'screens/caregiver_task_management_screen.dart';
 import 'screens/create_account_screen.dart';
 import 'screens/emergency_sos_alert.dart';
-import 'screens/emergency_sos_receive_screen.dart';
 import 'screens/navigation_hub_screen.dart';
 import 'screens/role_selection_screen.dart';
 import 'screens/task_details_screen.dart';
@@ -109,7 +108,6 @@ class MyApp extends StatelessWidget {
             const CaregiverTaskManagementScreen(),
         '/caregiver-analytics': (_) => const CaregiverAnalyticsScreen(),
         '/emergency-sos': (_) => const EmergencySOSAlertScreen(),
-        '/emergency-sos-receive': (_) => const EmergencySOSReceiveScreen(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/task-details' && settings.arguments is Task) {

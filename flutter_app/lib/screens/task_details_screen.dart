@@ -45,59 +45,109 @@ class TaskDetailsScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            Semantics(
-              header: true,
-              child: Text(
-                task.title,
-                style: textTheme.headlineSmall?.copyWith(
-                  color: colorScheme.onSurface,
-                ),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: colorScheme.outline, width: 1),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              task.patientName,
-              style: textTheme.bodyLarge?.copyWith(
-                color: colorScheme.onSurfaceVariant,
+              child: Row(
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary600,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.medication,
+                      color: colorScheme.onPrimary,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          task.title,
+                          style: textTheme.headlineSmall?.copyWith(
+                            color: colorScheme.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          task.description,
+                          style: textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            _StatusPill(
+                              label: 'DUE $timeLabel',
+                              backgroundColor: AppColors.primary100,
+                              textColor: colorScheme.primary,
+                            ),
+                            const SizedBox(width: 8),
+                            _StatusPill(
+                              label: 'RECURRING',
+                              backgroundColor: colorScheme.surfaceContainer,
+                              textColor: colorScheme.onSurfaceVariant,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
-            _DetailRow(
-              icon: Icons.calendar_today,
-              label: 'Date',
-              value: dateLabel,
-            ),
-            const SizedBox(height: 12),
-            _DetailRow(
-              icon: Icons.access_time,
-              label: 'Time',
-              value: timeLabel,
-            ),
-            const SizedBox(height: 12),
-            _DetailRow(
-              icon: task.isCompleted ? Icons.check_circle : Icons.pending,
-              label: 'Status',
-              value: task.isCompleted ? 'Completed' : 'Pending',
-              valueColor:
-                  task.isCompleted ? AppColors.success700 : AppColors.warning700,
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: colorScheme.outline, width: 1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _DetailSection(
+                    title: 'Medication',
+                    value: 'Lisinopril 10mg',
+                  ),
+                  const SizedBox(height: 12),
+                  _DetailSection(
+                    title: 'Instructions',
+                    value: 'Take one tablet with water',
+                  ),
+                  const SizedBox(height: 12),
+                  _DetailSection(
+                    title: 'Frequency',
+                    value: 'Once daily at $timeLabel',
+                  ),
+                  const SizedBox(height: 12),
+                  _DetailSection(
+                    title: 'Notes',
+                    value: 'Best taken with food. Avoid grapefruit.',
+                  ),
+                  const SizedBox(height: 12),
+                  _DetailSection(
+                    title: 'Date',
+                    value: dateLabel,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
-            Text(
-              'Details',
-              style: textTheme.titleMedium?.copyWith(
-                color: colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              task.description,
-              style: textTheme.bodyLarge?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 24),
             Semantics(
-              label: 'Mark task complete, button',
+              label: 'Mark task as complete, button',
               button: true,
               child: SizedBox(
                 width: double.infinity,
@@ -110,9 +160,41 @@ class TaskDetailsScreen extends StatelessWidget {
                     minimumSize: const Size(0, 48),
                   ),
                   icon: const Icon(Icons.check),
-                  label: const Text('Mark Complete'),
+                  label: const Text('Mark as Complete'),
                 ),
               ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: colorScheme.onSurface,
+                      backgroundColor: colorScheme.surfaceContainer,
+                      side: BorderSide(color: colorScheme.outline),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      minimumSize: const Size(0, 48),
+                    ),
+                    child: const Text('Snooze'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: colorScheme.onSurface,
+                      backgroundColor: colorScheme.surfaceContainer,
+                      side: BorderSide(color: colorScheme.outline),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      minimumSize: const Size(0, 48),
+                    ),
+                    child: const Text('Skip Today'),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -121,17 +203,46 @@ class TaskDetailsScreen extends StatelessWidget {
   }
 }
 
-class _DetailRow extends StatelessWidget {
-  final IconData icon;
+class _StatusPill extends StatelessWidget {
   final String label;
-  final String value;
-  final Color? valueColor;
+  final Color backgroundColor;
+  final Color textColor;
 
-  const _DetailRow({
-    required this.icon,
+  const _StatusPill({
     required this.label,
+    required this.backgroundColor,
+    required this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        label,
+        style: textTheme.labelSmall?.copyWith(
+          color: textColor,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.3,
+        ),
+      ),
+    );
+  }
+}
+
+class _DetailSection extends StatelessWidget {
+  final String title;
+  final String value;
+
+  const _DetailSection({
+    required this.title,
     required this.value,
-    this.valueColor,
   });
 
   @override
@@ -140,29 +251,20 @@ class _DetailRow extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
 
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: colorScheme.primary, size: 20),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: textTheme.bodySmall?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                value,
-                style: textTheme.titleMedium?.copyWith(
-                  color: valueColor ?? colorScheme.onSurface,
-                ),
-              ),
-            ],
+        Text(
+          title,
+          style: textTheme.titleSmall?.copyWith(
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          value,
+          style: textTheme.bodyLarge?.copyWith(
+            color: colorScheme.onSurface,
           ),
         ),
       ],
