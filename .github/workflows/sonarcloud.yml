@@ -1,0 +1,37 @@
+name: SonarQube Analysis
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  Sonarqube-Analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch the full Git history is crucial for accurate SonarQube analysis
+          fetch-depth: 0
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >-
+            -Dsonar.projectKey=YOUR_PROJECT_KEY # Replace with your project key
+            -Dsonar.sources=.
+            # Add other desired SonarQube parameters here
+
+      - name: SonarQube Quality Gate check
+        uses: SonarSource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

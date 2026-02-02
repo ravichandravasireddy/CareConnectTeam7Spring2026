@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'create_account_screen.dart';
 import '../theme/app_colors.dart';
+import 'registration_screen.dart';
 
 // =============================================================================
 // ROLE SELECTION SCREEN
@@ -80,7 +80,7 @@ class RoleSelectionScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CreateAccountScreen(),
+                              builder: (context) => RegistrationScreen(),
                             ),
                           );
                         },
@@ -99,7 +99,7 @@ class RoleSelectionScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CreateAccountScreen(),
+                              builder: (context) => RegistrationScreen(),
                             ),
                           );
                         },

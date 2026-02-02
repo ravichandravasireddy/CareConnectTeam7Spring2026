@@ -1,22 +1,25 @@
-// REMOVE BEFORE SUBMISSION
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'calendar_screen.dart';
+import '../models/task.dart';
+import '../theme/app_colors.dart';
+import 'caregiver_analytics_screen.dart';
+import 'caregiver_dashboard.dart';
+import 'caregiver_patient_monitoring_screen.dart';
+import 'caregiver_task_management_screen.dart';
 import 'create_account_screen.dart';
-import 'health_logs_screen.dart';
-import 'health_timeline_screen.dart';
-import 'notes_screen.dart';
-import 'notes_detail_screen.dart';
-import 'notification_screen.dart';
+import 'emergency_sos_alert.dart';
+import 'emergency_sos_receive_screen.dart';
 import 'role_selection_screen.dart';
-import 'video_call_screen.dart';
+import 'task_details_screen.dart';
 import 'welcome_screen.dart';
-import '../providers/note_provider.dart';
 
-// Temporary welcome screen with buttons that lead to all other screens for testing.
+// =============================================================================
+// NAVIGATION HUB (DEV)
+// =============================================================================
+// Simple list of buttons to reach all screens while flows are in progress.
+// =============================================================================
 
-class TemporaryScreen extends StatelessWidget {
-  const TemporaryScreen({super.key});
+class NavigationHubScreen extends StatelessWidget {
+  const NavigationHubScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +29,22 @@ class TemporaryScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Testing Hub',
-          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
-        ),
         backgroundColor: colorScheme.surface,
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          'Navigation Hub',
+          style: textTheme.headlineLarge?.copyWith(
+            color: colorScheme.onSurface,
+          ),
+        ),
       ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
             Text(
-              'Tap a button to open the screen for testing.',
+              'Tap a button to open a screen.',
               style: textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
@@ -56,36 +63,34 @@ class TemporaryScreen extends StatelessWidget {
               onPressed: () => _push(context, const CreateAccountScreen()),
             ),
             _NavButton(
-              label: 'Calendar',
-              onPressed: () => _push(context, const CalendarScreen()),
+              label: 'Caregiver Dashboard',
+              onPressed: () => _push(context, const CaregiverDashboardScreen()),
             ),
             _NavButton(
-              label: 'Health Logs',
-              onPressed: () => _push(context, const HealthLogsScreen()),
+              label: 'Caregiver: Patient Monitoring',
+              onPressed: () =>
+                  _push(context, const CaregiverPatientMonitoringScreen()),
             ),
             _NavButton(
-              label: 'Health Timeline',
-              onPressed: () => _push(context, const HealthTimelineScreen()),
+              label: 'Caregiver: Task Management',
+              onPressed: () =>
+                  _push(context, const CaregiverTaskManagementScreen()),
             ),
             _NavButton(
-              label: 'Notes',
-              onPressed: () => _push(context, const NotesScreen()),
+              label: 'Caregiver: Analytics',
+              onPressed: () => _push(context, const CaregiverAnalyticsScreen()),
             ),
             _NavButton(
-              label: 'Note Detail (first or "test")',
-              onPressed: () {
-                final notes = context.read<NoteProvider>().notes;
-                final id = notes.isNotEmpty ? notes.first.id : 'test';
-                _push(context, NoteDetailScreen(noteId: id));
-              },
+              label: 'Emergency SOS Alert',
+              onPressed: () => _push(context, const EmergencySOSAlertScreen()),
             ),
             _NavButton(
-              label: 'Notifications',
-              onPressed: () => _push(context, const NotificationScreen()),
+              label: 'Emergency SOS Receive',
+              onPressed: () => _push(context, const EmergencySOSReceiveScreen()),
             ),
             _NavButton(
-              label: 'Video Call',
-              onPressed: () => _push(context, const VideoCallScreen()),
+              label: 'Task Details (sample)',
+              onPressed: () => _push(context, TaskDetailsScreen(task: _demoTask)),
             ),
           ],
         ),
@@ -133,3 +138,14 @@ class _NavButton extends StatelessWidget {
     );
   }
 }
+
+final Task _demoTask = Task(
+  id: 'task-demo',
+  title: 'Medication check',
+  description: 'Confirm morning medication taken with water.',
+  date: DateTime.now().add(const Duration(hours: 2)),
+  patientName: 'Robert Williams',
+  icon: Icons.medication,
+  iconBackground: AppColors.primary100,
+  iconColor: AppColors.primary700,
+);

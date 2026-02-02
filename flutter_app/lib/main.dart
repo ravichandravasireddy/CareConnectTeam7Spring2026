@@ -8,6 +8,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'screens/caregiver_analytics_screen.dart';
+import 'screens/caregiver_dashboard.dart';
+import 'screens/caregiver_patient_monitoring_screen.dart';
+import 'screens/caregiver_task_management_screen.dart';
+import 'screens/emergency_sos_alert.dart';
+import 'screens/emergency_sos_receive_screen.dart';
+import 'screens/navigation_hub_screen.dart';
+import 'screens/task_details_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/registration_screen.dart';
 import 'screens/patient_dashboard_screen.dart';
@@ -24,6 +32,7 @@ import 'providers/auth_provider.dart';
 import 'providers/preferences_provider.dart';
 import 'theme/app_typography.dart';
 import 'theme/app_colors.dart';
+import 'models/task.dart';
 
 void main() {
   runApp(const MyApp());
@@ -129,14 +138,33 @@ class MyApp extends StatelessWidget {
             AppColors.darkTextPrimary,
           ),
       ),
-      home: const WelcomeScreen(),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/task-details' && settings.arguments is Task) {
+          final task = settings.arguments! as Task;
+          return MaterialPageRoute<void>(
+            builder: (_) => TaskDetailsScreen(task: task),
+          );
+        }
+        return null;
+      },
+      initialRoute: '/',
       routes: {
+          '/': (context) => const WelcomeScreen(),
           '/registration': (context) => const RegistrationScreen(),
           '/role-selection': (context) => const RoleSelectionScreen(),
           '/dashboard': (context) => const PatientDashboardScreen(),
           '/messaging': (context) => const MessagingThreadScreen(),
           '/profile': (context) => const PatientProfileScreen(),
           '/preferences': (context) => const PreferencesAccessibilityScreen(),
+          '/nav-hub': (_) => const NavigationHubScreen(),
+        '/caregiver-dashboard': (_) => const CaregiverDashboardScreen(),
+        '/caregiver-patient-monitoring': (_) =>
+            const CaregiverPatientMonitoringScreen(),
+        '/caregiver-task-management': (_) =>
+            const CaregiverTaskManagementScreen(),
+        '/caregiver-analytics': (_) => const CaregiverAnalyticsScreen(),
+        '/emergency-sos': (_) => const EmergencySOSAlertScreen(),
+        '/emergency-sos-receive': (_) => const EmergencySOSReceiveScreen(),
         },
       ),
     );

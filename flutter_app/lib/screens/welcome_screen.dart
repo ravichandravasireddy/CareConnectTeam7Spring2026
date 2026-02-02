@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-
-// =============================================================================
-// WELCOME SCREEN
-// =============================================================================
-// Entry landing: gradient background, app title, and CTA to [RoleSelectionScreen].
-// =============================================================================
+// import 'role_selection_screen.dart';
+import 'navigation_hub_screen.dart';
+// import '../theme/app_colors.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -147,16 +144,32 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                         ),
 
-                        SizedBox(height: 24),
-                      ],
+                SizedBox(height: 24),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NavigationHubScreen(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Open Navigation Hub',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
-              );
-            },
+                SizedBox(height: 16),
+              ],
+            ),
           ),
         ),
       ),
     );
+    
   }
 }
