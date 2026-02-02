@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
 
 /// Preferences and accessibility settings screen
 class PreferencesAccessibilityScreen extends StatefulWidget {
@@ -40,7 +39,7 @@ class _PreferencesAccessibilityScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.gray100,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -60,7 +59,7 @@ class _PreferencesAccessibilityScreenState
             _buildSettingTile(
               title: 'Text Size',
               subtitle: 'Adjust text size for better readability',
-              trailing: const Icon(Icons.chevron_right, color: AppColors.gray500),
+              trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
               onTap: () {
                 _showTextSizeDialog();
               },
@@ -160,7 +159,7 @@ class _PreferencesAccessibilityScreenState
             _buildSettingTile(
               title: 'Language',
               subtitle: _language,
-              trailing: const Icon(Icons.chevron_right, color: AppColors.gray500),
+              trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
               onTap: () {
                 _showLanguageDialog();
               },
@@ -168,7 +167,7 @@ class _PreferencesAccessibilityScreenState
             _buildSettingTile(
               title: 'Time Format',
               subtitle: _timeFormat,
-              trailing: const Icon(Icons.chevron_right, color: AppColors.gray500),
+              trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
               onTap: () {
                 _showTimeFormatDialog();
               },
@@ -176,7 +175,7 @@ class _PreferencesAccessibilityScreenState
             _buildSettingTile(
               title: 'Date Format',
               subtitle: _dateFormat,
-              trailing: const Icon(Icons.chevron_right, color: AppColors.gray500),
+              trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
               onTap: () {
                 _showDateFormatDialog();
               },
@@ -204,7 +203,7 @@ class _PreferencesAccessibilityScreenState
             _buildSettingTile(
               title: 'HIPAA Consent',
               subtitle: 'View privacy policy',
-              trailing: const Icon(Icons.chevron_right, color: AppColors.gray500),
+              trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
               onTap: () {
                 // TODO: Show privacy policy
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -224,15 +223,15 @@ class _PreferencesAccessibilityScreenState
                 child: ElevatedButton(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Preferences saved successfully'),
-                        backgroundColor: AppColors.success500,
+                      SnackBar(
+                        content: const Text('Preferences saved successfully'),
+                        backgroundColor: Colors.green,
                       ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary600,
-                    foregroundColor: AppColors.white,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -263,7 +262,7 @@ class _PreferencesAccessibilityScreenState
         title,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.gray900,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
       ),
     );
@@ -281,9 +280,9 @@ class _PreferencesAccessibilityScreenState
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.gray300),
+          border: Border.all(color: Theme.of(context).colorScheme.outline),
         ),
         child: Row(
           children: [
@@ -295,14 +294,14 @@ class _PreferencesAccessibilityScreenState
                     title,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppColors.gray900,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.gray700,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                   ),
                 ],
@@ -325,9 +324,9 @@ class _PreferencesAccessibilityScreenState
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.gray300),
+        border: Border.all(color: Theme.of(context).colorScheme.outline),
       ),
       child: Row(
         children: [
@@ -339,14 +338,14 @@ class _PreferencesAccessibilityScreenState
                   title,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.gray900,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.gray700,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                 ),
               ],
@@ -355,7 +354,7 @@ class _PreferencesAccessibilityScreenState
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: AppColors.primary600,
+            activeTrackColor: Theme.of(context).colorScheme.primary,
           ),
         ],
       ),

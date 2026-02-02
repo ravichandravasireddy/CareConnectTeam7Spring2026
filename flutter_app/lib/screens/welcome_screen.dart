@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -14,8 +13,8 @@ class WelcomeScreen extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Theme.of(context).colorScheme.primary, // Bright blue
-              Theme.of(context).colorScheme.tertiary, // Purple
+              Theme.of(context).colorScheme.primary,
+              Theme.of(context).colorScheme.tertiary,
             ],
           ),
         ),
@@ -26,14 +25,14 @@ class WelcomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Spacer to push content toward center
-                Spacer(flex: 2),
+                const Spacer(flex: 2),
 
                 // Heart Icon in white circle
                 Container(
                   width: 120,
                   height: 120,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    color: Theme.of(context).colorScheme.surface,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -43,7 +42,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
 
                 // App Title
                 Text(
@@ -55,7 +54,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 // Description
                 Text(
@@ -63,31 +62,30 @@ class WelcomeScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
-                    color: AppColors.gray300,
+                    color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.9),
                     height: 1.5,
                   ),
                 ),
 
-                Spacer(flex: 2),
+                const Spacer(flex: 2),
 
                 // Get Started Button (Primary)
                 SizedBox(
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                     onPressed: () {
-                      Navigator.pushNamed(context, '/registration');
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/role-selection');
                     },
-
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+                      backgroundColor: Theme.of(context).colorScheme.surface,
                       foregroundColor: Theme.of(context).colorScheme.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       elevation: 0,
                     ),
-                    child: Text(
+                    child: const Text(
                       'Get Started',
                       style: TextStyle(
                         fontSize: 18,
@@ -97,7 +95,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 // Sign In Button (Outlined)
                 SizedBox(
@@ -109,12 +107,15 @@ class WelcomeScreen extends StatelessWidget {
                     },
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      side: BorderSide(color: Theme.of(context).colorScheme.onPrimary, width: 2),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        width: 2,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Sign In',
                       style: TextStyle(
                         fontSize: 18,
@@ -124,18 +125,18 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
 
                 // HIPAA compliance text
                 Text(
                   'HIPAA-compliant • Secure • Private',
                   style: TextStyle(
                     fontSize: 14,
-                    color: AppColors.gray300,
+                    color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.8),
                   ),
                 ),
 
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
               ],
             ),
           ),

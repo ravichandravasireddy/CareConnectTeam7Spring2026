@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
 
 /// Patient dashboard screen showing health overview and tasks
 class PatientDashboardScreen extends StatelessWidget {
@@ -8,7 +7,7 @@ class PatientDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.gray100,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       appBar: AppBar(
         leading: Builder(
           builder: (context) => IconButton(
@@ -35,8 +34,8 @@ class PatientDashboardScreen extends StatelessWidget {
                 child: Container(
                   width: 8,
                   height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColors.error500,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.error,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -56,10 +55,10 @@ class PatientDashboardScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     colors: [
-                      AppColors.primary600,
-                      AppColors.primary500,
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -68,20 +67,20 @@ class PatientDashboardScreen extends StatelessWidget {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
                       'Good Morning, Robert!',
                       style: TextStyle(
-                        color: AppColors.white,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       "Here's your health overview for today",
                       style: TextStyle(
-                        color: AppColors.white,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         fontSize: 16,
                       ),
                     ),
@@ -97,8 +96,8 @@ class PatientDashboardScreen extends StatelessWidget {
                     child: _buildSummaryCard(
                       context,
                       icon: Icons.check_circle_outline,
-                      iconColor: AppColors.success500,
-                      iconBgColor: AppColors.success100,
+                      iconColor: Colors.green,
+                      iconBgColor: Colors.green.withValues(alpha: 0.1),
                       title: 'Tasks',
                       value: '3/5',
                       subtitle: 'Completed today',
@@ -109,12 +108,12 @@ class PatientDashboardScreen extends StatelessWidget {
                     child: _buildSummaryCard(
                       context,
                       icon: Icons.favorite_outline,
-                      iconColor: AppColors.error500,
-                      iconBgColor: AppColors.error100,
+                      iconColor: Colors.red,
+                      iconBgColor: Colors.red.withValues(alpha: 0.1),
                       title: 'BP Today',
                       value: '120/80',
                       subtitle: 'Normal',
-                      subtitleColor: AppColors.success500,
+                      subtitleColor: Colors.green,
                     ),
                   ),
                 ],
@@ -129,17 +128,17 @@ class PatientDashboardScreen extends StatelessWidget {
                     'Upcoming Tasks',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: AppColors.gray900,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                   ),
                   TextButton(
                     onPressed: () {
                       // TODO: Navigate to all tasks
                     },
-                    child: const Text(
+                    child: Text(
                       'View All',
                       style: TextStyle(
-                        color: AppColors.primary600,
+                        color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -152,13 +151,13 @@ class PatientDashboardScreen extends StatelessWidget {
               _buildTaskCard(
                 context,
                 icon: Icons.medication,
-                iconColor: AppColors.white,
-                iconBgColor: AppColors.error500,
+                iconColor: Theme.of(context).colorScheme.onError,
+                iconBgColor: Theme.of(context).colorScheme.error,
                 title: 'Take\nMedication',
                 subtitle: 'Metformin\n500mg',
                 dueText: 'DUE IN 15 MIN',
-                dueColor: AppColors.error700,
-                bgColor: AppColors.error100,
+                dueColor: Colors.red.shade700,
+                bgColor: Colors.red.withValues(alpha: 0.1),
               ),
               const SizedBox(height: 12),
 
@@ -166,8 +165,8 @@ class PatientDashboardScreen extends StatelessWidget {
               _buildTaskCard(
                 context,
                 icon: Icons.favorite,
-                iconColor: AppColors.info500,
-                iconBgColor: AppColors.info100,
+                iconColor: Theme.of(context).colorScheme.primary,
+                iconBgColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                 title: 'Blood Pressure Check',
                 subtitle: 'Due at 2:00 PM',
                 showChevron: true,
@@ -179,7 +178,7 @@ class PatientDashboardScreen extends StatelessWidget {
                 "Today's Appointments",
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.gray900,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
               ),
               const SizedBox(height: 12),
@@ -202,7 +201,7 @@ class PatientDashboardScreen extends StatelessWidget {
                       context,
                       icon: Icons.favorite_outline,
                       label: 'Log Health Data',
-                      color: AppColors.secondary500,
+                      color: Theme.of(context).colorScheme.secondary,
                       onTap: () {
                         // TODO: Navigate to log health data
                       },
@@ -214,7 +213,7 @@ class PatientDashboardScreen extends StatelessWidget {
                       context,
                       icon: Icons.message_outlined,
                       label: 'Send Message',
-                      color: AppColors.info500,
+                      color: Theme.of(context).colorScheme.primary,
                       onTap: () {
                         Navigator.pushNamed(context, '/messaging');
                       },
@@ -249,8 +248,8 @@ class PatientDashboardScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.error500,
-                  foregroundColor: AppColors.white,
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  foregroundColor: Theme.of(context).colorScheme.onError,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -287,30 +286,30 @@ class PatientDashboardScreen extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(
-              color: AppColors.primary600,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
+              children: [
                 CircleAvatar(
                   radius: 30,
-                  backgroundColor: AppColors.white,
+                  backgroundColor: Theme.of(context).colorScheme.onPrimary,
                   child: Text(
                     'RW',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primary600,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 Text(
                   'Robert Williams',
                   style: TextStyle(
-                    color: AppColors.white,
+                    color: Theme.of(context).colorScheme.onPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -318,7 +317,7 @@ class PatientDashboardScreen extends StatelessWidget {
                 Text(
                   'robert.w@email.com',
                   style: TextStyle(
-                    color: AppColors.white,
+                    color: Theme.of(context).colorScheme.onPrimary,
                     fontSize: 14,
                   ),
                 ),
@@ -350,8 +349,8 @@ class PatientDashboardScreen extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.logout, color: AppColors.error500),
-            title: const Text('Sign Out', style: TextStyle(color: AppColors.error500)),
+            leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
+            title: Text('Sign Out', style: TextStyle(color: Theme.of(context).colorScheme.error)),
             onTap: () {
               Navigator.pop(context);
               // TODO: Sign out
@@ -375,9 +374,9 @@ class PatientDashboardScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.gray300),
+        border: Border.all(color: Theme.of(context).colorScheme.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -397,7 +396,7 @@ class PatientDashboardScreen extends StatelessWidget {
                 title,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.gray900,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
               ),
             ],
@@ -407,14 +406,14 @@ class PatientDashboardScreen extends StatelessWidget {
             value,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.gray900,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
           ),
           const SizedBox(height: 4),
           Text(
             subtitle,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: subtitleColor ?? AppColors.gray700,
+                  color: subtitleColor ?? Theme.of(context).colorScheme.onSurfaceVariant,
                   fontWeight: subtitleColor != null ? FontWeight.w600 : null,
                 ),
           ),
@@ -438,9 +437,9 @@ class PatientDashboardScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: bgColor ?? AppColors.white,
+        color: bgColor ?? Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.gray300),
+        border: Border.all(color: Theme.of(context).colorScheme.outline),
       ),
       child: Row(
         children: [
@@ -462,14 +461,14 @@ class PatientDashboardScreen extends StatelessWidget {
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppColors.gray900,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.gray700,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                 ),
               ],
@@ -479,7 +478,7 @@ class PatientDashboardScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -492,7 +491,7 @@ class PatientDashboardScreen extends StatelessWidget {
               ),
             ),
           if (showChevron)
-            const Icon(Icons.chevron_right, color: AppColors.gray500),
+            Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
         ],
       ),
     );
@@ -507,10 +506,10 @@ class PatientDashboardScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.accent100,
+        color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppColors.accent400,
+          color: Theme.of(context).colorScheme.tertiary,
         ),
       ),
       child: Row(
@@ -518,13 +517,13 @@ class PatientDashboardScreen extends StatelessWidget {
           Container(
             width: 48,
             height: 48,
-            decoration: const BoxDecoration(
-              color: AppColors.accent500,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.tertiary,
               shape: BoxShape.circle,
             ),
-            child: const Icon(
+            child: Icon(
               Icons.videocam,
-              color: AppColors.white,
+              color: Theme.of(context).colorScheme.onTertiary,
               size: 24,
             ),
           ),
@@ -537,14 +536,14 @@ class PatientDashboardScreen extends StatelessWidget {
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppColors.gray900,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.gray700,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                 ),
               ],
@@ -552,12 +551,12 @@ class PatientDashboardScreen extends StatelessWidget {
           ),
           IconButton(
             onPressed: onTap,
-            icon: const Icon(
+            icon: Icon(
               Icons.videocam,
-              color: AppColors.white,
+              color: Theme.of(context).colorScheme.onTertiary,
             ),
             style: IconButton.styleFrom(
-              backgroundColor: AppColors.accent500,
+              backgroundColor: Theme.of(context).colorScheme.tertiary,
             ),
           ),
         ],
@@ -578,16 +577,16 @@ class PatientDashboardScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.gray300),
+          border: Border.all(color: Theme.of(context).colorScheme.outline),
         ),
         child: Column(
           children: [
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: color, size: 28),
@@ -598,7 +597,7 @@ class PatientDashboardScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.gray900,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
             ),
           ],
@@ -609,10 +608,10 @@ class PatientDashboardScreen extends StatelessWidget {
 
   Widget _buildBottomNavBar(BuildContext context, int currentIndex) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color: AppColors.gray300,
+            color: Theme.of(context).colorScheme.outline,
             width: 1,
           ),
         ),
@@ -630,13 +629,13 @@ class PatientDashboardScreen extends StatelessWidget {
           } else if (index == 3) {
             // TODO: Navigate to Health
           } else if (index == 4) {
-            
+            // Navigate to Profile
             Navigator.pushNamed(context, '/profile');
           }
         },
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.primary600,
-        unselectedItemColor: AppColors.gray500,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
         selectedFontSize: 12,
         unselectedFontSize: 12,
         items: const [

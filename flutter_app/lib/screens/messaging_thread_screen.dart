@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
 
 /// Messaging thread screen for chatting with doctors and caregivers
 class MessagingThreadScreen extends StatefulWidget {
@@ -95,7 +94,7 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
     final userInitials = _getInitials(widget.userName);
     
     return Scaffold(
-      backgroundColor: AppColors.gray100,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -104,11 +103,11 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
         title: Row(
           children: [
             CircleAvatar(
-              backgroundColor: AppColors.primary600,
+              backgroundColor: Theme.of(context).colorScheme.primary,
               child: Text(
                 userInitials,
-                style: const TextStyle(
-                  color: AppColors.white,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -126,7 +125,7 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
                     'Active now',
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppColors.gray700,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -163,16 +162,17 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
               itemBuilder: (context, index) {
                 // Date separator
                 if (index == 0) {
-                  return _buildDateSeparator();
+                  return _buildDateSeparator(context);
                 }
 
                 // Typing indicator
                 if (_isTyping && index == _messages.length + 1) {
-                  return _buildTypingIndicator();
+                  return _buildTypingIndicator(context);
                 }
 
                 final message = _messages[index - 1];
                 return _buildMessageBubble(
+                  context,
                   message['content'],
                   message['isCurrentUser'],
                   message['time'],
@@ -185,9 +185,9 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: Theme.of(context).colorScheme.surface,
               border: Border(
-                top: BorderSide(color: AppColors.gray300),
+                top: BorderSide(color: Theme.of(context).colorScheme.outline),
               ),
             ),
             child: SafeArea(
@@ -198,20 +198,20 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
                     onPressed: () {
                       // TODO: Add attachment
                     },
-                    color: AppColors.gray700,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                   Expanded(
                     child: TextField(
                       controller: _messageController,
                       decoration: InputDecoration(
                         hintText: 'Type a message...',
-                        hintStyle: const TextStyle(color: AppColors.gray500),
+                        hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
-                        fillColor: AppColors.gray100,
+                        fillColor: Theme.of(context).colorScheme.surfaceContainer,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 10,
@@ -226,8 +226,8 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
                     icon: const Icon(Icons.send),
                     onPressed: _sendMessage,
                     style: IconButton.styleFrom(
-                      backgroundColor: AppColors.primary600,
-                      foregroundColor: AppColors.white,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 ],
@@ -239,29 +239,29 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
     );
   }
 
-  Widget _buildDateSeparator() {
+  Widget _buildDateSeparator(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
         children: [
-          Expanded(child: Divider(color: AppColors.gray300)),
+          Expanded(child: Divider(color: Theme.of(context).colorScheme.outline)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               'Today',
               style: TextStyle(
-                color: AppColors.gray700,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
                 fontSize: 12,
               ),
             ),
           ),
-          Expanded(child: Divider(color: AppColors.gray300)),
+          Expanded(child: Divider(color: Theme.of(context).colorScheme.outline)),
         ],
       ),
     );
   }
 
-  Widget _buildMessageBubble(String content, bool isCurrentUser, String time) {
+  Widget _buildMessageBubble(BuildContext context, String content, bool isCurrentUser, String time) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -273,11 +273,11 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
           if (!isCurrentUser) ...[
             CircleAvatar(
               radius: 16,
-              backgroundColor: AppColors.primary600,
+              backgroundColor: Theme.of(context).colorScheme.primary,
               child: Text(
                 _getInitials(widget.userName),
-                style: const TextStyle(
-                  color: AppColors.white,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -295,14 +295,16 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     color: isCurrentUser
-                        ? AppColors.primary600
-                        : AppColors.white,
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
                     content,
                     style: TextStyle(
-                      color: isCurrentUser ? AppColors.white : AppColors.gray900,
+                      color: isCurrentUser 
+                          ? Theme.of(context).colorScheme.onPrimary 
+                          : Theme.of(context).colorScheme.onSurface,
                       fontSize: 16,
                     ),
                   ),
@@ -311,7 +313,7 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
                 Text(
                   time,
                   style: TextStyle(
-                    color: AppColors.gray500,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                     fontSize: 12,
                   ),
                 ),
@@ -322,11 +324,11 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
             const SizedBox(width: 8),
             CircleAvatar(
               radius: 16,
-              backgroundColor: AppColors.secondary500,
-              child: const Text(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              child: Text(
                 'RW',
                 style: TextStyle(
-                  color: AppColors.white,
+                  color: Theme.of(context).colorScheme.onSecondary,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -338,18 +340,18 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
     );
   }
 
-  Widget _buildTypingIndicator() {
+  Widget _buildTypingIndicator(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
           CircleAvatar(
             radius: 16,
-            backgroundColor: AppColors.primary600,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             child: Text(
               _getInitials(widget.userName),
-              style: const TextStyle(
-                color: AppColors.white,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),
@@ -359,17 +361,17 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _buildDot(),
+                _buildDot(context),
                 const SizedBox(width: 4),
-                _buildDot(),
+                _buildDot(context),
                 const SizedBox(width: 4),
-                _buildDot(),
+                _buildDot(context),
               ],
             ),
           ),
@@ -378,12 +380,12 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
     );
   }
 
-  Widget _buildDot() {
+  Widget _buildDot(BuildContext context) {
     return Container(
       width: 8,
       height: 8,
       decoration: BoxDecoration(
-        color: AppColors.gray500,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
         shape: BoxShape.circle,
       ),
     );

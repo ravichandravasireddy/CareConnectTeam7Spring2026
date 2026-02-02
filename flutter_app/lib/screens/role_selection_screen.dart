@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
 
 class RoleSelectionScreen extends StatelessWidget {
   const RoleSelectionScreen({super.key});
@@ -33,7 +32,7 @@ class RoleSelectionScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               
               // Main heading
               Text(
@@ -46,7 +45,7 @@ class RoleSelectionScreen extends StatelessWidget {
                 ),
               ),
               
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               
               // Subtitle
               Text(
@@ -57,13 +56,13 @@ class RoleSelectionScreen extends StatelessWidget {
                 ),
               ),
               
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               
               // Care Recipient Card
               RoleCard(
                 icon: Icons.favorite,
                 iconColor: colorScheme.primary,
-                backgroundColor: AppColors.primary100,
+                backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
                 title: 'Care Recipient',
                 description: 'I\'m managing my\nown health and tasks',
                 onTap: () {
@@ -71,29 +70,28 @@ class RoleSelectionScreen extends StatelessWidget {
                 },
               ),
               
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               
               // Caregiver Card
               RoleCard(
                 icon: Icons.people,
                 iconColor: colorScheme.tertiary,
-                backgroundColor: AppColors.accent100,
+                backgroundColor: colorScheme.tertiary.withValues(alpha: 0.1),
                 title: 'Caregiver',
                 description: 'I\'m caring for one or\nmore people',
                 onTap: () {
-                  // Navigate to Dashboard (caregiver dashboard coming soon)
                   Navigator.pushNamed(context, '/registration');
                 },
               ),
               
-              Spacer(),
+              const Spacer(),
               
               // Info box at bottom
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest,
+                  color: colorScheme.surfaceContainer,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: colorScheme.outline,
@@ -110,7 +108,7 @@ class RoleSelectionScreen extends StatelessWidget {
                 ),
               ),
               
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -145,7 +143,7 @@ class RoleCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
@@ -171,7 +169,7 @@ class RoleCard extends StatelessWidget {
               ),
             ),
             
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             
             // Text content
             Expanded(
@@ -186,7 +184,7 @@ class RoleCard extends StatelessWidget {
                       color: colorScheme.onSurface,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     description,
                     style: TextStyle(

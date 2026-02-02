@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
 import 'registration_screen.dart';
 
 /// Sign in screen for user authentication
@@ -38,19 +37,18 @@ class _SignInScreenState extends State<SignInScreen> {
     if (mounted) {
       setState(() => _isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Sign in successful!'),
-          backgroundColor: AppColors.success500,
+        SnackBar(
+          content: const Text('Sign in successful!'),
+          backgroundColor: Colors.green,
         ),
       );
-      // TODO: Navigate to dashboard after successful sign in
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.gray100,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -76,14 +74,14 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: Container(
                     width: 120,
                     height: 120,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primary600,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.favorite,
                       size: 60,
-                      color: AppColors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 ),
@@ -95,7 +93,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppColors.gray900,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
                 const SizedBox(height: 8),
@@ -103,7 +101,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   'Sign in to your CareConnect account',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppColors.gray700,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                 ),
                 const SizedBox(height: 40),
@@ -113,7 +111,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   'Email Address',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.gray900,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
                 const SizedBox(height: 8),
@@ -122,20 +120,20 @@ class _SignInScreenState extends State<SignInScreen> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: 'your.email@example.com',
-                    hintStyle: const TextStyle(color: AppColors.gray500),
+                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     filled: true,
-                    fillColor: AppColors.white,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.gray300),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.gray300),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.primary600, width: 2),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
                     ),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
@@ -159,7 +157,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   'Password',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.gray900,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
                 const SizedBox(height: 8),
@@ -168,20 +166,20 @@ class _SignInScreenState extends State<SignInScreen> {
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     hintText: 'Enter your password',
-                    hintStyle: const TextStyle(color: AppColors.gray500),
+                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     filled: true,
-                    fillColor: AppColors.white,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.gray300),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.gray300),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.primary600, width: 2),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
                     ),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
@@ -190,7 +188,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                        color: AppColors.gray500,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                       onPressed: () {
                         setState(() => _obscurePassword = !_obscurePassword);
@@ -211,7 +209,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   alignment: Alignment.centerLeft,
                   child: GestureDetector(
                     onTap: () {
-                      // TODO: Navigate to forgot password screen
+                      
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Forgot password feature coming soon'),
@@ -221,7 +219,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: Text(
                       'Forgot Password?',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.primary600,
+                            color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.w600,
                           ),
                     ),
@@ -235,20 +233,22 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _handleSignIn,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary600,
-                      foregroundColor: AppColors.white,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       elevation: 0,
                     ),
                     child: _isLoading
-                        ? const SizedBox(
+                        ? SizedBox(
                             height: 20,
                             width: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).colorScheme.onPrimary,
+                              ),
                             ),
                           )
                         : const Text(
@@ -269,7 +269,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Text(
                       "Don't have an account? ",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.gray700,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
                     GestureDetector(
@@ -284,7 +284,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       child: Text(
                         'Sign Up',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.primary600,
+                              color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w600,
                             ),
                       ),

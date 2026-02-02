@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
 
 /// Registration screen for creating new user accounts
 class RegistrationScreen extends StatefulWidget {
@@ -41,9 +40,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     if (!_agreedToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please agree to the Terms of Service and Privacy Policy'),
-          backgroundColor: AppColors.error500,
+        SnackBar(
+          content: const Text('Please agree to the Terms of Service and Privacy Policy'),
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -64,7 +63,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.gray100,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -88,14 +87,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   'Join CareConnect',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: AppColors.gray900,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Create your account to get started',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppColors.gray700,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                 ),
                 const SizedBox(height: 32),
@@ -111,7 +110,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             'First Name',
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.w600,
-                                  color: AppColors.gray900,
+                                  color: Theme.of(context).colorScheme.onSurface,
                                 ),
                           ),
                           const SizedBox(height: 8),
@@ -119,20 +118,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             controller: _firstNameController,
                             decoration: InputDecoration(
                               hintText: 'John',
-                              hintStyle: TextStyle(color: AppColors.gray500),
+                              hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                               filled: true,
-                              fillColor: AppColors.white,
+                              fillColor: Theme.of(context).colorScheme.surface,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: AppColors.gray300),
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: AppColors.gray300),
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: AppColors.primary600, width: 2),
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
                               ),
                             ),
                             validator: (value) {
@@ -154,7 +153,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             'Last Name',
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.w600,
-                                  color: AppColors.gray900,
+                                  color: Theme.of(context).colorScheme.onSurface,
                                 ),
                           ),
                           const SizedBox(height: 8),
@@ -162,20 +161,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             controller: _lastNameController,
                             decoration: InputDecoration(
                               hintText: 'Doe',
-                              hintStyle: TextStyle(color: AppColors.gray500),
+                              hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                               filled: true,
-                              fillColor: AppColors.white,
+                              fillColor: Theme.of(context).colorScheme.surface,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: AppColors.gray300),
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: AppColors.gray300),
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: AppColors.primary600, width: 2),
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
                               ),
                             ),
                             validator: (value) {
@@ -197,7 +196,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   'Email Address',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.gray900,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
                 const SizedBox(height: 8),
@@ -206,20 +205,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: 'your.email@example.com',
-                    hintStyle: TextStyle(color: AppColors.gray500),
+                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     filled: true,
-                    fillColor: AppColors.white,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.gray300),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.gray300),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.primary600, width: 2),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
                     ),
                   ),
                   validator: (value) {
@@ -239,7 +238,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   'Phone Number',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.gray900,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
                 const SizedBox(height: 8),
@@ -248,20 +247,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     hintText: '(555) 123-4567',
-                    hintStyle: TextStyle(color: AppColors.gray500),
+                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     filled: true,
-                    fillColor: AppColors.white,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.gray300),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.gray300),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.primary600, width: 2),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
                     ),
                   ),
                   validator: (value) {
@@ -278,7 +277,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   'Password',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.gray900,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
                 const SizedBox(height: 8),
@@ -287,25 +286,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     hintText: 'Create a strong password',
-                    hintStyle: TextStyle(color: AppColors.gray500),
+                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     filled: true,
-                    fillColor: AppColors.white,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.gray300),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.gray300),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.primary600, width: 2),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                        color: AppColors.gray500,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                       onPressed: () {
                         setState(() => _obscurePassword = !_obscurePassword);
@@ -326,7 +325,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Text(
                   'At least 8 characters with letters and numbers',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.gray700,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                 ),
                 const SizedBox(height: 24),
@@ -336,7 +335,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   'Confirm Password',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.gray900,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
                 const SizedBox(height: 8),
@@ -345,27 +344,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   obscureText: _obscureConfirmPassword,
                   decoration: InputDecoration(
                     hintText: 'Re-enter your password',
-                    hintStyle: TextStyle(color: AppColors.gray500),
+                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     filled: true,
-                    fillColor: AppColors.white,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.gray300),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.gray300),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppColors.primary600, width: 2),
+                      borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscureConfirmPassword
                             ? Icons.visibility_off
                             : Icons.visibility,
-                        color: AppColors.gray500,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                       onPressed: () {
                         setState(() =>
@@ -389,7 +388,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.primary100,
+                    color: Theme.of(context).colorScheme.inversePrimary,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -399,7 +398,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         onChanged: (value) {
                           setState(() => _agreedToTerms = value ?? false);
                         },
-                        activeColor: AppColors.primary600,
+                        activeColor: Theme.of(context).colorScheme.primary,
                       ),
                       Expanded(
                         child: Wrap(
@@ -407,7 +406,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             Text(
                               'I agree to the ',
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.gray900,
+                                    color: Theme.of(context).colorScheme.onSurface,
                                   ),
                             ),
                             GestureDetector(
@@ -420,7 +419,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     .textTheme
                                     .bodyMedium
                                     ?.copyWith(
-                                      color: AppColors.primary600,
+                                      color: Theme.of(context).colorScheme.primary,
                                       fontWeight: FontWeight.w600,
                                     ),
                               ),
@@ -428,7 +427,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             Text(
                               ' and ',
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.gray900,
+                                    color: Theme.of(context).colorScheme.onSurface,
                                   ),
                             ),
                             GestureDetector(
@@ -441,7 +440,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     .textTheme
                                     .bodyMedium
                                     ?.copyWith(
-                                      color: AppColors.primary600,
+                                      color: Theme.of(context).colorScheme.primary,
                                       fontWeight: FontWeight.w600,
                                     ),
                               ),
@@ -460,20 +459,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _handleRegistration,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary600,
-                      foregroundColor: AppColors.white,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       elevation: 0,
                     ),
                     child: _isLoading
-                        ? const SizedBox(
+                        ? SizedBox(
                             height: 20,
                             width: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).colorScheme.onPrimary,
+                              ),
                             ),
                           )
                         : const Text(
@@ -494,7 +495,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Text(
                       'Already have an account? ',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.gray700,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
                     GestureDetector(
@@ -502,7 +503,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       child: Text(
                         'Sign In',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.primary600,
+                              color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w600,
                             ),
                       ),
