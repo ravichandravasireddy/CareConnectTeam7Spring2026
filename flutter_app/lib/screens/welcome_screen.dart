@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'role_selection_screen.dart';
-import '../theme/app_colors.dart';
 
 // =============================================================================
 // WELCOME SCREEN
@@ -24,8 +22,8 @@ class WelcomeScreen extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Theme.of(context).colorScheme.primary, // Bright blue
-              Theme.of(context).colorScheme.tertiary, // Purple
+              Theme.of(context).colorScheme.primary,
+              Theme.of(context).colorScheme.tertiary,
             ],
           ),
         ),
@@ -49,7 +47,7 @@ class WelcomeScreen extends StatelessWidget {
                   width: 120,
                   height: 120,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    color: Theme.of(context).colorScheme.surface,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -59,7 +57,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
 
                 // App Title
                 Text(
@@ -77,7 +75,7 @@ class WelcomeScreen extends StatelessWidget {
                   'Remote health management and coordination for patients and caregivers',
                   textAlign: TextAlign.center,
                   style: textTheme.titleLarge?.copyWith(
-                    color: AppColors.gray300,
+                    color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.9),
                     height: 1.5,
                   ),
                         ),
@@ -90,16 +88,10 @@ class WelcomeScreen extends StatelessWidget {
                   height: 56,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Navigate to role selection screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RoleSelectionScreen(),
-                        ),
-                      );
+                      Navigator.pushNamed(context, '/role-selection');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+                      backgroundColor: Theme.of(context).colorScheme.surface,
                       foregroundColor: Theme.of(context).colorScheme.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -111,6 +103,7 @@ class WelcomeScreen extends StatelessWidget {
                       style: textTheme.headlineMedium?.copyWith(
                         color: colorScheme.primary,
                       ),
+                    
                     ),
                   ),
                 ),
@@ -123,11 +116,14 @@ class WelcomeScreen extends StatelessWidget {
                   height: 56,
                   child: OutlinedButton(
                     onPressed: () {
-                      // TODO: Navigate to sign in screen
+                      Navigator.pushNamed(context, '/signin');
                     },
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      side: BorderSide(color: Theme.of(context).colorScheme.onPrimary, width: 2),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        width: 2,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -147,7 +143,7 @@ class WelcomeScreen extends StatelessWidget {
                 Text(
                   'HIPAA-compliant • Secure • Private',
                   style: textTheme.bodySmall?.copyWith(
-                    color: AppColors.gray300,
+                    color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.8),
                   ),
                         ),
 

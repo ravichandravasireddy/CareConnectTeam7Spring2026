@@ -169,7 +169,7 @@ class RoleCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
@@ -195,7 +195,7 @@ class RoleCard extends StatelessWidget {
               ),
             ),
             
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             
             // Text content
             Expanded(
@@ -208,7 +208,7 @@ class RoleCard extends StatelessWidget {
                       color: colorScheme.onSurface,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     description,
                     style: textTheme.bodySmall?.copyWith(
