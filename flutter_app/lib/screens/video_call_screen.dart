@@ -155,7 +155,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                     semanticLabel: 'End call',
                     backgroundColor: AppColors.error700,
                     iconColor: AppColors.white,
-                    onPressed: () => Navigator.maybePop(context),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
                   const SizedBox(width: 16),
                   _CallButton(

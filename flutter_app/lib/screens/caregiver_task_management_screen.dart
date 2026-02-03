@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/task.dart';
 import '../theme/app_colors.dart';
+import '../widgets/app_app_bar.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 import 'task_details_screen.dart';
 
@@ -28,23 +29,11 @@ class _CaregiverTaskManagementScreenState
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: colorScheme.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: colorScheme.onSurface),
-          onPressed: () {},
-        ),
-        title: Text(
-          'Tasks',
-          style: textTheme.headlineLarge?.copyWith(
-            color: colorScheme.onSurface,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          _NotificationIcon(colorScheme: colorScheme),
-        ],
+      appBar: AppAppBar(
+        title: 'Tasks',
+        showMenuButton: false,
+        useBackButton: true,
+        onNotificationTap: () => Navigator.pushNamed(context, '/notifications'),
       ),
       body: SafeArea(
         child: ListView(
@@ -73,22 +62,6 @@ class _CaregiverTaskManagementScreenState
     );
   }
 
-  List<Task> get _filteredTasks {
-    switch (_selectedFilter) {
-      case TaskFilter.all:
-        return _mockTasks;
-      case TaskFilter.today:
-        final now = DateTime.now();
-        final today = DateTime(now.year, now.month, now.day);
-        return _mockTasks
-            .where((task) =>
-                DateTime(task.date.year, task.date.month, task.date.day) ==
-                today)
-            .toList();
-      case TaskFilter.completed:
-        return _mockTasks.where((task) => task.isCompleted).toList();
-    }
-  }
 }
 
 class _NotificationIcon extends StatelessWidget {
@@ -234,25 +207,6 @@ class _OverdueTasksCard extends StatelessWidget {
   }
 }
 
-void _handleNav(BuildContext context, int index) {
-  if (index == 0) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => const CaregiverDashboardScreen()),
-    );
-  } else if (index == 1) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const CaregiverPatientMonitoringScreen(),
-      ),
-    );
-  } else if (index == 2) {
-    return;
-  } else if (index == 3) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => const CaregiverAnalyticsScreen()),
-    );
-  }
-}
 
 final List<Task> _mockTasks = [
   Task(

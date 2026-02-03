@@ -38,6 +38,7 @@ import 'screens/notification_screen.dart';
 import 'screens/notes_screen.dart';
 import 'screens/health_logs_screen.dart';
 import 'screens/health_timeline_screen.dart';
+import 'screens/video_call_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -175,7 +176,7 @@ class MyApp extends StatelessWidget {
             const CaregiverTaskManagementScreen(),
         '/caregiver-analytics': (_) => const CaregiverAnalyticsScreen(),
         '/emergency-sos': (_) => const EmergencySOSAlertScreen(),
-        '/emergency-sos-receive': (_) => const EmergencySOSReceiveScreen(),
+        '/video-call': (_) => const VideoCallScreen(),
         },
       ),
     );

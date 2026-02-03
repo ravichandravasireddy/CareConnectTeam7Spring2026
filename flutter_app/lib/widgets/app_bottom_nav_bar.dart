@@ -49,11 +49,24 @@ class AppBottomNavBar extends StatelessWidget {
 
   void _navigateTo(BuildContext context, String route, bool isPatient) {
     final homeRoute = isPatient ? _patientHomeRoute : _caregiverHomeRoute;
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      route,
-      (route) => route.settings.name == homeRoute,
-    );
+    if (!isPatient && route == _caregiverHomeRoute) {
+      // Caregiver tapping Home: pop back to dashboard so back button is not needed.
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        route,
+        (r) => r.settings.name == homeRoute,
+      );
+    } else if (!isPatient) {
+      // Caregiver tapping Tasks/Analytics/Monitor: push so back returns to previous screen.
+      Navigator.pushNamed(context, route);
+    } else {
+      // Patient: keep existing behavior (replace stack down to home).
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        route,
+        (r) => r.settings.name == homeRoute,
+      );
+    }
   }
 
   void _onTapPatient(BuildContext context, int index) {
@@ -70,7 +83,7 @@ class AppBottomNavBar extends StatelessWidget {
         _navigateTo(context, '/messaging', isPatient);
         break;
       case kPatientNavHealth:
-        _navigateTo(context, '/health-timeline', isPatient);
+        _navigateTo(context, '/health-logs', isPatient);
         break;
       case kPatientNavProfile:
         _navigateTo(context, '/profile', isPatient);

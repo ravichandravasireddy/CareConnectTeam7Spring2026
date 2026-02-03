@@ -147,7 +147,7 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
           IconButton(
             icon: const Icon(Icons.videocam),
             onPressed: () {
-              // TODO: Initiate video call
+              Navigator.pushNamed(context, '/video-call');
             },
           ),
         ],

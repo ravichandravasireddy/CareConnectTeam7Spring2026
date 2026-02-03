@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../models/patient.dart';
 import '../models/task.dart';
@@ -8,10 +7,8 @@ import '../theme/app_colors.dart';
 import '../widgets/app_app_bar.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 import '../widgets/app_drawer.dart';
-import 'caregiver_patient_monitoring_screen.dart';
 import 'caregiver_task_management_screen.dart';
-// import 'caregiver_analytics_screen.dart';
-import 'emergency_sos_alert.dart';
+import '../providers/task_provider.dart';
 import 'task_details_screen.dart';
 
 // =============================================================================
@@ -23,6 +20,11 @@ import 'task_details_screen.dart';
 class CaregiverDashboardScreen extends StatelessWidget {
   const CaregiverDashboardScreen({super.key});
 
+  static final List<Patient> _patients = [
+    Patient(id: '1', name: 'Robert Williams'),
+    Patient(id: '2', name: 'Mary Johnson'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -30,11 +32,13 @@ class CaregiverDashboardScreen extends StatelessWidget {
     final textTheme = theme.textTheme;
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final todayTasks = _tasksForDate(today);
+    final allTasks = context.read<TaskProvider>().tasks;
+    final todayTasks = _tasksForDate(allTasks, today);
     final completedCount = todayTasks.where((t) => t.isCompleted).length;
     final totalCount = todayTasks.length;
 
     final userName = context.read<AuthProvider>().userName ?? 'Caregiver';
+    final greetingName = _greetingName(userName);
 
     return Scaffold(
       backgroundColor: colorScheme.surfaceContainerHighest,
@@ -79,7 +83,7 @@ class CaregiverDashboardScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$_greetingText, ${userName.split(' ').first}!',
+                      '$_greetingText, $greetingName!',
                       style: textTheme.headlineSmall?.copyWith(
                         color: colorScheme.onPrimary,
                         fontWeight: FontWeight.bold,
@@ -100,7 +104,10 @@ class CaregiverDashboardScreen extends StatelessWidget {
                 context,
                 colorScheme: colorScheme,
                 textTheme: textTheme,
-                onTap: () {},
+                patientCount: _patients.length,
+                tasksCompleted: completedCount,
+                tasksTotal: totalCount,
+                alertCount: 1,
               ),
               const SizedBox(height: 16),
               Container(
@@ -130,6 +137,14 @@ class CaregiverDashboardScreen extends StatelessWidget {
     if (hour < 12) return 'Good Morning';
     if (hour < 17) return 'Good Afternoon';
     return 'Good Evening';
+  }
+
+  /// First name for greeting; strips "Dr." prefix so "Dr. Sarah Johnson" → "Sarah".
+  static String _greetingName(String fullName) {
+    final parts = fullName.trim().split(RegExp(r'\s+'));
+    if (parts.isEmpty) return 'Caregiver';
+    if (parts.length > 1 && parts[0] == 'Dr.') return parts[1];
+    return parts.first;
   }
 
   Widget _buildQuickStats(
@@ -230,145 +245,7 @@ class CaregiverDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmergencyBanner(
-    BuildContext context, {
-    required ColorScheme colorScheme,
-    required TextTheme textTheme,
-  }) {
-    return Semantics(
-      label: 'Emergency alert: 1 active alert. Tap for details.',
-      button: true,
-      child: Material(
-        color: AppColors.error100,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(12),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => const EmergencySOSAlertScreen(),
-              ),
-            );
-          },
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: AppColors.error500.withValues(alpha: 0.5),
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.warning_amber_rounded,
-                  color: AppColors.error700,
-                  size: 28,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '1 Active Alert',
-                        style: textTheme.titleMedium?.copyWith(
-                          color: colorScheme.onSurface,
-                        ),
-                      ),
-                      Text(
-                        'Tap to view details',
-                        style: textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(
-                  Icons.chevron_right,
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
-  Widget _buildPatientsSection(
-    BuildContext context, {
-    required ColorScheme colorScheme,
-    required TextTheme textTheme,
-  }) {
-    return Semantics(
-      label: 'Patient list, ${_patients.length} patients',
-      header: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'My Patients',
-                style: textTheme.headlineSmall?.copyWith(
-                  color: colorScheme.onSurface,
-                ),
-              ),
-              Semantics(
-                label: 'View all patients',
-                button: true,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => const CaregiverPatientMonitoringScreen(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'View all',
-                    style: textTheme.labelMedium?.copyWith(
-                      color: colorScheme.primary,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          if (_patients.isEmpty)
-            _buildEmptyCard(
-              context,
-              message: 'No patients assigned yet',
-              colorScheme: colorScheme,
-              textTheme: textTheme,
-            )
-          else
-            ..._patients.map(
-              (p) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: _PatientCard(
-                  patient: p,
-                  colorScheme: colorScheme,
-                  textTheme: textTheme,
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => const CaregiverPatientMonitoringScreen(),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildTasksSection(
     BuildContext context, {
@@ -471,8 +348,8 @@ class CaregiverDashboardScreen extends StatelessWidget {
     );
   }
 
-  List<Task> _tasksForDate(DateTime date) {
-    return _tasks
+  List<Task> _tasksForDate(List<Task> tasks, DateTime date) {
+    return tasks
         .where(
           (task) =>
               task.date.year == date.year &&
@@ -483,12 +360,15 @@ class CaregiverDashboardScreen extends StatelessWidget {
   }
 }
 
-class _UrgentBanner extends StatelessWidget {
+
+class _TaskCard extends StatelessWidget {
+  final Task task;
   final ColorScheme colorScheme;
   final TextTheme textTheme;
   final VoidCallback onTap;
 
-  const _UrgentBanner({
+  const _TaskCard({
+    required this.task,
     required this.colorScheme,
     required this.textTheme,
     required this.onTap,
@@ -497,288 +377,44 @@ class _UrgentBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.error100,
-      borderRadius: BorderRadius.circular(16),
+      color: colorScheme.surface,
+      borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              Icon(Icons.warning_amber_rounded, color: AppColors.error500),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: task.iconBackground,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(task.icon, color: task.iconColor, size: 22),
+              ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '2 URGENT ALERTS',
-                      style: textTheme.titleMedium?.copyWith(
-                        color: AppColors.error700,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      task.title,
+                      style: textTheme.titleMedium?.copyWith(color: colorScheme.onSurface),
                     ),
-                    Text(
-                      'Immediate attention required',
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: AppColors.error700.withValues(alpha: 0.8),
+                    if (task.patientName.isNotEmpty)
+                      Text(
+                        task.patientName,
+                        style: textTheme.bodySmall?.copyWith(color: colorScheme.onSurfaceVariant),
                       ),
-                    ),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, color: AppColors.error700),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _AlertCard extends StatelessWidget {
-  final String severityLabel;
-  final Color severityColor;
-  final String timeLabel;
-  final String initials;
-  final String name;
-  final String details;
-  final String alertTitle;
-  final String alertBody;
-  final String? actionLeft;
-  final String? actionRight;
-
-  const _AlertCard({
-    required this.severityLabel,
-    required this.severityColor,
-    required this.timeLabel,
-    required this.initials,
-    required this.name,
-    required this.details,
-    required this.alertTitle,
-    required this.alertBody,
-    this.actionLeft,
-    this.actionRight,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final textTheme = theme.textTheme;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: severityColor, width: 3),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            decoration: BoxDecoration(
-              color: severityColor,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.error_outline, color: AppColors.white, size: 18),
-                const SizedBox(width: 8),
-                Text(
-                  severityLabel,
-                  style: textTheme.labelLarge?.copyWith(
-                    color: AppColors.white,
-                    letterSpacing: 0.4,
-                  ),
-                ),
-                const Spacer(),
-                Text(
-                  timeLabel,
-                  style: textTheme.bodyMedium?.copyWith(
-                    color: AppColors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 52,
-                      height: 52,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary600,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          initials,
-                          style: textTheme.titleMedium?.copyWith(
-                            color: AppColors.white,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            name,
-                            style: textTheme.titleMedium?.copyWith(
-                              color: colorScheme.onSurface,
-                            ),
-                          ),
-                          Text(
-                            details,
-                            style: textTheme.bodyMedium?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: severityColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border(
-                      left: BorderSide(color: severityColor, width: 4),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.warning_amber_rounded, color: severityColor),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              alertTitle,
-                              style: textTheme.titleSmall?.copyWith(
-                                color: colorScheme.onSurface,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              alertBody,
-                              style: textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (actionLeft != null && actionRight != null) ...[
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: FilledButton.icon(
-                          onPressed: () {},
-                          style: FilledButton.styleFrom(
-                            backgroundColor: AppColors.primary600,
-                            foregroundColor: AppColors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                          icon: const Icon(Icons.message),
-                          label: Text(actionLeft!),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: FilledButton.icon(
-                          onPressed: () {},
-                          style: FilledButton.styleFrom(
-                            backgroundColor: AppColors.accent500,
-                            foregroundColor: AppColors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                          icon: const Icon(Icons.videocam),
-                          label: Text(actionRight!),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _NotificationIcon extends StatelessWidget {
-  final ColorScheme colorScheme;
-
-  const _NotificationIcon({required this.colorScheme});
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        IconButton(
-          icon: Icon(Icons.notifications_outlined, color: colorScheme.onSurface),
-          onPressed: () {},
-        ),
-        Positioned(
-          right: 10,
-          top: 10,
-          child: Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(
-              color: AppColors.error500,
-              shape: BoxShape.circle,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-void _handleNav(BuildContext context, int index) {
-  if (index == 0) {
-    return;
-  } else if (index == 1) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const CaregiverPatientMonitoringScreen(),
-      ),
-    );
-  } else if (index == 2) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const CaregiverTaskManagementScreen(),
-      ),
-    );
-  } else if (index == 3) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const CaregiverAnalyticsScreen(),
       ),
     );
   }

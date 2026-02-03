@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
-import 'caregiver_dashboard.dart';
-import 'caregiver_patient_monitoring_screen.dart';
-import 'caregiver_task_management_screen.dart';
+import '../widgets/app_app_bar.dart';
+import '../widgets/app_bottom_nav_bar.dart';
 
 // =============================================================================
 // CAREGIVER: ANALYTICS
@@ -21,23 +20,11 @@ class CaregiverAnalyticsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: colorScheme.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: colorScheme.onSurface),
-          onPressed: () {},
-        ),
-        title: Text(
-          'Analytics',
-          style: textTheme.headlineLarge?.copyWith(
-            color: colorScheme.onSurface,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          _NotificationIcon(colorScheme: colorScheme),
-        ],
+      appBar: AppAppBar(
+        title: 'Analytics',
+        showMenuButton: false,
+        useBackButton: true,
+        onNotificationTap: () => Navigator.pushNamed(context, '/notifications'),
       ),
       body: SafeArea(
         child: ListView(
@@ -120,31 +107,9 @@ class CaregiverAnalyticsScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: 3,
-        onDestinationSelected: (index) => _handleNav(context, index),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Dashboard',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.people_outline),
-            selectedIcon: Icon(Icons.people),
-            label: 'Patients',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_today_outlined),
-            selectedIcon: Icon(Icons.calendar_today),
-            label: 'Tasks',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.analytics_outlined),
-            selectedIcon: Icon(Icons.analytics),
-            label: 'Analytics',
-          ),
-        ],
+      bottomNavigationBar: const AppBottomNavBar(
+        currentIndex: kCaregiverNavAnalytics,
+        isPatient: false,
       ),
     );
   }
@@ -235,27 +200,5 @@ class _NotificationIcon extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-void _handleNav(BuildContext context, int index) {
-  if (index == 0) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => const CaregiverDashboardScreen()),
-    );
-  } else if (index == 1) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const CaregiverPatientMonitoringScreen(),
-      ),
-    );
-  } else if (index == 2) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const CaregiverTaskManagementScreen(),
-      ),
-    );
-  } else if (index == 3) {
-    return;
   }
 }

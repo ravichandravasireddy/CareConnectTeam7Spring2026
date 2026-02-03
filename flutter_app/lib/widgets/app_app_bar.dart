@@ -12,7 +12,11 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
   /// Show leading menu button that opens the drawer. Default true.
+  /// If [useBackButton] is true, shows back button instead (for sub-screens).
   final bool showMenuButton;
+
+  /// When true, leading is a back button that pops the route. Takes precedence over [showMenuButton].
+  final bool useBackButton;
 
   /// Show a dot badge on the notification icon. Default false.
   final bool showNotificationBadge;
@@ -27,6 +31,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.title,
     this.showMenuButton = true,
+    this.useBackButton = false,
     this.showNotificationBadge = false,
     this.actions,
     this.onNotificationTap,
@@ -71,14 +76,19 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (actions != null) list.addAll(actions!);
 
     return AppBar(
-      leading: showMenuButton
-          ? Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              ),
+      leading: useBackButton
+          ? IconButton(
+              icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onSurface),
+              onPressed: () => Navigator.of(context).pop(),
             )
-          : null,
+          : showMenuButton
+              ? Builder(
+                  builder: (context) => IconButton(
+                    icon: const Icon(Icons.menu),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  ),
+                )
+              : null,
       title: Text(title),
       centerTitle: true,
       backgroundColor: Colors.transparent,

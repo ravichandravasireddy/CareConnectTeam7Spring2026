@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
-import 'caregiver_analytics_screen.dart';
-import 'caregiver_dashboard.dart';
-import 'caregiver_task_management_screen.dart';
+import '../widgets/app_app_bar.dart';
+import '../widgets/app_bottom_nav_bar.dart';
 
 // =============================================================================
 // CAREGIVER: PATIENT MONITORING
@@ -21,43 +20,17 @@ class CaregiverPatientMonitoringScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: colorScheme.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: colorScheme.onSurface),
-          onPressed: () {},
-        ),
-        title: Text(
-          'Patient Details',
-          style: textTheme.headlineLarge?.copyWith(
-            color: colorScheme.onSurface,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          _NotificationIcon(colorScheme: colorScheme),
-        ],
+      appBar: AppAppBar(
+        title: 'Patient Details',
+        showMenuButton: false,
+        useBackButton: true,
+        onNotificationTap: () => Navigator.pushNamed(context, '/notifications'),
       ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            TextButton.icon(
-              onPressed: () {},
-              icon: Icon(Icons.arrow_back, color: colorScheme.primary),
-              label: Text(
-                'Back to Patients',
-                style: textTheme.bodyLarge?.copyWith(
-                  color: colorScheme.primary,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: const Size(0, 44),
-              ),
-            ),
+            
             const SizedBox(height: 12),
             Row(
               children: [
@@ -104,7 +77,7 @@ class CaregiverPatientMonitoringScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Row(
-              children: const [
+              children: [
                 Expanded(
                   child: _ActionCard(
                     icon: Icons.call,
@@ -112,15 +85,16 @@ class CaregiverPatientMonitoringScreen extends StatelessWidget {
                     color: AppColors.primary600,
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
                   child: _ActionCard(
                     icon: Icons.videocam,
                     label: 'Video',
                     color: AppColors.accent500,
+                    onTap: () => Navigator.pushNamed(context, '/video-call'),
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
                   child: _ActionCard(
                     icon: Icons.message,
@@ -173,31 +147,9 @@ class CaregiverPatientMonitoringScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: 1,
-        onDestinationSelected: (index) => _handleNav(context, index),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Dashboard',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.people_outline),
-            selectedIcon: Icon(Icons.people),
-            label: 'Patients',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_today_outlined),
-            selectedIcon: Icon(Icons.calendar_today),
-            label: 'Tasks',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.analytics_outlined),
-            selectedIcon: Icon(Icons.analytics),
-            label: 'Analytics',
-          ),
-        ],
+      bottomNavigationBar: const AppBottomNavBar(
+        currentIndex: kCaregiverNavMonitor,
+        isPatient: false,
       ),
     );
   }
@@ -238,11 +190,13 @@ class _ActionCard extends StatelessWidget {
   final IconData icon;
   final String label;
   final Color color;
+  final VoidCallback? onTap;
 
   const _ActionCard({
     required this.icon,
     required this.label,
     required this.color,
+    this.onTap,
   });
 
   @override
@@ -251,6 +205,20 @@ class _ActionCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
 
+    final content = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(icon, color: color, size: 26),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          style: textTheme.bodyMedium?.copyWith(
+            color: colorScheme.onSurface,
+          ),
+        ),
+      ],
+    );
+
     return Container(
       height: 84,
       decoration: BoxDecoration(
@@ -258,18 +226,13 @@ class _ActionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: colorScheme.outline, width: 1),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: color, size: 26),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: textTheme.bodyMedium?.copyWith(
-              color: colorScheme.onSurface,
-            ),
-          ),
-        ],
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: content,
+        ),
       ),
     );
   }
@@ -322,28 +285,6 @@ class _VitalTile extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-void _handleNav(BuildContext context, int index) {
-  if (index == 0) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => const CaregiverDashboardScreen()),
-    );
-  } else if (index == 1) {
-    return;
-  } else if (index == 2) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const CaregiverTaskManagementScreen(),
-      ),
-    );
-  } else if (index == 3) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const CaregiverAnalyticsScreen(),
       ),
     );
   }

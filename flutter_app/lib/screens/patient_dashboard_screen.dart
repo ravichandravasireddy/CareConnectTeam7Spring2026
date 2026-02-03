@@ -165,7 +165,7 @@ class PatientDashboardScreen extends StatelessWidget {
                 title: 'Virtual Appointment',
                 subtitle: 'Dr. Johnson • 3:00 PM',
                 onTap: () {
-                  // TODO: Join virtual appointment
+                  Navigator.pushNamed(context, '/video-call');
                 },
               ),
               const SizedBox(height: 24),
@@ -216,7 +216,7 @@ class PatientDashboardScreen extends StatelessWidget {
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context);
-                            // TODO: Trigger emergency protocol
+                            Navigator.pushNamed(context, '/emergency-sos');
                           },
                           child: const Text('Yes, Call Help'),
                         ),
