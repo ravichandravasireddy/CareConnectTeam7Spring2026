@@ -380,45 +380,33 @@ class _PreferencesAccessibilityScreenState
   void _showLanguageDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Select Language'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<String>(
-              title: const Text('English (US)'),
-              value: 'English (US)',
-              groupValue: _language,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() => _language = value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('Spanish'),
-              value: 'Spanish',
-              groupValue: _language,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() => _language = value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('French'),
-              value: 'French',
-              groupValue: _language,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() => _language = value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-          ],
+        content: RadioGroup<String>(
+          groupValue: _language,
+          onChanged: (value) {
+            if (value != null) {
+              setState(() => _language = value);
+              Navigator.pop(dialogContext);
+            }
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile<String>(
+                title: const Text('English (US)'),
+                value: 'English (US)',
+              ),
+              RadioListTile<String>(
+                title: const Text('Spanish'),
+                value: 'Spanish',
+              ),
+              RadioListTile<String>(
+                title: const Text('French'),
+                value: 'French',
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -427,34 +415,29 @@ class _PreferencesAccessibilityScreenState
   void _showTimeFormatDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Time Format'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<String>(
-              title: const Text('12-hour'),
-              value: '12-hour',
-              groupValue: _timeFormat,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() => _timeFormat = value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('24-hour'),
-              value: '24-hour',
-              groupValue: _timeFormat,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() => _timeFormat = value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-          ],
+        content: RadioGroup<String>(
+          groupValue: _timeFormat,
+          onChanged: (value) {
+            if (value != null) {
+              setState(() => _timeFormat = value);
+              Navigator.pop(dialogContext);
+            }
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile<String>(
+                title: const Text('12-hour'),
+                value: '12-hour',
+              ),
+              RadioListTile<String>(
+                title: const Text('24-hour'),
+                value: '24-hour',
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -463,45 +446,33 @@ class _PreferencesAccessibilityScreenState
   void _showDateFormatDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Date Format'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<String>(
-              title: const Text('MM/DD/YYYY'),
-              value: 'MM/DD/YYYY',
-              groupValue: _dateFormat,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() => _dateFormat = value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('DD/MM/YYYY'),
-              value: 'DD/MM/YYYY',
-              groupValue: _dateFormat,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() => _dateFormat = value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('YYYY-MM-DD'),
-              value: 'YYYY-MM-DD',
-              groupValue: _dateFormat,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() => _dateFormat = value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-          ],
+        content: RadioGroup<String>(
+          groupValue: _dateFormat,
+          onChanged: (value) {
+            if (value != null) {
+              setState(() => _dateFormat = value);
+              Navigator.pop(dialogContext);
+            }
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile<String>(
+                title: const Text('MM/DD/YYYY'),
+                value: 'MM/DD/YYYY',
+              ),
+              RadioListTile<String>(
+                title: const Text('DD/MM/YYYY'),
+                value: 'DD/MM/YYYY',
+              ),
+              RadioListTile<String>(
+                title: const Text('YYYY-MM-DD'),
+                value: 'YYYY-MM-DD',
+              ),
+            ],
+          ),
         ),
       ),
     );

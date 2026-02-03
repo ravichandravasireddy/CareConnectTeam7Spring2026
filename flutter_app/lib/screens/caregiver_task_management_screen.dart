@@ -64,37 +64,6 @@ class _CaregiverTaskManagementScreenState
 
 }
 
-class _NotificationIcon extends StatelessWidget {
-  final ColorScheme colorScheme;
-
-  const _NotificationIcon({required this.colorScheme});
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        IconButton(
-          icon: Icon(Icons.notifications_outlined, color: colorScheme.onSurface),
-          onPressed: () {},
-        ),
-        Positioned(
-          right: 10,
-          top: 10,
-          child: Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(
-              color: AppColors.error500,
-              shape: BoxShape.circle,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _OverdueTasksCard extends StatelessWidget {
   final ColorScheme colorScheme;
   final TextTheme textTheme;

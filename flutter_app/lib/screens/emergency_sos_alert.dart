@@ -236,8 +236,9 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
             child: FilledButton.icon(
               onPressed: () {
                 setState(() => _isAcknowledged = true);
+                final navigator = Navigator.of(context);
                 Future.delayed(const Duration(seconds: 3), () {
-                  if (mounted) Navigator.of(context).pop();
+                  if (mounted) navigator.pop();
                 });
               },
               style: FilledButton.styleFrom(
