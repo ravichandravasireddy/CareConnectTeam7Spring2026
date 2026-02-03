@@ -55,183 +55,206 @@ class PatientProfileScreen extends StatelessWidget {
         ? 'Operations Desk\n(555) 555-0199'
         : 'Mary Smith (Daughter)\n(555) 987-6543';
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-      appBar: AppAppBar(
-        title: 'Profile',
-        onNotificationTap: () => Navigator.pushNamed(context, '/notifications'),
-      ),
-      drawer: const AppDrawer(isPatient: true),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Profile Header
-              Container(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      child: Text(
-                        initials,
-                        style: Theme.of(context).textTheme.displayLarge
+    void handleBack() {
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+        return;
+      }
+
+      final nextRoute = isCaregiver ? '/caregiver-dashboard' : '/dashboard';
+      Navigator.pushReplacementNamed(context, nextRoute);
+    }
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (!didPop) handleBack();
+      },
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+        appBar: AppAppBar(
+          title: 'Profile',
+          onNotificationTap: () =>
+              Navigator.pushNamed(context, '/notifications'),
+        ),
+        drawer: AppDrawer(isPatient: !isCaregiver),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Profile Header
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.secondary,
+                        child: Text(
+                          initials,
+                          style: Theme.of(context).textTheme.displayLarge
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSecondary,
+                              ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        displayName,
+                        style: Theme.of(context).textTheme.headlineSmall
                             ?.copyWith(
-                              color: Theme.of(context).colorScheme.onSecondary,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      displayName,
-                      style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      profileId,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        // TODO: Navigate to edit profile
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Edit profile feature coming soon'),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Theme.of(
-                          context,
-                        ).colorScheme.onPrimary,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32,
-                          vertical: 12,
+                      const SizedBox(height: 4),
+                      Text(
+                        profileId,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        elevation: 0,
                       ),
-                      child: const Text('Edit Profile'),
-                    ),
-                  ],
-                ),
-              ),
-
-              const Divider(height: 1),
-
-              // Personal Information Section
-              _buildSectionHeader(context, 'Personal Information'),
-              _buildInfoItem(context, label: 'Age', value: ageValue),
-              _buildInfoItem(context, label: 'Email', value: displayEmail),
-              _buildInfoItem(context, label: 'Phone', value: phoneValue),
-              _buildInfoItem(context, label: 'Address', value: addressValue),
-
-              const Divider(height: 1),
-
-              // Medical Information Section
-              _buildSectionHeader(context, 'Medical Information'),
-              _buildInfoItem(
-                context,
-                label: 'Conditions',
-                value: conditionsValue,
-              ),
-              _buildInfoItem(
-                context,
-                label: 'Allergies',
-                value: allergiesValue,
-              ),
-              _buildInfoItem(
-                context,
-                label: primaryProviderLabel,
-                value: primaryProviderValue,
-              ),
-              _buildInfoItem(
-                context,
-                label: 'Emergency Contact',
-                value: emergencyContactValue,
-              ),
-
-              const Divider(height: 1),
-
-              // Account Settings Section
-              _buildSectionHeader(context, 'Account Settings'),
-              _buildSettingItem(
-                context,
-                icon: Icons.settings,
-                iconColor: Theme.of(context).colorScheme.primary,
-                label: 'Preferences & Accessibility',
-                onTap: () {
-                  Navigator.pushNamed(context, '/preferences');
-                },
-              ),
-              _buildSettingItem(
-                context,
-                icon: Icons.notifications,
-                iconColor: Theme.of(context).colorScheme.tertiary,
-                label: 'Notification Settings',
-                onTap: () {
-                  // TODO: Navigate to notification settings
-                },
-              ),
-              _buildSettingItem(
-                context,
-                icon: Icons.people,
-                iconColor: AppColors.success700,
-                label: 'Connected Caregivers',
-                onTap: () {
-                  // TODO: Navigate to connected caregivers
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              // Sign Out Button
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: OutlinedButton(
-                  onPressed: () {
-                    _showSignOutDialog(context);
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.error,
-                    side: BorderSide(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          // TODO: Navigate to edit profile
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Edit profile feature coming soon'),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
+                          foregroundColor: Theme.of(
+                            context,
+                          ).colorScheme.onPrimary,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 32,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: const Text('Edit Profile'),
+                      ),
+                    ],
                   ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      'Sign Out',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                ),
+
+                const Divider(height: 1),
+
+                // Personal Information Section
+                _buildSectionHeader(context, 'Personal Information'),
+                _buildInfoItem(context, label: 'Age', value: ageValue),
+                _buildInfoItem(context, label: 'Email', value: displayEmail),
+                _buildInfoItem(context, label: 'Phone', value: phoneValue),
+                _buildInfoItem(context, label: 'Address', value: addressValue),
+
+                const Divider(height: 1),
+
+                // Medical Information Section
+                _buildSectionHeader(context, 'Medical Information'),
+                _buildInfoItem(
+                  context,
+                  label: 'Conditions',
+                  value: conditionsValue,
+                ),
+                _buildInfoItem(
+                  context,
+                  label: 'Allergies',
+                  value: allergiesValue,
+                ),
+                _buildInfoItem(
+                  context,
+                  label: primaryProviderLabel,
+                  value: primaryProviderValue,
+                ),
+                _buildInfoItem(
+                  context,
+                  label: 'Emergency Contact',
+                  value: emergencyContactValue,
+                ),
+
+                const Divider(height: 1),
+
+                // Account Settings Section
+                _buildSectionHeader(context, 'Account Settings'),
+                _buildSettingItem(
+                  context,
+                  icon: Icons.settings,
+                  iconColor: Theme.of(context).colorScheme.primary,
+                  label: 'Preferences & Accessibility',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/preferences');
+                  },
+                ),
+                _buildSettingItem(
+                  context,
+                  icon: Icons.notifications,
+                  iconColor: Theme.of(context).colorScheme.tertiary,
+                  label: 'Notification Settings',
+                  onTap: () {
+                    // TODO: Navigate to notification settings
+                  },
+                ),
+                _buildSettingItem(
+                  context,
+                  icon: Icons.people,
+                  iconColor: AppColors.success700,
+                  label: 'Connected Caregivers',
+                  onTap: () {
+                    // TODO: Navigate to connected caregivers
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                // Sign Out Button
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: OutlinedButton(
+                    onPressed: () {
+                      _showSignOutDialog(context);
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.error,
+                      side: BorderSide(
                         color: Theme.of(context).colorScheme.error,
                       ),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        'Sign Out',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
-            ],
+                const SizedBox(height: 24),
+              ],
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: const AppBottomNavBar(
-        currentIndex: kPatientNavProfile,
-        isPatient: true,
+        bottomNavigationBar: AppBottomNavBar(
+          currentIndex: isCaregiver ? kCaregiverNavHome : kPatientNavProfile,
+          isPatient: !isCaregiver,
+        ),
       ),
     );
   }

@@ -95,11 +95,7 @@ class AppDrawer extends StatelessWidget {
                 color: Theme.of(context).colorScheme.error,
               ),
             ),
-            onTap: () {
-              Navigator.pop(context);
-              auth.signOut();
-              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-            },
+            onTap: () => _showSignOutDialog(context, auth),
           ),
         ],
       ),
@@ -150,5 +146,37 @@ class AppDrawer extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       navigator.pushNamed(route); // push on stack so back works
     });
+  }
+
+  /// Same confirmation dialog as profile screen: "Are you sure you want to sign out?"
+  /// On confirm: close dialog, close drawer, sign out, navigate to root.
+  void _showSignOutDialog(BuildContext context, AuthProvider auth) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Sign Out'),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              Navigator.pop(context);
+              auth.signOut();
+              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+            },
+            child: Text(
+              'Sign Out',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

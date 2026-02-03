@@ -25,7 +25,7 @@ class PatientDashboardScreen extends StatelessWidget {
         showNotificationBadge: true,
         onNotificationTap: () => Navigator.pushNamed(context, '/notifications'),
       ),
-      drawer: const AppDrawer(isPatient: true),
+      drawer: const AppDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
 
 /// Preferences and accessibility settings screen
@@ -39,232 +41,253 @@ class _PreferencesAccessibilityScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+    final auth = context.read<AuthProvider>();
+    final role = auth.userRole;
+
+    void handleBack() {
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+        return;
+      }
+
+      final nextRoute = role == UserRole.caregiver
+          ? '/caregiver-dashboard'
+          : '/dashboard';
+      Navigator.pushReplacementNamed(context, nextRoute);
+    }
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (!didPop) handleBack();
+      },
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: handleBack,
+          ),
+          title: const Text('Preferences & Accessibility'),
+          centerTitle: true,
+          backgroundColor: Theme.of(
+            context,
+          ).colorScheme.surface.withValues(alpha: 0),
+          elevation: 0,
         ),
-        title: const Text('Preferences & Accessibility'),
-        centerTitle: true,
-        backgroundColor: Theme.of(
-          context,
-        ).colorScheme.surface.withValues(alpha: 0),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Display Section
-            _buildSectionHeader('Display'),
-            _buildSettingTile(
-              title: 'Text Size',
-              subtitle: 'Adjust text size for better readability',
-              trailing: Icon(
-                Icons.chevron_right,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Display Section
+              _buildSectionHeader('Display'),
+              _buildSettingTile(
+                title: 'Text Size',
+                subtitle: 'Adjust text size for better readability',
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                onTap: () {
+                  _showTextSizeDialog();
+                },
               ),
-              onTap: () {
-                _showTextSizeDialog();
-              },
-            ),
-            _buildSwitchTile(
-              title: 'Dark Mode',
-              subtitle: 'Reduce eye strain in low light',
-              value: _isDarkMode,
-              onChanged: (value) {
-                setState(() => _isDarkMode = value);
-              },
-            ),
-            _buildSwitchTile(
-              title: 'High Contrast',
-              subtitle: 'Increase contrast for visibility',
-              value: _isHighContrast,
-              onChanged: (value) {
-                setState(() => _isHighContrast = value);
-              },
-            ),
-            const SizedBox(height: 8),
-
-            // Accessibility Section
-            _buildSectionHeader('Accessibility'),
-            _buildSwitchTile(
-              title: 'Screen Reader',
-              subtitle: 'Enable voice guidance',
-              value: _screenReaderEnabled,
-              onChanged: (value) {
-                setState(() => _screenReaderEnabled = value);
-              },
-            ),
-            _buildSwitchTile(
-              title: 'Reduce Motion',
-              subtitle: 'Minimize animations',
-              value: _reduceMotion,
-              onChanged: (value) {
-                setState(() => _reduceMotion = value);
-              },
-            ),
-            _buildSwitchTile(
-              title: 'Large Touch Targets',
-              subtitle: 'Increase button sizes (44x44pt minimum)',
-              value: _largeTouchTargets,
-              onChanged: (value) {
-                setState(() => _largeTouchTargets = value);
-              },
-            ),
-            _buildSwitchTile(
-              title: 'Bold Text',
-              subtitle: 'Make text easier to read',
-              value: _boldText,
-              onChanged: (value) {
-                setState(() => _boldText = value);
-              },
-            ),
-            const SizedBox(height: 8),
-
-            // Notifications Section
-            _buildSectionHeader('Notifications'),
-            _buildSwitchTile(
-              title: 'Medication Reminders',
-              subtitle: 'Get notified to take medication',
-              value: _medicationReminders,
-              onChanged: (value) {
-                setState(() => _medicationReminders = value);
-              },
-            ),
-            _buildSwitchTile(
-              title: 'Task Alerts',
-              subtitle: 'Reminders for scheduled tasks',
-              value: _taskAlerts,
-              onChanged: (value) {
-                setState(() => _taskAlerts = value);
-              },
-            ),
-            _buildSwitchTile(
-              title: 'Health Alerts',
-              subtitle: 'Important health notifications',
-              value: _healthAlerts,
-              onChanged: (value) {
-                setState(() => _healthAlerts = value);
-              },
-            ),
-            _buildSwitchTile(
-              title: 'Message Notifications',
-              subtitle: 'New messages from caregivers',
-              value: _messageNotifications,
-              onChanged: (value) {
-                setState(() => _messageNotifications = value);
-              },
-            ),
-            const SizedBox(height: 8),
-
-            // Language & Region Section
-            _buildSectionHeader('Language & Region'),
-            _buildSettingTile(
-              title: 'Language',
-              subtitle: _language,
-              trailing: Icon(
-                Icons.chevron_right,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              _buildSwitchTile(
+                title: 'Dark Mode',
+                subtitle: 'Reduce eye strain in low light',
+                value: _isDarkMode,
+                onChanged: (value) {
+                  setState(() => _isDarkMode = value);
+                },
               ),
-              onTap: () {
-                _showLanguageDialog();
-              },
-            ),
-            _buildSettingTile(
-              title: 'Time Format',
-              subtitle: _timeFormat,
-              trailing: Icon(
-                Icons.chevron_right,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              _buildSwitchTile(
+                title: 'High Contrast',
+                subtitle: 'Increase contrast for visibility',
+                value: _isHighContrast,
+                onChanged: (value) {
+                  setState(() => _isHighContrast = value);
+                },
               ),
-              onTap: () {
-                _showTimeFormatDialog();
-              },
-            ),
-            _buildSettingTile(
-              title: 'Date Format',
-              subtitle: _dateFormat,
-              trailing: Icon(
-                Icons.chevron_right,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              onTap: () {
-                _showDateFormatDialog();
-              },
-            ),
-            const SizedBox(height: 8),
+              const SizedBox(height: 8),
 
-            // Privacy & Security Section
-            _buildSectionHeader('Privacy & Security'),
-            _buildSwitchTile(
-              title: 'Biometric Login',
-              subtitle: 'Use Face ID or Touch ID',
-              value: _biometricLogin,
-              onChanged: (value) {
-                setState(() => _biometricLogin = value);
-              },
-            ),
-            _buildSwitchTile(
-              title: 'Data Sharing',
-              subtitle: 'Share data with caregivers',
-              value: _dataSharing,
-              onChanged: (value) {
-                setState(() => _dataSharing = value);
-              },
-            ),
-            _buildSettingTile(
-              title: 'HIPAA Consent',
-              subtitle: 'View privacy policy',
-              trailing: Icon(
-                Icons.chevron_right,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              // Accessibility Section
+              _buildSectionHeader('Accessibility'),
+              _buildSwitchTile(
+                title: 'Screen Reader',
+                subtitle: 'Enable voice guidance',
+                value: _screenReaderEnabled,
+                onChanged: (value) {
+                  setState(() => _screenReaderEnabled = value);
+                },
               ),
-              onTap: () {
-                // TODO: Show privacy policy
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Privacy policy viewer coming soon'),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 24),
+              _buildSwitchTile(
+                title: 'Reduce Motion',
+                subtitle: 'Minimize animations',
+                value: _reduceMotion,
+                onChanged: (value) {
+                  setState(() => _reduceMotion = value);
+                },
+              ),
+              _buildSwitchTile(
+                title: 'Large Touch Targets',
+                subtitle: 'Increase button sizes (44x44pt minimum)',
+                value: _largeTouchTargets,
+                onChanged: (value) {
+                  setState(() => _largeTouchTargets = value);
+                },
+              ),
+              _buildSwitchTile(
+                title: 'Bold Text',
+                subtitle: 'Make text easier to read',
+                value: _boldText,
+                onChanged: (value) {
+                  setState(() => _boldText = value);
+                },
+              ),
+              const SizedBox(height: 8),
 
-            // Save Button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Preferences saved successfully'),
-                        backgroundColor: AppColors.success700,
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              // Notifications Section
+              _buildSectionHeader('Notifications'),
+              _buildSwitchTile(
+                title: 'Medication Reminders',
+                subtitle: 'Get notified to take medication',
+                value: _medicationReminders,
+                onChanged: (value) {
+                  setState(() => _medicationReminders = value);
+                },
+              ),
+              _buildSwitchTile(
+                title: 'Task Alerts',
+                subtitle: 'Reminders for scheduled tasks',
+                value: _taskAlerts,
+                onChanged: (value) {
+                  setState(() => _taskAlerts = value);
+                },
+              ),
+              _buildSwitchTile(
+                title: 'Health Alerts',
+                subtitle: 'Important health notifications',
+                value: _healthAlerts,
+                onChanged: (value) {
+                  setState(() => _healthAlerts = value);
+                },
+              ),
+              _buildSwitchTile(
+                title: 'Message Notifications',
+                subtitle: 'New messages from caregivers',
+                value: _messageNotifications,
+                onChanged: (value) {
+                  setState(() => _messageNotifications = value);
+                },
+              ),
+              const SizedBox(height: 8),
+
+              // Language & Region Section
+              _buildSectionHeader('Language & Region'),
+              _buildSettingTile(
+                title: 'Language',
+                subtitle: _language,
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                onTap: () {
+                  _showLanguageDialog();
+                },
+              ),
+              _buildSettingTile(
+                title: 'Time Format',
+                subtitle: _timeFormat,
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                onTap: () {
+                  _showTimeFormatDialog();
+                },
+              ),
+              _buildSettingTile(
+                title: 'Date Format',
+                subtitle: _dateFormat,
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                onTap: () {
+                  _showDateFormatDialog();
+                },
+              ),
+              const SizedBox(height: 8),
+
+              // Privacy & Security Section
+              _buildSectionHeader('Privacy & Security'),
+              _buildSwitchTile(
+                title: 'Biometric Login',
+                subtitle: 'Use Face ID or Touch ID',
+                value: _biometricLogin,
+                onChanged: (value) {
+                  setState(() => _biometricLogin = value);
+                },
+              ),
+              _buildSwitchTile(
+                title: 'Data Sharing',
+                subtitle: 'Share data with caregivers',
+                value: _dataSharing,
+                onChanged: (value) {
+                  setState(() => _dataSharing = value);
+                },
+              ),
+              _buildSettingTile(
+                title: 'HIPAA Consent',
+                subtitle: 'View privacy policy',
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                onTap: () {
+                  // TODO: Show privacy policy
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Privacy policy viewer coming soon'),
                     ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    'Save Preferences',
-                    style: Theme.of(context).textTheme.labelLarge,
+                  );
+                },
+              ),
+              const SizedBox(height: 24),
+
+              // Save Button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('Preferences saved successfully'),
+                          backgroundColor: AppColors.success700,
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      'Save Preferences',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 32),
-          ],
+              const SizedBox(height: 32),
+            ],
+          ),
         ),
       ),
     );

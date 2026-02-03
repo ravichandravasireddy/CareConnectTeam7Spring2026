@@ -58,7 +58,7 @@ class CaregiverDashboardScreen extends StatelessWidget {
           ),
         ],
       ),
-      drawer: const AppDrawer(isPatient: false),
+      drawer: const AppDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
