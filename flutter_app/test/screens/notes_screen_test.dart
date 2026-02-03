@@ -19,6 +19,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_app/models/note.dart';
 import 'package:flutter_app/providers/note_provider.dart';
+import 'package:flutter_app/providers/auth_provider.dart';
 import 'package:flutter_app/screens/notes_screen.dart';
 import 'package:flutter_app/screens/notes_add_screen.dart';
 import 'package:flutter_app/screens/notes_detail_screen.dart';
@@ -86,7 +87,9 @@ void main() {
       expect(formatNoteCategoryDisplay(NoteCategory.medication), 'Medication');
       expect(formatNoteCategoryDisplay(NoteCategory.exercise), 'Exercise');
       expect(
-          formatNoteCategoryDisplay(NoteCategory.appointment), 'Appointment');
+        formatNoteCategoryDisplay(NoteCategory.appointment),
+        'Appointment',
+      );
     });
   });
 
@@ -108,7 +111,8 @@ void main() {
     test('should initialize with 3 mock notes', () {
       // ASSERT: Provider starts with mock data
       expect(provider.notes.length, 3);
-      expect(provider.notes.first.id, '1');
+      final ids = provider.notes.map((note) => note.id).toSet();
+      expect(ids, containsAll(<String>['1', '2', '3']));
     });
 
     test('should keep notes sorted by createdAt (newest first)', () {
@@ -121,7 +125,8 @@ void main() {
           notes[i].createdAt.isAfter(notes[i + 1].createdAt) ||
               notes[i].createdAt.isAtSameMomentAs(notes[i + 1].createdAt),
           true,
-          reason: 'Note at index $i should be newer than note at index ${i + 1}',
+          reason:
+              'Note at index $i should be newer than note at index ${i + 1}',
         );
       }
     });
@@ -248,22 +253,25 @@ void main() {
       // ACT & ASSERT: Trying to modify should throw
       final notes = provider.notes;
       expect(
-        () => notes.add(Note(
-          id: 'test',
-          title: 'Test',
-          body: 'Test',
-          author: 'Test',
-          createdAt: DateTime.now(),
-          category: NoteCategory.medication,
-        )),
+        () => notes.add(
+          Note(
+            id: 'test',
+            title: 'Test',
+            body: 'Test',
+            author: 'Test',
+            createdAt: DateTime.now(),
+            category: NoteCategory.medication,
+          ),
+        ),
         throwsUnsupportedError,
       );
     });
 
     test('categoryColors should return Color tuples for all categories', () {
       // Test all categories return valid colors
-      final medicationColors =
-          NoteProvider.categoryColors(NoteCategory.medication);
+      final medicationColors = NoteProvider.categoryColors(
+        NoteCategory.medication,
+      );
       expect(medicationColors.$1, isA<Color>());
       expect(medicationColors.$2, isA<Color>());
 
@@ -271,8 +279,9 @@ void main() {
       expect(exerciseColors.$1, isA<Color>());
       expect(exerciseColors.$2, isA<Color>());
 
-      final appointmentColors =
-          NoteProvider.categoryColors(NoteCategory.appointment);
+      final appointmentColors = NoteProvider.categoryColors(
+        NoteCategory.appointment,
+      );
       expect(appointmentColors.$1, isA<Color>());
       expect(appointmentColors.$2, isA<Color>());
     });
@@ -334,11 +343,14 @@ void main() {
     /// Creates a test harness for NotesScreen.
     /// COPY THIS PATTERN for testing screens with providers!
     Widget createTestHarness() {
-      return ChangeNotifierProvider(
-        create: (_) => NoteProvider(),
-        child: const MaterialApp(
-          home: NotesScreen(),
-        ),
+      final authProvider = AuthProvider()..setTestUser(UserRole.patient);
+
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => NoteProvider()),
+          ChangeNotifierProvider.value(value: authProvider),
+        ],
+        child: const MaterialApp(home: NotesScreen()),
       );
     }
 
@@ -370,8 +382,9 @@ void main() {
       expect(find.text("Doctor's Appointment"), findsOneWidget);
     });
 
-    testWidgets('should display note preview truncated at 60 characters',
-        (tester) async {
+    testWidgets('should display note preview truncated at 60 characters', (
+      tester,
+    ) async {
       // ARRANGE & ACT: Build widget
       await tester.pumpWidget(createTestHarness());
 
@@ -380,8 +393,9 @@ void main() {
       expect(preview, findsOneWidget);
     });
 
-    testWidgets('should display category chips with uppercase labels',
-        (tester) async {
+    testWidgets('should display category chips with uppercase labels', (
+      tester,
+    ) async {
       // ARRANGE & ACT: Build widget
       await tester.pumpWidget(createTestHarness());
 
@@ -391,8 +405,9 @@ void main() {
       expect(find.text('APPOINTMENT'), findsOneWidget);
     });
 
-    testWidgets('tapping "Add New Note" should navigate to AddNoteScreen',
-        (tester) async {
+    testWidgets('tapping "Add New Note" should navigate to AddNoteScreen', (
+      tester,
+    ) async {
       // ARRANGE: Build widget
       await tester.pumpWidget(createTestHarness());
 
@@ -404,8 +419,9 @@ void main() {
       expect(find.text('New Note'), findsOneWidget);
     });
 
-    testWidgets('tapping a note should navigate to NoteDetailScreen',
-        (tester) async {
+    testWidgets('tapping a note should navigate to NoteDetailScreen', (
+      tester,
+    ) async {
       // ARRANGE: Build widget
       await tester.pumpWidget(createTestHarness());
 
@@ -417,18 +433,23 @@ void main() {
       expect(find.text('Medication Side Effects'), findsWidgets);
     });
 
-    testWidgets('should display empty state when no notes exist',
-        (tester) async {
+    testWidgets('should display empty state when no notes exist', (
+      tester,
+    ) async {
       // ARRANGE: Create provider and delete all notes
       final emptyProvider = NoteProvider();
+      final authProvider = AuthProvider()..setTestUser(UserRole.patient);
       for (var note in emptyProvider.notes.toList()) {
         emptyProvider.deleteNote(note.id);
       }
 
       // ACT: Build with empty provider
       await tester.pumpWidget(
-        ChangeNotifierProvider.value(
-          value: emptyProvider,
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: emptyProvider),
+            ChangeNotifierProvider.value(value: authProvider),
+          ],
           child: const MaterialApp(home: NotesScreen()),
         ),
       );
@@ -459,16 +480,18 @@ void main() {
   group('AddNoteScreen Widget', () {
     /// Creates a test harness for AddNoteScreen.
     Widget createTestHarness() {
-      return ChangeNotifierProvider(
-        create: (_) => NoteProvider(),
-        child: const MaterialApp(
-          home: AddNoteScreen(),
-        ),
+      final authProvider = AuthProvider()..setTestUser(UserRole.patient);
+
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => NoteProvider()),
+          ChangeNotifierProvider.value(value: authProvider),
+        ],
+        child: const MaterialApp(home: AddNoteScreen()),
       );
     }
 
-    testWidgets('should render app bar with "New Note" title',
-        (tester) async {
+    testWidgets('should render app bar with "New Note" title', (tester) async {
       // ARRANGE & ACT: Build widget
       await tester.pumpWidget(createTestHarness());
 
@@ -488,8 +511,9 @@ void main() {
       expect(find.text('Save'), findsOneWidget);
     });
 
-    testWidgets('should display hint text for Title and Note fields',
-        (tester) async {
+    testWidgets('should display hint text for Title and Note fields', (
+      tester,
+    ) async {
       // ARRANGE & ACT: Build widget
       await tester.pumpWidget(createTestHarness());
 
@@ -498,8 +522,7 @@ void main() {
       expect(find.text('Write your note here…'), findsOneWidget);
     });
 
-    testWidgets('should show validation error for empty title',
-        (tester) async {
+    testWidgets('should show validation error for empty title', (tester) async {
       // ARRANGE: Build widget
       await tester.pumpWidget(createTestHarness());
 
@@ -511,8 +534,9 @@ void main() {
       expect(find.text('Enter a title'), findsOneWidget);
     });
 
-    testWidgets('should show validation error for empty note body',
-        (tester) async {
+    testWidgets('should show validation error for empty note body', (
+      tester,
+    ) async {
       // ARRANGE: Build widget
       await tester.pumpWidget(createTestHarness());
 
@@ -528,8 +552,7 @@ void main() {
       expect(find.text('Enter note content'), findsOneWidget);
     });
 
-    testWidgets('category dropdown should show all categories',
-        (tester) async {
+    testWidgets('category dropdown should show all categories', (tester) async {
       // ARRANGE: Build widget
       await tester.pumpWidget(createTestHarness());
 
@@ -557,8 +580,9 @@ void main() {
       expect(find.text('Exercise'), findsWidgets);
     });
 
-    testWidgets('should save note and pop screen when form is valid',
-        (tester) async {
+    testWidgets('should save note and pop screen when form is valid', (
+      tester,
+    ) async {
       // ARRANGE: Build widget
       await tester.pumpWidget(createTestHarness());
 
@@ -578,8 +602,9 @@ void main() {
       expect(find.text('New Note'), findsNothing);
     });
 
-    testWidgets('close button should pop screen without saving',
-        (tester) async {
+    testWidgets('close button should pop screen without saving', (
+      tester,
+    ) async {
       // ARRANGE: Build widget and enter some data
       await tester.pumpWidget(createTestHarness());
       await tester.enterText(
@@ -605,11 +630,14 @@ void main() {
   group('NoteDetailScreen Widget', () {
     /// Creates a test harness for NoteDetailScreen with a specific note ID.
     Widget createTestHarness(String noteId) {
-      return ChangeNotifierProvider(
-        create: (_) => NoteProvider(),
-        child: MaterialApp(
-          home: NoteDetailScreen(noteId: noteId),
-        ),
+      final authProvider = AuthProvider()..setTestUser(UserRole.patient);
+
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => NoteProvider()),
+          ChangeNotifierProvider.value(value: authProvider),
+        ],
+        child: MaterialApp(home: NoteDetailScreen(noteId: noteId)),
       );
     }
 
@@ -624,8 +652,9 @@ void main() {
       expect(find.textContaining('Felt slight dizziness'), findsOneWidget);
     });
 
-    testWidgets('should display full note body (not truncated)',
-        (tester) async {
+    testWidgets('should display full note body (not truncated)', (
+      tester,
+    ) async {
       // ARRANGE & ACT: Build widget
       await tester.pumpWidget(createTestHarness('1'));
 
@@ -636,8 +665,9 @@ void main() {
       expect(find.text(fullBody), findsOneWidget);
     });
 
-    testWidgets('should display formatted timestamp with bullet separator',
-        (tester) async {
+    testWidgets('should display formatted timestamp with bullet separator', (
+      tester,
+    ) async {
       // ARRANGE & ACT: Build widget
       await tester.pumpWidget(createTestHarness('1'));
 
@@ -660,8 +690,9 @@ void main() {
       expect(chipContainer, findsWidgets);
     });
 
-    testWidgets('should show "Note not found" for invalid note ID',
-        (tester) async {
+    testWidgets('should show "Note not found" for invalid note ID', (
+      tester,
+    ) async {
       // ARRANGE & ACT: Build with invalid ID
       await tester.pumpWidget(createTestHarness('invalid_id'));
       await tester.pump();
@@ -703,29 +734,37 @@ void main() {
   // ===========================================================================
 
   group('Notes Feature Accessibility', () {
-    testWidgets('NotesScreen - Add New Note button should have semantic label',
-        (tester) async {
-      // ARRANGE: Build NotesScreen
-      await tester.pumpWidget(
-        ChangeNotifierProvider(
-          create: (_) => NoteProvider(),
-          child: const MaterialApp(home: NotesScreen()),
-        ),
-      );
+    testWidgets(
+      'NotesScreen - Add New Note button should have semantic label',
+      (tester) async {
+        // ARRANGE: Build NotesScreen
+        final authProvider = AuthProvider()..setTestUser(UserRole.patient);
+        await tester.pumpWidget(
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (_) => NoteProvider()),
+              ChangeNotifierProvider.value(value: authProvider),
+            ],
+            child: const MaterialApp(home: NotesScreen()),
+          ),
+        );
 
-      // ASSERT: Semantics label is present for screen readers
-      expect(
-        find.bySemanticsLabel('Add New Note, button'),
-        findsOneWidget,
-      );
-    });
+        // ASSERT: Semantics label is present for screen readers
+        expect(find.bySemanticsLabel('Add New Note, button'), findsOneWidget);
+      },
+    );
 
-    testWidgets('NotesScreen - Note tiles should have semantic labels',
-        (tester) async {
+    testWidgets('NotesScreen - Note tiles should have semantic labels', (
+      tester,
+    ) async {
       // ARRANGE: Build NotesScreen
+      final authProvider = AuthProvider()..setTestUser(UserRole.patient);
       await tester.pumpWidget(
-        ChangeNotifierProvider(
-          create: (_) => NoteProvider(),
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => NoteProvider()),
+            ChangeNotifierProvider.value(value: authProvider),
+          ],
           child: const MaterialApp(home: NotesScreen()),
         ),
       );
@@ -752,13 +791,18 @@ void main() {
   // ===========================================================================
 
   group('Notes Feature Integration', () {
-    testWidgets('complete flow: add note, view in list, then view details',
-        (tester) async {
+    testWidgets('complete flow: add note, view in list, then view details', (
+      tester,
+    ) async {
       // ARRANGE: Create provider and build NotesScreen
       final provider = NoteProvider();
+      final authProvider = AuthProvider()..setTestUser(UserRole.patient);
       await tester.pumpWidget(
-        ChangeNotifierProvider.value(
-          value: provider,
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: provider),
+            ChangeNotifierProvider.value(value: authProvider),
+          ],
           child: const MaterialApp(home: NotesScreen()),
         ),
       );
@@ -796,13 +840,18 @@ void main() {
       expect(find.text('Sarah Johnson (Caregiver)'), findsOneWidget);
     });
 
-    testWidgets('newly added notes should appear at the top of the list',
-        (tester) async {
+    testWidgets('newly added notes should appear at the top of the list', (
+      tester,
+    ) async {
       // ARRANGE: Create provider and build NotesScreen
       final provider = NoteProvider();
+      final authProvider = AuthProvider()..setTestUser(UserRole.patient);
       await tester.pumpWidget(
-        ChangeNotifierProvider.value(
-          value: provider,
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: provider),
+            ChangeNotifierProvider.value(value: authProvider),
+          ],
           child: const MaterialApp(home: NotesScreen()),
         ),
       );

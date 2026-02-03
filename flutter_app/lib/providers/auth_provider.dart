@@ -106,4 +106,13 @@ class AuthProvider extends ChangeNotifier {
     _isAuthenticated = false;
     notifyListeners();
   }
+
+  /// Set user state for testing (e.g. widget tests that need AuthProvider above AppBottomNavBar).
+  void setTestUser(UserRole role) {
+    _userRole = role;
+    _userEmail = role == UserRole.patient ? _mockPatientEmail : _mockCaregiverEmail;
+    _userName = role == UserRole.patient ? 'Robert Williams' : 'Dr. Sarah Johnson';
+    _isAuthenticated = true;
+    notifyListeners();
+  }
 }

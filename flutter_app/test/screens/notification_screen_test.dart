@@ -17,6 +17,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_app/screens/notification_screen.dart';
 import 'package:flutter_app/providers/notification_provider.dart';
+import 'package:flutter_app/providers/auth_provider.dart';
 import 'package:flutter_app/models/notification_item.dart';
 
 void main() {
@@ -24,14 +25,18 @@ void main() {
   // TEST HARNESS
   // ===========================================================================
 
-  /// Creates test harness with NotificationProvider
+  /// Creates test harness with NotificationProvider and AuthProvider (required by AppBottomNavBar).
   Widget createTestHarness({NotificationProvider? notificationProvider}) {
-    final provider = notificationProvider ?? NotificationProvider();
+    final notificationProviderInstance = notificationProvider ?? NotificationProvider();
+    final auth = AuthProvider()..setTestUser(UserRole.patient);
 
-    return ChangeNotifierProvider<NotificationProvider>.value(
-      value: provider,
-      child: const MaterialApp(
-        home: NotificationScreen(),
+    return ChangeNotifierProvider<AuthProvider>.value(
+      value: auth,
+      child: ChangeNotifierProvider<NotificationProvider>.value(
+        value: notificationProviderInstance,
+        child: const MaterialApp(
+          home: NotificationScreen(),
+        ),
       ),
     );
   }

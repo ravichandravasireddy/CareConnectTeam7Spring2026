@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_app/screens/calendar_screen.dart';
 import 'package:flutter_app/providers/task_provider.dart';
+import 'package:flutter_app/providers/auth_provider.dart';
 import 'package:flutter_app/models/task.dart';
 import 'package:flutter_app/theme/app_colors.dart';
 
@@ -25,16 +26,18 @@ void main() {
   // ===========================================================================
   // TEST HARNESS
   // ===========================================================================
-  
+
   /// Creates test harness with TaskProvider
   Widget createTestHarness({TaskProvider? taskProvider}) {
     final provider = taskProvider ?? TaskProvider();
+    final authProvider = AuthProvider()..setTestUser(UserRole.patient);
 
-    return ChangeNotifierProvider<TaskProvider>.value(
-      value: provider,
-      child: const MaterialApp(
-        home: CalendarScreen(),
-      ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<TaskProvider>.value(value: provider),
+        ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
+      ],
+      child: const MaterialApp(home: CalendarScreen()),
     );
   }
 
@@ -69,11 +72,13 @@ void main() {
 
       final now = DateTime.now();
       final monthYear = '${_getMonthName(now.month)} ${now.year}';
-      
+
       expect(find.text(monthYear), findsOneWidget);
     });
 
-    testWidgets('should render previous and next month buttons', (tester) async {
+    testWidgets('should render previous and next month buttons', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       expect(find.byIcon(Icons.chevron_left), findsOneWidget);
@@ -88,7 +93,7 @@ void main() {
         of: find.byType(GridView),
         matching: find.byType(InkWell),
       );
-      
+
       expect(dateCells, findsNWidgets(42));
     });
 
@@ -97,7 +102,7 @@ void main() {
 
       final now = DateTime.now();
       final expectedText = 'Tasks for ${_getMonthName(now.month)} ${now.day}';
-      
+
       expect(find.text(expectedText), findsOneWidget);
     });
   });
@@ -107,13 +112,14 @@ void main() {
   // ===========================================================================
 
   group('CalendarScreen Month Navigation', () {
-    testWidgets('should navigate to previous month when left arrow tapped', 
-        (tester) async {
+    testWidgets('should navigate to previous month when left arrow tapped', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       final now = DateTime.now();
       final currentMonth = '${_getMonthName(now.month)} ${now.year}';
-      
+
       // Verify current month is displayed
       expect(find.text(currentMonth), findsOneWidget);
 
@@ -123,30 +129,32 @@ void main() {
 
       // Verify previous month is now displayed
       final previousMonth = DateTime(now.year, now.month - 1, 1);
-      final previousMonthText = 
+      final previousMonthText =
           '${_getMonthName(previousMonth.month)} ${previousMonth.year}';
       expect(find.text(previousMonthText), findsOneWidget);
     });
 
-    testWidgets('should navigate to next month when right arrow tapped', 
-        (tester) async {
+    testWidgets('should navigate to next month when right arrow tapped', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       final now = DateTime.now();
-      
+
       // Tap next month button
       await tester.tap(find.byIcon(Icons.chevron_right));
       await tester.pumpAndSettle();
 
       // Verify next month is now displayed
       final nextMonth = DateTime(now.year, now.month + 1, 1);
-      final nextMonthText = 
+      final nextMonthText =
           '${_getMonthName(nextMonth.month)} ${nextMonth.year}';
       expect(find.text(nextMonthText), findsOneWidget);
     });
 
-    testWidgets('should handle year rollover when navigating months',
-        (tester) async {
+    testWidgets('should handle year rollover when navigating months', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       // Tap next 12 times: same month next year (e.g. Jan -> Jan next year)
@@ -170,33 +178,34 @@ void main() {
       await tester.pumpWidget(createTestHarness());
 
       final now = DateTime.now();
-      
+
       // Today's cell should have primary background color
       // We can verify by checking the selected date text includes today
       final expectedText = 'Tasks for ${_getMonthName(now.month)} ${now.day}';
       expect(find.text(expectedText), findsOneWidget);
     });
 
-    testWidgets('should update selected date when tapping a date cell', 
-        (tester) async {
+    testWidgets('should update selected date when tapping a date cell', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       final now = DateTime.now();
       // Find a different date to tap (day 15 if not today)
       final dayToTap = now.day == 15 ? 14 : 15;
-      
+
       // Tap on day 15
       await tester.tap(find.text('$dayToTap').first);
       await tester.pumpAndSettle();
 
       // Verify selected date text updated
-      final expectedText = 
-          'Tasks for ${_getMonthName(now.month)} $dayToTap';
+      final expectedText = 'Tasks for ${_getMonthName(now.month)} $dayToTap';
       expect(find.text(expectedText), findsOneWidget);
     });
 
-    testWidgets('should not select dates from previous/next months',
-        (tester) async {
+    testWidgets('should not select dates from previous/next months', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       // Calendar grid has 42 date cells (including prev/next month dates).
@@ -232,8 +241,9 @@ void main() {
       }
     });
 
-    testWidgets('should show "no tasks" message when date has no tasks',
-        (tester) async {
+    testWidgets('should show "no tasks" message when date has no tasks', (
+      tester,
+    ) async {
       final provider = TaskProvider();
       provider.clearTasks();
 
@@ -244,27 +254,27 @@ void main() {
       await tester.tap(find.text('1').first);
       await tester.pumpAndSettle();
 
-      expect(
-        find.text('No tasks scheduled for this day'),
-        findsOneWidget,
-      );
+      expect(find.text('No tasks scheduled for this day'), findsOneWidget);
     });
 
-    testWidgets('should display task indicator dot for dates with tasks',
-        (tester) async {
+    testWidgets('should display task indicator dot for dates with tasks', (
+      tester,
+    ) async {
       final provider = TaskProvider();
       provider.clearTasks();
       final now = DateTime.now();
       // Pick a date that has no tasks, then add one task on it
       const dayWithTasks = 25;
-      provider.addTask(Task(
-        id: 'dot-test',
-        title: 'Dot Test Task',
-        date: DateTime(now.year, now.month, dayWithTasks, 10, 0),
-        icon: Icons.task,
-        iconBackground: AppColors.primary100,
-        iconColor: AppColors.primary700,
-      ));
+      provider.addTask(
+        Task(
+          id: 'dot-test',
+          title: 'Dot Test Task',
+          date: DateTime(now.year, now.month, dayWithTasks, 10, 0),
+          icon: Icons.task,
+          iconBackground: AppColors.primary100,
+          iconColor: AppColors.primary700,
+        ),
+      );
 
       await tester.pumpWidget(createTestHarness(taskProvider: provider));
 
@@ -276,8 +286,9 @@ void main() {
       expect(find.bySemanticsLabel(hasTasksLabel), findsWidgets);
     });
 
-    testWidgets('should display task cards with correct icons and colors',
-        (tester) async {
+    testWidgets('should display task cards with correct icons and colors', (
+      tester,
+    ) async {
       final provider = TaskProvider();
       await tester.pumpWidget(createTestHarness(taskProvider: provider));
 
@@ -294,30 +305,33 @@ void main() {
       expect(find.text(firstTask.title), findsOneWidget);
     });
 
-    testWidgets('should sort tasks by time for selected date', 
-        (tester) async {
+    testWidgets('should sort tasks by time for selected date', (tester) async {
       final provider = TaskProvider();
       final testDate = DateTime.now();
       final dateOnly = DateTime(testDate.year, testDate.month, testDate.day);
 
       // Add tasks out of order (date holds day + time)
-      provider.addTask(Task(
-        id: 'test-1',
-        title: 'Afternoon Task',
-        date: DateTime(dateOnly.year, dateOnly.month, dateOnly.day, 15, 0),
-        icon: Icons.task,
-        iconBackground: AppColors.primary100,
-        iconColor: AppColors.primary700,
-      ));
+      provider.addTask(
+        Task(
+          id: 'test-1',
+          title: 'Afternoon Task',
+          date: DateTime(dateOnly.year, dateOnly.month, dateOnly.day, 15, 0),
+          icon: Icons.task,
+          iconBackground: AppColors.primary100,
+          iconColor: AppColors.primary700,
+        ),
+      );
 
-      provider.addTask(Task(
-        id: 'test-2',
-        title: 'Morning Task',
-        date: DateTime(dateOnly.year, dateOnly.month, dateOnly.day, 9, 0),
-        icon: Icons.task,
-        iconBackground: AppColors.primary100,
-        iconColor: AppColors.primary700,
-      ));
+      provider.addTask(
+        Task(
+          id: 'test-2',
+          title: 'Morning Task',
+          date: DateTime(dateOnly.year, dateOnly.month, dateOnly.day, 9, 0),
+          icon: Icons.task,
+          iconBackground: AppColors.primary100,
+          iconColor: AppColors.primary700,
+        ),
+      );
 
       await tester.pumpWidget(createTestHarness(taskProvider: provider));
       await tester.pumpAndSettle();
@@ -326,7 +340,9 @@ void main() {
       expect(tasks.length, greaterThanOrEqualTo(2));
 
       final morningIndex = tasks.indexWhere((t) => t.title == 'Morning Task');
-      final afternoonIndex = tasks.indexWhere((t) => t.title == 'Afternoon Task');
+      final afternoonIndex = tasks.indexWhere(
+        (t) => t.title == 'Afternoon Task',
+      );
 
       expect(morningIndex != -1 && afternoonIndex != -1, true);
       expect(morningIndex, lessThan(afternoonIndex));
@@ -338,38 +354,28 @@ void main() {
   // ===========================================================================
 
   group('CalendarScreen Accessibility', () {
-    testWidgets('should have semantic labels for navigation buttons', 
-        (tester) async {
+    testWidgets('should have semantic labels for navigation buttons', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       // Find Semantics widgets with button labels
-      expect(
-        find.bySemanticsLabel('Previous month'),
-        findsOneWidget,
-      );
-      
-      expect(
-        find.bySemanticsLabel('Next month'),
-        findsOneWidget,
-      );
+      expect(find.bySemanticsLabel('Previous month'), findsOneWidget);
+
+      expect(find.bySemanticsLabel('Next month'), findsOneWidget);
     });
 
-    testWidgets('should have semantic label for calendar grid', 
-        (tester) async {
+    testWidgets('should have semantic label for calendar grid', (tester) async {
       await tester.pumpWidget(createTestHarness());
 
       final now = DateTime.now();
       final monthYear = '${_getMonthName(now.month)} ${now.year}';
       final expectedLabel = 'Calendar, $monthYear';
-      
-      expect(
-        find.bySemanticsLabel(expectedLabel),
-        findsOneWidget,
-      );
+
+      expect(find.bySemanticsLabel(expectedLabel), findsOneWidget);
     });
 
-    testWidgets('should have semantic labels for task cards', 
-        (tester) async {
+    testWidgets('should have semantic labels for task cards', (tester) async {
       final provider = TaskProvider();
       await tester.pumpWidget(createTestHarness(taskProvider: provider));
 
@@ -381,27 +387,22 @@ void main() {
 
       for (final task in scheduledForToday) {
         final timeLabel = DateFormat.jm().format(task.date);
-        final pattern = RegExp('${RegExp.escape(task.title)}.*${RegExp.escape(timeLabel)}');
-        expect(
-          find.bySemanticsLabel(pattern),
-          findsOneWidget,
+        final pattern = RegExp(
+          '${RegExp.escape(task.title)}.*${RegExp.escape(timeLabel)}',
         );
+        expect(find.bySemanticsLabel(pattern), findsOneWidget);
       }
     });
 
-    testWidgets('should indicate today in semantic label', 
-        (tester) async {
+    testWidgets('should indicate today in semantic label', (tester) async {
       await tester.pumpWidget(createTestHarness());
 
       // Today's date cell should have "today" in its semantic label
       final now = DateTime.now();
       final todayLabel = '${now.day}, today';
-      
+
       // This might find multiple if there are tasks indicators
-      expect(
-        find.bySemanticsLabel(RegExp(todayLabel)),
-        findsWidgets,
-      );
+      expect(find.bySemanticsLabel(RegExp(todayLabel)), findsWidgets);
     });
   });
 
@@ -413,30 +414,34 @@ void main() {
     testWidgets('should handle empty task list', (tester) async {
       final provider = TaskProvider();
       provider.clearTasks(); // Remove all tasks
-      
+
       await tester.pumpWidget(createTestHarness(taskProvider: provider));
 
-      expect(
-        find.text('No tasks scheduled for this day'),
-        findsOneWidget,
-      );
+      expect(find.text('No tasks scheduled for this day'), findsOneWidget);
     });
 
-    testWidgets('should handle multiple tasks on same date', 
-        (tester) async {
+    testWidgets('should handle multiple tasks on same date', (tester) async {
       final provider = TaskProvider();
       final testDate = DateTime.now();
-      
+
       final dateOnly = DateTime(testDate.year, testDate.month, testDate.day);
       for (int i = 0; i < 5; i++) {
-        provider.addTask(Task(
-          id: 'multi-$i',
-          title: 'Task $i',
-          date: DateTime(dateOnly.year, dateOnly.month, dateOnly.day, 9 + i, 0),
-          icon: Icons.task,
-          iconBackground: AppColors.primary100,
-          iconColor: AppColors.primary700,
-        ));
+        provider.addTask(
+          Task(
+            id: 'multi-$i',
+            title: 'Task $i',
+            date: DateTime(
+              dateOnly.year,
+              dateOnly.month,
+              dateOnly.day,
+              9 + i,
+              0,
+            ),
+            icon: Icons.task,
+            iconBackground: AppColors.primary100,
+            iconColor: AppColors.primary700,
+          ),
+        );
       }
 
       await tester.pumpWidget(createTestHarness(taskProvider: provider));
@@ -448,8 +453,9 @@ void main() {
       }
     });
 
-    testWidgets('should maintain selection when navigating months',
-        (tester) async {
+    testWidgets('should maintain selection when navigating months', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       await tester.tap(find.text('15').first);
@@ -476,8 +482,18 @@ void main() {
 /// Get month name from month number (1-12)
 String _getMonthName(int month) {
   const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
   return months[month - 1];
 }

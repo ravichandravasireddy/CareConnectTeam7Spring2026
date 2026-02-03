@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 
 import 'package:flutter_app/screens/messaging_thread_screen.dart';
+import 'package:flutter_app/providers/auth_provider.dart';
 
 import '../helpers/test_harness.dart';
 
 void main() {
   group('MessagingThreadScreen', () {
     testWidgets('renders header and initial content', (tester) async {
+      final authProvider = AuthProvider()..setTestUser(UserRole.patient);
       await tester.pumpWidget(
-        createTestHarness(child: const MessagingThreadScreen()),
+        MultiProvider(
+          providers: [ChangeNotifierProvider.value(value: authProvider)],
+          child: createTestHarness(child: const MessagingThreadScreen()),
+        ),
       );
 
       expect(find.text('Dr. Sarah Johnson'), findsOneWidget);
@@ -18,8 +24,12 @@ void main() {
     });
 
     testWidgets('sends a new message', (tester) async {
+      final authProvider = AuthProvider()..setTestUser(UserRole.patient);
       await tester.pumpWidget(
-        createTestHarness(child: const MessagingThreadScreen()),
+        MultiProvider(
+          providers: [ChangeNotifierProvider.value(value: authProvider)],
+          child: createTestHarness(child: const MessagingThreadScreen()),
+        ),
       );
 
       await tester.enterText(find.byType(TextField), 'Hello there');

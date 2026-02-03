@@ -10,8 +10,7 @@ import '../helpers/test_harness.dart';
 void main() {
   group('PatientDashboardScreen', () {
     testWidgets('renders core dashboard sections', (tester) async {
-      final auth = AuthProvider();
-      await auth.signIn('patient@careconnect.demo', 'password123');
+      final auth = AuthProvider()..setTestUser(UserRole.patient);
 
       await tester.pumpWidget(
         ChangeNotifierProvider<AuthProvider>.value(

@@ -17,20 +17,24 @@ import 'package:provider/provider.dart';
 import 'package:flutter_app/screens/health_logs_screen.dart';
 import 'package:flutter_app/screens/health_log_add_screen.dart';
 import 'package:flutter_app/providers/health_log_provider.dart';
+import 'package:flutter_app/providers/auth_provider.dart';
 import 'package:flutter_app/models/health_log.dart';
 
 void main() {
   // ===========================================================================
   // TEST HARNESS SETUP
   // ===========================================================================
-  
+
   /// Creates a test harness with a fresh HealthLogProvider.
   Widget createTestHarness({HealthLogProvider? provider}) {
-    return ChangeNotifierProvider(
-      create: (_) => provider ?? HealthLogProvider(),
-      child: const MaterialApp(
-        home: HealthLogsScreen(),
-      ),
+    final authProvider = AuthProvider()..setTestUser(UserRole.patient);
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => provider ?? HealthLogProvider()),
+        ChangeNotifierProvider.value(value: authProvider),
+      ],
+      child: const MaterialApp(home: HealthLogsScreen()),
     );
   }
 
@@ -90,8 +94,9 @@ void main() {
       expect(find.text('General'), findsOneWidget);
     });
 
-    testWidgets('should render quick log buttons with correct icons', (tester) async {
-
+    testWidgets('should render quick log buttons with correct icons', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       // Icons appear in both quick log grid and "Latest by type" placeholder cards
@@ -102,29 +107,35 @@ void main() {
       expect(find.byIcon(Icons.favorite), findsWidgets);
       expect(find.byIcon(Icons.bedtime), findsWidgets);
       expect(find.byIcon(Icons.monitor_heart_outlined), findsWidgets);
-      expect(find.byIcon(Icons.speed), findsWidgets); 
+      expect(find.byIcon(Icons.speed), findsWidgets);
       expect(find.byIcon(Icons.description), findsWidgets);
     });
 
-    testWidgets('should render "Latest by type" section header', (tester) async {
+    testWidgets('should render "Latest by type" section header', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       expect(find.text('Latest by type'), findsOneWidget);
     });
 
-    testWidgets('should render today\'s log entries when present', (tester) async {
+    testWidgets('should render today\'s log entries when present', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       // The default provider initializes with mock logs for today
       // Verify at least one log card is rendered
       expect(find.byType(SingleChildScrollView), findsOneWidget);
-      
+
       // Check for mock log content
       expect(find.text('Happy'), findsOneWidget);
       expect(find.text('Oatmeal with berries'), findsOneWidget);
     });
 
-    testWidgets('should render placeholders when no logs for a type', (tester) async {
+    testWidgets('should render placeholders when no logs for a type', (
+      tester,
+    ) async {
       final emptyProvider = createEmptyProvider();
       await tester.pumpWidget(createTestHarness(provider: emptyProvider));
 
@@ -153,16 +164,18 @@ void main() {
     testWidgets('tapping back button should pop navigation', (tester) async {
       // Create a navigator observer to track navigation
       final navigatorKey = GlobalKey<NavigatorState>();
-      
+      final authProvider = AuthProvider()..setTestUser(UserRole.patient);
+
       await tester.pumpWidget(
-        ChangeNotifierProvider(
-          create: (_) => HealthLogProvider(),
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => HealthLogProvider()),
+            ChangeNotifierProvider.value(value: authProvider),
+          ],
           child: MaterialApp(
             navigatorKey: navigatorKey,
             home: const Scaffold(body: Center(child: Text('Home'))),
-            routes: {
-              '/health-logs': (context) => const HealthLogsScreen(),
-            },
+            routes: {'/health-logs': (context) => const HealthLogsScreen()},
           ),
         ),
       );
@@ -182,8 +195,9 @@ void main() {
       expect(find.text('Health Logs'), findsNothing);
     });
 
-    testWidgets('tapping "Add a Log" should navigate to HealthLogAddScreen', 
-        (tester) async {
+    testWidgets('tapping "Add a Log" should navigate to HealthLogAddScreen', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       await tester.tap(find.text('Add a Log'));
@@ -194,22 +208,25 @@ void main() {
       expect(find.text('New Health Log'), findsOneWidget);
     });
 
-    testWidgets('tapping "Add a Log" should pass general type as initial type', 
-        (tester) async {
-      await tester.pumpWidget(createTestHarness());
+    testWidgets(
+      'tapping "Add a Log" should pass general type as initial type',
+      (tester) async {
+        await tester.pumpWidget(createTestHarness());
 
-      await tester.tap(find.text('Add a Log'));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text('Add a Log'));
+        await tester.pumpAndSettle();
 
-      // Verify the screen was created with general type
-      final addScreen = tester.widget<HealthLogAddScreen>(
-        find.byType(HealthLogAddScreen),
-      );
-      expect(addScreen.initialType, HealthLogType.general);
-    });
+        // Verify the screen was created with general type
+        final addScreen = tester.widget<HealthLogAddScreen>(
+          find.byType(HealthLogAddScreen),
+        );
+        expect(addScreen.initialType, HealthLogType.general);
+      },
+    );
 
-    testWidgets('tapping Mood quick log should navigate with mood type', 
-        (tester) async {
+    testWidgets('tapping Mood quick log should navigate with mood type', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       // Find the mood button by its text
@@ -217,15 +234,16 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(HealthLogAddScreen), findsOneWidget);
-      
+
       final addScreen = tester.widget<HealthLogAddScreen>(
         find.byType(HealthLogAddScreen),
       );
       expect(addScreen.initialType, HealthLogType.mood);
     });
 
-    testWidgets('tapping Water quick log should navigate with water type', 
-        (tester) async {
+    testWidgets('tapping Water quick log should navigate with water type', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       await tester.tap(find.text('Water'));
@@ -237,19 +255,22 @@ void main() {
       expect(addScreen.initialType, HealthLogType.water);
     });
 
-    testWidgets('tapping Symptoms quick log should navigate with symptoms type',
-        (tester) async {
-      await tester.pumpWidget(createTestHarness());
-      await tester.tap(find.text('Symptoms'));
-      await tester.pumpAndSettle();
-      final addScreen = tester.widget<HealthLogAddScreen>(
-        find.byType(HealthLogAddScreen),
-      );
-      expect(addScreen.initialType, HealthLogType.symptoms);
-    });
+    testWidgets(
+      'tapping Symptoms quick log should navigate with symptoms type',
+      (tester) async {
+        await tester.pumpWidget(createTestHarness());
+        await tester.tap(find.text('Symptoms'));
+        await tester.pumpAndSettle();
+        final addScreen = tester.widget<HealthLogAddScreen>(
+          find.byType(HealthLogAddScreen),
+        );
+        expect(addScreen.initialType, HealthLogType.symptoms);
+      },
+    );
 
-    testWidgets('tapping Meals quick log should navigate with meals type',
-        (tester) async {
+    testWidgets('tapping Meals quick log should navigate with meals type', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
       await tester.tap(find.text('Meals'));
       await tester.pumpAndSettle();
@@ -259,19 +280,22 @@ void main() {
       expect(addScreen.initialType, HealthLogType.meals);
     });
 
-    testWidgets('tapping Exercise quick log should navigate with exercise type',
-        (tester) async {
-      await tester.pumpWidget(createTestHarness());
-      await tester.tap(find.text('Exercise'));
-      await tester.pumpAndSettle();
-      final addScreen = tester.widget<HealthLogAddScreen>(
-        find.byType(HealthLogAddScreen),
-      );
-      expect(addScreen.initialType, HealthLogType.exercise);
-    });
+    testWidgets(
+      'tapping Exercise quick log should navigate with exercise type',
+      (tester) async {
+        await tester.pumpWidget(createTestHarness());
+        await tester.tap(find.text('Exercise'));
+        await tester.pumpAndSettle();
+        final addScreen = tester.widget<HealthLogAddScreen>(
+          find.byType(HealthLogAddScreen),
+        );
+        expect(addScreen.initialType, HealthLogType.exercise);
+      },
+    );
 
-    testWidgets('tapping Sleep quick log should navigate with sleep type',
-        (tester) async {
+    testWidgets('tapping Sleep quick log should navigate with sleep type', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
       await tester.tap(find.text('Sleep'));
       await tester.pumpAndSettle();
@@ -281,38 +305,46 @@ void main() {
       expect(addScreen.initialType, HealthLogType.sleep);
     });
 
-    testWidgets('tapping Blood Pressure quick log should navigate with bloodPressure type',
-        (tester) async {
-      await tester.pumpWidget(createTestHarness());
-      final bloodPressureButton = find.bySemanticsLabel('Blood Pressure quick log, button');
-      await tester.ensureVisible(bloodPressureButton);
-      await tester.tap(bloodPressureButton);
-      await tester.pumpAndSettle();
-      final addScreen = tester.widget<HealthLogAddScreen>(
-        find.byType(HealthLogAddScreen),
-      );
-      expect(addScreen.initialType, HealthLogType.bloodPressure);
-    });
+    testWidgets(
+      'tapping Blood Pressure quick log should navigate with bloodPressure type',
+      (tester) async {
+        await tester.pumpWidget(createTestHarness());
+        final bloodPressureButton = find.bySemanticsLabel(
+          'Blood Pressure quick log, button',
+        );
+        await tester.ensureVisible(bloodPressureButton);
+        await tester.tap(bloodPressureButton);
+        await tester.pumpAndSettle();
+        final addScreen = tester.widget<HealthLogAddScreen>(
+          find.byType(HealthLogAddScreen),
+        );
+        expect(addScreen.initialType, HealthLogType.bloodPressure);
+      },
+    );
 
-    testWidgets('tapping Heart Rate quick log should navigate with heartRate type',
-        (tester) async {
-      await tester.pumpWidget(createTestHarness());
-      final heartRateButton = find.bySemanticsLabel('Heart Rate quick log, button');
-      await tester.ensureVisible(heartRateButton);
-      await tester.tap(heartRateButton);
-      await tester.pumpAndSettle();
-      final addScreen = tester.widget<HealthLogAddScreen>(
-        find.byType(HealthLogAddScreen),
-      );
-      expect(addScreen.initialType, HealthLogType.heartRate);
-    });
+    testWidgets(
+      'tapping Heart Rate quick log should navigate with heartRate type',
+      (tester) async {
+        await tester.pumpWidget(createTestHarness());
+        final heartRateButton = find.bySemanticsLabel(
+          'Heart Rate quick log, button',
+        );
+        await tester.ensureVisible(heartRateButton);
+        await tester.tap(heartRateButton);
+        await tester.pumpAndSettle();
+        final addScreen = tester.widget<HealthLogAddScreen>(
+          find.byType(HealthLogAddScreen),
+        );
+        expect(addScreen.initialType, HealthLogType.heartRate);
+      },
+    );
 
     testWidgets('quick log buttons should all be tappable', (tester) async {
       await tester.pumpWidget(createTestHarness());
 
       // Find all OutlinedButtons (quick log buttons)
       final quickLogButtons = find.byType(OutlinedButton);
-      
+
       // Should find 8 quick log buttons
       expect(quickLogButtons, findsNWidgets(9));
 
@@ -335,7 +367,7 @@ void main() {
 
       // Provider initializes with mock data
       expect(provider.logs.isNotEmpty, isTrue);
-      
+
       // Verify log content is displayed
       final todayLogs = provider.logsForDate(DateTime.now());
       expect(todayLogs.isNotEmpty, isTrue);
@@ -364,7 +396,9 @@ void main() {
       expect(find.text('No Mood logged'), findsNothing);
     });
 
-    testWidgets('should show latest log per type for current day only', (tester) async {
+    testWidgets('should show latest log per type for current day only', (
+      tester,
+    ) async {
       final provider = createEmptyProvider();
 
       final todayLog = HealthLog(
@@ -391,22 +425,28 @@ void main() {
       expect(find.text('Yesterday Log'), findsNothing);
     });
 
-    testWidgets('should show most recent log per type when multiple today', (tester) async {
+    testWidgets('should show most recent log per type when multiple today', (
+      tester,
+    ) async {
       final provider = createEmptyProvider();
       final now = DateTime.now();
 
-      provider.addLog(HealthLog(
-        id: 'earlier',
-        type: HealthLogType.mood,
-        description: 'Earlier',
-        createdAt: DateTime(now.year, now.month, now.day, 9, 0),
-      ));
-      provider.addLog(HealthLog(
-        id: 'later',
-        type: HealthLogType.mood,
-        description: 'Later',
-        createdAt: DateTime(now.year, now.month, now.day, 11, 0),
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'earlier',
+          type: HealthLogType.mood,
+          description: 'Earlier',
+          createdAt: DateTime(now.year, now.month, now.day, 9, 0),
+        ),
+      );
+      provider.addLog(
+        HealthLog(
+          id: 'later',
+          type: HealthLogType.mood,
+          description: 'Later',
+          createdAt: DateTime(now.year, now.month, now.day, 11, 0),
+        ),
+      );
 
       await tester.pumpWidget(createTestHarness(provider: provider));
 
@@ -420,22 +460,37 @@ void main() {
   // ===========================================================================
 
   group('HealthLogsScreen Accessibility', () {
-    testWidgets('quick log buttons should have semantic labels', (tester) async {
+    testWidgets('quick log buttons should have semantic labels', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       // Each quick log button should have a descriptive semantic label
       expect(find.bySemanticsLabel('Mood quick log, button'), findsOneWidget);
-      expect(find.bySemanticsLabel('Symptoms quick log, button'), findsOneWidget);
+      expect(
+        find.bySemanticsLabel('Symptoms quick log, button'),
+        findsOneWidget,
+      );
       expect(find.bySemanticsLabel('Meals quick log, button'), findsOneWidget);
       expect(find.bySemanticsLabel('Water quick log, button'), findsOneWidget);
-      expect(find.bySemanticsLabel('Exercise quick log, button'), findsOneWidget);
+      expect(
+        find.bySemanticsLabel('Exercise quick log, button'),
+        findsOneWidget,
+      );
       expect(find.bySemanticsLabel('Sleep quick log, button'), findsOneWidget);
-      expect(find.bySemanticsLabel('Blood Pressure quick log, button'), findsOneWidget);
-      expect(find.bySemanticsLabel('Heart Rate quick log, button'), findsOneWidget);
+      expect(
+        find.bySemanticsLabel('Blood Pressure quick log, button'),
+        findsOneWidget,
+      );
+      expect(
+        find.bySemanticsLabel('Heart Rate quick log, button'),
+        findsOneWidget,
+      );
     });
 
-    testWidgets('log cards should have semantic labels with content', 
-        (tester) async {
+    testWidgets('log cards should have semantic labels with content', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       // Find log cards with semantic information
@@ -450,15 +505,14 @@ void main() {
       expect(semanticsFinder, findsWidgets);
     });
 
-    testWidgets('buttons should be marked as buttons in semantics', 
-        (tester) async {
+    testWidgets('buttons should be marked as buttons in semantics', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       // Find semantics with button property
       final buttonSemantics = find.byWidgetPredicate(
-        (widget) =>
-            widget is Semantics &&
-            widget.properties.button == true,
+        (widget) => widget is Semantics && widget.properties.button == true,
       );
 
       // Should find at least the 6 quick log buttons
@@ -524,42 +578,50 @@ void main() {
 
     testWidgets('log cards should display note when present', (tester) async {
       final provider = createEmptyProvider();
-      provider.addLog(HealthLog(
-        id: 'with-note',
-        type: HealthLogType.mood,
-        description: 'Calm',
-        createdAt: DateTime.now(),
-        note: 'Had a good rest.',
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'with-note',
+          type: HealthLogType.mood,
+          description: 'Calm',
+          createdAt: DateTime.now(),
+          note: 'Had a good rest.',
+        ),
+      );
       await tester.pumpWidget(createTestHarness(provider: provider));
 
       expect(find.text('Calm'), findsOneWidget);
       expect(find.text('Had a good rest.'), findsOneWidget);
     });
 
-    testWidgets('log cards should not show note line when note is null',
-        (tester) async {
+    testWidgets('log cards should not show note line when note is null', (
+      tester,
+    ) async {
       final provider = createEmptyProvider();
-      provider.addLog(HealthLog(
-        id: 'no-note',
-        type: HealthLogType.general,
-        description: 'Quick entry',
-        createdAt: DateTime.now(),
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'no-note',
+          type: HealthLogType.general,
+          description: 'Quick entry',
+          createdAt: DateTime.now(),
+        ),
+      );
       await tester.pumpWidget(createTestHarness(provider: provider));
 
       expect(find.text('Quick entry'), findsOneWidget);
     });
 
-    testWidgets('log cards without emoji still display description and time',
-        (tester) async {
+    testWidgets('log cards without emoji still display description and time', (
+      tester,
+    ) async {
       final provider = createEmptyProvider();
-      provider.addLog(HealthLog(
-        id: 'no-emoji',
-        type: HealthLogType.meals,
-        description: 'Salad',
-        createdAt: DateTime.now(),
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'no-emoji',
+          type: HealthLogType.meals,
+          description: 'Salad',
+          createdAt: DateTime.now(),
+        ),
+      );
       await tester.pumpWidget(createTestHarness(provider: provider));
 
       expect(find.text('Salad'), findsOneWidget);
@@ -568,12 +630,14 @@ void main() {
 
     testWidgets('general type log card shows description icon', (tester) async {
       final provider = createEmptyProvider();
-      provider.addLog(HealthLog(
-        id: 'gen-1',
-        type: HealthLogType.general,
-        description: 'General entry',
-        createdAt: DateTime.now(),
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'gen-1',
+          type: HealthLogType.general,
+          description: 'General entry',
+          createdAt: DateTime.now(),
+        ),
+      );
       await tester.pumpWidget(createTestHarness(provider: provider));
 
       await tester.ensureVisible(find.text('General entry'));
@@ -583,12 +647,14 @@ void main() {
 
     testWidgets('exercise type log card shows favorite icon', (tester) async {
       final provider = createEmptyProvider();
-      provider.addLog(HealthLog(
-        id: 'ex-1',
-        type: HealthLogType.exercise,
-        description: 'Morning run',
-        createdAt: DateTime.now(),
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'ex-1',
+          type: HealthLogType.exercise,
+          description: 'Morning run',
+          createdAt: DateTime.now(),
+        ),
+      );
       await tester.pumpWidget(createTestHarness(provider: provider));
 
       expect(find.text('Morning run'), findsOneWidget);
@@ -597,12 +663,14 @@ void main() {
 
     testWidgets('sleep type log card shows bedtime icon', (tester) async {
       final provider = createEmptyProvider();
-      provider.addLog(HealthLog(
-        id: 'sl-1',
-        type: HealthLogType.sleep,
-        description: '7 hours',
-        createdAt: DateTime.now(),
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'sl-1',
+          type: HealthLogType.sleep,
+          description: '7 hours',
+          createdAt: DateTime.now(),
+        ),
+      );
       await tester.pumpWidget(createTestHarness(provider: provider));
 
       expect(find.text('7 hours'), findsOneWidget);
@@ -621,14 +689,17 @@ void main() {
       expect(find.byType(Column), findsWidgets);
     });
 
-    testWidgets('should use SingleChildScrollView for scrollable content', 
-        (tester) async {
+    testWidgets('should use SingleChildScrollView for scrollable content', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       expect(find.byType(SingleChildScrollView), findsOneWidget);
     });
 
-    testWidgets('latest by type section shows placeholder cards', (tester) async {
+    testWidgets('latest by type section shows placeholder cards', (
+      tester,
+    ) async {
       final emptyProvider = createEmptyProvider();
       await tester.pumpWidget(createTestHarness(provider: emptyProvider));
 
@@ -644,7 +715,9 @@ void main() {
       expect(appBar.elevation, 0);
     });
 
-    testWidgets('Add a Log button has minimum tap target height', (tester) async {
+    testWidgets('Add a Log button has minimum tap target height', (
+      tester,
+    ) async {
       await tester.pumpWidget(createTestHarness());
 
       final buttonFinder = find.widgetWithText(FilledButton, 'Add a Log');
@@ -675,16 +748,19 @@ void main() {
   // ===========================================================================
 
   group('HealthLogsScreen Log Card Semantics', () {
-    testWidgets('log card with note includes note in semantic label',
-        (tester) async {
+    testWidgets('log card with note includes note in semantic label', (
+      tester,
+    ) async {
       final provider = createEmptyProvider();
-      provider.addLog(HealthLog(
-        id: 'sn-1',
-        type: HealthLogType.mood,
-        description: 'Relaxed',
-        createdAt: DateTime.now(),
-        note: 'Evening wind down',
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'sn-1',
+          type: HealthLogType.mood,
+          description: 'Relaxed',
+          createdAt: DateTime.now(),
+          note: 'Evening wind down',
+        ),
+      );
       await tester.pumpWidget(createTestHarness(provider: provider));
 
       final semanticsWithNote = find.byWidgetPredicate(
@@ -697,15 +773,18 @@ void main() {
       expect(semanticsWithNote, findsWidgets);
     });
 
-    testWidgets('log card without note has description and time in label',
-        (tester) async {
+    testWidgets('log card without note has description and time in label', (
+      tester,
+    ) async {
       final provider = createEmptyProvider();
-      provider.addLog(HealthLog(
-        id: 'sn-2',
-        type: HealthLogType.general,
-        description: 'Brief note',
-        createdAt: DateTime.now(),
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'sn-2',
+          type: HealthLogType.general,
+          description: 'Brief note',
+          createdAt: DateTime.now(),
+        ),
+      );
       await tester.pumpWidget(createTestHarness(provider: provider));
 
       await tester.ensureVisible(find.text('Brief note'));

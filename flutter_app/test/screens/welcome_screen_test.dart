@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_app/screens/welcome_screen.dart';
@@ -31,6 +32,9 @@ void main() {
     });
 
     testWidgets('navigates to sign in', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 900));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
       await tester.pumpWidget(
         createTestHarness(
           child: const WelcomeScreen(),

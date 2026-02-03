@@ -23,18 +23,14 @@ void main() {
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
       await tester.pumpWidget(
-        createTestHarness(
-          child: const RoleSelectionScreen(),
-          routes: {
-            '/registration': (_) => placeholderScreen('Registration'),
-          },
-        ),
+        createTestHarness(child: const RoleSelectionScreen()),
       );
 
       await tester.tap(find.text('Care Recipient'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Registration'), findsOneWidget);
+      // RoleSelectionScreen pushes RegistrationScreen (Create Account) via MaterialPageRoute
+      expect(find.text('Create Account'), findsWidgets);
     });
   });
 }
