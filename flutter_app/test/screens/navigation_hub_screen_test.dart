@@ -56,6 +56,8 @@ void main() {
     });
 
     testWidgets('Caregiver Dashboard button pushes CaregiverDashboardScreen', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 2400));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(
         MultiProvider(
           providers: [
@@ -72,6 +74,8 @@ void main() {
     });
 
     testWidgets('Caregiver: Patient Monitoring button pushes screen', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 2400));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(
         ChangeNotifierProvider<AuthProvider>.value(
           value: AuthProvider()..setTestUser(UserRole.caregiver),
@@ -85,6 +89,8 @@ void main() {
     });
 
     testWidgets('Caregiver: Task Management button pushes screen', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 2400));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(
         ChangeNotifierProvider<AuthProvider>.value(
           value: AuthProvider()..setTestUser(UserRole.caregiver),
@@ -98,6 +104,8 @@ void main() {
     });
 
     testWidgets('Caregiver: Analytics button pushes screen', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 2400));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(
         ChangeNotifierProvider<AuthProvider>.value(
           value: AuthProvider()..setTestUser(UserRole.caregiver),
@@ -111,6 +119,8 @@ void main() {
     });
 
     testWidgets('Emergency SOS Alert button pushes screen', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 2400));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(
         const MaterialApp(home: NavigationHubScreen()),
       );
@@ -121,6 +131,8 @@ void main() {
     });
 
     testWidgets('Task Details (sample) button pushes TaskDetailsScreen', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 2400));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(
         MultiProvider(
           providers: [
