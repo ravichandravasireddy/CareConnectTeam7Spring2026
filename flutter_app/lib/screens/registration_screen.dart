@@ -71,7 +71,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
         title: const Text('Create Account'),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
         elevation: 0,
       ),
       body: SafeArea(

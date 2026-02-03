@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 
 /// Preferences and accessibility settings screen
 class PreferencesAccessibilityScreen extends StatefulWidget {
@@ -47,7 +48,7 @@ class _PreferencesAccessibilityScreenState
         ),
         title: const Text('Preferences & Accessibility'),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -225,7 +226,7 @@ class _PreferencesAccessibilityScreenState
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: const Text('Preferences saved successfully'),
-                        backgroundColor: Colors.green,
+                        backgroundColor: AppColors.success700,
                       ),
                     );
                   },

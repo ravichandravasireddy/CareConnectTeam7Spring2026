@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/task.dart';
+import '../providers/task_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 
@@ -7,6 +9,7 @@ import '../widgets/app_bottom_nav_bar.dart';
 // TASK DETAILS SCREEN (SHARED)
 // =============================================================================
 // Shows task details for both caregiver and patient flows.
+// Uses [TaskProvider] for mark complete; displays data from [Task].
 // =============================================================================
 
 class TaskDetailsScreen extends StatelessWidget {
@@ -24,6 +27,8 @@ class TaskDetailsScreen extends StatelessWidget {
     final timeLabel = localizations.formatTimeOfDay(
       TimeOfDay.fromDateTime(task.date),
     );
+    final taskProvider = context.read<TaskProvider>();
+    final isCompleted = task.isCompleted;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -59,12 +64,12 @@ class TaskDetailsScreen extends StatelessWidget {
                     width: 56,
                     height: 56,
                     decoration: BoxDecoration(
-                      color: AppColors.primary600,
+                      color: task.iconBackground,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      Icons.medication,
-                      color: colorScheme.onPrimary,
+                      task.icon,
+                      color: task.iconColor,
                       size: 28,
                     ),
                   ),
@@ -90,9 +95,13 @@ class TaskDetailsScreen extends StatelessWidget {
                         Row(
                           children: [
                             _StatusPill(
-                              label: 'DUE $timeLabel',
-                              backgroundColor: AppColors.primary100,
-                              textColor: colorScheme.primary,
+                              label: isCompleted ? 'COMPLETED' : 'DUE $timeLabel',
+                              backgroundColor: isCompleted
+                                  ? AppColors.success100
+                                  : AppColors.primary100,
+                              textColor: isCompleted
+                                  ? AppColors.success700
+                                  : colorScheme.primary,
                             ),
                             const SizedBox(width: 8),
                             _StatusPill(
@@ -120,51 +129,63 @@ class TaskDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _DetailSection(
-                    title: 'Medication',
-                    value: 'Lisinopril 10mg',
-                  ),
-                  const SizedBox(height: 12),
-                  _DetailSection(
-                    title: 'Instructions',
-                    value: 'Take one tablet with water',
-                  ),
-                  const SizedBox(height: 12),
-                  _DetailSection(
-                    title: 'Frequency',
-                    value: 'Once daily at $timeLabel',
-                  ),
-                  const SizedBox(height: 12),
-                  _DetailSection(
-                    title: 'Notes',
-                    value: 'Best taken with food. Avoid grapefruit.',
-                  ),
-                  const SizedBox(height: 12),
-                  _DetailSection(
                     title: 'Date',
                     value: dateLabel,
                   ),
+                  if (task.patientName.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    _DetailSection(
+                      title: 'Patient',
+                      value: task.patientName,
+                    ),
+                  ],
                 ],
               ),
             ),
             const SizedBox(height: 20),
-            Semantics(
-              label: 'Mark task as complete, button',
-              button: true,
-              child: SizedBox(
-                width: double.infinity,
-                child: FilledButton.icon(
-                  onPressed: () {},
-                  style: FilledButton.styleFrom(
-                    backgroundColor: colorScheme.primary,
-                    foregroundColor: colorScheme.onPrimary,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    minimumSize: const Size(0, 48),
+            if (!isCompleted)
+              Semantics(
+                label: 'Mark task as complete, button',
+                button: true,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed: () {
+                      taskProvider.markCompleted(task.id);
+                      Navigator.pop(context);
+                    },
+                    style: FilledButton.styleFrom(
+                      backgroundColor: colorScheme.primary,
+                      foregroundColor: colorScheme.onPrimary,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      minimumSize: const Size(0, 48),
+                    ),
+                    icon: const Icon(Icons.check),
+                    label: const Text('Mark as Complete'),
                   ),
-                  icon: const Icon(Icons.check),
-                  label: const Text('Mark as Complete'),
                 ),
               ),
-            ),
+            if (isCompleted)
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.success100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.check_circle, color: AppColors.success700, size: 24),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Completed',
+                      style: textTheme.titleMedium?.copyWith(
+                        color: AppColors.success700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             const SizedBox(height: 12),
             Row(
               children: [

@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter_app/models/task.dart';
 import 'package:flutter_app/providers/auth_provider.dart';
+import 'package:flutter_app/providers/task_provider.dart';
 import 'package:flutter_app/screens/task_details_screen.dart';
 import 'package:flutter_app/theme/app_colors.dart';
 
@@ -25,9 +26,13 @@ void main() {
 
   Widget createTestHarness(Task task) {
     final authProvider = AuthProvider()..setTestUser(UserRole.patient);
+    final taskProvider = TaskProvider();
 
-    return ChangeNotifierProvider<AuthProvider>.value(
-      value: authProvider,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
+        ChangeNotifierProvider<TaskProvider>.value(value: taskProvider),
+      ],
       child: MaterialApp(
         home: TaskDetailsScreen(task: task),
       ),
@@ -51,8 +56,7 @@ void main() {
       expect(find.widgetWithText(AppBar, 'Task Details'), findsOneWidget);
       expect(find.text('Morning Medication'), findsOneWidget);
       expect(find.text('Take one tablet with water'), findsWidgets);
-      expect(find.text('Medication'), findsOneWidget);
-      expect(find.text('Instructions'), findsOneWidget);
+      expect(find.text('Date'), findsOneWidget);
 
       await tester.ensureVisible(
         find.text('Mark as Complete', skipOffstage: false),

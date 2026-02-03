@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../theme/app_colors.dart';
 import '../widgets/app_app_bar.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 import '../widgets/app_drawer.dart';
@@ -185,7 +186,7 @@ class PatientProfileScreen extends StatelessWidget {
               _buildSettingItem(
                 context,
                 icon: Icons.people,
-                iconColor: Colors.green,
+                iconColor: AppColors.success700,
                 label: 'Connected Caregivers',
                 onTap: () {
                   // TODO: Navigate to connected caregivers
@@ -355,7 +356,7 @@ class PatientProfileScreen extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text('Signed out successfully'),
-                  backgroundColor: Colors.green,
+                  backgroundColor: AppColors.success700,
                 ),
               );
             },

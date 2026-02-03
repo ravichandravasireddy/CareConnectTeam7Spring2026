@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../theme/app_colors.dart';
 import 'registration_screen.dart';
 
 /// Sign in screen for user authentication
@@ -54,14 +55,14 @@ class _SignInScreenState extends State<SignInScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Sign in successful!'),
-          backgroundColor: Colors.green,
+          backgroundColor: AppColors.success700,
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Invalid email or password. See demo credentials below.'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.error700,
         ),
       );
     }
@@ -78,7 +79,7 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
         title: const Text('Sign In'),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
         elevation: 0,
       ),
       body: SafeArea(

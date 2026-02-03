@@ -148,7 +148,7 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
             },
           ),
         ],
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
         elevation: 0,
       ),
       body: Column(

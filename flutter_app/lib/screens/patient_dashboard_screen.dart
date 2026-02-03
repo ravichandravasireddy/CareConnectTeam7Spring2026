@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../models/task.dart';
+import '../theme/app_colors.dart';
 import '../widgets/app_app_bar.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 import '../widgets/app_drawer.dart';
@@ -75,8 +76,8 @@ class PatientDashboardScreen extends StatelessWidget {
                     child: _buildSummaryCard(
                       context,
                       icon: Icons.check_circle_outline,
-                      iconColor: Colors.green,
-                      iconBgColor: Colors.green.withValues(alpha: 0.1),
+                      iconColor: AppColors.success700,
+                      iconBgColor: AppColors.success100,
                       title: 'Tasks',
                       value: '3/5',
                       subtitle: 'Completed today',
@@ -88,12 +89,12 @@ class PatientDashboardScreen extends StatelessWidget {
                     child: _buildSummaryCard(
                       context,
                       icon: Icons.favorite_outline,
-                      iconColor: Colors.red,
-                      iconBgColor: Colors.red.withValues(alpha: 0.1),
+                      iconColor: AppColors.error500,
+                      iconBgColor: AppColors.error100,
                       title: 'BP Today',
                       value: '120/80',
                       subtitle: 'Normal',
-                      subtitleColor: Colors.green,
+                      subtitleColor: AppColors.success700,
                       onTap: () => Navigator.pushNamed(context, '/health-logs'),
                     ),
                   ),
@@ -135,8 +136,8 @@ class PatientDashboardScreen extends StatelessWidget {
                 title: 'Take\nMedication',
                 subtitle: 'Metformin\n500mg',
                 dueText: 'DUE IN 15 MIN',
-                dueColor: Colors.red.shade700,
-                bgColor: Colors.red.withValues(alpha: 0.1),
+                dueColor: AppColors.error700,
+                bgColor: AppColors.error100,
                 onTap: () {
                   final task = Task(
                     id: 'medication-1',

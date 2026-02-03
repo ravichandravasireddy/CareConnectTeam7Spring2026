@@ -259,7 +259,7 @@ class _ActionCard extends StatelessWidget {
         border: Border.all(color: colorScheme.outline, width: 1),
       ),
       child: Material(
-        color: Colors.transparent,
+        color: colorScheme.surface.withValues(alpha: 0),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(12),

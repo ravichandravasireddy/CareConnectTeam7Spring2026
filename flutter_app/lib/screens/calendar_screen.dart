@@ -389,20 +389,20 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     Color backgroundColor;
     Color textColor;
-    Color borderColor = Colors.transparent;
+    Color borderColor = colorScheme.surface.withValues(alpha: 0);
 
     if (isToday) {
       backgroundColor = colorScheme.primary;
       textColor = colorScheme.onPrimary;
     } else if (isSelected && isCurrentMonth) {
-      backgroundColor = Colors.transparent;
+      backgroundColor = colorScheme.surface.withValues(alpha: 0);
       textColor = colorScheme.onSurface;
       borderColor = colorScheme.primary;
     } else if (isCurrentMonth) {
-      backgroundColor = Colors.transparent;
+      backgroundColor = colorScheme.surface.withValues(alpha: 0);
       textColor = colorScheme.onSurface;
     } else {
-      backgroundColor = Colors.transparent;
+      backgroundColor = colorScheme.surface.withValues(alpha: 0);
       textColor = colorScheme.onSurfaceVariant.withValues(alpha: 0.6);
     }
 
