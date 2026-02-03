@@ -1,4 +1,4 @@
-# CareConnect Team7 Spring2026 Flutter Application
+# CareConnect Team7 Spring2026 Flutter Mobile Application
 
 ## Description
 
@@ -54,9 +54,13 @@ genhtml coverage/lcov.info -o coverage/html
 [Test Coverage Screenshot](https://drive.google.com/file/d/1oL4Jz_L_8lv0hmiqcmNKoL51T1a_Q7NP/view?usp=sharing)
 
 ## Known issues or limitations
-- **Note categories** are limited; More may be added.
-- **Call logs** and **transcript screens** can be implemented in future iterations.
-- No backend or real auth; app is UI/flow-focused.
+- Note categories are limited; More may be added.
+- Call logs and transcript screens can be implemented in future iterations.
+- The Analytics page could be improved
+- The messages page is not customized according to user role
+- High contrast mode was not implementated
+- Dark mode was not implementated
+- Mixed use of native app bar and custom app bar
 
 ## Team member contributions this week
 **Dominique Rattray (Team Lead):** 

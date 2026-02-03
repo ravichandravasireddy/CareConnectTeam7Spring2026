@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
-import '../widgets/app_app_bar.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 import '../widgets/app_drawer.dart';
 
@@ -72,10 +71,17 @@ class PatientProfileScreen extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-        appBar: AppAppBar(
-          title: 'Profile',
-          onNotificationTap: () =>
-              Navigator.pushNamed(context, '/notifications'),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: handleBack,
+          ),
+          title: const Text('Profile'),
+          centerTitle: true,
+          backgroundColor: Theme.of(
+            context,
+          ).colorScheme.surface.withValues(alpha: 0),
+          elevation: 0,
         ),
         drawer: AppDrawer(isPatient: !isCaregiver),
         body: SafeArea(
