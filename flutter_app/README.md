@@ -1,5 +1,4 @@
-# Project Name
-CareConnect Team7 Spring2026 Flutter Application
+# CareConnect Team7 Spring2026 Flutter Application
 
 ## Description
 
@@ -43,7 +42,13 @@ To generate a coverage report:
 ```bash
 flutter test --coverage
 ```
-Coverage output is written to `flutter_app/coverage/lcov.info`. Use a viewer (e.g. VS Code "Coverage Gutters" or `genhtml`) to inspect it.
+
+To generate html version:
+- Coverage output is written to `flutter_app/coverage/lcov.info`. Use a viewer (e.g. VS Code "Coverage Gutters" or `genhtml`) to inspect it.
+- Genhtml version
+```
+genhtml coverage/lcov.info -o coverage/html
+```
 
 ## Link to test coverage report
 [Test Coverage Screenshot](https://drive.google.com/file/d/1oL4Jz_L_8lv0hmiqcmNKoL51T1a_Q7NP/view?usp=sharing)
