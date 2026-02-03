@@ -6,8 +6,8 @@ import 'registration_screen.dart';
 // =============================================================================
 // ROLE SELECTION SCREEN
 // =============================================================================
-// Lets user choose role (Caregiver / Patient); navigates to [CreateAccountScreen]
-// for account creation. Uses [AppColors] for cards and buttons.
+// Lets user choose role (Caregiver / Patient); navigates to [RegistrationScreen]
+// with the selected role for account creation. Uses [AppColors] for cards and buttons.
 // =============================================================================
 
 class RoleSelectionScreen extends StatelessWidget {

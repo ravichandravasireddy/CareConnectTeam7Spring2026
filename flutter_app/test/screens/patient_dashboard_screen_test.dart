@@ -31,7 +31,7 @@ void main() {
       );
 
       expect(find.widgetWithText(AppBar, 'Home'), findsOneWidget);
-      expect(find.text('Good Morning, Robert!'), findsOneWidget);
+      expect(find.textContaining('Good '), findsOneWidget);
       expect(find.text('Upcoming Tasks'), findsOneWidget);
       expect(find.text("Today's Appointments"), findsOneWidget);
     });

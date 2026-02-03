@@ -163,10 +163,11 @@ class AppDrawer extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
+              final navigator = Navigator.of(context);
               Navigator.pop(dialogContext);
-              Navigator.pop(context);
+              navigator.pop();
               auth.signOut();
-              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+              navigator.pushNamedAndRemoveUntil('/', (route) => false);
             },
             child: Text(
               'Sign Out',

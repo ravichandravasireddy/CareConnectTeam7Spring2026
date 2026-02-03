@@ -657,7 +657,7 @@ class _AslImageViewState extends State<_AslImageView>
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
-              errorBuilder: (_, __, ___) => Container(
+              errorBuilder: (_, _, _) => Container(
                 color: AppColors.gray700,
                 child: const Center(
                   child: Icon(

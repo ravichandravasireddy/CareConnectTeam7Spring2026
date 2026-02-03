@@ -4,6 +4,7 @@ import '../models/task.dart';
 import '../providers/task_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/app_bottom_nav_bar.dart';
+import '../providers/auth_provider.dart';
 
 // =============================================================================
 // TASK DETAILS SCREEN (SHARED)
@@ -29,6 +30,8 @@ class TaskDetailsScreen extends StatelessWidget {
     );
     final taskProvider = context.read<TaskProvider>();
     final isCompleted = task.isCompleted;
+    final auth = context.watch<AuthProvider>();
+    final isCaregiver = auth.userRole == UserRole.caregiver;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -221,7 +224,10 @@ class TaskDetailsScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: kPatientNavTasks),
+      bottomNavigationBar: AppBottomNavBar(
+          currentIndex: isCaregiver ? kCaregiverNavHome : kPatientNavProfile,
+          isPatient: !isCaregiver,
+        ),
     );
   }
 }
