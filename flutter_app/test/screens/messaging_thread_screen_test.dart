@@ -30,7 +30,6 @@ void main() {
       );
 
       expect(find.text('Dr. Sarah Johnson'), findsOneWidget);
-      expect(find.text('Active now'), findsOneWidget);
       expect(find.text('Today'), findsOneWidget);
     });
 

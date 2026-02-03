@@ -59,13 +59,16 @@ class AppBottomNavBar extends StatelessWidget {
     } else if (!isPatient) {
       // Caregiver tapping Tasks/Analytics/Monitor: push so back returns to previous screen.
       Navigator.pushNamed(context, route);
-    } else {
-      // Patient: keep existing behavior (replace stack down to home).
+    } else if (route == _patientHomeRoute) {
+      // Patient tapping Home: clear stack down to dashboard so back from home is not needed.
       Navigator.pushNamedAndRemoveUntil(
         context,
         route,
         (r) => r.settings.name == homeRoute,
       );
+    } else {
+      // Patient tapping Tasks/Messages/Health/Profile: push so back returns to previous screen (e.g. Calendar -> Profile -> Back = Calendar).
+      Navigator.pushNamed(context, route);
     }
   }
 

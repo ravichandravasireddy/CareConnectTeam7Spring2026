@@ -18,6 +18,9 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// When true, leading is a back button that pops the route. Takes precedence over [showMenuButton].
   final bool useBackButton;
 
+  /// When [useBackButton] is true, optional custom back action. If null, defaults to [Navigator.pop].
+  final VoidCallback? onBackPressed;
+
   /// Show a dot badge on the notification icon. Default false.
   final bool showNotificationBadge;
 
@@ -32,6 +35,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     this.showMenuButton = true,
     this.useBackButton = false,
+    this.onBackPressed,
     this.showNotificationBadge = false,
     this.actions,
     this.onNotificationTap,
@@ -79,7 +83,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: useBackButton
           ? IconButton(
               icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onSurface),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
             )
           : showMenuButton
               ? Builder(

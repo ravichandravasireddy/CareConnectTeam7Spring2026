@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../widgets/app_app_bar.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 
 /// Messaging thread screen for chatting with doctors and caregivers
@@ -94,46 +95,12 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userInitials = _getInitials(widget.userName);
-
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              child: Text(
-                userInitials,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.userName,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  Text(
-                    'Active now',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      appBar: AppAppBar(
+        title: widget.userName,
+        showMenuButton: false,
+        useBackButton: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.phone),
@@ -148,10 +115,6 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
             },
           ),
         ],
-        backgroundColor: Theme.of(
-          context,
-        ).colorScheme.surface.withValues(alpha: 0),
-        elevation: 0,
       ),
       body: Column(
         children: [

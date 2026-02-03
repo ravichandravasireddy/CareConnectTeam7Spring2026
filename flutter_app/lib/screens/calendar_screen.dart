@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../models/task.dart';
 import '../providers/task_provider.dart';
+import '../widgets/app_app_bar.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 
 // =============================================================================
@@ -146,20 +147,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: colorScheme.surface,
-        elevation: 0.5,
-        centerTitle: true,
-        title: Text(
-          'Calendar',
-          style: textTheme.headlineLarge?.copyWith(
-            color: colorScheme.onSurface,
-          ),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
-        ),
+      appBar: const AppAppBar(
+        title: 'Calendar',
+        showMenuButton: false,
+        useBackButton: true,
       ),
       body: SafeArea(
         child: useWideLayout

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../models/health_log.dart';
 import '../providers/health_log_provider.dart';
+import '../widgets/app_app_bar.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 import 'health_log_add_screen.dart';
 
@@ -77,18 +78,10 @@ class HealthLogsScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: colorScheme.surface,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          'Health Logs',
-          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
-        ),
+      appBar: const AppAppBar(
+        title: 'Health Logs',
+        showMenuButton: false,
+        useBackButton: true,
       ),
       body: SafeArea(
         child: Column(
