@@ -11,17 +11,28 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 
+import 'package:flutter_app/providers/auth_provider.dart';
 import 'package:flutter_app/screens/preferences_accessibility_screen.dart';
 
 import '../helpers/test_harness.dart';
 
 void main() {
+  Widget createPreferencesHarness({Map<String, WidgetBuilder>? routes}) {
+    final auth = AuthProvider()..setTestUser(UserRole.patient);
+    return ChangeNotifierProvider<AuthProvider>.value(
+      value: auth,
+      child: createTestHarness(
+        child: const PreferencesAccessibilityScreen(),
+        routes: routes,
+      ),
+    );
+  }
+
   group('PreferencesAccessibilityScreen', () {
     testWidgets('renders main sections', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
 
       expect(find.text('Preferences & Accessibility'), findsOneWidget);
       expect(find.text('Display'), findsOneWidget);
@@ -30,9 +41,7 @@ void main() {
     });
 
     testWidgets('toggles dark mode switch', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
 
       final darkModeRow = find.ancestor(
         of: find.text('Dark Mode'),
@@ -52,9 +61,7 @@ void main() {
     });
 
     testWidgets('opens display and language dialogs', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
 
       final textSizeTile = find.text('Text Size');
       await tester.ensureVisible(textSizeTile);
@@ -77,9 +84,7 @@ void main() {
     });
 
     testWidgets('opens time format dialog', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
 
       final timeFormatTile = find.text('Time Format');
       await tester.ensureVisible(timeFormatTile);
@@ -90,9 +95,7 @@ void main() {
     });
 
     testWidgets('toggles accessibility switches', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
 
       final boldTextRow = find.ancestor(
         of: find.text('Bold Text'),
@@ -112,9 +115,11 @@ void main() {
 
     testWidgets('back button pops route', (tester) async {
       await tester.pumpWidget(
-        createTestHarness(
-          child: const PreferencesAccessibilityScreen(),
-          routes: {'/preferences': (_) => const PreferencesAccessibilityScreen()},
+        createPreferencesHarness(
+          routes: {
+            '/preferences': (_) => const PreferencesAccessibilityScreen(),
+            '/dashboard': (_) => const Scaffold(body: Text('Dashboard')),
+          },
         ),
       );
       await tester.tap(find.byIcon(Icons.arrow_back));
@@ -123,9 +128,7 @@ void main() {
     });
 
     testWidgets('toggles High Contrast switch', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
       final row = find.ancestor(of: find.text('High Contrast'), matching: find.byType(Row));
       final sw = find.descendant(of: row, matching: find.byType(Switch));
       expect(tester.widget<Switch>(sw).value, isFalse);
@@ -136,9 +139,7 @@ void main() {
     });
 
     testWidgets('toggles notification and privacy switches', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
       for (final label in ['Medication Reminders', 'Biometric Login', 'Data Sharing']) {
         final row = find.ancestor(of: find.text(label), matching: find.byType(Row));
         final sw = find.descendant(of: row, matching: find.byType(Switch));
@@ -151,9 +152,7 @@ void main() {
     });
 
     testWidgets('opens date format dialog and selects option', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
       await tester.ensureVisible(find.text('Date Format'));
       await tester.tap(find.text('Date Format'));
       await tester.pumpAndSettle();
@@ -163,9 +162,7 @@ void main() {
     });
 
     testWidgets('HIPAA Consent shows snackbar', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
       await tester.ensureVisible(find.text('HIPAA Consent'));
       await tester.tap(find.text('HIPAA Consent'));
       await tester.pump();
@@ -173,9 +170,7 @@ void main() {
     });
 
     testWidgets('Save Preferences shows success snackbar', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
       await tester.ensureVisible(find.text('Save Preferences'));
       await tester.tap(find.text('Save Preferences'));
       await tester.pump();
@@ -183,9 +178,7 @@ void main() {
     });
 
     testWidgets('renders Language & Region and Privacy sections', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
       expect(find.text('Language & Region'), findsOneWidget);
       expect(find.text('Privacy & Security'), findsOneWidget);
       expect(find.text('Language'), findsOneWidget);
@@ -194,9 +187,7 @@ void main() {
     });
 
     testWidgets('toggles Screen Reader and Reduce Motion', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
       for (final label in ['Screen Reader', 'Reduce Motion', 'Large Touch Targets']) {
         final row = find.ancestor(of: find.text(label), matching: find.byType(Row));
         final sw = find.descendant(of: row, matching: find.byType(Switch));
@@ -209,9 +200,7 @@ void main() {
     });
 
     testWidgets('toggles Task Alerts and Health Alerts and Message Notifications', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
       for (final label in ['Task Alerts', 'Health Alerts', 'Message Notifications']) {
         final row = find.ancestor(of: find.text(label), matching: find.byType(Row));
         final sw = find.descendant(of: row, matching: find.byType(Switch));
@@ -224,9 +213,7 @@ void main() {
     });
 
     testWidgets('time format dialog select 24-hour', (tester) async {
-      await tester.pumpWidget(
-        createTestHarness(child: const PreferencesAccessibilityScreen()),
-      );
+      await tester.pumpWidget(createPreferencesHarness());
       await tester.ensureVisible(find.text('Time Format'));
       await tester.tap(find.text('Time Format'));
       await tester.pumpAndSettle();

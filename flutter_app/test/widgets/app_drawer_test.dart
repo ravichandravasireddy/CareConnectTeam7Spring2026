@@ -66,8 +66,8 @@ void main() {
       await tester.pumpWidget(createDrawerHarness(isPatient: false));
 
       expect(find.text('Dashboard'), findsOneWidget);
-      expect(find.text('Patient'), findsOneWidget);
-      expect(find.text('Task'), findsOneWidget);
+      expect(find.text('Patients'), findsOneWidget);
+      expect(find.text('Tasks'), findsOneWidget);
       expect(find.text('Analytics'), findsOneWidget);
     });
 
@@ -110,10 +110,10 @@ void main() {
       expect(find.text('Caregiver Dashboard'), findsOneWidget);
     });
 
-    testWidgets('tapping caregiver Task navigates to task management', (tester) async {
+    testWidgets('tapping caregiver Tasks navigates to task management', (tester) async {
       await tester.pumpWidget(createDrawerHarness(isPatient: false));
 
-      await tester.tap(find.text('Task'));
+      await tester.tap(find.text('Tasks'));
       await tester.pumpAndSettle();
 
       expect(find.text('Task Management'), findsOneWidget);
@@ -151,8 +151,14 @@ void main() {
         ),
       );
 
-      await tester.ensureVisible(find.text('Sign Out'));
+      await tester.dragUntilVisible(
+        find.text('Sign Out'),
+        find.byType(ListView),
+        const Offset(0, -200),
+      );
       await tester.tap(find.text('Sign Out'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(TextButton, 'Sign Out'));
       await tester.pumpAndSettle();
 
       expect(find.text('Welcome Root'), findsOneWidget);
