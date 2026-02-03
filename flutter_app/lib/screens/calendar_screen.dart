@@ -432,11 +432,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
             children: [
               Text(
                 isCurrentMonth ? '${date.day}' : '',
-                style: textTheme.bodySmall?.copyWith(
-                  fontWeight:
-                      (isToday || isSelected) ? FontWeight.bold : FontWeight.normal,
-                  color: textColor,
-                ),
+                style: (isToday || isSelected)
+                    ? textTheme.titleMedium?.copyWith(color: textColor)
+                    : textTheme.bodySmall?.copyWith(color: textColor),
               ),
               if (hasTasks)
                 Container(
@@ -523,7 +521,6 @@ class _TaskCard extends StatelessWidget {
                     Text(
                       timeLabel,
                       style: textTheme.bodySmall?.copyWith(
-                        fontSize: 13,
                         color: colorScheme.onSurfaceVariant,
                       ),
                     ),

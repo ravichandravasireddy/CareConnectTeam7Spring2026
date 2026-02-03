@@ -461,8 +461,7 @@ class _HealthLogCard extends StatelessWidget {
                       ),
                       child: Text(
                         statusChip,
-                        style: textTheme.labelLarge?.copyWith(
-                          fontSize: 11,
+                        style: textTheme.labelSmall?.copyWith(
                           color: colorScheme.onPrimaryContainer,
                         ),
                       ),
@@ -473,7 +472,6 @@ class _HealthLogCard extends StatelessWidget {
                     Text(
                       log.note!,
                       style: textTheme.bodySmall?.copyWith(
-                        fontSize: 13,
                         color: colorScheme.onSurfaceVariant,
                       ),
                     ),
@@ -481,8 +479,7 @@ class _HealthLogCard extends StatelessWidget {
                     const SizedBox(height: 4),
                   Text(
                     timeLabel,
-                    style: textTheme.labelSmall?.copyWith(
-                      fontWeight: FontWeight.w400,
+                    style: textTheme.bodySmall?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),
                   ),
@@ -492,9 +489,7 @@ class _HealthLogCard extends StatelessWidget {
                       children: [
                         Text(
                           'Goal: ${log.waterGoal!.toStringAsFixed(0)} oz',
-                          style: textTheme.labelSmall?.copyWith(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w400,
+                          style: textTheme.bodySmall?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
                         ),
@@ -523,7 +518,7 @@ class _HealthLogCard extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 8),
                 child: Text(
                   log.emoji!,
-                  style: textTheme.titleLarge?.copyWith(fontSize: 22),
+                  style: textTheme.headlineLarge,
                 ),
               ),
           ],

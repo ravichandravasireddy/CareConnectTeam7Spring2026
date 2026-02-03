@@ -217,8 +217,7 @@ class _NoteListTile extends StatelessWidget {
                             ),
                             Text(
                               timeLabel,
-                              style: textTheme.labelSmall?.copyWith(
-                                fontWeight: FontWeight.w400,
+                              style: textTheme.bodySmall?.copyWith(
                                 color: colorScheme.onSurfaceVariant,
                               ),
                             ),
@@ -227,8 +226,7 @@ class _NoteListTile extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           note.author,
-                          style: textTheme.labelSmall?.copyWith(
-                            fontWeight: FontWeight.w400,
+                          style: textTheme.bodySmall?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
                           maxLines: 1,
@@ -256,7 +254,6 @@ class _NoteListTile extends StatelessWidget {
                           child: Text(
                             formatNoteCategoryDisplay(note.category).toUpperCase(),
                             style: textTheme.labelSmall?.copyWith(
-                              fontSize: 11,
                               color: chipFg,
                             ),
                           ),

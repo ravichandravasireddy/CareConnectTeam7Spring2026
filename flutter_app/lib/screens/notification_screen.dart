@@ -278,8 +278,7 @@ class _NotificationCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         timeLabel,
-                        style: textTheme.labelSmall?.copyWith(
-                          fontWeight: FontWeight.w400,
+                        style: textTheme.bodySmall?.copyWith(
                           color: colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
                         ),
                       ),

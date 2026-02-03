@@ -84,9 +84,6 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
             textAlign: TextAlign.center,
             style: textTheme.displaySmall?.copyWith(
               color: colorScheme.onError,
-              fontWeight: FontWeight.w700,
-              height: 1.1,
-              letterSpacing: 0.6,
             ),
           ),
         ),
@@ -102,9 +99,8 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
             children: [
               Text(
                 'From: Robert Williams',
-                style: textTheme.titleMedium?.copyWith(
+                style: textTheme.headlineSmall?.copyWith(
                   color: AppColors.white,
-                  fontWeight: FontWeight.w700,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -149,9 +145,8 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
                     child: Center(
                       child: Text(
                         'RW',
-                        style: textTheme.titleMedium?.copyWith(
+                        style: textTheme.headlineSmall?.copyWith(
                           color: colorScheme.onSecondary,
-                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
@@ -163,9 +158,8 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
                       children: [
                         Text(
                           'Robert Williams',
-                          style: textTheme.titleMedium?.copyWith(
+                          style: textTheme.headlineSmall?.copyWith(
                             color: colorScheme.onSurface,
-                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(height: 4),

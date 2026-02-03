@@ -238,12 +238,9 @@ class _PreferencesAccessibilityScreenState
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
+                  child: Text(
                     'Save Preferences',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
               ),
@@ -260,8 +257,7 @@ class _PreferencesAccessibilityScreenState
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
+        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               color: Theme.of(context).colorScheme.onSurface,
             ),
       ),
@@ -292,8 +288,7 @@ class _PreferencesAccessibilityScreenState
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
                   ),
@@ -336,8 +331,7 @@ class _PreferencesAccessibilityScreenState
               children: [
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),

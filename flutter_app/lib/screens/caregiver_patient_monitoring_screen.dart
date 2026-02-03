@@ -44,9 +44,8 @@ class CaregiverPatientMonitoringScreen extends StatelessWidget {
                   child: Center(
                     child: Text(
                       'SJ',
-                      style: textTheme.titleMedium?.copyWith(
+                      style: textTheme.headlineSmall?.copyWith(
                         color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
@@ -58,9 +57,8 @@ class CaregiverPatientMonitoringScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Sarah Johnson',
-                        style: textTheme.titleMedium?.copyWith(
+                        style: textTheme.headlineSmall?.copyWith(
                           color: colorScheme.onSurface,
-                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 4),

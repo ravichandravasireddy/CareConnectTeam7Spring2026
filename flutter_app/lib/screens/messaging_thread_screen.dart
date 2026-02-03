@@ -109,9 +109,8 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
               backgroundColor: Theme.of(context).colorScheme.primary,
               child: Text(
                 userInitials,
-                style: TextStyle(
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   color: Theme.of(context).colorScheme.onPrimary,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -122,14 +121,12 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
                 children: [
                   Text(
                     widget.userName,
-                    style: const TextStyle(fontSize: 16),
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   Text(
                     'Active now',
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.normal,
                     ),
                   ),
                 ],
@@ -208,7 +205,7 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
                       controller: _messageController,
                       decoration: InputDecoration(
                         hintText: 'Type a message...',
-                        hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                        hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
                           borderSide: BorderSide.none,
@@ -259,9 +256,8 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               'Today',
-              style: TextStyle(
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontSize: 12,
               ),
             ),
           ),
@@ -286,10 +282,8 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
               backgroundColor: Theme.of(context).colorScheme.primary,
               child: Text(
                 _getInitials(widget.userName),
-                style: TextStyle(
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: Theme.of(context).colorScheme.onPrimary,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -311,20 +305,18 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
                   ),
                   child: Text(
                     content,
-                    style: TextStyle(
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: isCurrentUser 
                           ? Theme.of(context).colorScheme.onPrimary 
                           : Theme.of(context).colorScheme.onSurface,
-                      fontSize: 16,
                     ),
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   time,
-                  style: TextStyle(
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontSize: 12,
                   ),
                 ),
               ],
@@ -337,10 +329,8 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
               backgroundColor: Theme.of(context).colorScheme.secondary,
               child: Text(
                 'RW',
-                style: TextStyle(
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSecondary,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -360,10 +350,8 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
             backgroundColor: Theme.of(context).colorScheme.primary,
             child: Text(
               _getInitials(widget.userName),
-              style: TextStyle(
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
                 color: Theme.of(context).colorScheme.onPrimary,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
               ),
             ),
           ),

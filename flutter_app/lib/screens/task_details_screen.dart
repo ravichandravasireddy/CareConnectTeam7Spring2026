@@ -230,8 +230,6 @@ class _StatusPill extends StatelessWidget {
         label,
         style: textTheme.labelSmall?.copyWith(
           color: textColor,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.3,
         ),
       ),
     );

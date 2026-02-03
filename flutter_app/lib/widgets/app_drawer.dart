@@ -58,9 +58,7 @@ class AppDrawer extends StatelessWidget {
                   backgroundColor: Theme.of(context).colorScheme.onPrimary,
                   child: Text(
                     _initials(displayName),
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
@@ -68,10 +66,8 @@ class AppDrawer extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   displayName,
-                  style: TextStyle(
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -79,9 +75,8 @@ class AppDrawer extends StatelessWidget {
                 if (email.isNotEmpty)
                   Text(
                     email,
-                    style: TextStyle(
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 12,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -96,7 +91,9 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
             title: Text(
               'Sign Out',
-              style: TextStyle(color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.w600),
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
             ),
             onTap: () {
               Navigator.pop(context);

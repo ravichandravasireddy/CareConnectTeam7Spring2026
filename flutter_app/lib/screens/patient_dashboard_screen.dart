@@ -47,18 +47,15 @@ class PatientDashboardScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Good Morning, $firstName!',
-                      style: TextStyle(
+                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       "Here's your health overview for today",
-                      style: TextStyle(
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary,
-                        fontSize: 16,
                       ),
                     ),
                   ],
@@ -103,8 +100,7 @@ class PatientDashboardScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Upcoming Tasks',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
                   ),
@@ -114,9 +110,8 @@ class PatientDashboardScreen extends StatelessWidget {
                     },
                     child: Text(
                       'View All',
-                      style: TextStyle(
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -153,8 +148,7 @@ class PatientDashboardScreen extends StatelessWidget {
               // Today's Appointments
               Text(
                 "Today's Appointments",
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
               ),
@@ -235,14 +229,13 @@ class PatientDashboardScreen extends StatelessWidget {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.warning, size: 24),
-                    SizedBox(width: 8),
+                  children: [
+                    const Icon(Icons.warning, size: 24),
+                    const SizedBox(width: 8),
                     Text(
                       'Emergency SOS',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onError,
                       ),
                     ),
                   ],
@@ -290,8 +283,7 @@ class PatientDashboardScreen extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
               ),
@@ -301,16 +293,17 @@ class PatientDashboardScreen extends StatelessWidget {
           Text(
             value,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
           ),
           const SizedBox(height: 4),
           Text(
             subtitle,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            style: (subtitleColor != null
+                    ? Theme.of(context).textTheme.titleMedium
+                    : Theme.of(context).textTheme.bodyMedium)
+                ?.copyWith(
                   color: subtitleColor ?? Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontWeight: subtitleColor != null ? FontWeight.w600 : null,
                 ),
           ),
         ],
@@ -356,7 +349,6 @@ class PatientDashboardScreen extends StatelessWidget {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -379,10 +371,8 @@ class PatientDashboardScreen extends StatelessWidget {
               ),
               child: Text(
                 dueText,
-                style: TextStyle(
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: dueColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
                 ),
               ),
             ),
@@ -431,7 +421,6 @@ class PatientDashboardScreen extends StatelessWidget {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -491,8 +480,7 @@ class PatientDashboardScreen extends StatelessWidget {
             Text(
               label,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
             ),

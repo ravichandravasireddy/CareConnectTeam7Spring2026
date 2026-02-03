@@ -114,7 +114,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   'Welcome Back',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -132,7 +131,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 Text(
                   'Email Address',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -142,7 +140,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: 'your.email@example.com',
-                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
@@ -178,7 +176,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 Text(
                   'Password',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -188,7 +185,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     hintText: 'Enter your password',
-                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
@@ -240,9 +237,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     },
                     child: Text(
                       'Forgot Password?',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.w600,
                           ),
                     ),
                   ),
@@ -273,12 +269,9 @@ class _SignInScreenState extends State<SignInScreen> {
                               ),
                             ),
                           )
-                        : const Text(
+                        : Text(
                             'Sign In',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
                   ),
                 ),
@@ -305,9 +298,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       },
                       child: Text(
                         'Sign Up',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w600,
                             ),
                       ),
                     ),
@@ -328,7 +320,6 @@ class _SignInScreenState extends State<SignInScreen> {
                         'Demo login',
                         style: Theme.of(context).textTheme.labelMedium?.copyWith(
                               color: Theme.of(context).colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.w600,
                             ),
                       ),
                       const SizedBox(height: 4),

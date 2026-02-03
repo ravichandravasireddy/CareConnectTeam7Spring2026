@@ -17,7 +17,7 @@ import 'package:flutter_app/models/task.dart';
 import 'package:flutter_app/theme/app_colors.dart';
 
 void main() {
-  group('MyApp', () {
+  group('My CareConnectApp', () {
     testWidgets('shows the welcome screen on launch', (tester) async {
       await tester.pumpWidget(const MyApp());
 
@@ -25,6 +25,9 @@ void main() {
       expect(find.text('Get Started'), findsOneWidget);
       expect(find.text('Sign In'), findsOneWidget);
     });
+  });
+
+  group('My CareConnectApp\'s Navigation', () {
 
     testWidgets('can navigate to registration route', (tester) async {
       await tester.pumpWidget(const MyApp());
@@ -35,6 +38,19 @@ void main() {
 
       expect(find.widgetWithText(AppBar, 'Create Account'), findsOneWidget);
       expect(find.text('Join CareConnect'), findsOneWidget);
+    });
+
+    testWidgets('can navigate to role selection route', (tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      final navigator = tester.state<NavigatorState>(find.byType(Navigator));
+      navigator.pushNamed('/role-selection');
+      await tester.pumpAndSettle();
+
+      expect(find.text('How will you use\nCareConnect?'), findsOneWidget);
+      expect(find.text('Select the option that best describes you'), findsOneWidget);
+      expect(find.text('Care Recipient'), findsOneWidget);
+      expect(find.text('Caregiver'), findsOneWidget);
     });
 
     testWidgets('can navigate to task details route', (tester) async {

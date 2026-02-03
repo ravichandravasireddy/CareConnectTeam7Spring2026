@@ -86,7 +86,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Text(
                   'Join CareConnect',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -109,7 +108,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           Text(
                             'First Name',
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w600,
                                   color: Theme.of(context).colorScheme.onSurface,
                                 ),
                           ),
@@ -118,7 +116,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             controller: _firstNameController,
                             decoration: InputDecoration(
                               hintText: 'John',
-                              hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                              hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                               filled: true,
                               fillColor: Theme.of(context).colorScheme.surface,
                               border: OutlineInputBorder(
@@ -152,7 +150,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           Text(
                             'Last Name',
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w600,
                                   color: Theme.of(context).colorScheme.onSurface,
                                 ),
                           ),
@@ -161,7 +158,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             controller: _lastNameController,
                             decoration: InputDecoration(
                               hintText: 'Doe',
-                              hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                              hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                               filled: true,
                               fillColor: Theme.of(context).colorScheme.surface,
                               border: OutlineInputBorder(
@@ -195,7 +192,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Text(
                   'Email Address',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -205,7 +201,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: 'your.email@example.com',
-                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
@@ -237,7 +233,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Text(
                   'Phone Number',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -247,7 +242,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     hintText: '(555) 123-4567',
-                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
@@ -276,7 +271,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Text(
                   'Password',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -286,7 +280,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     hintText: 'Create a strong password',
-                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
@@ -334,7 +328,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Text(
                   'Confirm Password',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -344,7 +337,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   obscureText: _obscureConfirmPassword,
                   decoration: InputDecoration(
                     hintText: 'Re-enter your password',
-                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
@@ -417,10 +410,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 'Terms of Service',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyMedium
+                                    .titleMedium
                                     ?.copyWith(
                                       color: Theme.of(context).colorScheme.primary,
-                                      fontWeight: FontWeight.w600,
                                     ),
                               ),
                             ),
@@ -438,10 +430,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 'Privacy Policy',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyMedium
+                                    .titleMedium
                                     ?.copyWith(
                                       color: Theme.of(context).colorScheme.primary,
-                                      fontWeight: FontWeight.w600,
                                     ),
                               ),
                             ),
@@ -477,12 +468,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               ),
                             ),
                           )
-                        : const Text(
+                        : Text(
                             'Create Account',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
                   ),
                 ),
@@ -502,9 +490,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       onTap: () => Navigator.pop(context),
                       child: Text(
                         'Sign In',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.w600,
                             ),
                       ),
                     ),

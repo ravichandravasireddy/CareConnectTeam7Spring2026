@@ -30,10 +30,8 @@ class PatientProfileScreen extends StatelessWidget {
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                       child: Text(
                         'RW',
-                        style: TextStyle(
+                        style: Theme.of(context).textTheme.displayLarge?.copyWith(
                           color: Theme.of(context).colorScheme.onSecondary,
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -41,7 +39,6 @@ class PatientProfileScreen extends StatelessWidget {
                     Text(
                       'Robert Williams',
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
                     ),
@@ -179,14 +176,13 @@ class PatientProfileScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const SizedBox(
+                  child: SizedBox(
                     width: double.infinity,
                     child: Text(
                       'Sign Out',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.error,
                       ),
                     ),
                   ),
@@ -206,8 +202,7 @@ class PatientProfileScreen extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
+        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               color: Theme.of(context).colorScheme.onSurface,
             ),
       ),
@@ -242,8 +237,7 @@ class PatientProfileScreen extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   value,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -287,8 +281,7 @@ class PatientProfileScreen extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
               ),
@@ -324,7 +317,9 @@ class PatientProfileScreen extends StatelessWidget {
             },
             child: Text(
               'Sign Out',
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
             ),
           ),
         ],

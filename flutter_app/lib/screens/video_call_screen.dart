@@ -215,9 +215,8 @@ class _PatientVideoView extends StatelessWidget {
               ),
               Text(
                 'Patient',
-                style: textTheme.labelSmall?.copyWith(
+                style: textTheme.bodySmall?.copyWith(
                   color: AppColors.darkTextPrimary.withValues(alpha: 0.9),
-                  fontWeight: FontWeight.w400,
                   shadows: [
                     Shadow(
                       color: colorScheme.shadow,
@@ -279,8 +278,7 @@ class _PatientCameraOffView extends StatelessWidget {
             ),
             Text(
               'Patient',
-              style: textTheme.labelSmall?.copyWith(
-                fontWeight: FontWeight.w400,
+              style: textTheme.bodySmall?.copyWith(
                 color: AppColors.darkTextPrimary.withValues(alpha: 0.8),
               ),
             ),

@@ -201,8 +201,7 @@ class _TimelineItem extends StatelessWidget {
                     ),
                     Text(
                       timeLabel,
-                      style: textTheme.labelSmall?.copyWith(
-                        fontWeight: FontWeight.w400,
+                      style: textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
                     ),
@@ -229,7 +228,6 @@ class _TimelineItem extends StatelessWidget {
                     child: Text(
                       event.statusLabel!,
                       style: textTheme.labelSmall?.copyWith(
-                        fontSize: 11,
                         color: colorScheme.onSecondaryContainer,
                       ),
                     ),

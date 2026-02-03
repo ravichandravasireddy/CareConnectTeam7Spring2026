@@ -60,7 +60,6 @@ class WelcomeScreen extends StatelessWidget {
                         Text(
                           'CareConnect',
                           style: textTheme.displayLarge?.copyWith(
-                            fontSize: 48,
                             color: colorScheme.onPrimary,
                           ),
                         ),
@@ -72,10 +71,7 @@ class WelcomeScreen extends StatelessWidget {
                           'Remote health management and coordination for patients and caregivers',
                           textAlign: TextAlign.center,
                           style: textTheme.titleLarge?.copyWith(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onPrimary.withValues(alpha: 0.9),
-                            height: 1.5,
+                            color: colorScheme.onPrimary.withValues(alpha: 0.9),
                           ),
                         ),
 
@@ -147,9 +143,7 @@ class WelcomeScreen extends StatelessWidget {
                         Text(
                           'HIPAA-compliant • Secure • Private',
                           style: textTheme.bodySmall?.copyWith(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onPrimary.withValues(alpha: 0.8),
+                            color: colorScheme.onPrimary.withValues(alpha: 0.8),
                           ),
                         ),
 
@@ -166,9 +160,8 @@ class WelcomeScreen extends StatelessWidget {
                           },
                           child: Text(
                             'Open Navigation Hub',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context).colorScheme.onPrimary,
+                            style: textTheme.bodySmall?.copyWith(
+                              color: colorScheme.onPrimary,
                               decoration: TextDecoration.underline,
                             ),
                           ),

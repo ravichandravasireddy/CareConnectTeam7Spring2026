@@ -230,13 +230,11 @@ class CaregiverDashboardScreen extends StatelessWidget {
             value,
             style: textTheme.headlineMedium?.copyWith(
               color: colorScheme.onSurface,
-              fontWeight: FontWeight.w700,
             ),
           ),
           Text(
             title,
-            style: textTheme.labelSmall?.copyWith(
-              fontWeight: FontWeight.w400,
+            style: textTheme.bodySmall?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
           ),
