@@ -1,0 +1,41 @@
+1. Create this Video Call Screen based on the provided code. 
+3. In the future a button will link to this page
+
+function VideoCall() {
+  return (
+    <div className="h-full bg-gray-900 flex flex-col">
+      <div className="flex-1 relative">
+        <div className="w-full h-full bg-gradient-to-br from-blue-900 to-purple-900 flex items-center justify-center">
+          <div className="text-center text-white">
+            <div className="w-24 h-24 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <User className="w-12 h-12" />
+            </div>
+            <p className="text-xl font-semibold">Dr. Sarah Johnson</p>
+          </div>
+        </div>
+        <div className="absolute top-4 right-4 w-32 h-40 bg-gray-800 rounded-lg border-2 border-white shadow-lg overflow-hidden">
+          <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
+            <User className="w-8 h-8 text-white opacity-50" />
+          </div>
+        </div>
+        <div className="absolute top-4 left-4 px-3 py-2 bg-black bg-opacity-50 rounded-full text-white text-sm font-semibold">12:34</div>
+      </div>
+      <div className="bg-gray-800 p-6">
+        <div className="flex items-center justify-center gap-4">
+          <button className="w-14 h-14 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors" aria-label="Toggle microphone">
+            <Phone className="w-6 h-6 text-white" />
+          </button>
+          <button className="w-14 h-14 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors" aria-label="Toggle video">
+            <Video className="w-6 h-6 text-white" />
+          </button>
+          <button className="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition-colors" aria-label="End call">
+            <Phone className="w-6 h-6 text-white transform rotate-135" />
+          </button>
+          <button className="w-14 h-14 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors" aria-label="More options">
+            <Menu className="w-6 h-6 text-white" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

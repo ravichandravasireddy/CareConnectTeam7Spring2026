@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
-import 'create_account_screen.dart';
+import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
+import 'registration_screen.dart';
+
+// =============================================================================
+// ROLE SELECTION SCREEN
+// =============================================================================
+// Lets user choose role (Caregiver / Patient); navigates to [RegistrationScreen]
+// with the selected role for account creation. Uses [AppColors] for cards and buttons.
+// =============================================================================
 
 class RoleSelectionScreen extends StatelessWidget {
   const RoleSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorScheme.surface,
@@ -20,111 +30,118 @@ class RoleSelectionScreen extends StatelessWidget {
         ),
         title: Text(
           'Select Your Role',
-          style: TextStyle(
+          style: textTheme.headlineLarge?.copyWith(
             color: colorScheme.onSurface,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 40),
-              
-              // Main heading
-              Text(
-                'How will you use\nCareConnect?',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.onSurface,
-                  height: 1.2,
-                ),
-              ),
-              
-              SizedBox(height: 16),
-              
-              // Subtitle
-              Text(
-                'Select the option that best describes you',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ),
-              
-              SizedBox(height: 40),
-              
-              // Care Recipient Card
-              RoleCard(
-                icon: Icons.favorite,
-                iconColor: colorScheme.primary,
-                backgroundColor: AppColors.primary100,
-                title: 'Care Recipient',
-                description: 'I\'m managing my\nown health and tasks',
-                onTap: () {
-                  // Navigate to Create Account screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CreateAccountScreen(),
-                    ),
-                  );
-                },
-              ),
-              
-              SizedBox(height: 16),
-              
-              // Caregiver Card
-              RoleCard(
-                icon: Icons.people,
-                iconColor: colorScheme.tertiary,
-                backgroundColor: AppColors.accent100,
-                title: 'Caregiver',
-                description: 'I\'m caring for one or\nmore people',
-                onTap: () {
-                  // Navigate to Create Account screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CreateAccountScreen(),
-                    ),
-                  );
-                },
-              ),
-              
-              Spacer(),
-              
-              // Info box at bottom
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: colorScheme.outline,
-                    width: 1,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: constraints.maxHeight * 0.08),
+
+                      // Main heading
+                      Text(
+                        'How will you use\nCareConnect?',
+                        style: textTheme.displayLarge?.copyWith(
+                          color: colorScheme.onSurface,
+                          height: 1.2,
+                        ),
+                      ),
+
+                      SizedBox(height: 16),
+
+                      // Subtitle
+                      Text(
+                        'Select the option that best describes you',
+                        style: textTheme.bodyLarge?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+
+                      SizedBox(height: 40),
+
+                      // Care Recipient Card
+                      RoleCard(
+                        icon: Icons.favorite,
+                        iconColor: colorScheme.primary,
+                        backgroundColor: AppColors.primary100,
+                        title: 'Care Recipient',
+                        description: 'I\'m managing my\nown health and tasks',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RegistrationScreen(
+                                selectedRole: UserRole.patient,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+
+                      SizedBox(height: 16),
+
+                      // Caregiver Card
+                      RoleCard(
+                        icon: Icons.people,
+                        iconColor: colorScheme.tertiary,
+                        backgroundColor: AppColors.accent100,
+                        title: 'Caregiver',
+                        description: 'I\'m caring for one or\nmore people',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RegistrationScreen(
+                                selectedRole: UserRole.caregiver,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+
+                      SizedBox(height: constraints.maxHeight * 0.08),
+
+                      // Info box at bottom
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: colorScheme.outline,
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          'You can change this later in your account settings',
+                          textAlign: TextAlign.center,
+                          style: textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(height: 24),
+                    ],
                   ),
                 ),
-                child: Text(
-                  'You can change this later in your account settings',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
               ),
-              
-              SizedBox(height: 24),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
@@ -152,19 +169,18 @@ class RoleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: colorScheme.outline,
-            width: 1.5,
-          ),
+          border: Border.all(color: colorScheme.outline, width: 1.5),
         ),
         child: Row(
           children: [
@@ -176,15 +192,11 @@ class RoleCard extends StatelessWidget {
                 color: backgroundColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                size: 32,
-                color: iconColor,
-              ),
+              child: Icon(icon, size: 32, color: iconColor),
             ),
-            
-            SizedBox(width: 16),
-            
+
+            const SizedBox(width: 16),
+
             // Text content
             Expanded(
               child: Column(
@@ -192,17 +204,14 @@ class RoleCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                    style: textTheme.headlineLarge?.copyWith(
                       color: colorScheme.onSurface,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     description,
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: textTheme.bodySmall?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                       height: 1.3,
                     ),
@@ -210,7 +219,7 @@ class RoleCard extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Chevron arrow
             Icon(
               Icons.chevron_right,

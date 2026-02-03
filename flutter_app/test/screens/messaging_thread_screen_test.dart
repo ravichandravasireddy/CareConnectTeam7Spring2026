@@ -1,0 +1,59 @@
+// =============================================================================
+// MESSAGING THREAD SCREEN WIDGET TESTS
+// =============================================================================
+// SWEN 661 - Verifies messaging header content and message sending flow.
+//
+// KEY CONCEPTS COVERED:
+// 1. Thread header rendering
+// 2. Provider-backed user role setup
+// 3. Message send interaction
+// =============================================================================
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+
+import 'package:flutter_app/screens/messaging_thread_screen.dart';
+import 'package:flutter_app/providers/auth_provider.dart';
+
+import '../helpers/test_harness.dart';
+
+void main() {
+  group('MessagingThreadScreen', () {
+    testWidgets('renders header and initial content', (tester) async {
+      final authProvider = AuthProvider()..setTestUser(UserRole.patient);
+      await tester.pumpWidget(
+        MultiProvider(
+          providers: [ChangeNotifierProvider.value(value: authProvider)],
+          child: createTestHarness(child: const MessagingThreadScreen()),
+        ),
+      );
+
+      expect(find.text('Dr. Sarah Johnson'), findsOneWidget);
+      expect(find.text('Today'), findsOneWidget);
+    });
+
+    testWidgets('sends a new message', (tester) async {
+      final authProvider = AuthProvider()..setTestUser(UserRole.patient);
+      await tester.pumpWidget(
+        MultiProvider(
+          providers: [ChangeNotifierProvider.value(value: authProvider)],
+          child: createTestHarness(child: const MessagingThreadScreen()),
+        ),
+      );
+
+      await tester.enterText(find.byType(TextField), 'Hello there');
+      await tester.tap(find.byIcon(Icons.send));
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pumpAndSettle();
+      await tester.dragUntilVisible(
+        find.text('Hello there'),
+        find.byType(ListView),
+        const Offset(0, -200),
+      );
+
+      expect(find.text('Hello there'), findsOneWidget);
+    });
+  });
+}
