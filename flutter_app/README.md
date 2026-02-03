@@ -24,6 +24,7 @@ Before beginning, you must clone the repository into your local environment
 ### Flutter App
 1. get Dependencies
   ```bash
+  cd flutter_app
   flutter pub get
   ```
 2. Connect a device or start up an emulator like Android Studio emulators
