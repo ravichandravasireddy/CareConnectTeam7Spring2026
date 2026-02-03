@@ -195,6 +195,7 @@ class CaregiverDashboardScreen extends StatelessWidget {
               color: AppColors.error500,
               colorScheme: colorScheme,
               textTheme: textTheme,
+              onTap: () => Navigator.pushNamed(context, '/emergency-sos'),
             ),
           ),
         ],

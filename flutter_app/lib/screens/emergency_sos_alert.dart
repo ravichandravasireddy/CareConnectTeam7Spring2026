@@ -29,20 +29,25 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
       backgroundColor:
           _isAcknowledged ? colorScheme.surface : AppColors.error500,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: _isAcknowledged
-              ? _buildAcknowledgedState(
-                  context,
-                  colorScheme: colorScheme,
-                  textTheme: textTheme,
-                )
-              : _buildAlertState(
+        child: _isAcknowledged
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: _buildAcknowledgedState(
+                    context,
+                    colorScheme: colorScheme,
+                    textTheme: textTheme,
+                  ),
+                ),
+              )
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: _buildAlertState(
                   context,
                   colorScheme: colorScheme,
                   textTheme: textTheme,
                 ),
-        ),
+              ),
       ),
     );
   }
@@ -256,9 +261,9 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
     required TextTheme textTheme,
   }) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 24),
         Icon(
           Icons.check_circle,
           color: AppColors.success700,
@@ -277,6 +282,15 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
           'This alert has been cleared.',
           style: textTheme.bodyLarge?.copyWith(
             color: colorScheme.onSurfaceVariant,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'You will be automatically redirected in 3 seconds.',
+          style: textTheme.bodyMedium?.copyWith(
+            color: colorScheme.onSurfaceVariant,
+            fontStyle: FontStyle.italic,
           ),
           textAlign: TextAlign.center,
         ),
