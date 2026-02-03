@@ -1,8 +1,13 @@
 // =============================================================================
 // TASK MODEL UNIT TESTS
 // =============================================================================
-// Tests for the Task model: construction, dateOnly/day getters,
-// copyWith, and toJson.
+// SWEN 661 - Tests for Task construction, date helpers, copyWith, and toJson.
+//
+// KEY CONCEPTS COVERED:
+// 1. Construction and default values
+// 2. Date helper getters
+// 3. copyWith behavior
+// 4. JSON serialization
 // =============================================================================
 
 import 'package:flutter/material.dart';
@@ -223,9 +228,7 @@ void main() {
     });
 
     test('toJson includes completedAt when set', () {
-      final task = baseTask.copyWith(
-        completedAt: DateTime(2025, 3, 15, 9, 5),
-      );
+      final task = baseTask.copyWith(completedAt: DateTime(2025, 3, 15, 9, 5));
       final json = task.toJson();
       expect(json.containsKey('completedAt'), true);
       expect(DateTime.parse(json['completedAt'] as String), task.completedAt);

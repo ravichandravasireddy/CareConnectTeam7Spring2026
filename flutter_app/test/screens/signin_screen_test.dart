@@ -1,3 +1,14 @@
+// =============================================================================
+// SIGN IN SCREEN WIDGET TESTS
+// =============================================================================
+// SWEN 661 - Validates sign in form rendering and validation behavior.
+//
+// KEY CONCEPTS COVERED:
+// 1. Form fields and labels
+// 2. Validation errors
+// 3. Provider-backed sign-in flow
+// =============================================================================
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +28,9 @@ Widget wrapWithAuthProvider(Widget child) {
 void main() {
   group('SignInScreen', () {
     testWidgets('renders sign in form', (tester) async {
-      await tester.pumpWidget(wrapWithAuthProvider(createTestHarness(child: const SignInScreen())));
+      await tester.pumpWidget(
+        wrapWithAuthProvider(createTestHarness(child: const SignInScreen())),
+      );
 
       expect(find.text('Sign In'), findsWidgets);
       expect(find.text('Email Address'), findsOneWidget);
@@ -25,7 +38,9 @@ void main() {
     });
 
     testWidgets('shows validation errors when empty', (tester) async {
-      await tester.pumpWidget(wrapWithAuthProvider(createTestHarness(child: const SignInScreen())));
+      await tester.pumpWidget(
+        wrapWithAuthProvider(createTestHarness(child: const SignInScreen())),
+      );
 
       final signInButton = find.byType(ElevatedButton).first;
       await tester.ensureVisible(signInButton);
@@ -43,13 +58,17 @@ void main() {
             child: const SignInScreen(),
             routes: {
               '/dashboard': (_) => placeholderScreen('Dashboard'),
-              '/caregiver-dashboard': (_) => placeholderScreen('Caregiver Dashboard'),
+              '/caregiver-dashboard': (_) =>
+                  placeholderScreen('Caregiver Dashboard'),
             },
           ),
         ),
       );
 
-      await tester.enterText(find.byType(TextFormField).at(0), 'patient@careconnect.demo');
+      await tester.enterText(
+        find.byType(TextFormField).at(0),
+        'patient@careconnect.demo',
+      );
       await tester.enterText(find.byType(TextFormField).at(1), 'password123');
       final signInButton = find.byType(ElevatedButton).first;
       await tester.ensureVisible(signInButton);
@@ -65,7 +84,9 @@ void main() {
     });
 
     testWidgets('toggles password visibility', (tester) async {
-      await tester.pumpWidget(wrapWithAuthProvider(createTestHarness(child: const SignInScreen())));
+      await tester.pumpWidget(
+        wrapWithAuthProvider(createTestHarness(child: const SignInScreen())),
+      );
 
       expect(find.byIcon(Icons.visibility_off), findsOneWidget);
       await tester.tap(find.byIcon(Icons.visibility_off));

@@ -1,3 +1,13 @@
+// =============================================================================
+// PREFERENCES PROVIDER UNIT TESTS
+// =============================================================================
+// SWEN 661 - Verifies default values and preference toggle setters.
+//
+// KEY CONCEPTS COVERED:
+// 1. Default settings
+// 2. Toggle and setter updates
+// =============================================================================
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_app/providers/preferences_provider.dart';

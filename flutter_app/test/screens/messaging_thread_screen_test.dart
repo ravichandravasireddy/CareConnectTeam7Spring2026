@@ -1,3 +1,14 @@
+// =============================================================================
+// MESSAGING THREAD SCREEN WIDGET TESTS
+// =============================================================================
+// SWEN 661 - Verifies messaging header content and message sending flow.
+//
+// KEY CONCEPTS COVERED:
+// 1. Thread header rendering
+// 2. Provider-backed user role setup
+// 3. Message send interaction
+// =============================================================================
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';

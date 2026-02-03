@@ -1,8 +1,13 @@
 // =============================================================================
 // HEALTH LOG PROVIDER UNIT TESTS
 // =============================================================================
-// Tests for HealthLogProvider: logs, logsForDate, addLog, waterTotalForDate,
-// addWaterDelta, removeLog, clearLogs, typeColors, defaultWaterGoalOz.
+// SWEN 661 - Tests for log collection helpers and water tracking operations.
+//
+// KEY CONCEPTS COVERED:
+// 1. Defaults and mock data
+// 2. Date filtering helpers
+// 3. Add/remove log behaviors
+// 4. Water totals and colors
 // =============================================================================
 
 import 'package:flutter/material.dart';
@@ -49,18 +54,22 @@ void main() {
       provider.clearLogs();
       final now = DateTime.now();
       final yesterday = now.subtract(const Duration(days: 1));
-      provider.addLog(HealthLog(
-        id: 'today-1',
-        type: HealthLogType.mood,
-        description: 'Today',
-        createdAt: now,
-      ));
-      provider.addLog(HealthLog(
-        id: 'yesterday-1',
-        type: HealthLogType.meals,
-        description: 'Yesterday',
-        createdAt: yesterday,
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'today-1',
+          type: HealthLogType.mood,
+          description: 'Today',
+          createdAt: now,
+        ),
+      );
+      provider.addLog(
+        HealthLog(
+          id: 'yesterday-1',
+          type: HealthLogType.meals,
+          description: 'Yesterday',
+          createdAt: yesterday,
+        ),
+      );
       final latest = provider.latestByType;
       expect(latest.length, 1);
       expect(latest[HealthLogType.mood]!.description, 'Today');
@@ -72,18 +81,22 @@ void main() {
       provider.clearLogs();
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
-      provider.addLog(HealthLog(
-        id: 'early',
-        type: HealthLogType.mood,
-        description: 'Early',
-        createdAt: DateTime(today.year, today.month, today.day, 8, 0),
-      ));
-      provider.addLog(HealthLog(
-        id: 'late',
-        type: HealthLogType.mood,
-        description: 'Late',
-        createdAt: DateTime(today.year, today.month, today.day, 12, 0),
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'early',
+          type: HealthLogType.mood,
+          description: 'Early',
+          createdAt: DateTime(today.year, today.month, today.day, 8, 0),
+        ),
+      );
+      provider.addLog(
+        HealthLog(
+          id: 'late',
+          type: HealthLogType.mood,
+          description: 'Late',
+          createdAt: DateTime(today.year, today.month, today.day, 12, 0),
+        ),
+      );
       final latest = provider.latestByType;
       expect(latest[HealthLogType.mood]!.description, 'Late');
     });
@@ -118,41 +131,50 @@ void main() {
       expect(provider.logsForDate(otherDate), isEmpty);
     });
 
-    test('returns only logs for requested date after adding different dates', () {
-      final provider = HealthLogProvider();
-      provider.clearLogs();
-      final today = DateTime.now();
-      final yesterday = today.subtract(const Duration(days: 1));
-      provider.addLog(HealthLog(
-        id: 't1',
-        type: HealthLogType.mood,
-        description: 'Today',
-        createdAt: today,
-      ));
-      provider.addLog(HealthLog(
-        id: 'y1',
-        type: HealthLogType.mood,
-        description: 'Yesterday',
-        createdAt: yesterday,
-      ));
-      final todayList = provider.logsForDate(today);
-      expect(todayList.length, 1);
-      expect(todayList.first.description, 'Today');
-      final yesterdayList = provider.logsForDate(yesterday);
-      expect(yesterdayList.length, 1);
-      expect(yesterdayList.first.description, 'Yesterday');
-    });
+    test(
+      'returns only logs for requested date after adding different dates',
+      () {
+        final provider = HealthLogProvider();
+        provider.clearLogs();
+        final today = DateTime.now();
+        final yesterday = today.subtract(const Duration(days: 1));
+        provider.addLog(
+          HealthLog(
+            id: 't1',
+            type: HealthLogType.mood,
+            description: 'Today',
+            createdAt: today,
+          ),
+        );
+        provider.addLog(
+          HealthLog(
+            id: 'y1',
+            type: HealthLogType.mood,
+            description: 'Yesterday',
+            createdAt: yesterday,
+          ),
+        );
+        final todayList = provider.logsForDate(today);
+        expect(todayList.length, 1);
+        expect(todayList.first.description, 'Today');
+        final yesterdayList = provider.logsForDate(yesterday);
+        expect(yesterdayList.length, 1);
+        expect(yesterdayList.first.description, 'Yesterday');
+      },
+    );
   });
 
   group('HealthLogProvider addLog', () {
     test('inserts log at front', () {
       final provider = HealthLogProvider();
-      provider.addLog(HealthLog(
-        id: 'new-first',
-        type: HealthLogType.general,
-        description: 'New First',
-        createdAt: DateTime.now().add(const Duration(hours: 1)),
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'new-first',
+          type: HealthLogType.general,
+          description: 'New First',
+          createdAt: DateTime.now().add(const Duration(hours: 1)),
+        ),
+      );
       expect(provider.logs.first.id, 'new-first');
       expect(provider.logs.first.description, 'New First');
     });
@@ -161,12 +183,14 @@ void main() {
       final provider = HealthLogProvider();
       var notified = false;
       provider.addListener(() => notified = true);
-      provider.addLog(HealthLog(
-        id: 'n',
-        type: HealthLogType.general,
-        description: 'N',
-        createdAt: DateTime.now(),
-      ));
+      provider.addLog(
+        HealthLog(
+          id: 'n',
+          type: HealthLogType.general,
+          description: 'N',
+          createdAt: DateTime.now(),
+        ),
+      );
       expect(notified, isTrue);
     });
   });
@@ -213,7 +237,10 @@ void main() {
       final provider = HealthLogProvider();
       provider.clearLogs();
       provider.addWaterDelta(deltaOz: 20, createdAt: DateTime.now());
-      final log = provider.addWaterDelta(deltaOz: -30, createdAt: DateTime.now());
+      final log = provider.addWaterDelta(
+        deltaOz: -30,
+        createdAt: DateTime.now(),
+      );
       expect(log.waterTotal, 0);
       expect(log.description, contains('Removed 30 oz'));
     });

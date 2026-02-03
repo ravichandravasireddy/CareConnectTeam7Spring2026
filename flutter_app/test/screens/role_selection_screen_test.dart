@@ -1,3 +1,13 @@
+// =============================================================================
+// ROLE SELECTION SCREEN WIDGET TESTS
+// =============================================================================
+// SWEN 661 - Ensures role choices render and navigate to registration.
+//
+// KEY CONCEPTS COVERED:
+// 1. Role option rendering
+// 2. Tap navigation to registration
+// =============================================================================
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,7 +21,9 @@ void main() {
       await tester.binding.setSurfaceSize(const Size(1000, 1200));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
-      await tester.pumpWidget(createTestHarness(child: const RoleSelectionScreen()));
+      await tester.pumpWidget(
+        createTestHarness(child: const RoleSelectionScreen()),
+      );
 
       expect(find.text('Select Your Role'), findsOneWidget);
       expect(find.text('Care Recipient'), findsOneWidget);

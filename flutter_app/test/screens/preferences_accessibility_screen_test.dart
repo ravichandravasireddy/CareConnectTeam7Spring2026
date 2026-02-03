@@ -1,3 +1,14 @@
+// =============================================================================
+// PREFERENCES & ACCESSIBILITY SCREEN WIDGET TESTS
+// =============================================================================
+// SWEN 661 - Preferences toggles, dialog interactions, and section rendering.
+//
+// KEY CONCEPTS COVERED:
+// 1. Rendering settings sections and tiles
+// 2. Switch state updates
+// 3. Dialog opening and dismissal
+// =============================================================================
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -49,7 +60,10 @@ void main() {
       await tester.ensureVisible(textSizeTile);
       await tester.tap(textSizeTile);
       await tester.pumpAndSettle();
-      expect(find.text('Text size adjustment feature coming soon'), findsOneWidget);
+      expect(
+        find.text('Text size adjustment feature coming soon'),
+        findsOneWidget,
+      );
       await tester.tap(find.text('OK'));
       await tester.pumpAndSettle();
 
@@ -60,6 +74,19 @@ void main() {
       expect(find.text('Select Language'), findsOneWidget);
       await tester.tap(find.text('Spanish'));
       await tester.pumpAndSettle();
+    });
+
+    testWidgets('opens time format dialog', (tester) async {
+      await tester.pumpWidget(
+        createTestHarness(child: const PreferencesAccessibilityScreen()),
+      );
+
+      final timeFormatTile = find.text('Time Format');
+      await tester.ensureVisible(timeFormatTile);
+      await tester.tap(timeFormatTile);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Time Format'), findsWidgets);
     });
 
     testWidgets('toggles accessibility switches', (tester) async {

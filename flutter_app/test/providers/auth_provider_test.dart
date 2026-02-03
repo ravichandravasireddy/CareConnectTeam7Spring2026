@@ -1,3 +1,14 @@
+// =============================================================================
+// AUTH PROVIDER UNIT TESTS
+// =============================================================================
+// SWEN 661 - Validates authentication flows and user roles.
+//
+// KEY CONCEPTS COVERED:
+// 1. Initial unauthenticated state
+// 2. Sign-in validation
+// 3. Patient vs caregiver roles
+// =============================================================================
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_app/providers/auth_provider.dart';
@@ -25,7 +36,10 @@ void main() {
     test('signs in as patient with mock credentials', () async {
       final provider = AuthProvider();
 
-      final result = await provider.signIn('patient@careconnect.demo', 'password123');
+      final result = await provider.signIn(
+        'patient@careconnect.demo',
+        'password123',
+      );
 
       expect(result, isTrue);
       expect(provider.isAuthenticated, isTrue);
@@ -37,7 +51,10 @@ void main() {
     test('signs in as caregiver with mock credentials', () async {
       final provider = AuthProvider();
 
-      final result = await provider.signIn('caregiver@careconnect.demo', 'password123');
+      final result = await provider.signIn(
+        'caregiver@careconnect.demo',
+        'password123',
+      );
 
       expect(result, isTrue);
       expect(provider.isAuthenticated, isTrue);

@@ -51,35 +51,40 @@ class AppDrawer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 CircleAvatar(
-                  radius: 30,
+                  radius: 24,
                   backgroundColor: Theme.of(context).colorScheme.onPrimary,
                   child: Text(
                     _initials(displayName),
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 Text(
                   displayName,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
                 if (email.isNotEmpty)
                   Text(
                     email,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 14,
+                      fontSize: 12,
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
               ],
             ),

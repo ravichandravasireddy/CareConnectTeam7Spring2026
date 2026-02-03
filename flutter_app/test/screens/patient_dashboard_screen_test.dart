@@ -1,3 +1,14 @@
+// =============================================================================
+// PATIENT DASHBOARD SCREEN WIDGET TESTS
+// =============================================================================
+// SWEN 661 - Verifies core sections and greeting on the patient dashboard.
+//
+// KEY CONCEPTS COVERED:
+// 1. App bar and greeting
+// 2. Upcoming tasks section
+// 3. Appointments section
+// =============================================================================
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';

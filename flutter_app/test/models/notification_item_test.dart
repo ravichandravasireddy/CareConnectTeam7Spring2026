@@ -1,8 +1,12 @@
 // =============================================================================
 // NOTIFICATION ITEM MODEL UNIT TESTS
 // =============================================================================
-// Tests for NotificationItem: construction defaults, destinationRoute,
-// and copyWith behavior.
+// SWEN 661 - Tests for NotificationItem defaults, routing, and copyWith.
+//
+// KEY CONCEPTS COVERED:
+// 1. Construction and defaults
+// 2. Destination route mapping
+// 3. copyWith behavior
 // =============================================================================
 
 import 'package:flutter_test/flutter_test.dart';

@@ -1,8 +1,13 @@
 // =============================================================================
 // HEALTH LOG MODEL UNIT TESTS
 // =============================================================================
-// Tests for HealthLog, HealthLogType, formatHealthLogTypeDisplay,
-// dateOnly, hasProgress, progressRatio, and copyWith.
+// SWEN 661 - Tests for HealthLog types, helpers, progress, and copyWith.
+//
+// KEY CONCEPTS COVERED:
+// 1. Type display formatting
+// 2. Date and progress helpers
+// 3. Validation and derived values
+// 4. copyWith behavior
 // =============================================================================
 
 import 'package:flutter_test/flutter_test.dart';
@@ -18,7 +23,10 @@ void main() {
       expect(formatHealthLogTypeDisplay(HealthLogType.exercise), 'Exercise');
       expect(formatHealthLogTypeDisplay(HealthLogType.sleep), 'Sleep');
       expect(formatHealthLogTypeDisplay(HealthLogType.general), 'General');
-      expect(formatHealthLogTypeDisplay(HealthLogType.bloodPressure), 'Blood Pressure');
+      expect(
+        formatHealthLogTypeDisplay(HealthLogType.bloodPressure),
+        'Blood Pressure',
+      );
       expect(formatHealthLogTypeDisplay(HealthLogType.heartRate), 'Heart Rate');
     });
 

@@ -1,3 +1,14 @@
+// =============================================================================
+// WELCOME SCREEN WIDGET TESTS
+// =============================================================================
+// SWEN 661 - Verifies welcome copy, actions, and navigation.
+//
+// KEY CONCEPTS COVERED:
+// 1. Action button rendering
+// 2. Route navigation to role selection
+// 3. Route navigation to sign in
+// =============================================================================
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -38,9 +49,7 @@ void main() {
       await tester.pumpWidget(
         createTestHarness(
           child: const WelcomeScreen(),
-          routes: {
-            '/signin': (_) => placeholderScreen('Sign In Screen'),
-          },
+          routes: {'/signin': (_) => placeholderScreen('Sign In Screen')},
         ),
       );
 
