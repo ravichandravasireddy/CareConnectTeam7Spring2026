@@ -23,6 +23,7 @@ import 'screens/messaging_thread_screen.dart';
 import 'screens/patient_profile_screen.dart';
 import 'screens/preferences_accessibility_screen.dart';
 import 'screens/role_selection_screen.dart';
+import 'screens/signin_screen.dart';
 import 'providers/task_provider.dart';
 import 'providers/notification_provider.dart';
 import 'providers/note_provider.dart';
@@ -33,6 +34,11 @@ import 'providers/preferences_provider.dart';
 import 'theme/app_typography.dart';
 import 'theme/app_colors.dart';
 import 'models/task.dart';
+import 'screens/calendar_screen.dart';
+import 'screens/notification_screen.dart';
+import 'screens/notes_screen.dart';
+import 'screens/health_logs_screen.dart';
+import 'screens/health_timeline_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -152,10 +158,16 @@ class MyApp extends StatelessWidget {
           '/': (context) => const WelcomeScreen(),
           '/registration': (context) => const RegistrationScreen(),
           '/role-selection': (context) => const RoleSelectionScreen(),
+          '/signin': (context) => const SignInScreen(),
           '/dashboard': (context) => const PatientDashboardScreen(),
           '/messaging': (context) => const MessagingThreadScreen(),
           '/profile': (context) => const PatientProfileScreen(),
           '/preferences': (context) => const PreferencesAccessibilityScreen(),
+          '/calendar': (context) => const CalendarScreen(),
+          '/notifications': (context) => const NotificationScreen(),
+          '/notes': (context) => const NotesScreen(),
+          '/health-logs': (context) => const HealthLogsScreen(),
+          '/health-timeline': (context) => const HealthTimelineScreen(),
           '/nav-hub': (_) => const NavigationHubScreen(),
         '/caregiver-dashboard': (_) => const CaregiverDashboardScreen(),
         '/caregiver-patient-monitoring': (_) =>

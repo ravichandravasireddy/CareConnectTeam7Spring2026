@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../models/notification_item.dart';
 import '../providers/notification_provider.dart';
+import '../widgets/app_bottom_nav_bar.dart';
 
 // =============================================================================
 // NOTIFICATION SCREEN
@@ -117,6 +118,7 @@ class NotificationScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: kPatientNavHome),
     );
   }
 }

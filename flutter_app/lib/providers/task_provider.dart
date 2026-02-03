@@ -27,7 +27,9 @@ class TaskProvider with ChangeNotifier {
       Task(
         id: '1',
         title: 'Morning Medication',
+        description: 'Administer morning dose with water and log adherence.',
         date: DateTime(now.year, now.month, 5, 9, 0),
+        patientName: 'Mary Johnson',
         icon: Icons.medication,
         iconBackground: AppColors.primary100,
         iconColor: AppColors.primary700,
@@ -35,7 +37,9 @@ class TaskProvider with ChangeNotifier {
       Task(
         id: '2',
         title: 'Physical Therapy',
+        description: 'Guide light stretching and mobility exercises.',
         date: DateTime(now.year, now.month, 5, 10, 30),
+        patientName: 'Robert Williams',
         icon: Icons.fitness_center,
         iconBackground: AppColors.success100,
         iconColor: AppColors.success700,
@@ -43,7 +47,9 @@ class TaskProvider with ChangeNotifier {
       Task(
         id: '3',
         title: 'Doctor Appointment',
+        description: 'Prepare questions and bring updated medication list.',
         date: DateTime(now.year, now.month, 12, 14, 0),
+        patientName: 'Sarah Johnson',
         icon: Icons.local_hospital,
         iconBackground: AppColors.error100,
         iconColor: AppColors.error700,
@@ -51,7 +57,9 @@ class TaskProvider with ChangeNotifier {
       Task(
         id: '4',
         title: 'Lab Results Review',
+        description: 'Review latest lab results and note follow-up actions.',
         date: DateTime(now.year, now.month, 12, 11, 0),
+        patientName: 'James Carter',
         icon: Icons.science,
         iconBackground: AppColors.info100,
         iconColor: AppColors.info700,
@@ -59,7 +67,9 @@ class TaskProvider with ChangeNotifier {
       Task(
         id: '5',
         title: 'Medication Refill',
+        description: 'Contact pharmacy and confirm refill pickup time.',
         date: DateTime(now.year, now.month, 18, 15, 0),
+        patientName: 'Mary Johnson',
         icon: Icons.medication_liquid,
         iconBackground: AppColors.primary100,
         iconColor: AppColors.primary700,
@@ -67,7 +77,9 @@ class TaskProvider with ChangeNotifier {
       Task(
         id: '6',
         title: 'Morning Medication',
+        description: 'Check dosage schedule and record completion.',
         date: DateTime(now.year, now.month, now.day, 9, 0),
+        patientName: 'Robert Williams',
         icon: Icons.medication,
         iconBackground: AppColors.primary100,
         iconColor: AppColors.primary700,
@@ -75,7 +87,9 @@ class TaskProvider with ChangeNotifier {
       Task(
         id: '7',
         title: 'Blood Pressure Check',
+        description: 'Measure BP and upload readings to the care plan.',
         date: DateTime(now.year, now.month, now.day, 14, 0),
+        patientName: 'Sarah Johnson',
         icon: Icons.monitor_heart,
         iconBackground: AppColors.error100,
         iconColor: AppColors.error700,
@@ -83,7 +97,9 @@ class TaskProvider with ChangeNotifier {
       Task(
         id: '8',
         title: 'Virtual Appointment',
+        description: 'Join video consult and summarize key outcomes.',
         date: DateTime(now.year, now.month, now.day, 15, 0),
+        patientName: 'Mary Johnson',
         icon: Icons.videocam,
         iconBackground: AppColors.accent100,
         iconColor: AppColors.accent600,
@@ -91,7 +107,9 @@ class TaskProvider with ChangeNotifier {
       Task(
         id: '9',
         title: 'Follow-up Call',
+        description: 'Call clinic to confirm next steps and reminders.',
         date: DateTime(now.year, now.month, now.day + 1, 10, 0),
+        patientName: 'Robert Williams',
         icon: Icons.phone,
         iconBackground: AppColors.warning100,
         iconColor: AppColors.warning700,
@@ -99,7 +117,9 @@ class TaskProvider with ChangeNotifier {
       Task(
         id: '10',
         title: 'Follow-up Call',
+        description: 'Confirm care plan updates and document notes.',
         date: DateTime(now.year, now.month, now.day, 10, 0),
+        patientName: 'James Carter',
         icon: Icons.phone,
         iconBackground: AppColors.warning100,
         iconColor: AppColors.warning700,
@@ -108,7 +128,9 @@ class TaskProvider with ChangeNotifier {
       Task(
         id: '11',
         title: 'Video Call with Sarah',
+        description: 'Discuss today’s care updates and share next steps.',
         date: DateTime(now.year, now.month, 12, 11, 0),
+        patientName: 'Sarah Johnson',
         icon: Icons.phone,
         iconBackground: AppColors.warning100,
         iconColor: AppColors.warning700,
@@ -119,9 +141,7 @@ class TaskProvider with ChangeNotifier {
 
   List<Task> getTasksForDate(DateTime date) {
     final dateOnly = DateTime(date.year, date.month, date.day);
-    return _tasks
-        .where((task) => task.dateOnly == dateOnly)
-        .toList()
+    return _tasks.where((task) => task.dateOnly == dateOnly).toList()
       ..sort((a, b) => a.date.compareTo(b.date));
   }
 
@@ -146,8 +166,9 @@ class TaskProvider with ChangeNotifier {
   /// True if there are scheduled (incomplete) tasks for [date]. Use for calendar dots.
   bool hasScheduledTasksForDate(DateTime date) {
     final dateOnly = DateTime(date.year, date.month, date.day);
-    return _tasks.any((task) =>
-        task.dateOnly == dateOnly && task.completedAt == null);
+    return _tasks.any(
+      (task) => task.dateOnly == dateOnly && task.completedAt == null,
+    );
   }
 
   void addTask(Task task) {

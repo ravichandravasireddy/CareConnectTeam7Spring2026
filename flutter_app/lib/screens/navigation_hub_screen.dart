@@ -5,7 +5,6 @@ import 'caregiver_analytics_screen.dart';
 import 'caregiver_dashboard.dart';
 import 'caregiver_patient_monitoring_screen.dart';
 import 'caregiver_task_management_screen.dart';
-import 'create_account_screen.dart';
 import 'emergency_sos_alert.dart';
 import 'emergency_sos_receive_screen.dart';
 import 'role_selection_screen.dart';
@@ -57,10 +56,6 @@ class NavigationHubScreen extends StatelessWidget {
             _NavButton(
               label: 'Role Selection',
               onPressed: () => _push(context, const RoleSelectionScreen()),
-            ),
-            _NavButton(
-              label: 'Create Account',
-              onPressed: () => _push(context, const CreateAccountScreen()),
             ),
             _NavButton(
               label: 'Caregiver Dashboard',

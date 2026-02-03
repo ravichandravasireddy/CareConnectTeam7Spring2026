@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 import 'registration_screen.dart';
 
 /// Sign in screen for user authentication
@@ -31,15 +33,35 @@ class _SignInScreenState extends State<SignInScreen> {
 
     setState(() => _isLoading = true);
 
-    // Simulate sign in - replace with actual API call
-    await Future.delayed(const Duration(seconds: 1));
+    final auth = context.read<AuthProvider>();
+    final success = await auth.signIn(
+      _emailController.text.trim(),
+      _passwordController.text,
+    );
 
-    if (mounted) {
-      setState(() => _isLoading = false);
+    if (!mounted) return;
+    setState(() => _isLoading = false);
+
+    if (success) {
+      final role = auth.userRole;
+      if (role == UserRole.patient) {
+        Navigator.pushNamedAndRemoveUntil(context, '/dashboard', (route) => false);
+      } else if (role == UserRole.caregiver) {
+        Navigator.pushNamedAndRemoveUntil(context, '/caregiver-dashboard', (route) => false);
+      } else {
+        Navigator.pushNamedAndRemoveUntil(context, '/dashboard', (route) => false);
+      }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Sign in successful!'),
+        const SnackBar(
+          content: Text('Sign in successful!'),
           backgroundColor: Colors.green,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Invalid email or password. See demo credentials below.'),
+          backgroundColor: Colors.red,
         ),
       );
     }
@@ -290,6 +312,40 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 24),
+                // Demo credentials hint
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Demo login',
+                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Patient: patient@careconnect.demo / password123',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                      Text(
+                        'Caregiver: caregiver@careconnect.demo / password123',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 40),
               ],

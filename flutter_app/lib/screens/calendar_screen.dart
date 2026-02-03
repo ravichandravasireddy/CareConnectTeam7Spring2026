@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../models/task.dart';
 import '../providers/task_provider.dart';
+import '../widgets/app_bottom_nav_bar.dart';
 
 // =============================================================================
 // CALENDAR SCREEN
@@ -195,6 +196,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
               ),
       ),
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: kPatientNavTasks),
     );
   }
 
@@ -351,14 +353,20 @@ class _CalendarScreenState extends State<CalendarScreen> {
             else
               ...selectedTasks.map((task) => Padding(
                     padding: const EdgeInsets.only(bottom: 12),
-                    child: _TaskCard(
-                      colorScheme: colorScheme,
-                      textTheme: textTheme,
-                      icon: task.icon,
-                      iconBackground: task.iconBackground,
-                      iconColor: task.iconColor,
-                      title: task.title,
-                      date: task.date,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/task-details', arguments: task);
+                      },
+                      borderRadius: BorderRadius.circular(12),
+                      child: _TaskCard(
+                        colorScheme: colorScheme,
+                        textTheme: textTheme,
+                        icon: task.icon,
+                        iconBackground: task.iconBackground,
+                        iconColor: task.iconColor,
+                        title: task.title,
+                        date: task.date,
+                      ),
                     ),
                   )),
           ],

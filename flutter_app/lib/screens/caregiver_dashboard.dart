@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../models/patient.dart';
 import '../models/task.dart';
+import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
+import '../widgets/app_app_bar.dart';
+import '../widgets/app_bottom_nav_bar.dart';
+import '../widgets/app_drawer.dart';
 import 'caregiver_patient_monitoring_screen.dart';
 import 'caregiver_task_management_screen.dart';
-import 'caregiver_analytics_screen.dart';
+// import 'caregiver_analytics_screen.dart';
 import 'emergency_sos_alert.dart';
 import 'task_details_screen.dart';
 
@@ -79,66 +84,68 @@ class _CaregiverDashboardScreenState extends State<CaregiverDashboardScreen> {
     final completedCount = todayTasks.where((t) => t.isCompleted).length;
     final totalCount = todayTasks.length;
 
+    final userName = context.read<AuthProvider>().userName ?? 'Caregiver';
+
     return Scaffold(
-      backgroundColor: colorScheme.surfaceContainerHighest ?? colorScheme.surface,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: colorScheme.surface,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              _greetingText,
-              style: textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ),
-            Text(
-              'Sarah Johnson',
-              style: textTheme.headlineMedium?.copyWith(
-                color: colorScheme.onSurface,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
+      backgroundColor: colorScheme.surfaceContainerHighest,
+      appBar: AppAppBar(
+        title: 'Dashboard',
+        showNotificationBadge: true,
+        onNotificationTap: () => Navigator.pushNamed(context, '/notifications'),
         actions: [
-          Semantics(
-            label: 'Notifications',
-            button: true,
-            child: IconButton(
-              icon: Icon(
-                Icons.notifications_outlined,
-                color: colorScheme.onSurface,
-              ),
-              onPressed: () {},
-              style: IconButton.styleFrom(
-                minimumSize: const Size(48, 48),
-              ),
-            ),
-          ),
           Semantics(
             label: 'Settings',
             button: true,
             child: IconButton(
-              icon: Icon(
-                Icons.settings_outlined,
-                color: colorScheme.onSurface,
-              ),
-              onPressed: () {},
-              style: IconButton.styleFrom(
-                minimumSize: const Size(48, 48),
-              ),
+              icon: Icon(Icons.settings_outlined, color: colorScheme.onSurface),
+              onPressed: () => Navigator.pushNamed(context, '/preferences'),
+              style: IconButton.styleFrom(minimumSize: const Size(48, 48)),
             ),
           ),
         ],
       ),
+      drawer: const AppDrawer(isPatient: false),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Welcome card (matching patient dashboard structure)
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      colorScheme.primary,
+                      colorScheme.primary.withValues(alpha: 0.7),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$_greetingText, ${userName.split(' ').first}!',
+                      style: textTheme.headlineSmall?.copyWith(
+                        color: colorScheme.onPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Here's your care overview for today",
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: colorScheme.onPrimary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
               _buildQuickStats(
                 context,
                 colorScheme: colorScheme,
@@ -171,10 +178,9 @@ class _CaregiverDashboardScreenState extends State<CaregiverDashboardScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(
-        context,
-        colorScheme: colorScheme,
-        textTheme: textTheme,
+      bottomNavigationBar: const AppBottomNavBar(
+        currentIndex: kCaregiverNavHome,
+        isPatient: false,
       ),
     );
   }
@@ -522,60 +528,6 @@ class _CaregiverDashboardScreenState extends State<CaregiverDashboardScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildBottomNav(
-    BuildContext context, {
-    required ColorScheme colorScheme,
-    required TextTheme textTheme,
-  }) {
-    return NavigationBar(
-      selectedIndex: _selectedIndex,
-      onDestinationSelected: (index) {
-        setState(() => _selectedIndex = index);
-        if (index == 1) {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => const CaregiverTaskManagementScreen(),
-            ),
-          );
-        } else if (index == 2) {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => const CaregiverAnalyticsScreen(),
-            ),
-          );
-        } else if (index == 3) {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => const CaregiverPatientMonitoringScreen(),
-            ),
-          );
-        }
-      },
-      destinations: const [
-        NavigationDestination(
-          icon: Icon(Icons.home_outlined),
-          selectedIcon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.checklist_outlined),
-          selectedIcon: Icon(Icons.checklist),
-          label: 'Tasks',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.analytics_outlined),
-          selectedIcon: Icon(Icons.analytics),
-          label: 'Analytics',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.monitor_heart_outlined),
-          selectedIcon: Icon(Icons.monitor_heart),
-          label: 'Monitor',
-        ),
-      ],
     );
   }
 

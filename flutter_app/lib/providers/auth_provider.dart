@@ -1,20 +1,35 @@
 import 'package:flutter/foundation.dart';
 
-/// Authentication provider to manage user login/logout state
+/// User role for post-login navigation (patient vs caregiver workflow).
+enum UserRole {
+  patient,
+  caregiver,
+}
+
+/// Authentication provider to manage user login/logout state.
+/// Mock credentials: patient@careconnect.demo / password123 → patient dashboard;
+/// caregiver@careconnect.demo / password123 → caregiver dashboard.
 class AuthProvider extends ChangeNotifier {
   String? _userEmail;
   String? _userName;
+  UserRole? _userRole;
   bool _isAuthenticated = false;
 
   // Getters
   String? get userEmail => _userEmail;
   String? get userName => _userName;
+  UserRole? get userRole => _userRole;
   bool get isAuthenticated => _isAuthenticated;
 
-  /// Sign in user
+  /// Mock login: patient@careconnect.demo → patient workflow; caregiver@careconnect.demo → caregiver workflow.
+  static const String _mockPatientEmail = 'patient@careconnect.demo';
+  static const String _mockCaregiverEmail = 'caregiver@careconnect.demo';
+  static const String _mockPassword = 'password123';
+
+  /// Sign in user. Returns true if credentials match mock patient or caregiver; otherwise false.
   Future<bool> signIn(String email, String password) async {
     // Simulate API call
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 800));
 
     // Basic validation
     if (email.isEmpty || !email.contains('@')) {
@@ -24,12 +39,27 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
 
-    // Set user data
-    _userEmail = email;
-    _userName = 'Robert Williams'; // Mock user name
-    _isAuthenticated = true;
-    notifyListeners();
-    return true;
+    final normalizedEmail = email.trim().toLowerCase();
+    final normalizedPassword = password.trim();
+
+    if (normalizedEmail == _mockPatientEmail && normalizedPassword == _mockPassword) {
+      _userEmail = normalizedEmail;
+      _userName = 'Robert Williams';
+      _userRole = UserRole.patient;
+      _isAuthenticated = true;
+      notifyListeners();
+      return true;
+    }
+    if (normalizedEmail == _mockCaregiverEmail && normalizedPassword == _mockPassword) {
+      _userEmail = normalizedEmail;
+      _userName = 'Dr. Sarah Johnson';
+      _userRole = UserRole.caregiver;
+      _isAuthenticated = true;
+      notifyListeners();
+      return true;
+    }
+
+    return false;
   }
 
   /// Register new user
@@ -63,6 +93,7 @@ class AuthProvider extends ChangeNotifier {
   void signOut() {
     _userEmail = null;
     _userName = null;
+    _userRole = null;
     _isAuthenticated = false;
     notifyListeners();
   }
@@ -71,6 +102,7 @@ class AuthProvider extends ChangeNotifier {
   void clear() {
     _userEmail = null;
     _userName = null;
+    _userRole = null;
     _isAuthenticated = false;
     notifyListeners();
   }

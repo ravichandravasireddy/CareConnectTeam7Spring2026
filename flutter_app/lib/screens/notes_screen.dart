@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../models/note.dart';
+import '../providers/auth_provider.dart';
 import '../providers/note_provider.dart';
+import '../widgets/app_bottom_nav_bar.dart';
 import 'notes_add_screen.dart';
 import 'notes_detail_screen.dart';
 
@@ -44,6 +46,8 @@ class NotesScreen extends StatelessWidget {
     final textTheme = theme.textTheme;
     final noteProvider = context.watch<NoteProvider>();
     final notes = noteProvider.notes;
+    final isPatient = context.read<AuthProvider>().userRole == UserRole.patient;
+    final navIndex = isPatient ? kPatientNavHealth : kCaregiverNavTasks;
 
     return Scaffold(
       appBar: AppBar(
@@ -128,6 +132,7 @@ class NotesScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: AppBottomNavBar(currentIndex: navIndex),
     );
   }
 }

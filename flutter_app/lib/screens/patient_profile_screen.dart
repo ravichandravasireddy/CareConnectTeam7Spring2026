@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../widgets/app_app_bar.dart';
+import '../widgets/app_bottom_nav_bar.dart';
+import '../widgets/app_drawer.dart';
 
 /// Patient profile screen showing personal and medical information
 class PatientProfileScreen extends StatelessWidget {
@@ -8,27 +11,11 @@ class PatientProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-      appBar: AppBar(
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
-        title: const Text('Profile'),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // TODO: Navigate to notifications
-            },
-          ),
-        ],
+      appBar: AppAppBar(
+        title: 'Profile',
+        onNotificationTap: () => Navigator.pushNamed(context, '/notifications'),
       ),
-      drawer: _buildDrawer(context),
+      drawer: const AppDrawer(isPatient: true),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -210,88 +197,7 @@ class PatientProfileScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(context, 4),
-    );
-  }
-
-  Widget _buildDrawer(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                  child: Text(
-                    'RW',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'Robert Williams',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'robert.w@email.com',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text('Home'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/dashboard');
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('Profile'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Preferences'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/preferences');
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
-            title: Text('Sign Out', style: TextStyle(color: Theme.of(context).colorScheme.error)),
-            onTap: () {
-              Navigator.pop(context);
-              _showSignOutDialog(context);
-            },
-          ),
-        ],
-      ),
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: kPatientNavProfile, isPatient: true),
     );
   }
 
@@ -390,69 +296,6 @@ class PatientProfileScreen extends StatelessWidget {
             Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildBottomNavBar(BuildContext context, int currentIndex) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
-            width: 1,
-          ),
-        ),
-      ),
-      child: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          if (index == 0) {
-            // Navigate to Home
-            Navigator.pushReplacementNamed(context, '/dashboard');
-          } else if (index == 1) {
-            // TODO: Navigate to Tasks
-          } else if (index == 2) {
-            // Navigate to Messages
-            Navigator.pushReplacementNamed(context, '/messaging');
-          } else if (index == 3) {
-            // TODO: Navigate to Health
-          } else if (index == 4) {
-            // Already on Profile, do nothing
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today_outlined),
-            activeIcon: Icon(Icons.calendar_today),
-            label: 'Tasks',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message_outlined),
-            activeIcon: Icon(Icons.message),
-            label: 'Messages',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_outline),
-            activeIcon: Icon(Icons.favorite),
-            label: 'Health',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
       ),
     );
   }

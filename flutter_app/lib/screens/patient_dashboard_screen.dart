@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
+import '../widgets/app_app_bar.dart';
+import '../widgets/app_bottom_nav_bar.dart';
+import '../widgets/app_drawer.dart';
 
 /// Patient dashboard screen showing health overview and tasks
 class PatientDashboardScreen extends StatelessWidget {
@@ -6,45 +11,17 @@ class PatientDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userName = context.watch<AuthProvider>().userName ?? 'Patient';
+    final firstName = userName.split(' ').isNotEmpty ? userName.split(' ').first : userName;
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-      appBar: AppBar(
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
-        title: const Text('Home'),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          Stack(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.notifications_outlined),
-                onPressed: () {
-                  // TODO: Navigate to notifications
-                },
-              ),
-              Positioned(
-                right: 12,
-                top: 12,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.error,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+      appBar: AppAppBar(
+        title: 'Home',
+        showNotificationBadge: true,
+        onNotificationTap: () => Navigator.pushNamed(context, '/notifications'),
       ),
-      drawer: _buildDrawer(context),
+      drawer: const AppDrawer(isPatient: true),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -69,7 +46,7 @@ class PatientDashboardScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Good Morning, Robert!',
+                      'Good Morning, $firstName!',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onPrimary,
                         fontSize: 24,
@@ -276,88 +253,7 @@ class PatientDashboardScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(context, 0),
-    );
-  }
-
-  Widget _buildDrawer(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                  child: Text(
-                    'RW',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'Robert Williams',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'robert.w@email.com',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text('Home'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('Profile'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/profile');
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Preferences'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/preferences');
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
-            title: Text('Sign Out', style: TextStyle(color: Theme.of(context).colorScheme.error)),
-            onTap: () {
-              Navigator.pop(context);
-              // TODO: Sign out
-            },
-          ),
-        ],
-      ),
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: kPatientNavHome, isPatient: true),
     );
   }
 
@@ -606,66 +502,4 @@ class PatientDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNavBar(BuildContext context, int currentIndex) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
-            width: 1,
-          ),
-        ),
-      ),
-      child: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          if (index == 0) {
-            // Already on Home, do nothing
-          } else if (index == 1) {
-            // TODO: Navigate to Tasks
-          } else if (index == 2) {
-            // Navigate to Messages
-            Navigator.pushNamed(context, '/messaging');
-          } else if (index == 3) {
-            // TODO: Navigate to Health
-          } else if (index == 4) {
-            // Navigate to Profile
-            Navigator.pushNamed(context, '/profile');
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today_outlined),
-            activeIcon: Icon(Icons.calendar_today),
-            label: 'Tasks',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message_outlined),
-            activeIcon: Icon(Icons.message),
-            label: 'Messages',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_outline),
-            activeIcon: Icon(Icons.favorite),
-            label: 'Health',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
-    );
-  }
 }

@@ -6,6 +6,7 @@ import '../providers/health_log_provider.dart';
 import '../providers/note_provider.dart';
 import '../providers/task_provider.dart';
 import '../providers/health_timeline_provider.dart';
+import '../widgets/app_bottom_nav_bar.dart';
 
 // =============================================================================
 // HEALTH TIMELINE SCREEN
@@ -65,6 +66,7 @@ class HealthTimelineScreen extends StatelessWidget {
             ),
           ),
         ),
+        bottomNavigationBar: const AppBottomNavBar(currentIndex: kPatientNavHealth),
       );
     }
 
@@ -89,6 +91,7 @@ class HealthTimelineScreen extends StatelessWidget {
           child: _TimelineBody(events: events),
         ),
       ),
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: kPatientNavHealth),
     );
   }
 }

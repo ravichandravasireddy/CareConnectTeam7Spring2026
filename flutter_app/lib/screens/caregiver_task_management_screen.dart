@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/task.dart';
 import '../theme/app_colors.dart';
+import '../widgets/app_bottom_nav_bar.dart';
 import 'task_details_screen.dart';
 
 // =============================================================================
@@ -103,6 +104,10 @@ class _CaregiverTaskManagementScreenState
               ),
           ],
         ),
+      ),
+      bottomNavigationBar: const AppBottomNavBar(
+        currentIndex: kCaregiverNavTasks,
+        isPatient: false,
       ),
     );
   }

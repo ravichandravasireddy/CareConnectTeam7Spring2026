@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
+import '../widgets/app_bottom_nav_bar.dart';
 
 /// Messaging thread screen for chatting with doctors and caregivers
 class MessagingThreadScreen extends StatefulWidget {
@@ -235,6 +238,13 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: Builder(
+        builder: (context) {
+          final isPatient = context.read<AuthProvider>().userRole == UserRole.patient;
+          final navIndex = isPatient ? kPatientNavMessages : kCaregiverNavHome;
+          return AppBottomNavBar(currentIndex: navIndex);
+        },
       ),
     );
   }

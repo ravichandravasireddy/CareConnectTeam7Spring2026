@@ -20,9 +20,9 @@ class Task {
   Task({
     required this.id,
     required this.title,
-    required this.description,
+    this.description = '',
     required this.date,
-    required this.patientName,
+    this.patientName = '',
     required this.icon,
     required this.iconBackground,
     required this.iconColor,
@@ -30,6 +30,21 @@ class Task {
   });
 
   bool get isCompleted => completedAt != null;
+
+  /// Date-only (midnight) for filtering by calendar day.
+  DateTime get dateOnly => DateTime(date.year, date.month, date.day);
+
+  /// Day of month.
+  int get day => date.day;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'date': date.toIso8601String(),
+      if (completedAt != null) 'completedAt': completedAt!.toIso8601String(),
+    };
+  }
 
   Task copyWith({
     String? id,

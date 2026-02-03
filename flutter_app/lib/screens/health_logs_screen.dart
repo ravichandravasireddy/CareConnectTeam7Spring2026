@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../models/health_log.dart';
 import '../providers/health_log_provider.dart';
+import '../widgets/app_bottom_nav_bar.dart';
 import 'health_log_add_screen.dart';
 
 // =============================================================================
@@ -222,6 +223,7 @@ class HealthLogsScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: kPatientNavHealth),
     );
   }
 }

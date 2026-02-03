@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/task.dart';
 import '../theme/app_colors.dart';
+import '../widgets/app_bottom_nav_bar.dart';
 
 // =============================================================================
 // TASK DETAILS SCREEN (SHARED)
@@ -117,6 +118,7 @@ class TaskDetailsScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: kPatientNavTasks),
     );
   }
 }
