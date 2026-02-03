@@ -20,14 +20,11 @@ class CaregiverTaskManagementScreen extends StatefulWidget {
 
 class _CaregiverTaskManagementScreenState
     extends State<CaregiverTaskManagementScreen> {
-  TaskFilter _selectedFilter = TaskFilter.all;
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
-    final tasks = _filteredTasks;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -35,73 +32,37 @@ class _CaregiverTaskManagementScreenState
         backgroundColor: colorScheme.surface,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.menu, color: colorScheme.onSurface),
+          onPressed: () {},
         ),
         title: Text(
-          'Task Management',
+          'Tasks',
           style: textTheme.headlineLarge?.copyWith(
             color: colorScheme.onSurface,
           ),
         ),
         centerTitle: true,
+        actions: [
+          _NotificationIcon(colorScheme: colorScheme),
+        ],
       ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            Semantics(
-              header: true,
-              child: Text(
-                'Tasks',
-                style: textTheme.headlineSmall?.copyWith(
-                  color: colorScheme.onSurface,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Review assignments by patient and due time.',
-              style: textTheme.bodyLarge?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 8,
-              children: TaskFilter.values.map((filter) {
-                return ChoiceChip(
-                  label: Text(filter.label),
-                  selected: _selectedFilter == filter,
-                  onSelected: (_) => setState(() => _selectedFilter = filter),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 24),
-            if (tasks.isEmpty)
-              _EmptyStateCard(
-                message: 'No tasks in this view.',
-                colorScheme: colorScheme,
-                textTheme: textTheme,
-              )
-            else
-              ...tasks.map(
-                (task) => Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: _TaskCard(
-                    task: task,
-                    colorScheme: colorScheme,
-                    textTheme: textTheme,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) => TaskDetailsScreen(task: task),
-                        ),
-                      );
-                    },
+            _OverdueTasksCard(
+              colorScheme: colorScheme,
+              textTheme: textTheme,
+              task: _mockTasks.first,
+              onNotify: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => TaskDetailsScreen(task: _mockTasks.first),
                   ),
-                ),
-              ),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -130,132 +91,165 @@ class _CaregiverTaskManagementScreenState
   }
 }
 
-enum TaskFilter { all, today, completed }
+class _NotificationIcon extends StatelessWidget {
+  final ColorScheme colorScheme;
 
-extension on TaskFilter {
-  String get label {
-    switch (this) {
-      case TaskFilter.all:
-        return 'All';
-      case TaskFilter.today:
-        return 'Today';
-      case TaskFilter.completed:
-        return 'Completed';
-    }
+  const _NotificationIcon({required this.colorScheme});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        IconButton(
+          icon: Icon(Icons.notifications_outlined, color: colorScheme.onSurface),
+          onPressed: () {},
+        ),
+        Positioned(
+          right: 10,
+          top: 10,
+          child: Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: AppColors.error500,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
-class _TaskCard extends StatelessWidget {
-  final Task task;
+class _OverdueTasksCard extends StatelessWidget {
   final ColorScheme colorScheme;
   final TextTheme textTheme;
+  final Task task;
+  final VoidCallback onNotify;
   final VoidCallback onTap;
 
-  const _TaskCard({
-    required this.task,
+  const _OverdueTasksCard({
     required this.colorScheme,
     required this.textTheme,
+    required this.task,
+    required this.onNotify,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final localizations = MaterialLocalizations.of(context);
-    final dateLabel = localizations.formatFullDate(task.date);
-    final timeLabel = localizations.formatTimeOfDay(
-      TimeOfDay.fromDateTime(task.date),
-    );
-
-    return Semantics(
-      label: '${task.title}, ${task.patientName}, $dateLabel at $timeLabel',
-      button: true,
-      child: Material(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(12),
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: colorScheme.outline, width: 1),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: task.iconBackground,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(task.icon, color: task.iconColor, size: 22),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.error100.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.error100, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.warning_amber_rounded, color: AppColors.error500),
+              const SizedBox(width: 8),
+              Text(
+                'Overdue Tasks (2)',
+                style: textTheme.titleMedium?.copyWith(
+                  color: AppColors.error700,
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        task.title,
-                        style: textTheme.titleMedium?.copyWith(
-                          color: colorScheme.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${task.patientName} • $timeLabel',
-                        style: textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.error100.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(12),
+                border: Border(
+                  left: BorderSide(color: AppColors.error500, width: 4),
                 ),
-                if (task.isCompleted)
-                  Icon(
-                    Icons.check_circle,
-                    color: AppColors.success500,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          task.patientName,
+                          style: textTheme.titleMedium?.copyWith(
+                            color: colorScheme.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Medication reminder:',
+                          style: textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        Text(
+                          task.title,
+                          style: textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Due 30 min ago',
+                          style: textTheme.bodyMedium?.copyWith(
+                            color: AppColors.error700,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-              ],
+                  const SizedBox(width: 8),
+                  FilledButton(
+                    onPressed: onNotify,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: colorScheme.primary,
+                      foregroundColor: colorScheme.onPrimary,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+                      minimumSize: const Size(0, 40),
+                    ),
+                    child: const Text('Notify'),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
 
-class _EmptyStateCard extends StatelessWidget {
-  final String message;
-  final ColorScheme colorScheme;
-  final TextTheme textTheme;
-
-  const _EmptyStateCard({
-    required this.message,
-    required this.colorScheme,
-    required this.textTheme,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colorScheme.outline, width: 1),
+void _handleNav(BuildContext context, int index) {
+  if (index == 0) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const CaregiverDashboardScreen()),
+    );
+  } else if (index == 1) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const CaregiverPatientMonitoringScreen(),
       ),
-      child: Center(
-        child: Text(
-          message,
-          style: textTheme.bodySmall?.copyWith(
-            color: colorScheme.onSurfaceVariant,
-          ),
-        ),
-      ),
+    );
+  } else if (index == 2) {
+    return;
+  } else if (index == 3) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const CaregiverAnalyticsScreen()),
     );
   }
 }
@@ -263,10 +257,10 @@ class _EmptyStateCard extends StatelessWidget {
 final List<Task> _mockTasks = [
   Task(
     id: 'task-1',
-    title: 'Medication check',
-    description: 'Confirm morning medication taken with water.',
+    title: 'Metformin 500mg',
+    description: 'Medication reminder',
     date: DateTime.now().add(const Duration(hours: 1)),
-    patientName: 'Robert Williams',
+    patientName: 'Sarah Johnson',
     icon: Icons.medication,
     iconBackground: AppColors.primary100,
     iconColor: AppColors.primary700,

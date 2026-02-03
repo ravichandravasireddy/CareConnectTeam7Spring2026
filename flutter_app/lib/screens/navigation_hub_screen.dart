@@ -6,7 +6,6 @@ import 'caregiver_dashboard.dart';
 import 'caregiver_patient_monitoring_screen.dart';
 import 'caregiver_task_management_screen.dart';
 import 'emergency_sos_alert.dart';
-import 'emergency_sos_receive_screen.dart';
 import 'role_selection_screen.dart';
 import 'task_details_screen.dart';
 import 'welcome_screen.dart';
@@ -78,10 +77,6 @@ class NavigationHubScreen extends StatelessWidget {
             _NavButton(
               label: 'Emergency SOS Alert',
               onPressed: () => _push(context, const EmergencySOSAlertScreen()),
-            ),
-            _NavButton(
-              label: 'Emergency SOS Receive',
-              onPressed: () => _push(context, const EmergencySOSReceiveScreen()),
             ),
             _NavButton(
               label: 'Task Details (sample)',

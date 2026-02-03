@@ -13,7 +13,6 @@ import 'screens/caregiver_dashboard.dart';
 import 'screens/caregiver_patient_monitoring_screen.dart';
 import 'screens/caregiver_task_management_screen.dart';
 import 'screens/emergency_sos_alert.dart';
-import 'screens/emergency_sos_receive_screen.dart';
 import 'screens/navigation_hub_screen.dart';
 import 'screens/task_details_screen.dart';
 import 'screens/welcome_screen.dart';

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import 'caregiver_dashboard.dart';
+import 'caregiver_patient_monitoring_screen.dart';
+import 'caregiver_task_management_screen.dart';
 
 // =============================================================================
 // CAREGIVER: ANALYTICS
@@ -22,8 +25,8 @@ class CaregiverAnalyticsScreen extends StatelessWidget {
         backgroundColor: colorScheme.surface,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.menu, color: colorScheme.onSurface),
+          onPressed: () {},
         ),
         title: Text(
           'Analytics',
@@ -32,6 +35,9 @@ class CaregiverAnalyticsScreen extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        actions: [
+          _NotificationIcon(colorScheme: colorScheme),
+        ],
       ),
       body: SafeArea(
         child: ListView(
@@ -54,66 +60,107 @@ class CaregiverAnalyticsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            Wrap(
-              spacing: 16,
-              runSpacing: 16,
+            Row(
               children: const [
-                _MetricCard(
-                  label: 'Active Patients',
-                  value: '8',
-                  icon: Icons.people_alt,
-                  color: AppColors.info500,
+                Expanded(
+                  child: _MetricCard(
+                    title: 'Task Completion',
+                    value: '87%',
+                    delta: '↑ 5% from last week',
+                    valueColor: AppColors.success700,
+                  ),
                 ),
-                _MetricCard(
-                  label: 'Tasks Completed',
-                  value: '42',
-                  icon: Icons.check_circle,
-                  color: AppColors.success500,
-                ),
-                _MetricCard(
-                  label: 'Alerts Resolved',
-                  value: '6',
-                  icon: Icons.warning_amber_rounded,
-                  color: AppColors.warning500,
-                ),
-                _MetricCard(
-                  label: 'Avg Response Time',
-                  value: '12m',
-                  icon: Icons.timer,
-                  color: AppColors.accent500,
+                SizedBox(width: 12),
+                Expanded(
+                  child: _MetricCard(
+                    title: 'Avg Response\nTime',
+                    value: '12m',
+                    delta: '↓ 3m from last week',
+                    valueColor: AppColors.primary600,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 24),
-            _InsightCard(
-              title: 'Highlights',
-              message:
-                  'Response time improved by 18% compared to last week.',
-            ),
-            const SizedBox(height: 16),
-            _InsightCard(
-              title: 'Needs Attention',
-              message:
-                  'Two patients missed evening check-ins this week.',
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: colorScheme.outline, width: 1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Medication Adherence',
+                    style: textTheme.titleMedium?.copyWith(
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    height: 160,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceContainer,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      '7-day adherence trend chart',
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: 3,
+        onDestinationSelected: (index) => _handleNav(context, index),
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: 'Dashboard',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.people_outline),
+            selectedIcon: Icon(Icons.people),
+            label: 'Patients',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.calendar_today_outlined),
+            selectedIcon: Icon(Icons.calendar_today),
+            label: 'Tasks',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.analytics_outlined),
+            selectedIcon: Icon(Icons.analytics),
+            label: 'Analytics',
+          ),
+        ],
       ),
     );
   }
 }
 
 class _MetricCard extends StatelessWidget {
-  final String label;
   final String value;
-  final IconData icon;
-  final Color color;
+  final String title;
+  final String delta;
+  final Color valueColor;
 
   const _MetricCard({
-    required this.label,
     required this.value,
-    required this.icon,
-    required this.color,
+    required this.title,
+    required this.delta,
+    required this.valueColor,
   });
 
   @override
@@ -133,18 +180,24 @@ class _MetricCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: color, size: 28),
-          const SizedBox(height: 12),
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: textTheme.titleSmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 10),
           Text(
             value,
             style: textTheme.headlineMedium?.copyWith(
-              color: colorScheme.onSurface,
+              color: valueColor,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Text(
-            label,
-            style: textTheme.bodySmall?.copyWith(
+            delta,
+            style: textTheme.bodyMedium?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
           ),
@@ -154,47 +207,55 @@ class _MetricCard extends StatelessWidget {
   }
 }
 
-class _InsightCard extends StatelessWidget {
-  final String title;
-  final String message;
+class _NotificationIcon extends StatelessWidget {
+  final ColorScheme colorScheme;
 
-  const _InsightCard({
-    required this.title,
-    required this.message,
-  });
+  const _NotificationIcon({required this.colorScheme});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final textTheme = theme.textTheme;
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        IconButton(
+          icon: Icon(Icons.notifications_outlined, color: colorScheme.onSurface),
+          onPressed: () {},
+        ),
+        Positioned(
+          right: 10,
+          top: 10,
+          child: Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: AppColors.error500,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colorScheme.outline, width: 1),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: textTheme.titleMedium?.copyWith(
-              color: colorScheme.onSurface,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            message,
-            style: textTheme.bodySmall?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
+void _handleNav(BuildContext context, int index) {
+  if (index == 0) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const CaregiverDashboardScreen()),
+    );
+  } else if (index == 1) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const CaregiverPatientMonitoringScreen(),
       ),
     );
+  } else if (index == 2) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const CaregiverTaskManagementScreen(),
+      ),
+    );
+  } else if (index == 3) {
+    return;
   }
 }
