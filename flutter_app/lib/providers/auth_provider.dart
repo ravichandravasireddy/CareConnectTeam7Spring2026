@@ -1,10 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 /// User role for post-login navigation (patient vs caregiver workflow).
-enum UserRole {
-  patient,
-  caregiver,
-}
+enum UserRole { patient, caregiver }
 
 /// Authentication provider to manage user login/logout state.
 /// Mock credentials: patient@careconnect.demo / password123 → patient dashboard;
@@ -42,7 +39,8 @@ class AuthProvider extends ChangeNotifier {
     final normalizedEmail = email.trim().toLowerCase();
     final normalizedPassword = password.trim();
 
-    if (normalizedEmail == _mockPatientEmail && normalizedPassword == _mockPassword) {
+    if (normalizedEmail == _mockPatientEmail &&
+        normalizedPassword == _mockPassword) {
       _userEmail = normalizedEmail;
       _userName = 'Robert Williams';
       _userRole = UserRole.patient;
@@ -50,7 +48,8 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     }
-    if (normalizedEmail == _mockCaregiverEmail && normalizedPassword == _mockPassword) {
+    if (normalizedEmail == _mockCaregiverEmail &&
+        normalizedPassword == _mockPassword) {
       _userEmail = normalizedEmail;
       _userName = 'Dr. Sarah Johnson';
       _userRole = UserRole.caregiver;
@@ -69,12 +68,23 @@ class AuthProvider extends ChangeNotifier {
     required String email,
     required String phone,
     required String password,
+    UserRole role = UserRole.patient,
   }) async {
     // Simulate API call
     await Future.delayed(const Duration(seconds: 1));
 
     // Basic validation
-    if (email.isEmpty || !email.contains('@')) {
+    final normalizedEmail = email.trim().isEmpty
+        ? (role == UserRole.caregiver
+              ? 'caregiver.user@careconnect.demo'
+              : 'patient.user@careconnect.demo')
+        : email.trim().toLowerCase();
+    final normalizedFirst = firstName.trim().isEmpty
+        ? (role == UserRole.caregiver ? 'Caregiver' : 'Care Recipient')
+        : firstName.trim();
+    final normalizedLast = lastName.trim().isEmpty ? 'User' : lastName.trim();
+
+    if (!normalizedEmail.contains('@')) {
       return false;
     }
     if (password.isEmpty || password.length < 8) {
@@ -82,8 +92,9 @@ class AuthProvider extends ChangeNotifier {
     }
 
     // Set user data
-    _userEmail = email;
-    _userName = '$firstName $lastName';
+    _userEmail = normalizedEmail;
+    _userName = '$normalizedFirst $normalizedLast';
+    _userRole = role;
     _isAuthenticated = true;
     notifyListeners();
     return true;
@@ -110,8 +121,12 @@ class AuthProvider extends ChangeNotifier {
   /// Set user state for testing (e.g. widget tests that need AuthProvider above AppBottomNavBar).
   void setTestUser(UserRole role) {
     _userRole = role;
-    _userEmail = role == UserRole.patient ? _mockPatientEmail : _mockCaregiverEmail;
-    _userName = role == UserRole.patient ? 'Robert Williams' : 'Dr. Sarah Johnson';
+    _userEmail = role == UserRole.patient
+        ? _mockPatientEmail
+        : _mockCaregiverEmail;
+    _userName = role == UserRole.patient
+        ? 'Robert Williams'
+        : 'Dr. Sarah Johnson';
     _isAuthenticated = true;
     notifyListeners();
   }

@@ -7,10 +7,7 @@ import '../widgets/app_bottom_nav_bar.dart';
 class MessagingThreadScreen extends StatefulWidget {
   final String userName;
 
-  const MessagingThreadScreen({
-    super.key,
-    this.userName = 'Dr. Sarah Johnson',
-  });
+  const MessagingThreadScreen({super.key, this.userName = 'Dr. Sarah Johnson'});
 
   @override
   State<MessagingThreadScreen> createState() => _MessagingThreadScreenState();
@@ -19,22 +16,25 @@ class MessagingThreadScreen extends StatefulWidget {
 class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  
+
   // Sample messages
   final List<Map<String, dynamic>> _messages = [
     {
       'isCurrentUser': false,
-      'content': 'Good morning! I reviewed your latest blood pressure readings and they look great. Keep up the excellent work!',
+      'content':
+          'Good morning! I reviewed your latest blood pressure readings and they look great. Keep up the excellent work!',
       'time': '10:30 AM',
     },
     {
       'isCurrentUser': true,
-      'content': "Thank you so much! I've been following the exercise routine you recommended.",
+      'content':
+          "Thank you so much! I've been following the exercise routine you recommended.",
       'time': '10:32 AM',
     },
     {
       'isCurrentUser': false,
-      'content': "That's wonderful to hear! How are you feeling after the walks?",
+      'content':
+          "That's wonderful to hear! How are you feeling after the walks?",
       'time': '10:33 AM',
     },
     {
@@ -95,7 +95,7 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
   @override
   Widget build(BuildContext context) {
     final userInitials = _getInitials(widget.userName);
-    
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       appBar: AppBar(
@@ -148,7 +148,9 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
             },
           ),
         ],
-        backgroundColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
+        backgroundColor: Theme.of(
+          context,
+        ).colorScheme.surface.withValues(alpha: 0),
         elevation: 0,
       ),
       body: Column(
@@ -205,13 +207,20 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
                       controller: _messageController,
                       decoration: InputDecoration(
                         hintText: 'Type a message...',
-                        hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                        hintStyle: Theme.of(context).textTheme.bodyMedium
+                            ?.copyWith(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                            ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
-                        fillColor: Theme.of(context).colorScheme.surfaceContainer,
+                        fillColor: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainer,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 10,
@@ -238,7 +247,8 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
       ),
       bottomNavigationBar: Builder(
         builder: (context) {
-          final isPatient = context.read<AuthProvider>().userRole == UserRole.patient;
+          final isPatient =
+              context.read<AuthProvider>().userRole == UserRole.patient;
           final navIndex = isPatient ? kPatientNavMessages : kCaregiverNavHome;
           return AppBottomNavBar(currentIndex: navIndex);
         },
@@ -251,7 +261,9 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
         children: [
-          Expanded(child: Divider(color: Theme.of(context).colorScheme.outline)),
+          Expanded(
+            child: Divider(color: Theme.of(context).colorScheme.outline),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
@@ -261,13 +273,20 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
               ),
             ),
           ),
-          Expanded(child: Divider(color: Theme.of(context).colorScheme.outline)),
+          Expanded(
+            child: Divider(color: Theme.of(context).colorScheme.outline),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildMessageBubble(BuildContext context, String content, bool isCurrentUser, String time) {
+  Widget _buildMessageBubble(
+    BuildContext context,
+    String content,
+    bool isCurrentUser,
+    String time,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -291,12 +310,15 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
           ],
           Flexible(
             child: Column(
-              crossAxisAlignment: isCurrentUser 
-                  ? CrossAxisAlignment.end 
+              crossAxisAlignment: isCurrentUser
+                  ? CrossAxisAlignment.end
                   : CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
                     color: isCurrentUser
                         ? Theme.of(context).colorScheme.primary
@@ -306,8 +328,8 @@ class _MessagingThreadScreenState extends State<MessagingThreadScreen> {
                   child: Text(
                     content,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: isCurrentUser 
-                          ? Theme.of(context).colorScheme.onPrimary 
+                      color: isCurrentUser
+                          ? Theme.of(context).colorScheme.onPrimary
                           : Theme.of(context).colorScheme.onSurface,
                     ),
                   ),

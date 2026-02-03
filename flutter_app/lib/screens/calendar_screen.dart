@@ -83,8 +83,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   /// Check if a date is in the current displayed month
   bool _isCurrentMonth(DateTime date) {
-    return date.month == _currentMonth.month &&
-        date.year == _currentMonth.year;
+    return date.month == _currentMonth.month && date.year == _currentMonth.year;
   }
 
   /// Check if a date is selected
@@ -153,7 +152,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
         centerTitle: true,
         title: Text(
           'Calendar',
-          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
+          style: textTheme.headlineLarge?.copyWith(
+            color: colorScheme.onSurface,
+          ),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
@@ -174,7 +175,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   ),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        bottom: 24,
+                      ),
                       child: tasksSection,
                     ),
                   ),
@@ -184,19 +189,20 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 padding: const EdgeInsets.only(bottom: 24),
                 child: Center(
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: _calendarMaxWidth),
+                    constraints: const BoxConstraints(
+                      maxWidth: _calendarMaxWidth,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        calendarSection,
-                        tasksSection,
-                      ],
+                      children: [calendarSection, tasksSection],
                     ),
                   ),
                 ),
               ),
       ),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: kPatientNavTasks),
+      bottomNavigationBar: const AppBottomNavBar(
+        currentIndex: kPatientNavTasks,
+      ),
     );
   }
 
@@ -212,10 +218,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         border: Border(
-          bottom: BorderSide(
-            color: colorScheme.outline,
-            width: 1,
-          ),
+          bottom: BorderSide(color: colorScheme.outline, width: 1),
         ),
       ),
       padding: const EdgeInsets.all(16),
@@ -234,9 +237,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     size: 28,
                   ),
                   onPressed: _previousMonth,
-                  style: IconButton.styleFrom(
-                    minimumSize: const Size(48, 48),
-                  ),
+                  style: IconButton.styleFrom(minimumSize: const Size(48, 48)),
                 ),
               ),
               Semantics(
@@ -259,9 +260,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     size: 28,
                   ),
                   onPressed: _nextMonth,
-                  style: IconButton.styleFrom(
-                    minimumSize: const Size(48, 48),
-                  ),
+                  style: IconButton.styleFrom(minimumSize: const Size(48, 48)),
                 ),
               ),
             ],
@@ -336,10 +335,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 decoration: BoxDecoration(
                   color: colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: colorScheme.outline,
-                    width: 1,
-                  ),
+                  border: Border.all(color: colorScheme.outline, width: 1),
                 ),
                 child: Center(
                   child: Text(
@@ -351,24 +347,30 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
               )
             else
-              ...selectedTasks.map((task) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/task-details', arguments: task);
-                      },
-                      borderRadius: BorderRadius.circular(12),
-                      child: _TaskCard(
-                        colorScheme: colorScheme,
-                        textTheme: textTheme,
-                        icon: task.icon,
-                        iconBackground: task.iconBackground,
-                        iconColor: task.iconColor,
-                        title: task.title,
-                        date: task.date,
-                      ),
+              ...selectedTasks.map(
+                (task) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/task-details',
+                        arguments: task,
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: _TaskCard(
+                      colorScheme: colorScheme,
+                      textTheme: textTheme,
+                      icon: task.icon,
+                      iconBackground: task.iconBackground,
+                      iconColor: task.iconColor,
+                      title: task.title,
+                      date: task.date,
                     ),
-                  )),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -442,7 +444,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   width: 4,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: isToday ? colorScheme.onPrimary : colorScheme.primary,
+                    color: isToday
+                        ? colorScheme.onPrimary
+                        : colorScheme.primary,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -486,10 +490,7 @@ class _TaskCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: colorScheme.surface,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: colorScheme.outline,
-              width: 1,
-            ),
+            border: Border.all(color: colorScheme.outline, width: 1),
           ),
           child: Row(
             children: [
@@ -500,11 +501,7 @@ class _TaskCard extends StatelessWidget {
                   color: iconBackground,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  icon,
-                  color: iconColor,
-                  size: 22,
-                ),
+                child: Icon(icon, color: iconColor, size: 22),
               ),
               const SizedBox(width: 12),
               Expanded(

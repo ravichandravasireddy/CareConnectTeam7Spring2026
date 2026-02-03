@@ -218,7 +218,7 @@ class PatientDashboardScreen extends StatelessWidget {
                       label: 'Log Health Data',
                       color: Theme.of(context).colorScheme.secondary,
                       onTap: () {
-                        // TODO: Navigate to log health data
+                        Navigator.pushNamed(context, '/health-logs');
                       },
                     ),
                   ),

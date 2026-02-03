@@ -122,8 +122,15 @@ void main() {
 
     testWidgets('Task Details (sample) button pushes TaskDetailsScreen', (tester) async {
       await tester.pumpWidget(
-        ChangeNotifierProvider<AuthProvider>.value(
-          value: AuthProvider()..setTestUser(UserRole.caregiver),
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider<AuthProvider>.value(
+              value: AuthProvider()..setTestUser(UserRole.caregiver),
+            ),
+            ChangeNotifierProvider<TaskProvider>.value(
+              value: TaskProvider(),
+            ),
+          ],
           child: const MaterialApp(home: NavigationHubScreen()),
         ),
       );

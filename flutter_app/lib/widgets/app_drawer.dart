@@ -122,8 +122,8 @@ class AppDrawer extends StatelessWidget {
   List<Widget> _caregiverTiles(BuildContext context) {
     return [
       _drawerTile(context, Icons.dashboard_outlined, 'Dashboard', () => _popAndPush(context, '/caregiver-dashboard')),
-      _drawerTile(context, Icons.people_outline, 'Patient', () => _popAndPush(context, '/caregiver-patient-monitoring')),
-      _drawerTile(context, Icons.task_alt, 'Task', () => _popAndPush(context, '/caregiver-task-management')),
+      _drawerTile(context, Icons.people_outline, 'Patients', () => _popAndPush(context, '/caregiver-patient-monitoring')),
+      _drawerTile(context, Icons.task_alt, 'Tasks', () => _popAndPush(context, '/caregiver-task-management')),
       _drawerTile(context, Icons.analytics_outlined, 'Analytics', () => _popAndPush(context, '/caregiver-analytics')),
       _drawerTile(context, Icons.note_outlined, 'Notes', () => _popAndPush(context, '/notes')),
       _drawerTile(context, Icons.message_outlined, 'Messages', () => _popAndPush(context, '/messaging')),

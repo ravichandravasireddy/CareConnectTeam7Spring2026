@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
 import 'registration_screen.dart';
 
@@ -29,7 +30,9 @@ class RoleSelectionScreen extends StatelessWidget {
         ),
         title: Text(
           'Select Your Role',
-          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
+          style: textTheme.headlineLarge?.copyWith(
+            color: colorScheme.onSurface,
+          ),
         ),
         centerTitle: true,
       ),
@@ -80,7 +83,9 @@ class RoleSelectionScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => RegistrationScreen(),
+                              builder: (context) => const RegistrationScreen(
+                                selectedRole: UserRole.patient,
+                              ),
                             ),
                           );
                         },
@@ -99,7 +104,9 @@ class RoleSelectionScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => RegistrationScreen(),
+                              builder: (context) => const RegistrationScreen(
+                                selectedRole: UserRole.caregiver,
+                              ),
                             ),
                           );
                         },
@@ -173,10 +180,7 @@ class RoleCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: colorScheme.outline,
-            width: 1.5,
-          ),
+          border: Border.all(color: colorScheme.outline, width: 1.5),
         ),
         child: Row(
           children: [
@@ -188,15 +192,11 @@ class RoleCard extends StatelessWidget {
                 color: backgroundColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                size: 32,
-                color: iconColor,
-              ),
+              child: Icon(icon, size: 32, color: iconColor),
             ),
-            
+
             const SizedBox(width: 16),
-            
+
             // Text content
             Expanded(
               child: Column(
@@ -219,7 +219,7 @@ class RoleCard extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Chevron arrow
             Icon(
               Icons.chevron_right,

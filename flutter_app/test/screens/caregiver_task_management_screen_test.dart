@@ -13,6 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_app/providers/auth_provider.dart';
+import 'package:flutter_app/providers/task_provider.dart';
 import 'package:flutter_app/screens/caregiver_task_management_screen.dart';
 
 void main() {
@@ -22,9 +23,13 @@ void main() {
 
   Widget createTestHarness() {
     final authProvider = AuthProvider()..setTestUser(UserRole.caregiver);
+    final taskProvider = TaskProvider();
 
-    return ChangeNotifierProvider<AuthProvider>.value(
-      value: authProvider,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
+        ChangeNotifierProvider<TaskProvider>.value(value: taskProvider),
+      ],
       child: const MaterialApp(home: CaregiverTaskManagementScreen()),
     );
   }
@@ -41,7 +46,7 @@ void main() {
     testWidgets('tapping overdue task opens task details', (tester) async {
       await tester.pumpWidget(createTestHarness());
 
-      await tester.tap(find.textContaining('Medication reminder:'));
+      await tester.tap(find.textContaining('Medication reminder'));
       await tester.pumpAndSettle();
 
       expect(find.text('Task Details'), findsOneWidget);

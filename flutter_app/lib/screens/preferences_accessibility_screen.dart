@@ -48,7 +48,9 @@ class _PreferencesAccessibilityScreenState
         ),
         title: const Text('Preferences & Accessibility'),
         centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
+        backgroundColor: Theme.of(
+          context,
+        ).colorScheme.surface.withValues(alpha: 0),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -60,7 +62,10 @@ class _PreferencesAccessibilityScreenState
             _buildSettingTile(
               title: 'Text Size',
               subtitle: 'Adjust text size for better readability',
-              trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               onTap: () {
                 _showTextSizeDialog();
               },
@@ -160,7 +165,10 @@ class _PreferencesAccessibilityScreenState
             _buildSettingTile(
               title: 'Language',
               subtitle: _language,
-              trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               onTap: () {
                 _showLanguageDialog();
               },
@@ -168,7 +176,10 @@ class _PreferencesAccessibilityScreenState
             _buildSettingTile(
               title: 'Time Format',
               subtitle: _timeFormat,
-              trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               onTap: () {
                 _showTimeFormatDialog();
               },
@@ -176,7 +187,10 @@ class _PreferencesAccessibilityScreenState
             _buildSettingTile(
               title: 'Date Format',
               subtitle: _dateFormat,
-              trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               onTap: () {
                 _showDateFormatDialog();
               },
@@ -204,7 +218,10 @@ class _PreferencesAccessibilityScreenState
             _buildSettingTile(
               title: 'HIPAA Consent',
               subtitle: 'View privacy policy',
-              trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               onTap: () {
                 // TODO: Show privacy policy
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -259,8 +276,8 @@ class _PreferencesAccessibilityScreenState
       child: Text(
         title,
         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
       ),
     );
   }
@@ -290,15 +307,15 @@ class _PreferencesAccessibilityScreenState
                   Text(
                     title,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),
@@ -333,15 +350,15 @@ class _PreferencesAccessibilityScreenState
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
