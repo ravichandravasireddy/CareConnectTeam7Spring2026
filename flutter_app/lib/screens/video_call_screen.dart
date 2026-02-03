@@ -8,8 +8,8 @@ import '../theme/app_colors.dart';
 // =============================================================================
 // Full-screen call UI: main area = patient (Robert Williams), PIP = caregiver
 // (Sarah Johnson). Uses [AppColors] dark palette. Timer runs from screen open;
-// mic/video buttons toggle state and PIP image vs placeholder. Set
-// [patientImageAsset] / [caregiverPipImageAsset] and add assets in pubspec.
+// mic/video buttons toggle state and PIP image vs placeholder. ASL Interpreter
+// button opens a PIP with connecting animation then asl.jpg. Set assets in pubspec.
 // =============================================================================
 
 /// Video call screen: participant view, PIP, timer, and control buttons.
@@ -24,6 +24,9 @@ class VideoCallScreen extends StatefulWidget {
   /// When user's video is on, this image is shown; when video is off, grey + icon placeholder is shown.
   static const String caregiverPipImageAsset = 'assets/images/sarah.jpg';
 
+  /// Image asset for the in-call ASL interpreter PIP.
+  static const String aslInterpreterImageAsset = 'assets/images/asl.jpg';
+
   /// Toggle for testing: true = show patient's image in main area; false = show gradient (camera off).
   /// Change this in code and hot restart, or tap the main video area at runtime to toggle.
   static const bool patientCameraOnForTesting = false;
@@ -31,6 +34,8 @@ class VideoCallScreen extends StatefulWidget {
   @override
   State<VideoCallScreen> createState() => _VideoCallScreenState();
 }
+
+enum _AslPipPhase { connecting, showing }
 
 class _VideoCallScreenState extends State<VideoCallScreen> {
   late DateTime _callStartTime;
@@ -40,6 +45,29 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   bool _videoOn = true;
   /// Patient (Robert) camera: when true show image; when false show gradient. Toggle in code via [VideoCallScreen.patientCameraOnForTesting] or tap main area.
   late bool _patientCameraOn;
+  bool _aslInterpreterVisible = false;
+  _AslPipPhase _aslPhase = _AslPipPhase.connecting;
+  Timer? _aslTransitionTimer;
+
+  void _openAslInterpreter() {
+    setState(() {
+      _aslInterpreterVisible = true;
+      _aslPhase = _AslPipPhase.connecting;
+    });
+    _aslTransitionTimer?.cancel();
+    _aslTransitionTimer = Timer(const Duration(milliseconds: 2500), () {
+      if (!mounted) return;
+      setState(() => _aslPhase = _AslPipPhase.showing);
+    });
+  }
+
+  void _closeAslInterpreter() {
+    _aslTransitionTimer?.cancel();
+    setState(() {
+      _aslInterpreterVisible = false;
+      _aslPhase = _AslPipPhase.connecting;
+    });
+  }
 
   @override
   void initState() {
@@ -57,6 +85,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   @override
   void dispose() {
     _timer?.cancel();
+    _aslTransitionTimer?.cancel();
     super.dispose();
   }
 
@@ -120,6 +149,19 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                       ),
                     ),
                   ),
+                  // ASL Interpreter PIP (lower right): gray + loading dots → image pop
+                  if (_aslInterpreterVisible)
+                    Positioned(
+                      bottom: 16,
+                      right: 16,
+                      child: _AslInterpreterPip(
+                        phase: _aslPhase,
+                        imageAsset: VideoCallScreen.aslInterpreterImageAsset,
+                        colorScheme: colorScheme,
+                        textTheme: textTheme,
+                        onClose: _closeAslInterpreter,
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -164,6 +206,28 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                     backgroundColor: AppColors.darkBgElevated,
                     iconColor: AppColors.white,
                     onPressed: () {},
+                  ),
+                  const SizedBox(width: 12),
+                  Semantics(
+                    label: 'ASL Interpreter',
+                    button: true,
+                    child: Material(
+                      color: AppColors.darkBgElevated,
+                      shape: const CircleBorder(),
+                      clipBehavior: Clip.antiAlias,
+                      child: InkWell(
+                        onTap: _openAslInterpreter,
+                        child: const SizedBox(
+                          width: 56,
+                          height: 56,
+                          child: Icon(
+                            Icons.sign_language,
+                            color: AppColors.white,
+                            size: 24,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -375,6 +439,238 @@ class _CaregiverPipPlaceholder extends StatelessWidget {
           color: AppColors.darkTextSecondary,
         ),
       ),
+    );
+  }
+}
+
+// =============================================================================
+// ASL INTERPRETER PIP
+// =============================================================================
+// Gray "connecting" state with loading dots, then asl.jpg pops in. Close button
+// to dismiss.
+// =============================================================================
+
+class _AslInterpreterPip extends StatelessWidget {
+  final _AslPipPhase phase;
+  final String imageAsset;
+  final ColorScheme colorScheme;
+  final TextTheme textTheme;
+  final VoidCallback onClose;
+
+  const _AslInterpreterPip({
+    required this.phase,
+    required this.imageAsset,
+    required this.colorScheme,
+    required this.textTheme,
+    required this.onClose,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 140,
+      height: 180,
+      decoration: BoxDecoration(
+        color: AppColors.darkBgSecondary,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.white, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.shadow.withValues(alpha: 0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(6),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            if (phase == _AslPipPhase.connecting) _AslConnectingView(),
+            if (phase == _AslPipPhase.showing)
+              _AslImageView(imageAsset: imageAsset),
+            Positioned(
+              top: 4,
+              right: 4,
+              child: Material(
+                color: AppColors.darkBgSecondary.withValues(alpha: 0.8),
+                shape: const CircleBorder(),
+                child: InkWell(
+                  onTap: onClose,
+                  customBorder: const CircleBorder(),
+                  child: const Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Icon(
+                      Icons.close,
+                      color: AppColors.white,
+                      size: 18,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 8,
+              child: Text(
+                'ASL Interpreter',
+                textAlign: TextAlign.center,
+                style: textTheme.labelSmall?.copyWith(
+                  color: AppColors.darkTextPrimary,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Gray screen with animated loading dots (calling / connecting).
+class _AslConnectingView extends StatefulWidget {
+  @override
+  State<_AslConnectingView> createState() => _AslConnectingViewState();
+}
+
+class _AslConnectingViewState extends State<_AslConnectingView>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AppColors.gray700,
+      padding: const EdgeInsets.only(bottom: 24),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Connecting…',
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: AppColors.darkTextSecondary,
+                  ),
+            ),
+            const SizedBox(height: 12),
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(3, (i) {
+                    final delay = i * 0.2;
+                    final t = ((_controller.value + delay) % 1.0);
+                    final y = 1.0 - (t < 0.5 ? t * 2 : 2 - t * 2);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Transform.translate(
+                        offset: Offset(0, 4 * y),
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: AppColors.darkTextSecondary,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// ASL interpreter image with pop-in animation.
+class _AslImageView extends StatefulWidget {
+  final String imageAsset;
+
+  const _AslImageView({required this.imageAsset});
+
+  @override
+  State<_AslImageView> createState() => _AslImageViewState();
+}
+
+class _AslImageViewState extends State<_AslImageView>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scale;
+  late Animation<double> _opacity;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+    _scale = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
+    );
+    _opacity = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Opacity(
+          opacity: _opacity.value,
+          child: Transform.scale(
+            scale: _scale.value,
+            alignment: Alignment.center,
+            child: Image.asset(
+              widget.imageAsset,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+              errorBuilder: (_, __, ___) => Container(
+                color: AppColors.gray700,
+                child: const Center(
+                  child: Icon(
+                    Icons.person,
+                    color: AppColors.darkTextSecondary,
+                    size: 48,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
