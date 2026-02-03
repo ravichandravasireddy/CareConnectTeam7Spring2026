@@ -39,7 +39,8 @@ void main() {
       await tester.pumpWidget(createTestHarness());
 
       expect(find.text('Patient Details'), findsOneWidget);
-      expect(find.text('Sarah Johnson'), findsOneWidget);
+      expect(find.text('Robert Williams'), findsWidgets);
+      expect(find.text('Maya Patel'), findsOneWidget);
       expect(find.text('Latest Vitals'), findsOneWidget);
       expect(find.text('Blood Pressure'), findsOneWidget);
       expect(find.text('Heart Rate'), findsOneWidget);

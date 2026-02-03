@@ -109,5 +109,129 @@ void main() {
       await tester.pump();
       expect(tester.widget<Switch>(boldTextSwitch).value, isTrue);
     });
+
+    testWidgets('back button pops route', (tester) async {
+      await tester.pumpWidget(
+        createTestHarness(
+          child: const PreferencesAccessibilityScreen(),
+          routes: {'/preferences': (_) => const PreferencesAccessibilityScreen()},
+        ),
+      );
+      await tester.tap(find.byIcon(Icons.arrow_back));
+      await tester.pumpAndSettle();
+      expect(find.text('Preferences & Accessibility'), findsNothing);
+    });
+
+    testWidgets('toggles High Contrast switch', (tester) async {
+      await tester.pumpWidget(
+        createTestHarness(child: const PreferencesAccessibilityScreen()),
+      );
+      final row = find.ancestor(of: find.text('High Contrast'), matching: find.byType(Row));
+      final sw = find.descendant(of: row, matching: find.byType(Switch));
+      expect(tester.widget<Switch>(sw).value, isFalse);
+      await tester.ensureVisible(sw);
+      await tester.tap(sw);
+      await tester.pump();
+      expect(tester.widget<Switch>(sw).value, isTrue);
+    });
+
+    testWidgets('toggles notification and privacy switches', (tester) async {
+      await tester.pumpWidget(
+        createTestHarness(child: const PreferencesAccessibilityScreen()),
+      );
+      for (final label in ['Medication Reminders', 'Biometric Login', 'Data Sharing']) {
+        final row = find.ancestor(of: find.text(label), matching: find.byType(Row));
+        final sw = find.descendant(of: row, matching: find.byType(Switch));
+        await tester.ensureVisible(sw);
+        final before = tester.widget<Switch>(sw).value;
+        await tester.tap(sw);
+        await tester.pump();
+        expect(tester.widget<Switch>(sw).value, isNot(equals(before)));
+      }
+    });
+
+    testWidgets('opens date format dialog and selects option', (tester) async {
+      await tester.pumpWidget(
+        createTestHarness(child: const PreferencesAccessibilityScreen()),
+      );
+      await tester.ensureVisible(find.text('Date Format'));
+      await tester.tap(find.text('Date Format'));
+      await tester.pumpAndSettle();
+      expect(find.text('Date Format'), findsWidgets);
+      await tester.tap(find.text('YYYY-MM-DD'));
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('HIPAA Consent shows snackbar', (tester) async {
+      await tester.pumpWidget(
+        createTestHarness(child: const PreferencesAccessibilityScreen()),
+      );
+      await tester.ensureVisible(find.text('HIPAA Consent'));
+      await tester.tap(find.text('HIPAA Consent'));
+      await tester.pump();
+      expect(find.text('Privacy policy viewer coming soon'), findsOneWidget);
+    });
+
+    testWidgets('Save Preferences shows success snackbar', (tester) async {
+      await tester.pumpWidget(
+        createTestHarness(child: const PreferencesAccessibilityScreen()),
+      );
+      await tester.ensureVisible(find.text('Save Preferences'));
+      await tester.tap(find.text('Save Preferences'));
+      await tester.pump();
+      expect(find.text('Preferences saved successfully'), findsOneWidget);
+    });
+
+    testWidgets('renders Language & Region and Privacy sections', (tester) async {
+      await tester.pumpWidget(
+        createTestHarness(child: const PreferencesAccessibilityScreen()),
+      );
+      expect(find.text('Language & Region'), findsOneWidget);
+      expect(find.text('Privacy & Security'), findsOneWidget);
+      expect(find.text('Language'), findsOneWidget);
+      expect(find.text('Time Format'), findsOneWidget);
+      expect(find.text('Biometric Login'), findsOneWidget);
+    });
+
+    testWidgets('toggles Screen Reader and Reduce Motion', (tester) async {
+      await tester.pumpWidget(
+        createTestHarness(child: const PreferencesAccessibilityScreen()),
+      );
+      for (final label in ['Screen Reader', 'Reduce Motion', 'Large Touch Targets']) {
+        final row = find.ancestor(of: find.text(label), matching: find.byType(Row));
+        final sw = find.descendant(of: row, matching: find.byType(Switch));
+        await tester.ensureVisible(sw);
+        final before = tester.widget<Switch>(sw).value;
+        await tester.tap(sw);
+        await tester.pump();
+        expect(tester.widget<Switch>(sw).value, isNot(equals(before)));
+      }
+    });
+
+    testWidgets('toggles Task Alerts and Health Alerts and Message Notifications', (tester) async {
+      await tester.pumpWidget(
+        createTestHarness(child: const PreferencesAccessibilityScreen()),
+      );
+      for (final label in ['Task Alerts', 'Health Alerts', 'Message Notifications']) {
+        final row = find.ancestor(of: find.text(label), matching: find.byType(Row));
+        final sw = find.descendant(of: row, matching: find.byType(Switch));
+        await tester.ensureVisible(sw);
+        final before = tester.widget<Switch>(sw).value;
+        await tester.tap(sw);
+        await tester.pump();
+        expect(tester.widget<Switch>(sw).value, isNot(equals(before)));
+      }
+    });
+
+    testWidgets('time format dialog select 24-hour', (tester) async {
+      await tester.pumpWidget(
+        createTestHarness(child: const PreferencesAccessibilityScreen()),
+      );
+      await tester.ensureVisible(find.text('Time Format'));
+      await tester.tap(find.text('Time Format'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('24-hour'));
+      await tester.pumpAndSettle();
+    });
   });
 }

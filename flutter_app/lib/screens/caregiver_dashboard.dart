@@ -22,7 +22,7 @@ class CaregiverDashboardScreen extends StatelessWidget {
 
   static final List<Patient> _patients = [
     Patient(id: '1', name: 'Robert Williams'),
-    Patient(id: '2', name: 'Mary Johnson'),
+    Patient(id: '2', name: 'Maya Patel'),
   ];
 
   @override
@@ -110,10 +110,7 @@ class CaregiverDashboardScreen extends StatelessWidget {
                 alertCount: 1,
               ),
               const SizedBox(height: 16),
-              Container(
-                height: 4,
-                color: AppColors.primary600,
-              ),
+              Container(height: 4, color: AppColors.primary600),
               const SizedBox(height: 24),
               _buildTasksSection(
                 context,
@@ -157,7 +154,8 @@ class CaregiverDashboardScreen extends StatelessWidget {
     required int alertCount,
   }) {
     return Semantics(
-      label: 'Quick stats: $patientCount patients, $tasksCompleted of $tasksTotal tasks, $alertCount alerts',
+      label:
+          'Quick stats: $patientCount patients, $tasksCompleted of $tasksTotal tasks, $alertCount alerts',
       child: Row(
         children: [
           Expanded(
@@ -169,6 +167,8 @@ class CaregiverDashboardScreen extends StatelessWidget {
               color: AppColors.info500,
               colorScheme: colorScheme,
               textTheme: textTheme,
+              onTap: () =>
+                  Navigator.pushNamed(context, '/caregiver-patient-monitoring'),
             ),
           ),
           const SizedBox(width: 12),
@@ -181,6 +181,8 @@ class CaregiverDashboardScreen extends StatelessWidget {
               color: AppColors.success500,
               colorScheme: colorScheme,
               textTheme: textTheme,
+              onTap: () =>
+                  Navigator.pushNamed(context, '/caregiver-task-management'),
             ),
           ),
           const SizedBox(width: 12),
@@ -208,8 +210,9 @@ class CaregiverDashboardScreen extends StatelessWidget {
     required Color color,
     required ColorScheme colorScheme,
     required TextTheme textTheme,
+    VoidCallback? onTap,
   }) {
-    return Container(
+    final content = Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: colorScheme.surface,
@@ -241,9 +244,18 @@ class CaregiverDashboardScreen extends StatelessWidget {
         ],
       ),
     );
+
+    if (onTap == null) return content;
+
+    return Material(
+      color: colorScheme.surface.withValues(alpha: 0),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: content,
+      ),
+    );
   }
-
-
 
   Widget _buildTasksSection(
     BuildContext context, {
@@ -296,7 +308,9 @@ class CaregiverDashboardScreen extends StatelessWidget {
               textTheme: textTheme,
             )
           else
-            ...tasks.take(5).map(
+            ...tasks
+                .take(5)
+                .map(
                   (task) => Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: _TaskCard(
@@ -330,10 +344,7 @@ class CaregiverDashboardScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: colorScheme.outline,
-          width: 1,
-        ),
+        border: Border.all(color: colorScheme.outline, width: 1),
       ),
       child: Center(
         child: Text(
@@ -357,7 +368,6 @@ class CaregiverDashboardScreen extends StatelessWidget {
         .toList();
   }
 }
-
 
 class _TaskCard extends StatelessWidget {
   final Task task;
@@ -400,12 +410,16 @@ class _TaskCard extends StatelessWidget {
                   children: [
                     Text(
                       task.title,
-                      style: textTheme.titleMedium?.copyWith(color: colorScheme.onSurface),
+                      style: textTheme.titleMedium?.copyWith(
+                        color: colorScheme.onSurface,
+                      ),
                     ),
                     if (task.patientName.isNotEmpty)
                       Text(
                         task.patientName,
-                        style: textTheme.bodySmall?.copyWith(color: colorScheme.onSurfaceVariant),
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
                       ),
                   ],
                 ),

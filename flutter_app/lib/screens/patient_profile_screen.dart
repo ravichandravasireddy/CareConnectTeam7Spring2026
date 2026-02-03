@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 import '../widgets/app_app_bar.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 import '../widgets/app_drawer.dart';
@@ -7,8 +9,51 @@ import '../widgets/app_drawer.dart';
 class PatientProfileScreen extends StatelessWidget {
   const PatientProfileScreen({super.key});
 
+  String _initialsForName(String name) {
+    final parts = name.trim().split(RegExp(r'\s+'));
+    if (parts.isEmpty) return '?';
+    if (parts.length == 1) {
+      final part = parts.first;
+      return part.length >= 2
+          ? part.substring(0, 2).toUpperCase()
+          : part.toUpperCase();
+    }
+    return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthProvider>();
+    final isCaregiver = auth.userRole == UserRole.caregiver;
+    final displayName =
+        auth.userName ??
+        (isCaregiver ? 'Dr. Sarah Johnson' : 'Robert Williams');
+    final displayEmail =
+        auth.userEmail ??
+        (isCaregiver ? 'sarah.johnson@careconnect.demo' : 'robert.w@email.com');
+    final initials = _initialsForName(displayName);
+    final profileId = isCaregiver
+        ? 'Caregiver ID: #SJ-1024'
+        : 'Patient ID: #RW-2847';
+    final ageValue = isCaregiver ? '41 years' : '67 years';
+    final phoneValue = isCaregiver ? '(555) 555-0183' : '(555) 123-4567';
+    final addressValue = isCaregiver
+        ? '1250 Health Ave\nRochester, NY 14620'
+        : '742 Evergreen Terrace\nSpringfield, IL 62701';
+    final conditionsValue = isCaregiver
+        ? 'Primary Care'
+        : 'Diabetes, Hypertension';
+    final allergiesValue = isCaregiver ? 'N/A' : 'Penicillin, Shellfish';
+    final primaryProviderLabel = isCaregiver
+        ? 'Care Team Lead'
+        : 'Primary Care Provider';
+    final primaryProviderValue = isCaregiver
+        ? 'Dr. Avery Chen'
+        : 'Dr. Sarah Johnson';
+    final emergencyContactValue = isCaregiver
+        ? 'Operations Desk\n(555) 555-0199'
+        : 'Mary Smith (Daughter)\n(555) 987-6543';
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       appBar: AppAppBar(
@@ -29,25 +74,27 @@ class PatientProfileScreen extends StatelessWidget {
                       radius: 50,
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                       child: Text(
-                        'RW',
-                        style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        ),
+                        initials,
+                        style: Theme.of(context).textTheme.displayLarge
+                            ?.copyWith(
+                              color: Theme.of(context).colorScheme.onSecondary,
+                            ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Robert Williams',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      displayName,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Patient ID: #RW-2847',
+                      profileId,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
@@ -61,7 +108,9 @@ class PatientProfileScreen extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        foregroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onPrimary,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 32,
                           vertical: 12,
@@ -81,26 +130,10 @@ class PatientProfileScreen extends StatelessWidget {
 
               // Personal Information Section
               _buildSectionHeader(context, 'Personal Information'),
-              _buildInfoItem(
-                context,
-                label: 'Age',
-                value: '67 years',
-              ),
-              _buildInfoItem(
-                context,
-                label: 'Email',
-                value: 'robert.w@email.com',
-              ),
-              _buildInfoItem(
-                context,
-                label: 'Phone',
-                value: '(555) 123-4567',
-              ),
-              _buildInfoItem(
-                context,
-                label: 'Address',
-                value: '742 Evergreen Terrace\nSpringfield, IL 62701',
-              ),
+              _buildInfoItem(context, label: 'Age', value: ageValue),
+              _buildInfoItem(context, label: 'Email', value: displayEmail),
+              _buildInfoItem(context, label: 'Phone', value: phoneValue),
+              _buildInfoItem(context, label: 'Address', value: addressValue),
 
               const Divider(height: 1),
 
@@ -109,22 +142,22 @@ class PatientProfileScreen extends StatelessWidget {
               _buildInfoItem(
                 context,
                 label: 'Conditions',
-                value: 'Diabetes, Hypertension',
+                value: conditionsValue,
               ),
               _buildInfoItem(
                 context,
                 label: 'Allergies',
-                value: 'Penicillin, Shellfish',
+                value: allergiesValue,
               ),
               _buildInfoItem(
                 context,
-                label: 'Primary Care Provider',
-                value: 'Dr. Sarah Johnson',
+                label: primaryProviderLabel,
+                value: primaryProviderValue,
               ),
               _buildInfoItem(
                 context,
                 label: 'Emergency Contact',
-                value: 'Mary Smith (Daughter)\n(555) 987-6543',
+                value: emergencyContactValue,
               ),
 
               const Divider(height: 1),
@@ -170,7 +203,9 @@ class PatientProfileScreen extends StatelessWidget {
                   },
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Theme.of(context).colorScheme.error,
-                    side: BorderSide(color: Theme.of(context).colorScheme.error),
+                    side: BorderSide(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -193,7 +228,10 @@ class PatientProfileScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: kPatientNavProfile, isPatient: true),
+      bottomNavigationBar: const AppBottomNavBar(
+        currentIndex: kPatientNavProfile,
+        isPatient: true,
+      ),
     );
   }
 
@@ -203,8 +241,8 @@ class PatientProfileScreen extends StatelessWidget {
       child: Text(
         title,
         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
       ),
     );
   }
@@ -231,20 +269,23 @@ class PatientProfileScreen extends StatelessWidget {
                 Text(
                   label,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   value,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ],
             ),
           ),
-          Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
+          Icon(
+            Icons.chevron_right,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ],
       ),
     );
@@ -282,11 +323,14 @@ class PatientProfileScreen extends StatelessWidget {
               child: Text(
                 label,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ),
-            Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
+            Icon(
+              Icons.chevron_right,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../models/task.dart';
 import '../widgets/app_app_bar.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 import '../widgets/app_drawer.dart';
@@ -12,7 +13,9 @@ class PatientDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userName = context.watch<AuthProvider>().userName ?? 'Patient';
-    final firstName = userName.split(' ').isNotEmpty ? userName.split(' ').first : userName;
+    final firstName = userName.split(' ').isNotEmpty
+        ? userName.split(' ').first
+        : userName;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
@@ -35,7 +38,9 @@ class PatientDashboardScreen extends StatelessWidget {
                   gradient: LinearGradient(
                     colors: [
                       Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
+                      Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.7),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -75,6 +80,7 @@ class PatientDashboardScreen extends StatelessWidget {
                       title: 'Tasks',
                       value: '3/5',
                       subtitle: 'Completed today',
+                      onTap: () => Navigator.pushNamed(context, '/calendar'),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -88,6 +94,7 @@ class PatientDashboardScreen extends StatelessWidget {
                       value: '120/80',
                       subtitle: 'Normal',
                       subtitleColor: Colors.green,
+                      onTap: () => Navigator.pushNamed(context, '/health-logs'),
                     ),
                   ),
                 ],
@@ -101,12 +108,12 @@ class PatientDashboardScreen extends StatelessWidget {
                   Text(
                     'Upcoming Tasks',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
-                      // TODO: Navigate to all tasks
+                      Navigator.pushNamed(context, '/calendar');
                     },
                     child: Text(
                       'View All',
@@ -130,6 +137,22 @@ class PatientDashboardScreen extends StatelessWidget {
                 dueText: 'DUE IN 15 MIN',
                 dueColor: Colors.red.shade700,
                 bgColor: Colors.red.withValues(alpha: 0.1),
+                onTap: () {
+                  final task = Task(
+                    id: 'medication-1',
+                    title: 'Take Medication',
+                    description: 'Metformin 500mg',
+                    date: DateTime.now().add(const Duration(minutes: 15)),
+                    icon: Icons.medication,
+                    iconBackground: Theme.of(context).colorScheme.error,
+                    iconColor: Theme.of(context).colorScheme.onError,
+                  );
+                  Navigator.pushNamed(
+                    context,
+                    '/task-details',
+                    arguments: task,
+                  );
+                },
               ),
               const SizedBox(height: 12),
 
@@ -138,10 +161,30 @@ class PatientDashboardScreen extends StatelessWidget {
                 context,
                 icon: Icons.favorite,
                 iconColor: Theme.of(context).colorScheme.primary,
-                iconBgColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                iconBgColor: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.1),
                 title: 'Blood Pressure Check',
                 subtitle: 'Due at 2:00 PM',
                 showChevron: true,
+                onTap: () {
+                  final task = Task(
+                    id: 'bp-check-1',
+                    title: 'Blood Pressure Check',
+                    description: 'Record blood pressure',
+                    date: DateTime.now().add(const Duration(hours: 2)),
+                    icon: Icons.favorite,
+                    iconBackground: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.1),
+                    iconColor: Theme.of(context).colorScheme.primary,
+                  );
+                  Navigator.pushNamed(
+                    context,
+                    '/task-details',
+                    arguments: task,
+                  );
+                },
               ),
               const SizedBox(height: 24),
 
@@ -149,8 +192,8 @@ class PatientDashboardScreen extends StatelessWidget {
               Text(
                 "Today's Appointments",
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               const SizedBox(height: 12),
 
@@ -234,9 +277,10 @@ class PatientDashboardScreen extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       'Emergency SOS',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onError,
-                      ),
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(
+                            color: Theme.of(context).colorScheme.onError,
+                          ),
                     ),
                   ],
                 ),
@@ -246,7 +290,10 @@ class PatientDashboardScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: kPatientNavHome, isPatient: true),
+      bottomNavigationBar: const AppBottomNavBar(
+        currentIndex: kPatientNavHome,
+        isPatient: true,
+      ),
     );
   }
 
@@ -259,8 +306,9 @@ class PatientDashboardScreen extends StatelessWidget {
     required String value,
     required String subtitle,
     Color? subtitleColor,
+    VoidCallback? onTap,
   }) {
-    return Container(
+    final content = Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -284,8 +332,8 @@ class PatientDashboardScreen extends StatelessWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ],
           ),
@@ -293,20 +341,34 @@ class PatientDashboardScreen extends StatelessWidget {
           Text(
             value,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             subtitle,
-            style: (subtitleColor != null
-                    ? Theme.of(context).textTheme.titleMedium
-                    : Theme.of(context).textTheme.bodyMedium)
-                ?.copyWith(
-                  color: subtitleColor ?? Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+            style:
+                (subtitleColor != null
+                        ? Theme.of(context).textTheme.titleMedium
+                        : Theme.of(context).textTheme.bodyMedium)
+                    ?.copyWith(
+                      color:
+                          subtitleColor ??
+                          Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
           ),
         ],
+      ),
+    );
+
+    if (onTap == null) return content;
+
+    return Material(
+      color: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: content,
       ),
     );
   }
@@ -322,8 +384,9 @@ class PatientDashboardScreen extends StatelessWidget {
     Color? dueColor,
     Color? bgColor,
     bool showChevron = false,
+    VoidCallback? onTap,
   }) {
-    return Container(
+    final content = Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: bgColor ?? Theme.of(context).colorScheme.surface,
@@ -349,15 +412,15 @@ class PatientDashboardScreen extends StatelessWidget {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
@@ -371,14 +434,28 @@ class PatientDashboardScreen extends StatelessWidget {
               ),
               child: Text(
                 dueText,
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: dueColor,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.labelSmall?.copyWith(color: dueColor),
               ),
             ),
           if (showChevron)
-            Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
+            Icon(
+              Icons.chevron_right,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
         ],
+      ),
+    );
+
+    if (onTap == null) return content;
+
+    return Material(
+      color: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: content,
       ),
     );
   }
@@ -394,9 +471,7 @@ class PatientDashboardScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.tertiary,
-        ),
+        border: Border.all(color: Theme.of(context).colorScheme.tertiary),
       ),
       child: Row(
         children: [
@@ -421,15 +496,15 @@ class PatientDashboardScreen extends StatelessWidget {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
@@ -481,13 +556,12 @@ class PatientDashboardScreen extends StatelessWidget {
               label,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ],
         ),
       ),
     );
   }
-
 }

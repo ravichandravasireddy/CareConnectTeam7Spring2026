@@ -61,7 +61,6 @@ class _CaregiverTaskManagementScreenState
       ),
     );
   }
-
 }
 
 class _OverdueTasksCard extends StatelessWidget {
@@ -176,14 +175,13 @@ class _OverdueTasksCard extends StatelessWidget {
   }
 }
 
-
 final List<Task> _mockTasks = [
   Task(
     id: 'task-1',
     title: 'Metformin 500mg',
     description: 'Medication reminder',
     date: DateTime.now().add(const Duration(hours: 1)),
-    patientName: 'Sarah Johnson',
+    patientName: 'Maya Patel',
     icon: Icons.medication,
     iconBackground: AppColors.primary100,
     iconColor: AppColors.primary700,

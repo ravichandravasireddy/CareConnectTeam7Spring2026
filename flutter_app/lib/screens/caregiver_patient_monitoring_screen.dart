@@ -30,7 +30,74 @@ class CaregiverPatientMonitoringScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            
+            Text(
+              'Patients',
+              style: textTheme.titleMedium?.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: colorScheme.outline, width: 1),
+              ),
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: AppColors.primary600,
+                      child: Text(
+                        'RW',
+                        style: textTheme.labelLarge?.copyWith(
+                          color: colorScheme.onPrimary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      'Robert Williams',
+                      style: textTheme.titleMedium?.copyWith(
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Patient ID: #RW-2847',
+                      style: textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                  Divider(height: 1, color: colorScheme.outline),
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: AppColors.secondary600,
+                      child: Text(
+                        'MP',
+                        style: textTheme.labelLarge?.copyWith(
+                          color: colorScheme.onSecondary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      'Maya Patel',
+                      style: textTheme.titleMedium?.copyWith(
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Patient ID: #MP-1932',
+                      style: textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -43,7 +110,7 @@ class CaregiverPatientMonitoringScreen extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'SJ',
+                      'RW',
                       style: textTheme.headlineSmall?.copyWith(
                         color: colorScheme.onPrimary,
                       ),
@@ -56,14 +123,14 @@ class CaregiverPatientMonitoringScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Sarah Johnson',
+                        'Robert Williams',
                         style: textTheme.headlineSmall?.copyWith(
                           color: colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Age 68 • Female • Type 2 Diabetes',
+                        'Age 67 • Male • Type 2 Diabetes',
                         style: textTheme.bodyMedium?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
@@ -179,9 +246,7 @@ class _ActionCard extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           label,
-          style: textTheme.bodyMedium?.copyWith(
-            color: colorScheme.onSurface,
-          ),
+          style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
         ),
       ],
     );
@@ -247,9 +312,7 @@ class _VitalTile extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             status,
-            style: textTheme.bodyMedium?.copyWith(
-              color: AppColors.success700,
-            ),
+            style: textTheme.bodyMedium?.copyWith(color: AppColors.success700),
           ),
         ],
       ),
