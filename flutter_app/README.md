@@ -27,12 +27,14 @@ git clone < Repository link >
 ### Flutter App
 
 1. get Dependencies
-
-```bash
-flutter pub get
-```
-
+  
+  ```bash
+  cd flutter_app
+  flutter pub get
+  ```
+  
 2. Connect a device or start up an emulator like Android Studio emulators
+
 3. Run the app
 
 ```bash
