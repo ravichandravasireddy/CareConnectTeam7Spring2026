@@ -65,45 +65,53 @@ genhtml coverage/lcov.info -o coverage/html
 
 ## Link to test coverage report
 
-[Test Coverage Screenshot](https://drive.google.com/file/d/1oL4Jz_L_8lv0hmiqcmNKoL51T1a_Q7NP/view?usp=sharing)
+[Test Coverage Screenshot](_images/03%20Code%20Coverage.jpg)
 
 ## Screen Images
 
-[01 Welcome](_screenshots/01%20Welcome.jpg)  
-[02 Sing in](_screenshots/02%20Sing%20in.jpg)  
-[03 Role Selection](_screenshots/03%20Role%20Selection.jpg)  
-[04 Registration](_screenshots/04%20Registration.jpg)  
-[05 Patient Dashboard](_screenshots/05%20Patient%20Dashboard.jpg)  
-[06 Patient tasks](_screenshots/06%20Patient%20tasks.jpg)  
-[07 Messsages](_screenshots/07%20Messsages.jpg)  
-[08 Health Logs](_screenshots/08%20Health%20Logs.jpg)  
-[09 Profile](_screenshots/09%20Profile.jpg)  
-[10 Health timeline](_screenshots/10%20Health%20timeline.jpg)  
-[11 Notes](_screenshots/11%20Notes.jpg)  
-[12 Preferences](_screenshots/12%20Preferences.jpg)  
-[13 Notifications](_screenshots/13%20Notifications.jpg)  
-[14 Video](_screenshots/14%20Video.jpg)  
-[15 Emergency Alert](_screenshots/15%20Emergency%20Alert.jpg)  
-[16 Caregiver dashboard](_screenshots/16%20Caregiver%20dashboard.jpg)  
-[17 Caregiver task management](_screenshots/17%20Caregiver%20task%20management.jpg)  
-[18 Analytics](_screenshots/18%20Analytics.jpg)  
-[19 Patient Monitoring](_screenshots/19%20Patient%20Monitoring.jpg)  
-[20 Navigation Hub](_screenshots/20%20Navigation%20Hub.jpg)  
+[01 Welcome](_images/screenshots/01%20Welcome.jpg)  
+[02 Sign in](_images/screenshots/02%20Sign%20in.jpg)  
+[03 Role Selection](_images/screenshots/03%20Role%20Selection.jpg)  
+[04 Registration](_images/screenshots/04%20Registration.jpg)  
+[05 Patient Dashboard](_images/screenshots/05%20Patient%20Dashboard.jpg)  
+[06 Patient tasks](_images/screenshots/06%20Patient%20tasks.jpg)  
+[07 Messages](_images/screenshots/07%20Messages.jpg)  
+[08 Health Logs](_images/screenshots/08%20Health%20Logs.jpg)  
+[09 Profile](_images/screenshots/09%20Profile.jpg)  
+[10 Health timeline](_images/screenshots/10%20Health%20timeline.jpg)  
+[11 Notes](_images/screenshots/11%20Notes.jpg)  
+[12 Preferences](_images/screenshots/12%20Preferences.jpg)  
+[13 Notifications](_images/screenshots/13%20Notifications.jpg)  
+[14 Video](_images/screenshots/14%20Video.jpg)  
+[15 Emergency Alert](_images/screenshots/15%20Emergency%20Alert.jpg)  
+[16 Caregiver dashboard](_images/screenshots/16%20Caregiver%20dashboard.jpg)  
+[17 Caregiver task management](_images/screenshots/17%20Caregiver%20task%20management.jpg)  
+[18 Analytics](_images/screenshots/18%20Analytics.jpg)  
+[19 Patient Monitoring](_images/screenshots/19%20Patient%20Monitoring.jpg)  
+[20 Navigation Hub](_images/screenshots/20%20Navigation%20Hub.jpg)  
 
 ## Known issues or limitations
 
-- Note categories are limited; More may be added.
-- Call logs and transcript screens can be implemented in future iterations.
-- The Analytics page could be improved
-- The messages page is not customized according to user role
-- High contrast mode was not implementated
-- Dark mode was not implementated
-- Mixed use of native app bar and custom app bar
+- **Note categories**: The note categories are limited to only three kinds right now (Medication, Exercise, and Appointments).
+- **Call logs and transcripts**: Call logs and transcript screens are not available yet, so video call history is not shown in-app.
+- **Analytics depth**: The Analytics page is still basic and does not provide deeper trends, comparisons, or exportable insights.
+- **Role-specific messaging**: The messages page is not customized by user role, so patient and caregiver views are currently the same.
+- **High-contrast mode**: High-contrast mode has not been implemented yet for users who need stronger visual separation.
+- **Dark mode**: Dark mode has not been implemented yet and the UI is optimized for light mode only.
+- **App bar consistency**: Some screens use the native app bar while others use a custom app bar, which creates visual inconsistency.
 
 ## Future Improvements
 
-- Notes author
-- Patient monitoring can add buttons to swithc between patients details
+- **Notes**: Assign note authors dynamically based on the signed-in user, and add support for more categories (including user-defined ones).
+- **Patient monitoring navigation**: Add clear controls to switch between patients and highlight the active patient context.
+- **Analytics enhancements**: Expand analytics with trend charts, filters, and export options for caregiver reporting.
+- **Messaging personalization**: Tailor message threads and shortcuts based on whether the user is a patient or caregiver.
+- **Accessibility modes**: Implement high-contrast mode and refine focus/keyboard support for accessibility parity.
+- **Dark mode support**: Add a full dark theme that matches the design system tokens and passes contrast checks.
+- **Call history features**: Add call logs, transcripts, and searchable history for video call follow-ups.
+- **Further ASL Support**: Add futher ASL support in the form of educational video content utilizing ASL.
+- **Functional Preferences**: Make the options in the Preferences and Accessibility page functional, making changes to the toggles actually able to update the UI. 
+- **Patient Profile**: Add more medical details about the patient to the patient profile and patient details (for caregiver), including blood type (e.g. A+).
 
 ## Team member contributions this week
 
