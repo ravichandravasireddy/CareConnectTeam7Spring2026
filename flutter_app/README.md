@@ -53,6 +53,28 @@ genhtml coverage/lcov.info -o coverage/html
 ## Link to test coverage report
 [Test Coverage Screenshot](https://drive.google.com/file/d/1oL4Jz_L_8lv0hmiqcmNKoL51T1a_Q7NP/view?usp=sharing)
 
+## Screen Images
+![01 Welcome](_screenshots/01%20Welcome.jpg)
+![02 Sing in](_screenshots/02%20Sing%20in.jpg)
+![03 Role Selection](_screenshots/03%20Role%20Selection.jpg)
+![04 Registration](_screenshots/04%20Registration.jpg)
+![05 Patient Dashboard](_screenshots/05%20Patient%20Dashboard.jpg)
+![06 Patient tasks](_screenshots/06%20Patient%20tasks.jpg)
+![07 Messsages](_screenshots/07%20Messsages.jpg)
+![08 Health Logs](_screenshots/08%20Health%20Logs.jpg)
+![09 Profile](_screenshots/09%20Profile.jpg)
+![10 Health timeline](_screenshots/10%20Health%20timeline.jpg)
+![11 Notes](_screenshots/11%20Notes.jpg)
+![12 Preferences](_screenshots/12%20Preferences.jpg)
+![13 Notifications](_screenshots/13%20Notifications.jpg)
+![14 Video](_screenshots/14%20Video.jpg)
+![15 Emergency Alert](_screenshots/15%20Emergency%20Alert.jpg)
+![16 Caregiver dashboard](_screenshots/16%20Caregiver%20dashboard.jpg)
+![17 Caregiver task management](_screenshots/17%20Caregiver%20task%20management.jpg)
+![18 Analytics](_screenshots/18%20Analytics.jpg)
+![19 Patient Monitoring](_screenshots/19%20Patient%20Monitoring.jpg)
+![20 Navigation Hub](_screenshots/20%20Navigation%20Hub.jpg)
+
 ## Known issues or limitations
 - Note categories are limited; More may be added.
 - Call logs and transcript screens can be implemented in future iterations.
@@ -61,6 +83,10 @@ genhtml coverage/lcov.info -o coverage/html
 - High contrast mode was not implementated
 - Dark mode was not implementated
 - Mixed use of native app bar and custom app bar
+
+## Future Improvements
+- Notes author
+- Patient monitoring can add buttons to swithc between patients details
 
 ## Team member contributions this week
 **Dominique Rattray (Team Lead):** 
