@@ -122,7 +122,7 @@ void main() {
       await pushRoute(tester, '/messaging');
 
       expect(find.text('Dr. Sarah Johnson'), findsOneWidget);
-      expect(find.text('Active now'), findsOneWidget);
+      expect(find.text('Today'), findsOneWidget);
     });
 
     testWidgets('can navigate to profile route', (tester) async {
