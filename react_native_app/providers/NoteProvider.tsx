@@ -62,7 +62,7 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }) => {
         body:
           "Dr. Johnson reviewed my test results. Blood pressure is improving. Continue current medication regimen.",
         author: 'Robert Williams (Patient)',
-        createdAt: new Date(now.getFullYear(), now.getMonth(), 22, 15, 30),
+        createdAt: new Date(now.getFullYear(), now.getMonth() - 1, 22, 15, 30),
         category: NoteCategory.appointment,
       },
     ];

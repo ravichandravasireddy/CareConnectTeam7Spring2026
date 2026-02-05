@@ -45,6 +45,12 @@ const COMPONENT_LINKS: ComponentLink[] = [
     description: 'View caregiver and patient notes',
     icon: 'description',
   },
+  {
+    title: 'Health Logs',
+    route: '/health-logs',
+    description: 'Log mood, water, sleep, blood pressure, and more',
+    icon: 'monitor-heart',
+  },
   // Add more component links here as you create them
   // {
   //   title: 'Task Details',

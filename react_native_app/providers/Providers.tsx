@@ -9,6 +9,7 @@ import React, { ReactNode } from 'react';
 import { TaskProvider } from './TaskProvider';
 import { NotificationProvider } from './NotificationProvider';
 import { NoteProvider } from './NoteProvider';
+import { HealthLogProvider } from './HealthLogProvider';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -23,9 +24,11 @@ export function Providers({ children }: ProvidersProps) {
     <TaskProvider>
       <NotificationProvider>
         <NoteProvider>
-          {/* Add more providers here as needed */}
-          {/* Example: <AuthProvider> */}
-          {children}
+          <HealthLogProvider>
+            {/* Add more providers here as needed */}
+            {/* Example: <AuthProvider> */}
+            {children}
+          </HealthLogProvider>
         </NoteProvider>
       </NotificationProvider>
     </TaskProvider>

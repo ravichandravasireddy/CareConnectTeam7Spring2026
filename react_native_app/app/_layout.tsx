@@ -21,7 +21,8 @@ export default function RootLayout() {
           <Stack.Screen name="calendar" options={{ title: "Calendar" }} />
           <Stack.Screen name="dev" options={{ title: "Dev Components" }} />
           <Stack.Screen name="notifications" options={{ title: "Notifications" }} />
-          <Stack.Screen name="notes" options={{ title: "Notes" }} />
+          <Stack.Screen name="notes" options={{ title: "Notes", headerShown: false }} />
+          <Stack.Screen name="health-logs" options={{ title: "Health Logs", headerShown: false }} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

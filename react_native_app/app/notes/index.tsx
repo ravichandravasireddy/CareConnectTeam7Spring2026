@@ -1,7 +1,7 @@
 // =============================================================================
 // NOTES SCREEN
 // =============================================================================
-// List of notes from NoteProvider; tap opens NoteDetailScreen (when implemented).
+// List of notes from NoteProvider; tap opens NoteDetailScreen.
 // Uses formatNoteTime for list item timestamps. Notes sorted by createdAt descending.
 // =============================================================================
 
@@ -16,10 +16,10 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useNoteProvider } from '../providers/NoteProvider';
-import { Note, formatNoteCategoryDisplay } from '../models/Note';
-import { Colors, Typography, AppColors } from '../constants/theme';
-import { useColorScheme } from '../hooks/use-color-scheme';
+import { useNoteProvider } from '../../providers/NoteProvider';
+import { Note, formatNoteCategoryDisplay } from '../../models/Note';
+import { Colors, Typography, AppColors } from '../../constants/theme';
+import { useColorScheme } from '../../hooks/use-color-scheme';
 
 type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
@@ -151,9 +151,7 @@ export default function NotesScreen() {
               accessible={true}
               accessibilityLabel="Add New Note, button"
               accessibilityRole="button"
-              onPress={() => {
-                // Empty onPress handler
-              }}
+              onPress={() => router.push('/notes/add' as any)}
               style={[
                 notesStyles.addButton,
                 { backgroundColor: colors.primary },
