@@ -24,6 +24,7 @@ export default function RootLayout() {
           <Stack.Screen name="notes" options={{ title: "Notes", headerShown: false }} />
           <Stack.Screen name="health-logs" options={{ title: "Health Logs", headerShown: false }} />
           <Stack.Screen name="health-timeline" options={{ title: "Health Timeline" }} />
+          <Stack.Screen name="video-call" options={{ title: "Video Call" }} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

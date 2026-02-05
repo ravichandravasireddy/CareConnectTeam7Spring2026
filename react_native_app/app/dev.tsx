@@ -57,6 +57,12 @@ const COMPONENT_LINKS: ComponentLink[] = [
     description: 'Unified timeline of health logs, notes, and completed tasks',
     icon: 'timeline',
   },
+  {
+    title: 'Video Call',
+    route: '/video-call',
+    description: 'Full-screen call UI with patient/caregiver view and ASL interpreter',
+    icon: 'videocam',
+  },
   // Add more component links here as you create them
   // {
   //   title: 'Task Details',
