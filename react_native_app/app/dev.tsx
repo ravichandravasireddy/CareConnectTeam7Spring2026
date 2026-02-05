@@ -12,9 +12,9 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Colors, Typography } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -32,6 +32,12 @@ const COMPONENT_LINKS: ComponentLink[] = [
     route: '/calendar',
     description: 'Month calendar with task scheduling',
     icon: 'calendar-today',
+  },
+  {
+    title: 'Notifications',
+    route: '/notifications',
+    description: 'View and manage notifications',
+    icon: 'notifications',
   },
   // Add more component links here as you create them
   // {

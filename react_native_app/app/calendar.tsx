@@ -19,8 +19,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useTaskProvider } from '../providers/TaskProvider';
-import { getTaskDateOnly, areDatesEqual } from '../models/Task';
-import { Colors, Typography, AppColors } from '../constants/theme';
+import { areDatesEqual } from '../models/Task';
+import { Colors, Typography } from '../constants/theme';
 import { useColorScheme } from '../hooks/use-color-scheme';
 import { TaskCard } from '../components/task-card';
 
@@ -113,7 +113,7 @@ const DateCell: React.FC<DateCellProps> = ({
   let textColor: string = colors.text;
   let borderColor: string = 'transparent';
 
-  if (isTodayDate) {
+  if (isTodayDate && isCurrentMonthDate) {
     backgroundColor = colors.primary;
     textColor = colors.background;
   } else if (isSelectedDate && isCurrentMonthDate) {
@@ -146,8 +146,8 @@ const DateCell: React.FC<DateCellProps> = ({
         styles.dateCell,
         {
           backgroundColor,
-          borderColor: isSelectedDate && !isTodayDate ? borderColor : 'transparent',
-          borderWidth: isSelectedDate && !isTodayDate ? 2 : 0,
+          borderColor: isSelectedDate && !isTodayDate && isCurrentMonthDate ? borderColor : 'transparent',
+          borderWidth: isSelectedDate && !isTodayDate && isCurrentMonthDate ? 2 : 0,
           minHeight: 48,
           minWidth: 48,
         },
@@ -163,7 +163,7 @@ const DateCell: React.FC<DateCellProps> = ({
         ]}>
         {isCurrentMonthDate ? date.getDate() : ''}
       </Text>
-      {hasTasks && (
+      {hasTasks && isCurrentMonthDate && (
         <View
           style={[
             styles.taskDot,

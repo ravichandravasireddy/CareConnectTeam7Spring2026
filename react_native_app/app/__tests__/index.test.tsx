@@ -63,6 +63,22 @@ jest.mock("react-native-safe-area-context", () => {
   };
 });
 
+jest.mock("expo-router", () => ({
+  useRouter: jest.fn(() => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    back: jest.fn(),
+    canGoBack: jest.fn(() => false),
+  })),
+}));
+
+jest.mock("@expo/vector-icons/MaterialIcons", () => {
+  const React = require("react");
+  return jest.fn(({ name, testID, ...props }: { name: string; testID?: string }) =>
+    React.createElement("View", { testID: testID || `icon-${name}`, ...props })
+  );
+});
+
 import WelcomeScreen, {
   calculateBottomSpacing,
   calculateTopSpacing,
@@ -119,7 +135,8 @@ describe("WelcomeScreen", () => {
     it("renders logo icon", () => {
       render(<WelcomeScreen />);
 
-      const logoIcon = screen.getByText("❤");
+      // Logo is now a MaterialIcons favorite icon, not emoji
+      const logoIcon = screen.getByTestId("icon-favorite");
       expect(logoIcon).toBeTruthy();
     });
 
@@ -389,7 +406,7 @@ describe("WelcomeScreen", () => {
 
       // Verify all main elements are present
       expect(screen.getByText("CareConnect")).toBeTruthy();
-      expect(screen.getByText("❤")).toBeTruthy();
+      expect(screen.getByTestId("icon-favorite")).toBeTruthy();
       expect(screen.getByText("Get Started")).toBeTruthy();
       expect(screen.getByText("Sign In")).toBeTruthy();
     });

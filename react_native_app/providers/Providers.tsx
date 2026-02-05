@@ -7,6 +7,7 @@
 
 import React, { ReactNode } from 'react';
 import { TaskProvider } from './TaskProvider';
+import { NotificationProvider } from './NotificationProvider';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -19,10 +20,11 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <TaskProvider>
-      {/* Add more providers here as needed */}
-      {/* Example: <AuthProvider> */}
-      {/* Example: <NotificationProvider> */}
-      {children}
+      <NotificationProvider>
+        {/* Add more providers here as needed */}
+        {/* Example: <AuthProvider> */}
+        {children}
+      </NotificationProvider>
     </TaskProvider>
   );
 }
