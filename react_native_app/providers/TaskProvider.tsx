@@ -52,6 +52,7 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
         icon: 'medication',
         iconBackground: AppColors.primary100,
         iconColor: AppColors.primary700,
+        completedAt: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 15),
       },
       {
         id: '2',
@@ -148,12 +149,12 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
         id: '11',
         title: 'Video Call with Maya',
         description: 'Discuss today\'s care updates and share next steps.',
-        date: new Date(now.getFullYear(), now.getMonth(), 12, 11, 0),
+        date: new Date(now.getFullYear(), now.getMonth() - 1, 12, 11, 0),
         patientName: 'Maya Patel',
         icon: 'phone',
         iconBackground: AppColors.warning100,
         iconColor: AppColors.warning700,
-        completedAt: new Date(now.getFullYear(), now.getMonth(), 12, 11, 0),
+        completedAt: new Date(now.getFullYear(), now.getMonth() - 1, 12, 11, 0),
       },
     ];
   });

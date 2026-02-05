@@ -51,6 +51,12 @@ const COMPONENT_LINKS: ComponentLink[] = [
     description: 'Log mood, water, sleep, blood pressure, and more',
     icon: 'monitor-heart',
   },
+  {
+    title: 'Health Timeline',
+    route: '/health-timeline',
+    description: 'Unified timeline of health logs, notes, and completed tasks',
+    icon: 'timeline',
+  },
   // Add more component links here as you create them
   // {
   //   title: 'Task Details',
