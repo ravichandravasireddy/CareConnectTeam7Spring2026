@@ -39,6 +39,12 @@ const COMPONENT_LINKS: ComponentLink[] = [
     description: 'View and manage notifications',
     icon: 'notifications',
   },
+  {
+    title: 'Notes',
+    route: '/notes',
+    description: 'View caregiver and patient notes',
+    icon: 'description',
+  },
   // Add more component links here as you create them
   // {
   //   title: 'Task Details',

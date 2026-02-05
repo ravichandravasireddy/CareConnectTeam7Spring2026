@@ -331,6 +331,8 @@ export default function CalendarScreen() {
         options={{
           title: 'Calendar',
           headerShown: true,
+          headerStyle: { backgroundColor: colors.surface },
+          headerTintColor: colors.text,
         }}
       />
       <SafeAreaView

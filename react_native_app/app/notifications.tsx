@@ -235,6 +235,8 @@ export default function NotificationScreen() {
         options={{
           title: 'Notifications',
           headerShown: true,
+          headerStyle: { backgroundColor: colors.surface },
+          headerTintColor: colors.text,
         }}
       />
       <SafeAreaView
