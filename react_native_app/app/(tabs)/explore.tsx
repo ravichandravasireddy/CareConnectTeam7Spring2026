@@ -1,3 +1,4 @@
+// DELETE ME AT MERGE - Example app file, not used in CareConnect app
 import { Image } from 'expo-image';
 import { Platform, StyleSheet } from 'react-native';
 

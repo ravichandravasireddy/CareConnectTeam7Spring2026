@@ -1,3 +1,4 @@
+// DELETE ME AT MERGE - Example app file, not used in CareConnect app
 import { Link } from 'expo-router';
 import { StyleSheet } from 'react-native';
 

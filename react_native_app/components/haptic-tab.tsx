@@ -1,3 +1,4 @@
+// DELETE ME AT MERGE - Example app component, not used in CareConnect app
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { PlatformPressable } from '@react-navigation/elements';
 import * as Haptics from 'expo-haptics';

@@ -1,3 +1,4 @@
+// DELETE ME AT MERGE - Example app component, not used in CareConnect app
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
 import { useThemeColor } from '@/hooks/use-theme-color';

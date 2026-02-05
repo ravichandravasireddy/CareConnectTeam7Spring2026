@@ -1,3 +1,4 @@
+// DELETE ME AT MERGE - Example app component, not used in CareConnect app
 import type { PropsWithChildren, ReactElement } from 'react';
 import { StyleSheet } from 'react-native';
 import Animated, {

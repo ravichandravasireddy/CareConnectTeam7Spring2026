@@ -1,3 +1,4 @@
+// DELETE ME AT MERGE - Example app hook, not used in CareConnect app
 /**
  * Learn more about light and dark modes:
  * https://docs.expo.dev/guides/color-schemes/

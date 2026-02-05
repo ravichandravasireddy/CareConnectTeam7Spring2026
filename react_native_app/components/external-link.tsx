@@ -1,3 +1,4 @@
+// DELETE ME AT MERGE - Example app component, not used in CareConnect app
 import { Href, Link } from 'expo-router';
 import { openBrowserAsync, WebBrowserPresentationStyle } from 'expo-web-browser';
 import { type ComponentProps } from 'react';

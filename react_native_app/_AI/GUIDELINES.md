@@ -5,6 +5,9 @@
 - Use the app theme colors and typography located in [theme.ts](../constants/theme.ts) at all times for all components.
 - Keep the accessibility contraint of hearing imaparied caregiver for all component implementations. If specifics are needed, refer to accessibility section below
 - Components in the `react_native_app` should have feature parity with the components in the `flutter_app` two folders up 
+- Put all providers in the provider component
+- Use proper icon components and not emojis for icons
+- If a file is marked "DELETE ME AT MERGE," but I am using it now, remove this label
 
 
 

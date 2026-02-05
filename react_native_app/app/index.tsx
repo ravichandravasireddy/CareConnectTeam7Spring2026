@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { AppColors, Colors, Fonts, Typography } from "@/constants/theme";
 
@@ -32,6 +34,7 @@ export default function WelcomeScreen() {
   const bottomSpacing = calculateBottomSpacing(height);
   const onPrimary =
     colorScheme === "dark" ? AppColors.darkTextPrimary : AppColors.white;
+  const router = useRouter();
 
   const handleGetStarted = () => {
     // TODO: Navigate to role selection screen
@@ -39,6 +42,10 @@ export default function WelcomeScreen() {
 
   const handleSignIn = () => {
     // TODO: Navigate to sign-in screen
+  };
+
+  const handleDevScreen = () => {
+    router.push("/dev" as any);
   };
 
   return (
@@ -63,7 +70,11 @@ export default function WelcomeScreen() {
             accessibilityLabel="CareConnect logo"
             accessible
           >
-            <Text style={[styles.iconText, { color: colors.primary }]}>❤</Text>
+            <MaterialIcons
+              name="favorite"
+              size={56}
+              color={colors.primary}
+            />
           </View>
 
           <Text style={[styles.title, { color: onPrimary }]}>CareConnect</Text>
@@ -116,6 +127,21 @@ export default function WelcomeScreen() {
           >
             HIPAA-compliant • Secure • Private
           </Text>
+
+          {/* Temporary dev link - remove in production */}
+          <Pressable
+            onPress={handleDevScreen}
+            accessibilityRole="button"
+            accessibilityLabel="Open dev components screen"
+            style={({ pressed }) => [
+              styles.devLink,
+              { borderColor: onPrimary, opacity: pressed ? 0.7 : 0.5 },
+            ]}
+          >
+            <Text style={[styles.devLinkText, { color: onPrimary }]}>
+              Dev Components →
+            </Text>
+          </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -146,11 +172,6 @@ const createStyles = (colors: typeof Colors.light | typeof Colors.dark) =>
       alignItems: "center",
       justifyContent: "center",
       marginBottom: 8,
-    },
-    iconText: {
-      fontSize: 48,
-      lineHeight: 56,
-      fontFamily: Fonts.rounded,
     },
     title: {
       ...Typography.h1,
@@ -198,5 +219,18 @@ const createStyles = (colors: typeof Colors.light | typeof Colors.dark) =>
       fontFamily: Fonts.sans,
       marginTop: 8,
       opacity: 0.85,
+    },
+    devLink: {
+      marginTop: 24,
+      paddingVertical: 8,
+      paddingHorizontal: 16,
+      borderRadius: 8,
+      borderWidth: 1,
+      backgroundColor: "transparent",
+    },
+    devLinkText: {
+      ...Typography.bodySmall,
+      fontFamily: Fonts.sans,
+      opacity: 0.7,
     },
   });

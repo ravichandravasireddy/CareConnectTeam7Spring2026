@@ -1,3 +1,4 @@
+// DELETE ME AT MERGE - Example app file, not used in CareConnect app
 import { Tabs } from 'expo-router';
 import React from 'react';
 
@@ -12,7 +13,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        // tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
       }}>
