@@ -11,6 +11,22 @@ module.exports = {
     "!**/node_modules/**",
     "!**/babel.config.js",
     "!**/jest.setup.js",
+    "!eslint.config.js",
+    "!expo-env.d.ts",
+    "!jest.config.js",
+    "!.expo/**",
+    "!scripts/**",
+    "!hooks/use-theme-color.ts", // DELETE ME AT MERGE
+    "!hooks/use-color-scheme.web.ts", // DELETE ME AT MERGE
+    "!app/modal.tsx", // DELETE ME AT MERGE
+    "!components/ui/**",// DELETE ME AT MERGE
+    "!components/haptic-tab.tsx",// DELETE ME AT MERGE
+    "!components/themed-*.tsx",// DELETE ME AT MERGE
+    "!components/parallax-scroll-view.tsx",// DELETE ME AT MERGE
+    "!components/external-link.tsx",// DELETE ME AT MERGE
+    "!components/hello-wave.tsx",// DELETE ME AT MERGE
+
+
   ],
   coverageThreshold: {
     global: {
@@ -19,6 +35,11 @@ module.exports = {
       lines: 80,
       statements: 80,
     },
+  //   "./models/*.ts": { branches: 90, functions: 90, lines: 90, statements: 90 },
+  //   "./providers/*.{ts,tsx}": { branches: 90, functions: 90, lines: 90, statements: 90 },
+  //   "./components/task-card.tsx": { branches: 90, functions: 90, lines: 90, statements: 90 },
+  //   "./app/notes/*.tsx": { branches: 90, functions: 90, lines: 90, statements: 90 },
+  //   "./app/health-logs/*.tsx": { branches: 90, functions: 90, lines: 90, statements: 90 },
   },
   coverageReporters: ["text", "lcov", "html"],
 };

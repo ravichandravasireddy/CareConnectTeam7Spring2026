@@ -104,13 +104,14 @@ export default function HealthTimelineScreen() {
         {events.length === 0 ? (
           <View style={styles.emptyState}>
             <Text
-              style={[Typography.bodySmall, { color: colors.textSecondary }]}
-              textAlign="center">
+              style={[Typography.bodySmall, { color: colors.textSecondary, textAlign: "center"}]}
+              >
               No timeline events yet. Add health logs, notes, or complete tasks to see them here.
             </Text>
           </View>
         ) : (
           <ScrollView
+            testID="health-timeline-scroll"
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}>
             <View style={[styles.timelineLine, { backgroundColor: colors.border }]} />

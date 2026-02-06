@@ -40,8 +40,8 @@ const formatNotificationTime = (createdAt: Date): string => {
 
     if (diffMinutes < 1) return 'Just now';
     if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
-    if (diffHours < 24) return `${diffHours} hours ago`;
-    return createdAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    // diffHours will always be < 24 for same calendar day (max ~23 hours 59 minutes)
+    return `${diffHours} hours ago`;
   } else if (date.getTime() === yesterdayStart.getTime()) {
     return `Yesterday, ${createdAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`;
   } else {

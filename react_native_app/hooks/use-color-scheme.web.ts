@@ -1,3 +1,4 @@
+// DELETE ME AT MERGE - Example app hook, not used in CareConnect app
 import { useEffect, useState } from 'react';
 import { useColorScheme as useRNColorScheme } from 'react-native';
 

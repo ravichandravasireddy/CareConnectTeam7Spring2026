@@ -115,7 +115,7 @@ describe("DevScreen", () => {
 
     it("renders link cards with chevron icon", () => {
       render(<DevScreen />);
-      expect(screen.getByTestId("icon-chevron-right")).toBeTruthy();
+      expect(screen.getAllByTestId("icon-chevron-right")).toBeTruthy();
     });
 
     it("renders link icon when link has icon", () => {
