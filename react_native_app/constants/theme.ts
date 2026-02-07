@@ -63,6 +63,7 @@ export const AppColors = {
 export const Colors = {
   light: {
     text: AppColors.gray900,
+    tint: AppColors.primary600,
     textSecondary: AppColors.gray700,
     background: AppColors.white,
     surface: AppColors.gray100,
@@ -83,6 +84,7 @@ export const Colors = {
   },
   dark: {
     text: AppColors.darkTextPrimary,
+    tint: AppColors.primary500,
     textSecondary: AppColors.darkTextSecondary,
     background: AppColors.darkBgPrimary,
     surface: AppColors.darkBgSecondary,

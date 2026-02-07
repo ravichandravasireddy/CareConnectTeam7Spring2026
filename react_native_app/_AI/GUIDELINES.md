@@ -3,7 +3,7 @@
 ## Copilot and Cusor AI intsructions for every prompt
 - Read this section in the guidelines before every prompt
 - Use the app theme colors and typography located in [theme.ts](../constants/theme.ts) at all times for all components.
-- Keep the accessibility contraint of hearing imaparied caregiver for all component implementations. If specifics are needed, refer to accessibility section below
+- Keep the accessibility constraint of **hearing-impaired / deaf caregivers** for all component implementations. If specifics are needed, refer to accessibility section below
 - Components in the `react_native_app` should have feature parity with the components in the `flutter_app` two folders up 
 
 
@@ -62,6 +62,15 @@
 
 - **Contrast ratios** must be maintained in dark theme.
 - Use **`Theme.of(context).colorScheme`** (and `AppColors` dark tokens) for all UI; no hardcoded light-only colors.
+
+### Deaf & hard of hearing users (primary target)
+
+- **No audio dependency**: All feedback must be visual. Never rely on sound alone for alerts, confirmations, or notifications.
+- **Visual alternatives**: Use text labels, icons, color, and layout to convey meaning. Alerts (e.g. Emergency SOS) must be highly visible (contrast, size, placement).
+- **Text-based content**: Critical information (patient names, vitals, task details) must be displayed as text, not conveyed only via audio.
+- **Notification badges**: Use visible badges (e.g. red dot) for unread state; do not rely on notification sounds.
+- **Video/call features**: When implemented, support captions/subtitles and visual call indicators (no audio-only ringtone).
+- **Haptic feedback**: Optional tactile feedback (e.g. tab press) is acceptable as a supplement to visual feedback.
 
 ### Error prevention & forms
 

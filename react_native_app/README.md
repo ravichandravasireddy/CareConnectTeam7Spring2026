@@ -25,6 +25,16 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Accessibility (Deaf & Hard of Hearing)
+
+This app targets **hearing-impaired caregivers**. All feedback is **visual only**—no audio alerts or notifications. Key design rules:
+
+- **No audio dependency**: Alerts, confirmations, and notifications use text, icons, and color
+- **Visual alternatives**: Emergency SOS uses red background, large text, and clear icons
+- **Text-based content**: Patient names, vitals, and task details are always displayed as text
+- **Touch targets**: Minimum 48×48px for interactive elements
+- **Color contrast**: WCAG AA compliant (see `_AI/GUIDELINES.md`)
+
 ## Get a fresh project
 
 When you're ready, run:
