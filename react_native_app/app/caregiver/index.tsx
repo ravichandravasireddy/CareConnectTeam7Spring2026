@@ -23,35 +23,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppAppBar } from "@/components/app-app-bar";
 import { AppColors, Colors, Typography, Fonts } from "@/constants/theme";
-import { MOCK_TASKS, Task, isTaskCompleted } from "@/models/task";
+import { MOCK_TASKS, isTaskCompleted } from "@/models/task";
+import { getGreeting, greetingName, tasksForToday } from "./helpers";
+
+export { getGreeting, greetingName, tasksForToday };
 
 const PATIENTS = [
   { id: "1", name: "Robert Williams" },
   { id: "2", name: "Maya Patel" },
 ];
-
-function getGreeting(): string {
-  const hour = new Date().getHours();
-  if (hour < 12) return "Good Morning";
-  if (hour < 17) return "Good Afternoon";
-  return "Good Evening";
-}
-
-function greetingName(fullName: string): string {
-  const parts = fullName.trim().split(/\s+/);
-  if (parts.length > 1 && parts[0] === "Dr.") return parts[1];
-  return parts[0] || "Caregiver";
-}
-
-function tasksForToday(tasks: Task[]): Task[] {
-  const today = new Date();
-  return tasks.filter(
-    (t) =>
-      t.date.getFullYear() === today.getFullYear() &&
-      t.date.getMonth() === today.getMonth() &&
-      t.date.getDate() === today.getDate()
-  );
-}
 
 export default function CaregiverDashboardScreen() {
   const colorScheme = useColorScheme();
