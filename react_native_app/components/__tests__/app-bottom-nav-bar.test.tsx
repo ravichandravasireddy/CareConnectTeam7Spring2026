@@ -17,10 +17,6 @@ jest.mock("react-native-safe-area-context", () => ({
   useSafeAreaInsets: () => ({ bottom: 0, top: 0, left: 0, right: 0 }),
 }));
 
-jest.mock("@/hooks/use-color-scheme", () => ({
-  useColorScheme: jest.fn(() => "light"),
-}));
-
 jest.mock("@/providers/ThemeProvider", () => {
   const { Colors } = require("@/constants/theme");
   return {

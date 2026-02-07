@@ -23,10 +23,6 @@ jest.mock("react-native", () => {
   };
 });
 
-jest.mock("@/hooks/use-color-scheme", () => ({
-  useColorScheme: jest.fn(() => "light"),
-}));
-
 jest.mock("@/providers/ThemeProvider", () => {
   const { Colors } = require("@/constants/theme");
   return {

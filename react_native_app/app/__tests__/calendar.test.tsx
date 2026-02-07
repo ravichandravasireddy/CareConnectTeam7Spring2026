@@ -134,12 +134,6 @@ jest.mock("@/providers/TaskProvider", () => ({
   })),
 }));
 
-// Mock use-color-scheme hook - this is already mocked in react-native mock above
-// But we'll keep this for explicit control
-jest.mock("@/hooks/use-color-scheme", () => ({
-  useColorScheme: jest.fn(() => "light"),
-}));
-
 jest.mock("@/providers/ThemeProvider", () => {
   const { Colors } = require("@/constants/theme");
   return {

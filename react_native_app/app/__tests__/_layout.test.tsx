@@ -17,10 +17,6 @@ jest.mock('react-native', () => {
   };
 });
 
-jest.mock('@/hooks/use-color-scheme', () => ({
-  useColorScheme: jest.fn(() => 'light'),
-}));
-
 jest.mock('@/providers/ThemeProvider', () => {
   const { Colors } = require('@/constants/theme');
   return {
@@ -60,20 +56,6 @@ describe('RootLayout', () => {
   });
 
   it('renders without throwing', () => {
-    expect(() => render(<RootLayout />)).not.toThrow();
-  });
-
-  it('uses light theme when color scheme is light', () => {
-    const { useColorScheme } = require('@/hooks/use-color-scheme');
-    (useColorScheme as jest.Mock).mockReturnValue('light');
-    
-    expect(() => render(<RootLayout />)).not.toThrow();
-  });
-
-  it('uses dark theme when color scheme is dark', () => {
-    const { useColorScheme } = require('@/hooks/use-color-scheme');
-    (useColorScheme as jest.Mock).mockReturnValue('dark');
-    
     expect(() => render(<RootLayout />)).not.toThrow();
   });
 

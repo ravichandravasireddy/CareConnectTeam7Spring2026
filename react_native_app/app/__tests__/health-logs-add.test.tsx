@@ -37,8 +37,6 @@ jest.mock("@expo/vector-icons/MaterialIcons", () => {
   return () => R.createElement(View, { testID: "icon-close" });
 });
 
-jest.mock("@/hooks/use-color-scheme", () => ({ useColorScheme: jest.fn(() => "light") }));
-
 jest.mock("@/providers/ThemeProvider", () => {
   const { Colors } = require("@/constants/theme");
   return {

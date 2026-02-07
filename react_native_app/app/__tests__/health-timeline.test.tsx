@@ -77,11 +77,6 @@ jest.mock("@expo/vector-icons/MaterialIcons", () => {
   );
 });
 
-// Mock use-color-scheme (health-timeline uses ../hooks/use-color-scheme)
-jest.mock("@/hooks/use-color-scheme", () => ({
-  useColorScheme: jest.fn(() => "light"),
-}));
-
 jest.mock("@/providers/ThemeProvider", () => {
   const { Colors } = require("@/constants/theme");
   return {

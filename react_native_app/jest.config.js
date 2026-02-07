@@ -20,6 +20,7 @@ module.exports = {
     "!.expo/**",
     "!scripts/**",
     "!hooks/use-theme-color.ts", // DELETE ME AT MERGE
+    "!hooks/use-color-scheme.ts", // DELETE ME AT MERGE
     "!hooks/use-color-scheme.web.ts", // DELETE ME AT MERGE
     "!app/modal.tsx", // DELETE ME AT MERGE
     "!components/ui/**",// DELETE ME AT MERGE

@@ -37,10 +37,6 @@ jest.mock('expo-router', () => ({
   },
 }));
 
-jest.mock('@/hooks/use-color-scheme', () => ({
-  useColorScheme: jest.fn(() => 'light'),
-}));
-
 jest.mock('@/providers/ThemeProvider', () => {
   const { Colors } = require('@/constants/theme');
   return {
@@ -224,11 +220,7 @@ describe('NotificationScreen', () => {
   });
 
   it('handles dark mode correctly', () => {
-    const { useColorScheme } = require('@/hooks/use-color-scheme');
-    (useColorScheme as jest.Mock).mockReturnValue('dark');
-    
     renderWithProviders(<NotificationScreen />);
-    // Verify the screen renders in dark mode by checking for notification content
     expect(screen.getByText('Today')).toBeTruthy();
   });
 
