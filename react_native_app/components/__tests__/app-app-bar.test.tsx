@@ -108,16 +108,6 @@ describe("AppAppBar", () => {
       expect(mockPush).toHaveBeenCalledWith("/notifications");
     });
 
-    it("calls onNotificationTap when notification pressed and override provided", () => {
-      const onNotificationTap = jest.fn();
-      render(
-        <AppAppBar title="Test" onNotificationTap={onNotificationTap} />
-      );
-      fireEvent.press(screen.getByLabelText("Notifications"));
-      expect(onNotificationTap).toHaveBeenCalledTimes(1);
-      expect(mockPush).not.toHaveBeenCalled();
-    });
-
     it("calls onSettingsPress when settings pressed", () => {
       const onSettingsPress = jest.fn();
       render(

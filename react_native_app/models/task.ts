@@ -1,21 +1,13 @@
 // =============================================================================
 // TASK MODEL
 // =============================================================================
-// Domain model for tasks used across caregiver screens, calendar, and task details.
-// Feature parity with flutter_app/lib/models/task.dart
+// Domain model for tasks used across caregiver screens and task details.
 // =============================================================================
 
-/** Icons used by caregiver screens and shared (calendar, TaskProvider) screens. All from Material Icons. */
-export type TaskIconName =
-  | "medication"
-  | "favorite"
-  | "directions-walk"
-  | "fitness-center"
-  | "local-hospital"
-  | "science"
-  | "medication-liquid"
-  | "videocam"
-  | "phone";
+import { ComponentProps } from 'react';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
+export type TaskIcon = ComponentProps<typeof MaterialIcons>['name'];
 
 export interface Task {
   id: string;
@@ -23,22 +15,24 @@ export interface Task {
   description: string;
   date: Date;
   patientName: string;
-  icon: TaskIconName;
+  icon: TaskIcon;
   iconBackground: string;
   iconColor: string;
   completedAt?: Date;
 }
 
-export const isTaskCompleted = (task: Task): boolean => !!task.completedAt;
+export const isTaskCompleted = (task: Task): boolean => {
+  return task.completedAt !== undefined && task.completedAt !== null;
+};
 
-/** Returns the same calendar day at local midnight for date-only comparison. */
-export function getTaskDateOnly(date: Date): Date {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
+export const getTaskDateOnly = (date: Date): Date => {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+};
 
-/** True if both dates are the same calendar day (ignoring time). */
-export function areDatesEqual(a: Date, b: Date): boolean {
-  return getTaskDateOnly(a).getTime() === getTaskDateOnly(b).getTime();
-}
+export const areDatesEqual = (date1: Date, date2: Date): boolean => {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+};
