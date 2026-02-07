@@ -11,10 +11,11 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { AppBottomNavBar, kPatientNavHealth } from '@/components/app-bottom-nav-bar';
 import { useHealthTimelineEvents } from '../hooks/useHealthTimelineEvents';
 import { TimelineEvent } from '../models/TimelineEvent';
 import { Colors, Typography } from '../constants/theme';
-import { useColorScheme } from '../hooks/use-color-scheme';
+import { useTheme } from '@/providers/ThemeProvider';
 
 type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
@@ -85,13 +86,11 @@ function TimelineItem({
 }
 
 export default function HealthTimelineScreen() {
-  const colorScheme = useColorScheme();
-  const themeKey = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[themeKey];
+  const { colors } = useTheme();
   const events = useHealthTimelineEvents();
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <Stack.Screen
         options={{
           title: 'Health Timeline',
@@ -100,7 +99,7 @@ export default function HealthTimelineScreen() {
           headerTintColor: colors.text,
         }}
       />
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['bottom']}>
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
         {events.length === 0 ? (
           <View style={styles.emptyState}>
             <Text
@@ -125,7 +124,8 @@ export default function HealthTimelineScreen() {
           </ScrollView>
         )}
       </SafeAreaView>
-    </>
+      <AppBottomNavBar currentIndex={kPatientNavHealth} isPatient={true} />
+    </View>
   );
 }
 

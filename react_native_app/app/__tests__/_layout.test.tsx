@@ -13,12 +13,21 @@ jest.mock('react-native', () => {
   return {
     View: (props: unknown) => React.createElement('View', props),
     Text: (props: unknown) => React.createElement('Text', props),
+    Platform: { OS: 'ios', select: (opts: Record<string, unknown>) => opts?.ios ?? opts?.default },
   };
 });
 
 jest.mock('@/hooks/use-color-scheme', () => ({
   useColorScheme: jest.fn(() => 'light'),
 }));
+
+jest.mock('@/providers/ThemeProvider', () => {
+  const { Colors } = require('@/constants/theme');
+  return {
+    useTheme: () => ({ colorScheme: 'light', highContrast: false, setHighContrast: () => {}, colors: Colors.light, themeKey: 'light' }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  };
+});
 
 jest.mock('@react-navigation/native', () => ({
   ThemeProvider: ({ children, value }: { children: React.ReactNode; value: unknown }) => (

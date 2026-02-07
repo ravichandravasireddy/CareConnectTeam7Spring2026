@@ -8,38 +8,47 @@
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
+
+import { useTheme } from "@/providers/ThemeProvider";
 import {
   Pressable,
   StyleSheet,
   Text,
   View,
-  useColorScheme,
 } from "react-native";
 
-import { AppColors, Colors, Typography, Fonts } from "@/constants/theme";
+import { AppColors, Typography, Fonts } from "@/constants/theme";
 
 type AppAppBarProps = {
   title: string;
   showMenuButton?: boolean;
   useBackButton?: boolean;
+  /** Show notification icon (default true). Tap navigates to /notifications unless onNotificationTap is provided. */
+  showNotificationButton?: boolean;
   showNotificationBadge?: boolean;
+  /** Override default navigation to /notifications when notification icon is pressed. */
   onNotificationTap?: () => void;
   onSettingsPress?: () => void;
 };
+
+const NOTIFICATIONS_ROUTE = "/notifications";
 
 export function AppAppBar({
   title,
   showMenuButton = true,
   useBackButton = false,
+  showNotificationButton = true,
   showNotificationBadge = false,
   onNotificationTap,
   onSettingsPress,
 }: AppAppBarProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme === "dark" ? "dark" : "light"];
+  const { colors } = useTheme();
   const router = useRouter();
 
   const handleBack = () => router.back();
+  const handleNotificationPress = () => {
+    (onNotificationTap ?? (() => router.push(NOTIFICATIONS_ROUTE as any)))();
+  };
 
   return (
     <View style={[styles.container, { borderBottomColor: colors.border }]}>
@@ -78,9 +87,9 @@ export function AppAppBar({
       <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
 
       <View style={styles.actions}>
-        {onNotificationTap && (
+        {showNotificationButton && (
           <Pressable
-            onPress={onNotificationTap}
+            onPress={handleNotificationPress}
             style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]}
             accessibilityRole="button"
             accessibilityLabel={
@@ -91,7 +100,7 @@ export function AppAppBar({
           >
             <View>
               <MaterialIcons
-                name="notifications-outlined"
+                name="notifications-none"
                 size={24}
                 color={colors.text}
               />
@@ -111,7 +120,7 @@ export function AppAppBar({
             accessibilityLabel="Settings"
           >
             <MaterialIcons
-              name="settings-outlined"
+              name="settings"
               size={24}
               color={colors.text}
             />

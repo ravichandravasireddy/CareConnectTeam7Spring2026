@@ -10,12 +10,12 @@ import {
   StyleSheet,
   Text,
   View,
-  useColorScheme,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppAppBar } from "@/components/app-app-bar";
 import { AppColors, Colors, Typography, Fonts } from "@/constants/theme";
+import { useTheme } from "@/providers/ThemeProvider";
 
 function MetricCard({
   title,
@@ -52,8 +52,7 @@ function MetricCard({
 }
 
 export default function CaregiverAnalyticsScreen() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme === "dark" ? "dark" : "light"];
+  const { colors } = useTheme();
 
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
@@ -61,7 +60,6 @@ export default function CaregiverAnalyticsScreen() {
         title="Analytics"
         showMenuButton={false}
         useBackButton={true}
-        onNotificationTap={() => {}}
       />
 
       <SafeAreaView edges={["bottom"]} style={styles.safeArea}>

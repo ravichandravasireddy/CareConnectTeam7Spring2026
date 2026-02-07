@@ -9,9 +9,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Task } from '@/models/Task';
-import { Colors, Typography } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Task } from '@/models/task';
+import { Colors, Typography, AppColors } from '@/constants/theme';
+import { useTheme } from '@/providers/ThemeProvider';
 
 type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
@@ -21,6 +21,10 @@ export interface TaskCardProps {
   style?: StyleProp<ViewStyle>;
   showTime?: boolean;
   showPatientName?: boolean;
+  /** When set, shows a status pill: "COMPLETED" (green) or "DUE {time}" (primary). */
+  completed?: boolean;
+  /** Optional description shown below the title. */
+  description?: string;
 }
 
 // Format time to "h:mm a" (e.g., "9:00 AM")
@@ -46,9 +50,10 @@ export function TaskCard({
   style,
   showTime = true,
   showPatientName = false,
+  completed,
+  description,
 }: TaskCardProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme === 'dark' ? 'dark' : 'light'];
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   const timeLabel = showTime ? formatTime(task.date) : '';
@@ -59,6 +64,14 @@ export function TaskCard({
   }
   const accessibilityLabel = accessibilityParts.join(', ');
 
+  const TaskIcon = (
+    <MaterialIcons
+      name={task.icon as React.ComponentProps<typeof MaterialIcons>['name']}
+      size={22}
+      color={task.iconColor}
+    />
+  );
+
   const content = (
     <View style={[styles.taskCard, { borderColor: colors.border }, style]}>
       <View
@@ -67,12 +80,19 @@ export function TaskCard({
           { backgroundColor: task.iconBackground },
         ]}
         accessible={false}>
-        <MaterialIcons name={task.icon} size={22} color={task.iconColor} />
+        {TaskIcon}
       </View>
       <View style={styles.taskContent}>
         <Text style={[Typography.h6, { color: colors.text }]} numberOfLines={2}>
           {task.title}
         </Text>
+        {description != null && description !== '' && (
+          <Text
+            style={[Typography.bodySmall, { color: colors.textSecondary }, styles.description]}
+            numberOfLines={2}>
+            {description}
+          </Text>
+        )}
         {showTime && timeLabel && (
           <Text
             style={[Typography.bodySmall, { color: colors.textSecondary }]}
@@ -86,6 +106,25 @@ export function TaskCard({
             numberOfLines={1}>
             {task.patientName}
           </Text>
+        )}
+        {completed !== undefined && (
+          <View
+            style={[
+              styles.pill,
+              {
+                backgroundColor: completed ? AppColors.success100 : AppColors.primary100,
+                alignSelf: 'flex-start',
+                marginTop: 8,
+              },
+            ]}>
+            <Text
+              style={[
+                Typography.captionBold,
+                { color: completed ? AppColors.success700 : colors.primary },
+              ]}>
+              {completed ? 'COMPLETED' : `DUE ${timeLabel || formatTime(task.date)}`}
+            </Text>
+          </View>
         )}
       </View>
     </View>
@@ -139,5 +178,13 @@ const createStyles = (colors: ThemeColors) =>
     taskContent: {
       flex: 1,
       marginLeft: 12,
+    },
+    description: {
+      marginTop: 4,
+    },
+    pill: {
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderRadius: 8,
     },
   });

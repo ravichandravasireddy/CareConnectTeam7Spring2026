@@ -6,7 +6,7 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import * as RN from "react-native";
 import { TaskCard } from "../task-card";
-import type { Task } from "@/models/Task";
+import type { Task } from "@/models/task";
 
 jest.mock("react-native", () => {
   const React = require("react");
@@ -27,11 +27,26 @@ jest.mock("@/hooks/use-color-scheme", () => ({
   useColorScheme: jest.fn(() => "light"),
 }));
 
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
 jest.mock("@expo/vector-icons/MaterialIcons", () => {
   const React = require("react");
   const { View } = require("react-native");
   return ({ name }: { name: string }) =>
     React.createElement(View, { testID: `icon-${name}` });
+});
+
+jest.mock("@expo/vector-icons/MaterialCommunityIcons", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+  return ({ name }: { name: string }) =>
+    React.createElement(View, { testID: `mci-${name}` });
 });
 
 const mockTask: Task = {

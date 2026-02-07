@@ -28,7 +28,15 @@ jest.mock("@/components/app-app-bar", () => ({
   },
 }));
 
-import CaregiverAnalyticsScreen from "../analytics";
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
+import CaregiverAnalyticsScreen from "../caregiver/analytics";
 
 describe("CaregiverAnalyticsScreen", () => {
   describe("Rendering - Normal Cases", () => {

@@ -6,7 +6,6 @@
 // No audio notifications; tap targets ≥48px.
 // =============================================================================
 
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -17,13 +16,15 @@ import {
   StyleSheet,
   Text,
   View,
-  useColorScheme,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppAppBar } from "@/components/app-app-bar";
-import { AppColors, Colors, Typography, Fonts } from "@/constants/theme";
-import { MOCK_TASKS, isTaskCompleted } from "@/models/task";
+import { TaskCard } from "@/components/task-card";
+import { AppColors, Typography, Fonts } from "@/constants/theme";
+import { isTaskCompleted } from "@/models/task";
+import { useTaskProvider } from "@/providers/TaskProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 import { getGreeting, greetingName, tasksForToday } from "./helpers";
 
 export { getGreeting, greetingName, tasksForToday };
@@ -34,11 +35,14 @@ const PATIENTS = [
 ];
 
 export default function CaregiverDashboardScreen() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme === "dark" ? "dark" : "light"];
+  const { colors } = useTheme();
   const router = useRouter();
 
-  const todayTasks = useMemo(() => tasksForToday(MOCK_TASKS), []);
+  const { getTasksForDate } = useTaskProvider();
+  const todayTasks = useMemo(
+    () => getTasksForDate(new Date()),
+    [getTasksForDate]
+  );
   const completedCount = todayTasks.filter(isTaskCompleted).length;
   const totalCount = todayTasks.length;
 
@@ -57,7 +61,6 @@ export default function CaregiverDashboardScreen() {
         showMenuButton={true}
         useBackButton={false}
         showNotificationBadge={true}
-        onNotificationTap={() => {}}
         onSettingsPress={() => {}}
       />
 
@@ -191,49 +194,18 @@ export default function CaregiverDashboardScreen() {
               </View>
             ) : (
               todayTasks.slice(0, 5).map((task) => (
-                <Pressable
+                <TaskCard
                   key={task.id}
-                  style={({ pressed }) => [
-                    styles.taskCard,
-                    { backgroundColor: colors.surface },
-                    pressed && styles.pressed,
-                  ]}
+                  task={task}
+                  showTime={true}
+                  showPatientName={true}
                   onPress={() =>
                     router.push({
                       pathname: "/caregiver/task-details",
                       params: { taskId: task.id },
                     })
                   }
-                  accessibilityRole="button"
-                  accessibilityLabel={`${task.title}, ${task.patientName || "no patient"}, tap to view details`}
-                >
-                  <View
-                    style={[
-                      styles.taskIcon,
-                      { backgroundColor: task.iconBackground },
-                    ]}
-                  >
-                    {task.icon === "medication" ? (
-                      <MaterialIcons name="medication" size={22} color={task.iconColor} />
-                    ) : task.icon === "monitor-heart" ? (
-                      <MaterialCommunityIcons name="monitor-heart" size={22} color={task.iconColor} />
-                    ) : (
-                      <MaterialIcons name="directions-walk" size={22} color={task.iconColor} />
-                    )}
-                  </View>
-                  <View style={styles.taskContent}>
-                    <Text style={[styles.taskTitle, { color: colors.text }]}>
-                      {task.title}
-                    </Text>
-                    {task.patientName ? (
-                      <Text
-                        style={[styles.taskSubtitle, { color: colors.textSecondary }]}
-                      >
-                        {task.patientName}
-                      </Text>
-                    ) : null}
-                  </View>
-                </Pressable>
+                />
               ))
             )}
           </View>
@@ -243,7 +215,7 @@ export default function CaregiverDashboardScreen() {
   );
 }
 
-const createStyles = (colors: typeof Colors.light) =>
+const createStyles = (colors: typeof Colors.light | typeof Colors.dark) =>
   StyleSheet.create({
     container: { flex: 1 },
     safeArea: { flex: 1 },
@@ -319,32 +291,5 @@ const createStyles = (colors: typeof Colors.light) =>
     emptyText: {
       ...Typography.bodySmall,
       fontFamily: Fonts.sans,
-    },
-    taskCard: {
-      flexDirection: "row",
-      alignItems: "center",
-      padding: 16,
-      borderRadius: 12,
-      marginTop: 12,
-    },
-    taskIcon: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    taskContent: {
-      flex: 1,
-      marginLeft: 12,
-    },
-    taskTitle: {
-      ...Typography.bodyEmphasized,
-      fontFamily: Fonts.sans,
-    },
-    taskSubtitle: {
-      ...Typography.bodySmall,
-      fontFamily: Fonts.sans,
-      marginTop: 2,
     },
   });

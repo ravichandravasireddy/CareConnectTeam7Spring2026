@@ -26,7 +26,7 @@ import {
   healthLogProgressRatio,
 } from '../../models/HealthLog';
 import { Colors, Typography, AppColors } from '../../constants/theme';
-import { useColorScheme } from '../../hooks/use-color-scheme';
+import { useTheme } from '@/providers/ThemeProvider';
 
 type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
@@ -131,9 +131,7 @@ function LatestLogCard({
 }
 
 export default function HealthLogsScreen() {
-  const colorScheme = useColorScheme();
-  const themeKey = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[themeKey];
+  const { colors } = useTheme();
   const router = useRouter();
   const healthLogProvider = useHealthLogProvider();
 

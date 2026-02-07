@@ -40,7 +40,21 @@ jest.mock("@/components/app-app-bar", () => ({
 jest.mock("@expo/vector-icons/MaterialIcons", () => "MaterialIcons");
 jest.mock("@expo/vector-icons/MaterialCommunityIcons", () => "MaterialCommunityIcons");
 
-import CaregiverDashboardScreen from "../index";
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
+jest.mock("@/providers/TaskProvider", () => ({
+  useTaskProvider: () => ({
+    getTasksForDate: () => [],
+  }),
+}));
+
+import CaregiverDashboardScreen from "../caregiver/index";
 
 describe("CaregiverDashboardScreen", () => {
   beforeEach(() => {
@@ -98,6 +112,13 @@ describe("CaregiverDashboardScreen", () => {
       const patientsCard = screen.getByLabelText(/Patients.*tap to view/);
       fireEvent.press(patientsCard);
       expect(mockRouter.push).toHaveBeenCalledWith("/caregiver/monitor");
+    });
+
+    it("Tasks stat navigates to tasks", () => {
+      render(<CaregiverDashboardScreen />);
+      const tasksCard = screen.getByLabelText("Tasks, tap to manage tasks");
+      fireEvent.press(tasksCard);
+      expect(mockRouter.push).toHaveBeenCalledWith("/caregiver/tasks");
     });
 
     it("Alerts stat navigates to emergency-sos", () => {

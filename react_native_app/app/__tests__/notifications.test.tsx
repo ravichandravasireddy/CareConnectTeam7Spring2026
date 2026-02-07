@@ -41,6 +41,14 @@ jest.mock('@/hooks/use-color-scheme', () => ({
   useColorScheme: jest.fn(() => 'light'),
 }));
 
+jest.mock('@/providers/ThemeProvider', () => {
+  const { Colors } = require('@/constants/theme');
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: 'light', highContrast: false, setHighContrast: () => {}, themeKey: 'light' }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
 jest.mock('react-native-safe-area-context', () => {
   const { View } = require('react-native');
   return {
@@ -49,6 +57,7 @@ jest.mock('react-native-safe-area-context', () => {
         {children}
       </View>
     ),
+    useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
   };
 });
 
@@ -57,6 +66,15 @@ jest.mock('@expo/vector-icons/MaterialIcons', () => {
   return jest.fn(({ name, ...props }: { name: string }) =>
     React.createElement('View', { testID: `icon-${name}`, ...props })
   );
+});
+
+jest.mock('@/components/app-bottom-nav-bar', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  return {
+    AppBottomNavBar: () => React.createElement(View, { testID: 'app-bottom-nav-bar' }),
+    kCaregiverNavHome: 0,
+  };
 });
 
 const mockRouter = {

@@ -31,7 +31,15 @@ jest.mock("@/components/app-app-bar", () => ({
 
 jest.mock("@expo/vector-icons/MaterialIcons", () => "MaterialIcons");
 
-import CaregiverPatientMonitoringScreen from "../monitor";
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
+import CaregiverPatientMonitoringScreen from "../caregiver/monitor";
 
 describe("CaregiverPatientMonitoringScreen", () => {
   beforeEach(() => {

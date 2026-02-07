@@ -13,12 +13,12 @@ import {
   StyleSheet,
   Text,
   View,
-  useColorScheme,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppAppBar } from "@/components/app-app-bar";
 import { AppColors, Colors, Typography, Fonts } from "@/constants/theme";
+import { useTheme } from "@/providers/ThemeProvider";
 
 const PATIENTS = [
   { id: "1", name: "Robert Williams", initials: "RW", patientId: "#RW-2847" },
@@ -36,7 +36,7 @@ function ActionCard({
   label: string;
   color: string;
   onPress?: () => void;
-  colors: typeof Colors.light;
+  colors: typeof Colors.light | typeof Colors.dark;
 }) {
   const content = (
     <View style={styles.actionContent}>
@@ -73,8 +73,7 @@ function VitalTile({
   value: string;
   status: string;
 }) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme === "dark" ? "dark" : "light"];
+  const { colors } = useTheme();
 
   return (
     <View
@@ -95,8 +94,7 @@ function VitalTile({
 }
 
 export default function CaregiverPatientMonitoringScreen() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme === "dark" ? "dark" : "light"];
+  const { colors } = useTheme();
   const router = useRouter();
 
   return (
@@ -105,7 +103,6 @@ export default function CaregiverPatientMonitoringScreen() {
         title="Patient Details"
         showMenuButton={false}
         useBackButton={true}
-        onNotificationTap={() => {}}
       />
 
       <SafeAreaView edges={["bottom"]} style={styles.safeArea}>

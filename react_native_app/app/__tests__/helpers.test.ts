@@ -4,8 +4,19 @@
 // Tests for getGreeting, greetingName, tasksForToday.
 // =============================================================================
 
-import { getGreeting, greetingName, tasksForToday } from "../helpers";
-import { MOCK_TASKS, type Task } from "@/models/task";
+import { getGreeting, greetingName, tasksForToday } from "../caregiver/helpers";
+import type { Task } from "@/models/task";
+
+const baseTask: Task = {
+  id: "base-1",
+  title: "Base Task",
+  description: "Description",
+  date: new Date(2025, 1, 7, 10, 0),
+  patientName: "Patient",
+  icon: "medication",
+  iconBackground: "#eee",
+  iconColor: "#333",
+};
 
 describe("getGreeting", () => {
   it("returns one of the valid greeting strings", () => {
@@ -117,11 +128,13 @@ describe("tasksForToday", () => {
     it("filters tasks for given date", () => {
       const tasks: Task[] = [
         {
-          ...MOCK_TASKS[0],
+          ...baseTask,
           date: new Date(2025, 1, 7, 10, 0),
         },
         {
-          ...MOCK_TASKS[1],
+          ...baseTask,
+          id: "base-2",
+          title: "Other",
           date: new Date(2025, 1, 8, 10, 0),
         },
       ];
@@ -133,7 +146,7 @@ describe("tasksForToday", () => {
     it("returns empty array when no tasks match", () => {
       const tasks: Task[] = [
         {
-          ...MOCK_TASKS[0],
+          ...baseTask,
           date: new Date(2025, 1, 8, 10, 0),
         },
       ];
@@ -143,8 +156,8 @@ describe("tasksForToday", () => {
 
     it("returns all matching tasks", () => {
       const tasks: Task[] = [
-        { ...MOCK_TASKS[0], date: new Date(2025, 1, 7, 9, 0) },
-        { ...MOCK_TASKS[1], date: new Date(2025, 1, 7, 14, 0) },
+        { ...baseTask, date: new Date(2025, 1, 7, 9, 0) },
+        { ...baseTask, id: "base-2", title: "Other", date: new Date(2025, 1, 7, 14, 0) },
       ];
       const result = tasksForToday(tasks, today);
       expect(result).toHaveLength(2);
@@ -160,7 +173,7 @@ describe("tasksForToday", () => {
     it("uses current date when referenceDate not provided", () => {
       const now = new Date();
       const taskToday: Task = {
-        ...MOCK_TASKS[0],
+        ...baseTask,
         date: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0),
       };
       const result = tasksForToday([taskToday]);
@@ -169,11 +182,13 @@ describe("tasksForToday", () => {
 
     it("matches year, month, and day correctly", () => {
       const taskFeb7 = {
-        ...MOCK_TASKS[0],
+        ...baseTask,
         date: new Date(2025, 1, 7, 23, 59),
       };
       const taskFeb8 = {
-        ...MOCK_TASKS[1],
+        ...baseTask,
+        id: "base-2",
+        title: "Other",
         date: new Date(2025, 1, 8, 0, 1),
       };
       const result = tasksForToday([taskFeb7, taskFeb8] as Task[], today);
@@ -189,7 +204,7 @@ describe("tasksForToday", () => {
 
     it("handles tasks with invalid dates", () => {
       const taskWithInvalidDate = {
-        ...MOCK_TASKS[0],
+        ...baseTask,
         date: new Date("invalid"),
       } as Task;
       expect(() => tasksForToday([taskWithInvalidDate], today)).not.toThrow();

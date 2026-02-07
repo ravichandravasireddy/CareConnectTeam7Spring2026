@@ -1,11 +1,64 @@
 // =============================================================================
 // TASK MODEL UNIT TESTS
 // =============================================================================
-// Tests for isTaskCompleted, MOCK_TASKS, and Task interface behavior.
-// Covers normal cases, edge cases, and error handling.
+// Tests for isTaskCompleted, getTaskDateOnly, areDatesEqual, and Task shape.
+// Mock/sample tasks live in TaskProvider; tests use local sample data.
 // =============================================================================
 
-import { isTaskCompleted, MOCK_TASKS, type Task } from "../task";
+import {
+  isTaskCompleted,
+  getTaskDateOnly,
+  areDatesEqual,
+  type Task,
+  type TaskIconName,
+} from "../task";
+
+/** Sample tasks for model unit tests (mirrors shape from TaskProvider). */
+const SAMPLE_TASKS: Task[] = [
+  {
+    id: "task-1",
+    title: "Metformin 500mg",
+    description: "Medication reminder",
+    date: new Date(Date.now() + 60 * 60 * 1000),
+    patientName: "Maya Patel",
+    icon: "medication",
+    iconBackground: "#e3f2fd",
+    iconColor: "#1976d2",
+  },
+  {
+    id: "task-2",
+    title: "Blood pressure log",
+    description: "Record BP and upload to the care plan.",
+    date: new Date(Date.now() + 3 * 60 * 60 * 1000),
+    patientName: "Mary Johnson",
+    icon: "favorite",
+    iconBackground: "#fce4ec",
+    iconColor: "#c2185b",
+  },
+  {
+    id: "task-3",
+    title: "Evening walk",
+    description: "Assist with 15-minute walk after dinner.",
+    date: new Date(Date.now() + 6 * 60 * 60 * 1000),
+    patientName: "James Carter",
+    icon: "directions-walk",
+    iconBackground: "#e8f5e9",
+    iconColor: "#388e3c",
+    completedAt: new Date(),
+  },
+];
+
+const VALID_TASK_ICONS: TaskIconName[] = [
+  "medication",
+  "favorite",
+  "directions-walk",
+  "fitness-center",
+  "local-hospital",
+  "science",
+  "medication-liquid",
+  "videocam",
+  "phone",
+];
 
 describe("Task Model", () => {
   // ===========================================================================
@@ -42,14 +95,14 @@ describe("Task Model", () => {
       expect(isTaskCompleted(incompleteTask)).toBe(false);
     });
 
-    it("identifies completed task in MOCK_TASKS", () => {
-      const task3 = MOCK_TASKS[2];
+    it("identifies completed task in sample tasks", () => {
+      const task3 = SAMPLE_TASKS[2];
       expect(isTaskCompleted(task3)).toBe(true);
     });
 
-    it("identifies incomplete tasks in MOCK_TASKS", () => {
-      expect(isTaskCompleted(MOCK_TASKS[0])).toBe(false);
-      expect(isTaskCompleted(MOCK_TASKS[1])).toBe(false);
+    it("identifies incomplete tasks in sample tasks", () => {
+      expect(isTaskCompleted(SAMPLE_TASKS[0])).toBe(false);
+      expect(isTaskCompleted(SAMPLE_TASKS[1])).toBe(false);
     });
   });
 
@@ -59,7 +112,7 @@ describe("Task Model", () => {
 
   describe("isTaskCompleted - Edge Cases", () => {
     it("returns false when completedAt is undefined", () => {
-      const task = { ...MOCK_TASKS[0], completedAt: undefined };
+      const task = { ...SAMPLE_TASKS[0], completedAt: undefined };
       expect(isTaskCompleted(task)).toBe(false);
     });
 
@@ -80,7 +133,7 @@ describe("Task Model", () => {
 
     it("returns true when completedAt is invalid date (still truthy)", () => {
       const task = {
-        ...MOCK_TASKS[0],
+        ...SAMPLE_TASKS[0],
         completedAt: new Date("invalid"),
       } as Task;
       expect(isTaskCompleted(task)).toBe(true);
@@ -88,16 +141,46 @@ describe("Task Model", () => {
   });
 
   // ===========================================================================
-  // MOCK_TASKS - Data Validation
+  // getTaskDateOnly & areDatesEqual
   // ===========================================================================
 
-  describe("MOCK_TASKS - Data Validation", () => {
-    it("has exactly 3 tasks", () => {
-      expect(MOCK_TASKS).toHaveLength(3);
+  describe("getTaskDateOnly", () => {
+    it("strips time to local midnight", () => {
+      const d = new Date(2026, 1, 7, 14, 30, 0);
+      const only = getTaskDateOnly(d);
+      expect(only.getFullYear()).toBe(2026);
+      expect(only.getMonth()).toBe(1);
+      expect(only.getDate()).toBe(7);
+      expect(only.getHours()).toBe(0);
+      expect(only.getMinutes()).toBe(0);
+      expect(only.getSeconds()).toBe(0);
+    });
+  });
+
+  describe("areDatesEqual", () => {
+    it("returns true for same calendar day", () => {
+      const a = new Date(2026, 1, 7, 9, 0);
+      const b = new Date(2026, 1, 7, 18, 30);
+      expect(areDatesEqual(a, b)).toBe(true);
+    });
+    it("returns false for different days", () => {
+      const a = new Date(2026, 1, 7, 9, 0);
+      const b = new Date(2026, 1, 8, 9, 0);
+      expect(areDatesEqual(a, b)).toBe(false);
+    });
+  });
+
+  // ===========================================================================
+  // Sample Task[] shape validation
+  // ===========================================================================
+
+  describe("Sample Task[] shape validation", () => {
+    it("sample has exactly 3 tasks", () => {
+      expect(SAMPLE_TASKS).toHaveLength(3);
     });
 
     it("each task has required fields", () => {
-      MOCK_TASKS.forEach((task, index) => {
+      SAMPLE_TASKS.forEach((task) => {
         expect(task).toHaveProperty("id");
         expect(task).toHaveProperty("title");
         expect(task).toHaveProperty("description");
@@ -109,51 +192,33 @@ describe("Task Model", () => {
         expect(typeof task.id).toBe("string");
         expect(typeof task.title).toBe("string");
         expect(task.date).toBeInstanceOf(Date);
-        expect(["medication", "monitor-heart", "directions-walk"]).toContain(
-          task.icon
-        );
+        expect(VALID_TASK_ICONS).toContain(task.icon);
       });
     });
 
     it("task IDs are unique", () => {
-      const ids = MOCK_TASKS.map((t) => t.id);
+      const ids = SAMPLE_TASKS.map((t) => t.id);
       const uniqueIds = new Set(ids);
       expect(uniqueIds.size).toBe(ids.length);
     });
 
     it("task icons are valid", () => {
-      const validIcons = ["medication", "monitor-heart", "directions-walk"];
-      MOCK_TASKS.forEach((task) => {
-        expect(validIcons).toContain(task.icon);
+      SAMPLE_TASKS.forEach((task) => {
+        expect(VALID_TASK_ICONS).toContain(task.icon);
       });
     });
 
     it("task colors are non-empty strings", () => {
-      MOCK_TASKS.forEach((task) => {
+      SAMPLE_TASKS.forEach((task) => {
         expect(task.iconBackground).toBeTruthy();
         expect(typeof task.iconBackground).toBe("string");
         expect(task.iconColor).toBeTruthy();
         expect(typeof task.iconColor).toBe("string");
       });
     });
-  });
 
-  // ===========================================================================
-  // MOCK_TASKS - Edge Cases
-  // ===========================================================================
-
-  describe("MOCK_TASKS - Edge Cases", () => {
-    it("tasks have dates in the future (except completed)", () => {
-      const now = Date.now();
-      MOCK_TASKS.forEach((task) => {
-        if (!task.completedAt) {
-          expect(task.date.getTime()).toBeGreaterThanOrEqual(now - 60000);
-        }
-      });
-    });
-
-    it("completed task has completedAt in the past or present", () => {
-      const completedTask = MOCK_TASKS.find((t) => t.completedAt);
+    it("completed task has completedAt", () => {
+      const completedTask = SAMPLE_TASKS.find((t) => t.completedAt);
       expect(completedTask).toBeDefined();
       expect(completedTask!.completedAt).toBeInstanceOf(Date);
     });

@@ -5,7 +5,6 @@
 // Deaf/HoH: All details as text. Visual status (completed/due). No audio cues.
 // =============================================================================
 
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
@@ -14,22 +13,45 @@ import {
   StyleSheet,
   Text,
   View,
-  useColorScheme,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppAppBar } from "@/components/app-app-bar";
-import { AppColors, Colors, Typography, Fonts } from "@/constants/theme";
-import { MOCK_TASKS, isTaskCompleted } from "@/models/task";
+import { TaskCard } from "@/components/task-card";
+import { AppColors, Typography, Fonts } from "@/constants/theme";
+import { isTaskCompleted } from "@/models/task";
+import { useTaskProvider } from "@/providers/TaskProvider";
+import { useTheme } from "@/providers/ThemeProvider";
 
 export default function TaskDetailsScreen() {
   const { taskId } = useLocalSearchParams<{ taskId: string }>();
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme === "dark" ? "dark" : "light"];
+  const { colors } = useTheme();
   const router = useRouter();
+  const { tasks } = useTaskProvider();
 
-  const task = MOCK_TASKS.find((t) => t.id === taskId) ?? MOCK_TASKS[0];
-  const completed = isTaskCompleted(task);
+  const task = taskId
+    ? tasks.find((t) => t.id === taskId) ?? tasks[0]
+    : tasks[0];
+  const completed = task ? isTaskCompleted(task) : false;
+
+  if (!task) {
+    return (
+      <View style={[styles.container, { backgroundColor: colors.surface }]}>
+        <AppAppBar
+          title="Task Details"
+          showMenuButton={false}
+          useBackButton={true}
+        />
+        <SafeAreaView edges={["bottom"]} style={styles.safeArea}>
+          <View style={styles.scrollContent}>
+            <Text style={[Typography.body, { color: colors.textSecondary }]}>
+              No task selected
+            </Text>
+          </View>
+        </SafeAreaView>
+      </View>
+    );
+  }
 
   const dateLabel = task.date.toLocaleDateString(undefined, {
     weekday: "long",
@@ -37,17 +59,6 @@ export default function TaskDetailsScreen() {
     month: "long",
     day: "numeric",
   });
-  const timeLabel = task.date.toLocaleTimeString(undefined, {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-
-  const TaskIcon =
-    task.icon === "medication"
-      ? () => <MaterialIcons name="medication" size={28} color={task.iconColor} />
-      : task.icon === "monitor-heart"
-        ? () => <MaterialCommunityIcons name="monitor-heart" size={28} color={task.iconColor} />
-        : () => <MaterialIcons name="directions-walk" size={28} color={task.iconColor} />;
 
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
@@ -55,7 +66,6 @@ export default function TaskDetailsScreen() {
         title="Task Details"
         showMenuButton={false}
         useBackButton={true}
-        onNotificationTap={() => {}}
       />
 
       <SafeAreaView edges={["bottom"]} style={styles.safeArea}>
@@ -66,70 +76,25 @@ export default function TaskDetailsScreen() {
           {/* Task card */}
           <View
             style={[
-              styles.taskCard,
+              styles.taskCardWrapper,
               {
                 backgroundColor: colors.surface,
                 borderColor: colors.border,
               },
             ]}
           >
-            <View
-              style={[
-                styles.taskIcon,
-                { backgroundColor: task.iconBackground },
-              ]}
-            >
-              <TaskIcon />
-            </View>
-            <View style={styles.taskContent}>
-              <Text style={[styles.taskTitle, { color: colors.text }]}>
-                {task.title}
+            <TaskCard
+              task={task}
+              showTime={true}
+              showPatientName={true}
+              description={task.description}
+              completed={completed}
+              style={[styles.taskCardInner, { borderColor: "transparent", backgroundColor: "transparent" }]}
+            />
+            <View style={[styles.pill, { backgroundColor: colors.surface }]}>
+              <Text style={[styles.pillText, { color: colors.textSecondary }]}>
+                RECURRING
               </Text>
-              <Text
-                style={[styles.taskDesc, { color: colors.textSecondary }]}
-              >
-                {task.description}
-              </Text>
-              <View style={styles.pillsRow}>
-                <View
-                  style={[
-                    styles.pill,
-                    {
-                      backgroundColor: completed
-                        ? AppColors.success100
-                        : AppColors.primary100,
-                    },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.pillText,
-                      {
-                        color: completed
-                          ? AppColors.success700
-                          : colors.primary,
-                      },
-                    ]}
-                  >
-                    {completed ? "COMPLETED" : `DUE ${timeLabel}`}
-                  </Text>
-                </View>
-                <View
-                  style={[
-                    styles.pill,
-                    { backgroundColor: colors.surface },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.pillText,
-                      { color: colors.textSecondary },
-                    ]}
-                  >
-                    RECURRING
-                  </Text>
-                </View>
-              </View>
             </View>
           </View>
 
@@ -246,41 +211,20 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingBottom: 32,
   },
-  taskCard: {
-    flexDirection: "row",
+  taskCardWrapper: {
     padding: 16,
     borderRadius: 16,
     borderWidth: 1,
   },
-  taskIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  taskContent: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  taskTitle: {
-    ...Typography.h5,
-    fontFamily: Fonts.sans,
-  },
-  taskDesc: {
-    ...Typography.body,
-    fontFamily: Fonts.sans,
-    marginTop: 4,
-  },
-  pillsRow: {
-    flexDirection: "row",
-    gap: 8,
-    marginTop: 12,
+  taskCardInner: {
+    marginBottom: 0,
   },
   pill: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
+    marginTop: 12,
+    alignSelf: "flex-start",
   },
   pillText: {
     ...Typography.captionBold,

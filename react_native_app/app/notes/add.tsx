@@ -22,16 +22,14 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNoteProvider } from '../../providers/NoteProvider';
 import { Note, NoteCategory, formatNoteCategoryDisplay } from '../../models/Note';
 import { Colors, Typography, AppColors } from '../../constants/theme';
-import { useColorScheme } from '../../hooks/use-color-scheme';
+import { useTheme } from '@/providers/ThemeProvider';
 
 const kCurrentUserAuthor = 'Sarah Johnson (Caregiver)';
 
 const NOTE_CATEGORIES = [NoteCategory.medication, NoteCategory.exercise, NoteCategory.appointment];
 
 export default function AddNoteScreen() {
-  const colorScheme = useColorScheme();
-  const themeKey = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[themeKey];
+  const { colors } = useTheme();
   const router = useRouter();
   const noteProvider = useNoteProvider();
 

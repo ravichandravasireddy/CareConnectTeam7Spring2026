@@ -5,13 +5,23 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react-native";
 
+const mockBack = jest.fn();
+const mockPush = jest.fn();
 jest.mock("expo-router", () => ({
   useRouter: () => ({
-    back: jest.fn(),
-    push: jest.fn(),
+    back: mockBack,
+    push: mockPush,
     replace: jest.fn(),
   }),
 }));
+
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
 
 jest.mock("@expo/vector-icons/MaterialIcons", () => "MaterialIcons");
 
@@ -34,20 +44,19 @@ describe("AppAppBar", () => {
       expect(screen.getByLabelText("Go back")).toBeTruthy();
     });
 
-    it("renders notification button when onNotificationTap provided", () => {
-      render(
-        <AppAppBar title="Test" onNotificationTap={() => {}} />
-      );
+    it("renders notification button by default", () => {
+      render(<AppAppBar title="Test" />);
       expect(screen.getByLabelText("Notifications")).toBeTruthy();
+    });
+
+    it("hides notification button when showNotificationButton is false", () => {
+      render(<AppAppBar title="Test" showNotificationButton={false} />);
+      expect(screen.queryByLabelText("Notifications")).toBeNull();
     });
 
     it("shows notification badge label when showNotificationBadge is true", () => {
       render(
-        <AppAppBar
-          title="Test"
-          onNotificationTap={() => {}}
-          showNotificationBadge
-        />
+        <AppAppBar title="Test" showNotificationBadge />
       );
       expect(
         screen.getByLabelText("Notifications, 1 unread notification")
@@ -87,13 +96,26 @@ describe("AppAppBar", () => {
   });
 
   describe("User Interactions", () => {
-    it("calls onNotificationTap when notification pressed", () => {
+    it("calls router.back when back button pressed", () => {
+      render(<AppAppBar title="Test" useBackButton showMenuButton={false} />);
+      fireEvent.press(screen.getByLabelText("Go back"));
+      expect(mockBack).toHaveBeenCalledTimes(1);
+    });
+
+    it("calls router.push('/notifications') when notification pressed by default", () => {
+      render(<AppAppBar title="Test" />);
+      fireEvent.press(screen.getByLabelText("Notifications"));
+      expect(mockPush).toHaveBeenCalledWith("/notifications");
+    });
+
+    it("calls onNotificationTap when notification pressed and override provided", () => {
       const onNotificationTap = jest.fn();
       render(
         <AppAppBar title="Test" onNotificationTap={onNotificationTap} />
       );
       fireEvent.press(screen.getByLabelText("Notifications"));
       expect(onNotificationTap).toHaveBeenCalledTimes(1);
+      expect(mockPush).not.toHaveBeenCalled();
     });
 
     it("calls onSettingsPress when settings pressed", () => {

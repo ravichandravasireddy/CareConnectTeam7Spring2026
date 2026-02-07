@@ -22,6 +22,14 @@ jest.mock("react-native-safe-area-context", () => {
   };
 });
 
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
 import NavigationHubScreen from "../navigation-hub";
 
 describe("NavigationHubScreen", () => {
@@ -102,6 +110,70 @@ describe("NavigationHubScreen", () => {
     it("Role Selection button does not throw", () => {
       render(<NavigationHubScreen />);
       expect(() => fireEvent.press(screen.getByText("Role Selection"))).not.toThrow();
+    });
+
+    it("Registration button does not throw", () => {
+      render(<NavigationHubScreen />);
+      expect(() => fireEvent.press(screen.getByText("Registration"))).not.toThrow();
+    });
+
+    it("Sign In button does not throw", () => {
+      render(<NavigationHubScreen />);
+      expect(() => fireEvent.press(screen.getByText("Sign In"))).not.toThrow();
+    });
+
+    it("Caregiver: Patient Monitoring calls router.push /caregiver/monitor", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Caregiver: Patient Monitoring"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/caregiver/monitor");
+    });
+
+    it("Caregiver: Task Management calls router.push /caregiver/tasks", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Caregiver: Task Management"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/caregiver/tasks");
+    });
+
+    it("Caregiver: Analytics calls router.push /caregiver/analytics", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Caregiver: Analytics"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/caregiver/analytics");
+    });
+
+    it("Calendar calls router.push /calendar", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Calendar"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/calendar");
+    });
+
+    it("Notifications calls router.push /notifications", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Notifications"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/notifications");
+    });
+
+    it("Notes calls router.push /notes", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Notes"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/notes");
+    });
+
+    it("Health Logs calls router.push /health-logs", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Health Logs"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/health-logs");
+    });
+
+    it("Health Timeline calls router.push /health-timeline", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Health Timeline"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/health-timeline");
+    });
+
+    it("Video Call calls router.push /video-call", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Video Call"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/video-call");
     });
   });
 

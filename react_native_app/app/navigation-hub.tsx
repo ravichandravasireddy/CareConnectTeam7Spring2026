@@ -12,16 +12,14 @@ import {
   StyleSheet,
   Text,
   View,
-  useColorScheme,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AppColors, Colors, Typography, Fonts } from "@/constants/theme";
+import { AppColors, Typography, Fonts } from "@/constants/theme";
+import { useTheme } from "@/providers/ThemeProvider";
 
 function SectionLabel({ label }: { label: string }) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme === "dark" ? "dark" : "light"];
-
+  const { colors } = useTheme();
   return (
     <Text style={[styles.sectionLabel, { color: colors.primary }]}>{label}</Text>
   );
@@ -34,9 +32,7 @@ function NavButton({
   label: string;
   onPress: () => void;
 }) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme === "dark" ? "dark" : "light"];
-
+  const { colors } = useTheme();
   return (
     <Pressable
       style={({ pressed }) => [
@@ -56,8 +52,7 @@ function NavButton({
 }
 
 export default function NavigationHubScreen() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme === "dark" ? "dark" : "light"];
+  const { colors } = useTheme();
   const router = useRouter();
 
   const showComingSoon = () => {
@@ -107,6 +102,30 @@ export default function NavigationHubScreen() {
           />
 
           <SectionLabel label="Shared & other" />
+          <NavButton
+            label="Calendar"
+            onPress={() => router.push("/calendar")}
+          />
+          <NavButton
+            label="Notifications"
+            onPress={() => router.push("/notifications")}
+          />
+          <NavButton
+            label="Notes"
+            onPress={() => router.push("/notes")}
+          />
+          <NavButton
+            label="Health Logs"
+            onPress={() => router.push("/health-logs")}
+          />
+          <NavButton
+            label="Health Timeline"
+            onPress={() => router.push("/health-timeline")}
+          />
+          <NavButton
+            label="Video Call"
+            onPress={() => router.push("/video-call")}
+          />
           <NavButton
             label="Emergency SOS Alert"
             onPress={() => router.push("/emergency-sos")}

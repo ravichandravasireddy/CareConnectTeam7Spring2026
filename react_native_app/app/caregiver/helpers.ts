@@ -29,3 +29,5 @@ export function tasksForToday(tasks: Task[], referenceDate?: Date): Task[] {
       t.date.getDate() === today.getDate()
   );
 }
+
+export default { getGreeting, greetingName, tasksForToday } as const;

@@ -19,7 +19,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNoteProvider } from '../../providers/NoteProvider';
 import { Note, formatNoteCategoryDisplay } from '../../models/Note';
 import { Colors, Typography, AppColors } from '../../constants/theme';
-import { useColorScheme } from '../../hooks/use-color-scheme';
+import { useTheme } from '@/providers/ThemeProvider';
 
 type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
@@ -122,9 +122,7 @@ const NoteListTile: React.FC<NoteListTileProps> = ({
 };
 
 export default function NotesScreen() {
-  const colorScheme = useColorScheme();
-  const themeKey = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[themeKey];
+  const { colors } = useTheme();
   const router = useRouter();
   const noteProvider = useNoteProvider();
 

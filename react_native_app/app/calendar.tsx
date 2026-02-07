@@ -19,9 +19,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useTaskProvider } from '../providers/TaskProvider';
-import { areDatesEqual } from '../models/Task';
+import { areDatesEqual } from '../models/task';
 import { Colors, Typography } from '../constants/theme';
-import { useColorScheme } from '../hooks/use-color-scheme';
+import { useTheme } from '@/providers/ThemeProvider';
 import { TaskCard } from '../components/task-card';
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -179,9 +179,7 @@ const DateCell: React.FC<DateCellProps> = ({
 
 
 export default function CalendarScreen() {
-  const colorScheme = useColorScheme();
-  const themeKey = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[themeKey];
+  const { colors } = useTheme();
   const { width } = useWindowDimensions();
   const router = useRouter();
   const taskProvider = useTaskProvider();

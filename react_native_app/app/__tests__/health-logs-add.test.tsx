@@ -39,6 +39,14 @@ jest.mock("@expo/vector-icons/MaterialIcons", () => {
 
 jest.mock("@/hooks/use-color-scheme", () => ({ useColorScheme: jest.fn(() => "light") }));
 
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
 const mockAddLog = jest.fn();
 const mockWaterTotalForDate = jest.fn(() => 0);
 jest.mock("../../providers/HealthLogProvider", () => ({

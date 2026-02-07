@@ -30,8 +30,31 @@ jest.mock("@/components/app-app-bar", () => ({
 }));
 
 jest.mock("@expo/vector-icons/MaterialIcons", () => "MaterialIcons");
+jest.mock("@expo/vector-icons/MaterialCommunityIcons", () => "MaterialCommunityIcons");
 
-import CaregiverTaskManagementScreen from "../tasks";
+const mockOverdueTask = {
+  id: "task-1",
+  title: "Metformin 500mg",
+  description: "Medication reminder",
+  date: new Date(Date.now() - 30 * 60 * 1000), // 30 min ago
+  patientName: "Maya Patel",
+  icon: "medication" as const,
+  iconBackground: "#eee",
+  iconColor: "#333",
+};
+jest.mock("@/providers/TaskProvider", () => ({
+  useTaskProvider: () => ({ tasks: [mockOverdueTask] }),
+}));
+
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
+import CaregiverTaskManagementScreen from "../caregiver/tasks";
 
 describe("CaregiverTaskManagementScreen", () => {
   beforeEach(() => {
@@ -44,9 +67,9 @@ describe("CaregiverTaskManagementScreen", () => {
       expect(screen.getByText("Tasks")).toBeTruthy();
     });
 
-    it("renders Overdue Tasks section", () => {
+    it("renders Overdue Tasks section with count", () => {
       render(<CaregiverTaskManagementScreen />);
-      expect(screen.getByText("Overdue Tasks (2)")).toBeTruthy();
+      expect(screen.getByText("Overdue Tasks (1)")).toBeTruthy();
     });
 
     it("renders patient name in overdue item", () => {
@@ -54,9 +77,9 @@ describe("CaregiverTaskManagementScreen", () => {
       expect(screen.getByText("Maya Patel")).toBeTruthy();
     });
 
-    it("renders medication reminder text", () => {
+    it("renders medication reminder description", () => {
       render(<CaregiverTaskManagementScreen />);
-      expect(screen.getByText("Medication reminder:")).toBeTruthy();
+      expect(screen.getByText("Medication reminder")).toBeTruthy();
     });
 
     it("renders Metformin task title", () => {
@@ -64,9 +87,9 @@ describe("CaregiverTaskManagementScreen", () => {
       expect(screen.getByText("Metformin 500mg")).toBeTruthy();
     });
 
-    it("renders Due 30 min ago", () => {
+    it("renders task time", () => {
       render(<CaregiverTaskManagementScreen />);
-      expect(screen.getByText("Due 30 min ago")).toBeTruthy();
+      expect(screen.getByText(/\d{1,2}:\d{2}\s*(AM|PM)/)).toBeTruthy();
     });
 
     it("renders Notify button", () => {
@@ -96,7 +119,7 @@ describe("CaregiverTaskManagementScreen", () => {
   describe("Accessibility", () => {
     it("overdue task has accessibility label", () => {
       render(<CaregiverTaskManagementScreen />);
-      expect(screen.getByLabelText(/Maya Patel.*medication reminder/)).toBeTruthy();
+      expect(screen.getByLabelText(/Metformin 500mg.*Maya Patel/)).toBeTruthy();
     });
 
     it("Notify button has accessibility label", () => {

@@ -10,6 +10,8 @@ import { TaskProvider } from './TaskProvider';
 import { NotificationProvider } from './NotificationProvider';
 import { NoteProvider } from './NoteProvider';
 import { HealthLogProvider } from './HealthLogProvider';
+import { UserProvider } from './UserProvider';
+import { ThemeProvider } from './ThemeProvider';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -17,20 +19,23 @@ interface ProvidersProps {
 
 /**
  * Wraps the app with all necessary providers.
- * Add new providers here instead of nesting them in _layout.tsx
+ * ThemeProvider: high-contrast preference (toggle from preferences screen, coming soon).
+ * UserProvider: role (caregiver/patient) for bottom bar and role-based UI; default caregiver.
  */
 export function Providers({ children }: ProvidersProps) {
   return (
-    <TaskProvider>
-      <NotificationProvider>
-        <NoteProvider>
-          <HealthLogProvider>
-            {/* Add more providers here as needed */}
-            {/* Example: <AuthProvider> */}
-            {children}
-          </HealthLogProvider>
-        </NoteProvider>
-      </NotificationProvider>
-    </TaskProvider>
+    <ThemeProvider>
+      <UserProvider initialRole="caregiver">
+        <TaskProvider>
+          <NotificationProvider>
+            <NoteProvider>
+              <HealthLogProvider>
+                {children}
+              </HealthLogProvider>
+            </NoteProvider>
+          </NotificationProvider>
+        </TaskProvider>
+      </UserProvider>
+    </ThemeProvider>
   );
 }

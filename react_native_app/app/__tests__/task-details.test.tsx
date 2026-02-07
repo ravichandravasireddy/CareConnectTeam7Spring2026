@@ -33,7 +33,29 @@ jest.mock("@/components/app-app-bar", () => ({
 jest.mock("@expo/vector-icons/MaterialIcons", () => "MaterialIcons");
 jest.mock("@expo/vector-icons/MaterialCommunityIcons", () => "MaterialCommunityIcons");
 
-import TaskDetailsScreen from "../task-details";
+const mockTask = {
+  id: "task-1",
+  title: "Metformin 500mg",
+  description: "Medication reminder",
+  date: new Date(2026, 1, 7, 9, 0),
+  patientName: "Maya Patel",
+  icon: "medication" as const,
+  iconBackground: "#eee",
+  iconColor: "#333",
+};
+jest.mock("@/providers/TaskProvider", () => ({
+  useTaskProvider: () => ({ tasks: [mockTask] }),
+}));
+
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
+import TaskDetailsScreen from "../caregiver/task-details";
 
 describe("TaskDetailsScreen", () => {
   beforeEach(() => {
@@ -64,7 +86,7 @@ describe("TaskDetailsScreen", () => {
     it("renders Patient label when task has patient", () => {
       render(<TaskDetailsScreen />);
       expect(screen.getByText("Patient")).toBeTruthy();
-      expect(screen.getByText("Maya Patel")).toBeTruthy();
+      expect(screen.getAllByText("Maya Patel").length).toBeGreaterThanOrEqual(1);
     });
 
     it("renders Mark as Complete button for incomplete task", () => {

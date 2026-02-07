@@ -20,6 +20,14 @@ jest.mock("react-native-safe-area-context", () => {
 
 jest.mock("@expo/vector-icons/MaterialIcons", () => "MaterialIcons");
 
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
 import EmergencySOSAlertScreen from "../emergency-sos";
 
 describe("EmergencySOSAlertScreen", () => {
@@ -102,11 +110,11 @@ describe("EmergencySOSAlertScreen", () => {
       expect(button.props.accessibilityHint).toContain("3 seconds");
     });
 
-    it("acknowledged state has accessibilityRole status", () => {
+    it("acknowledged state has accessibilityRole summary", () => {
       render(<EmergencySOSAlertScreen />);
       fireEvent.press(screen.getByText("Acknowledge Alert"));
       const [status] = screen.getAllByLabelText(/Alert acknowledged/);
-      expect(status.props.accessibilityRole).toBe("status");
+      expect(status.props.accessibilityRole).toBe("summary");
     });
   });
 

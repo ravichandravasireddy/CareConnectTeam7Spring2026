@@ -18,9 +18,8 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNoteProvider } from '../../providers/NoteProvider';
 import { formatNoteCategoryDisplay } from '../../models/Note';
 import { Colors, Typography } from '../../constants/theme';
-import { useColorScheme } from '../../hooks/use-color-scheme';
+import { useTheme } from '@/providers/ThemeProvider';
 
-type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
 // Format note time: "MMM d, y • h:mm AM/PM"
 const formatNoteDetailTime = (createdAt: Date): string => {
@@ -38,9 +37,7 @@ const formatNoteDetailTime = (createdAt: Date): string => {
 };
 
 export default function NoteDetailScreen() {
-  const colorScheme = useColorScheme();
-  const themeKey = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[themeKey];
+  const { colors } = useTheme();
   const { id } = useLocalSearchParams<{ id: string }>();
   const noteProvider = useNoteProvider();
 

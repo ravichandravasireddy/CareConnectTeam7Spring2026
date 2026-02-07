@@ -27,7 +27,7 @@ import {
 } from '../../models/HealthLog';
 import { DEFAULT_WATER_GOAL_OZ } from '../../providers/HealthLogProvider';
 import { Colors, Typography, AppColors } from '../../constants/theme';
-import { useColorScheme } from '../../hooks/use-color-scheme';
+import { useTheme } from '@/providers/ThemeProvider';
 
 const HEALTH_LOG_TYPES = [
   HealthLogType.mood,
@@ -60,9 +60,7 @@ function hintForType(type: HealthLogType): string {
 }
 
 export default function HealthLogAddScreen() {
-  const colorScheme = useColorScheme();
-  const themeKey = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[themeKey];
+  const { colors } = useTheme();
   const router = useRouter();
   const params = useLocalSearchParams<{ initialType?: string }>();
   const healthLogProvider = useHealthLogProvider();

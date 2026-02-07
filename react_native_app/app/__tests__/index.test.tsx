@@ -79,6 +79,14 @@ jest.mock("@expo/vector-icons/MaterialIcons", () => {
   );
 });
 
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
 import WelcomeScreen, {
   calculateBottomSpacing,
   calculateTopSpacing,
@@ -462,33 +470,43 @@ describe("WelcomeScreen", () => {
 
   describe("Button Interactions", () => {
     it("calls handleGetStarted when Get Started button is pressed", () => {
+      const mockReplace = jest.fn();
+      const { useRouter } = require("expo-router");
+      (useRouter as jest.Mock).mockReturnValue({
+        push: jest.fn(),
+        replace: mockReplace,
+        back: jest.fn(),
+      });
       const { getByLabelText } = render(<WelcomeScreen />);
       const getStartedButton = getByLabelText("Get started");
-      
       fireEvent.press(getStartedButton);
-      // Handler doesn't navigate yet (TODO), but should not crash
-      expect(getStartedButton).toBeTruthy();
+      expect(mockReplace).toHaveBeenCalledWith("/caregiver");
     });
 
     it("calls handleSignIn when Sign In button is pressed", () => {
+      const mockReplace = jest.fn();
+      const { useRouter } = require("expo-router");
+      (useRouter as jest.Mock).mockReturnValue({
+        push: jest.fn(),
+        replace: mockReplace,
+        back: jest.fn(),
+      });
       const { getByLabelText } = render(<WelcomeScreen />);
       const signInButton = getByLabelText("Sign in");
-      
       fireEvent.press(signInButton);
-      // Handler doesn't navigate yet (TODO), but should not crash
-      expect(signInButton).toBeTruthy();
+      expect(mockReplace).toHaveBeenCalledWith("/caregiver");
     });
 
-    it("navigates to dev screen when Dev Components link is pressed", () => {
+    it("navigates to navigation hub screen when Navigation Hub link is pressed", () => {
       const mockPush = jest.fn();
       const { useRouter } = require("expo-router");
       (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
 
       const { getByLabelText } = render(<WelcomeScreen />);
-      const devLink = getByLabelText("Open dev components screen");
+      const navHubLink = getByLabelText("Open Navigation Hub screen");
       
-      fireEvent.press(devLink);
-      expect(mockPush).toHaveBeenCalledWith("/dev");
+      fireEvent.press(navHubLink);
+      expect(mockPush).toHaveBeenCalledWith("/navigation-hub");
     });
   });
 
@@ -513,9 +531,9 @@ describe("WelcomeScreen", () => {
       expect(button).toBeTruthy();
     });
 
-    it("applies pressed opacity to Dev Components link", () => {
+    it("applies pressed opacity to Navigation Hub link", () => {
       const { getByLabelText } = render(<WelcomeScreen />);
-      const link = getByLabelText("Open dev components screen");
+      const link = getByLabelText("Open Navigation Hub screen");
       
       expect(link).toBeTruthy();
     });

@@ -3,7 +3,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  useColorScheme,
   useWindowDimensions,
   View,
   Pressable,
@@ -13,7 +12,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { AppColors, Colors, Fonts, Typography } from "@/constants/theme";
+import { AppColors, Fonts, Typography } from "@/constants/theme";
+import { useTheme } from "@/providers/ThemeProvider";
 
 export const normalizeColorScheme = (
   scheme: string | null | undefined,
@@ -27,8 +27,7 @@ export const calculateBottomSpacing = (height: number) =>
 
 export default function WelcomeScreen() {
   const router = useRouter();
-  const colorScheme = normalizeColorScheme(useColorScheme());
-  const colors = Colors[colorScheme];
+  const { colors, colorScheme } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { height } = useWindowDimensions();
   const topSpacing = calculateTopSpacing(height);
@@ -46,10 +45,6 @@ export default function WelcomeScreen() {
 
   const handleNavigationHub = () => {
     router.push("/navigation-hub" as any);
-  };
-
-  const handleDevScreen = () => {
-    router.push("/dev" as any);
   };
 
   return (
@@ -137,16 +132,16 @@ export default function WelcomeScreen() {
 
           {/* Temporary dev link - remove in production */}
           <Pressable
-            onPress={handleDevScreen} // handleNavigationHub
+            onPress={handleNavigationHub} // handleNavigationHub
             accessibilityRole="button"
-            accessibilityLabel="Open dev components screen"
+            accessibilityLabel="Open Navigation Hub screen"
             style={({ pressed }) => [
               styles.devLink,
               { borderColor: onPrimary, opacity: pressed ? 0.7 : 0.5 },
             ]}
           >
             <Text style={[styles.devLinkText, { color: onPrimary }]}>
-              Dev Components →
+            Navigation Hub →
             </Text>
           </Pressable>
         </View>

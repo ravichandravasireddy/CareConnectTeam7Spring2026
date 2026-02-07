@@ -15,15 +15,14 @@ import {
   StyleSheet,
   Text,
   View,
-  useColorScheme,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AppColors, Colors, Typography, Fonts } from "@/constants/theme";
+import { AppColors, Typography, Fonts } from "@/constants/theme";
+import { useTheme } from "@/providers/ThemeProvider";
 
 export default function EmergencySOSAlertScreen() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme === "dark" ? "dark" : "light"];
+  const { colors, colorScheme } = useTheme();
   const router = useRouter();
   const [isAcknowledged, setIsAcknowledged] = useState(false);
 
@@ -36,8 +35,9 @@ export default function EmergencySOSAlertScreen() {
     return (
       <View
         style={[styles.container, { backgroundColor: colors.surface }]}
-        accessibilityRole="status"
+        accessibilityRole="summary"
         accessibilityLabel="Alert acknowledged. You will be redirected in 3 seconds."
+        accessibilityHint="You will be redirected in 3 seconds."
       >
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.acknowledgedContent}>

@@ -15,6 +15,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import { AppBottomNavBar, kCaregiverNavHome } from "@/components/app-bottom-nav-bar";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -22,7 +23,7 @@ import { useNotificationProvider } from '../providers/NotificationProvider';
 import { useTaskProvider } from '../providers/TaskProvider';
 import { NotificationItem, NotificationType, getDestinationRoute, isTaskRelated } from '../models/NotificationItem';
 import { Colors, Typography } from '../constants/theme';
-import { useColorScheme } from '../hooks/use-color-scheme';
+import { useTheme } from '@/providers/ThemeProvider';
 
 type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
@@ -213,9 +214,7 @@ const NotificationSection: React.FC<NotificationSectionProps> = ({
 };
 
 export default function NotificationScreen() {
-  const colorScheme = useColorScheme();
-  const themeKey = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[themeKey];
+  const { colors } = useTheme();
   const router = useRouter();
   const notificationProvider = useNotificationProvider();
   const taskProvider = useTaskProvider();
@@ -230,7 +229,7 @@ export default function NotificationScreen() {
   };
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <Stack.Screen
         options={{
           title: 'Notifications',
@@ -241,7 +240,7 @@ export default function NotificationScreen() {
       />
       <SafeAreaView
         style={[notificationStyles.container, { backgroundColor: colors.surface }]}
-        edges={['bottom']}>
+        edges={['top']}>
         {notificationProvider.unreadCount > 0 && (
           <View style={notificationStyles.markAllContainer}>
             <TouchableOpacity
@@ -273,7 +272,8 @@ export default function NotificationScreen() {
           ))}
         </ScrollView>
       </SafeAreaView>
-    </>
+      <AppBottomNavBar currentIndex={kCaregiverNavHome} />
+    </View>
   );
 }
 

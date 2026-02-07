@@ -7,7 +7,7 @@
 // =============================================================================
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import { Task, getTaskDateOnly, areDatesEqual, isTaskCompleted } from '../models/Task';
+import { Task, getTaskDateOnly, areDatesEqual, isTaskCompleted } from '../models/task';
 import { AppColors } from '../constants/theme';
 
 interface TaskContextType {
@@ -110,7 +110,7 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
         description: 'Measure BP and upload readings to the care plan.',
         date: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 14, 0),
         patientName: 'Maya Patel',
-        icon: 'monitor-heart',
+        icon: 'favorite',
         iconBackground: AppColors.error100,
         iconColor: AppColors.error700,
       },

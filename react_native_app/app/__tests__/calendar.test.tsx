@@ -16,7 +16,7 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import * as RN from "react-native";
 import { useRouter } from "expo-router";
-import { Task } from "@/models/Task";
+import { Task } from "@/models/task";
 import { AppColors } from "@/constants/theme";
 
 // Mock react-native
@@ -139,6 +139,14 @@ jest.mock("@/providers/TaskProvider", () => ({
 jest.mock("@/hooks/use-color-scheme", () => ({
   useColorScheme: jest.fn(() => "light"),
 }));
+
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
 
 import CalendarScreen from "../calendar";
 
