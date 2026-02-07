@@ -6,7 +6,7 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import * as RN from "react-native";
 import { TaskCard } from "../task-card";
-import type { Task } from "@/models/task";
+import type { Task } from "@/models/Task";
 
 jest.mock("react-native", () => {
   const React = require("react");

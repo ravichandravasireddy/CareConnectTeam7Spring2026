@@ -5,7 +5,7 @@
 // =============================================================================
 
 import { getGreeting, greetingName, tasksForToday } from "../caregiver/helpers";
-import type { Task } from "@/models/task";
+import type { Task } from "@/models/Task";
 
 const baseTask: Task = {
   id: "base-1",

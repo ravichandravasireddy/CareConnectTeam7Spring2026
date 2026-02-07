@@ -7,7 +7,7 @@
 // =============================================================================
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import { Task, getTaskDateOnly, areDatesEqual, isTaskCompleted } from '../models/task';
+import { Task, getTaskDateOnly, areDatesEqual, isTaskCompleted } from '../models/Task';
 import { AppColors } from '../constants/theme';
 
 interface TaskContextType {

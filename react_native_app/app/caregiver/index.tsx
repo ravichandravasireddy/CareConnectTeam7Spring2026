@@ -22,7 +22,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { AppAppBar } from "@/components/app-app-bar";
 import { TaskCard } from "@/components/task-card";
 import { AppColors, Typography, Fonts } from "@/constants/theme";
-import { isTaskCompleted } from "@/models/task";
+import { isTaskCompleted } from "@/models/Task";
 import { useTaskProvider } from "@/providers/TaskProvider";
 import { useTheme } from "@/providers/ThemeProvider";
 import { getGreeting, greetingName, tasksForToday } from "./helpers";

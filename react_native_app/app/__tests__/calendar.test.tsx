@@ -16,7 +16,7 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import * as RN from "react-native";
 import { useRouter } from "expo-router";
-import { Task } from "@/models/task";
+import { Task } from "@/models/Task";
 import { AppColors } from "@/constants/theme";
 
 // Mock react-native

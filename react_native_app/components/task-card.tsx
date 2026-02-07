@@ -9,7 +9,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Task } from '@/models/task';
+import { Task } from '@/models/Task';
 import { Colors, Typography, AppColors } from '@/constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
 

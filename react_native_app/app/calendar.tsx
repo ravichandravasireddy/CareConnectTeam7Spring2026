@@ -19,7 +19,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useTaskProvider } from '../providers/TaskProvider';
-import { areDatesEqual } from '../models/task';
+import { areDatesEqual } from '../models/Task';
 import { Colors, Typography } from '../constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
 import { TaskCard } from '../components/task-card';

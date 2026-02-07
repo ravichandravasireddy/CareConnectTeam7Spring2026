@@ -5,7 +5,7 @@
 // Extracted for unit testing without loading screen dependencies.
 // =============================================================================
 
-import type { Task } from "@/models/task";
+import type { Task } from "@/models/Task";
 
 export function getGreeting(): string {
   const hour = new Date().getHours();

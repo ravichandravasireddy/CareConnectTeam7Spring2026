@@ -18,7 +18,7 @@ import {
   heartRateCategoryLabel,
 } from '../models/HealthLog';
 import { Note } from '../models/Note';
-import { Task, isTaskCompleted } from '../models/task';
+import { Task, isTaskCompleted } from '../models/Task';
 
 function iconForHealthLogType(type: HealthLogType): string {
   switch (type) {
