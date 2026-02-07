@@ -212,7 +212,8 @@ describe("WelcomeScreen", () => {
       render(<WelcomeScreen />);
 
       const safeArea = screen.getByTestId("safe-area-view");
-      expect(safeArea.props.accessibilityLabel).toBe("Welcome screen");
+      expect(safeArea.props.accessibilityLabel).toContain("CareConnect welcome");
+      expect(safeArea.props.accessibilityLabel).toContain("visual only");
     });
 
     it("has accessibility label on logo", () => {
@@ -242,16 +243,14 @@ describe("WelcomeScreen", () => {
       render(<WelcomeScreen />);
 
       const button = screen.getByLabelText("Get started");
-      expect(button.props.accessibilityHint).toBe(
-        "TODO: Navigates to role selection",
-      );
+      expect(button.props.accessibilityHint).toBe("Opens caregiver dashboard");
     });
 
     it("has accessibility hint on Sign In button", () => {
       render(<WelcomeScreen />);
 
       const button = screen.getByLabelText("Sign in");
-      expect(button.props.accessibilityHint).toBe("TODO: Navigates to sign in");
+      expect(button.props.accessibilityHint).toBe("Opens caregiver dashboard");
     });
 
     it("has accessibility role on text elements", () => {

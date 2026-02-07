@@ -26,6 +26,7 @@ export const calculateBottomSpacing = (height: number) =>
   Math.max(24, height * 0.1);
 
 export default function WelcomeScreen() {
+  const router = useRouter();
   const colorScheme = normalizeColorScheme(useColorScheme());
   const colors = Colors[colorScheme];
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -34,14 +35,17 @@ export default function WelcomeScreen() {
   const bottomSpacing = calculateBottomSpacing(height);
   const onPrimary =
     colorScheme === "dark" ? AppColors.darkTextPrimary : AppColors.white;
-  const router = useRouter();
 
   const handleGetStarted = () => {
-    // TODO: Navigate to role selection screen
+    router.replace("/caregiver" as any);
   };
 
   const handleSignIn = () => {
-    // TODO: Navigate to sign-in screen
+    router.replace("/caregiver" as any);
+  };
+
+  const handleNavigationHub = () => {
+    router.push("/navigation-hub" as any);
   };
 
   const handleDevScreen = () => {
@@ -49,7 +53,10 @@ export default function WelcomeScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} accessibilityLabel="Welcome screen">
+    <SafeAreaView
+      style={styles.safeArea}
+      accessibilityLabel="CareConnect welcome. Get started or sign in. All feedback is visual only."
+    >
       <LinearGradient
         colors={[AppColors.primary600, AppColors.accent500]}
         start={{ x: 0, y: 0 }}
@@ -92,7 +99,7 @@ export default function WelcomeScreen() {
               onPress={handleGetStarted}
               accessibilityRole="button"
               accessibilityLabel="Get started"
-              accessibilityHint="TODO: Navigates to role selection"
+              accessibilityHint="Opens caregiver dashboard"
               style={({ pressed }) => [
                 styles.primaryButton,
                 { backgroundColor: colors.surface, opacity: pressed ? 0.9 : 1 },
@@ -109,7 +116,7 @@ export default function WelcomeScreen() {
               onPress={handleSignIn}
               accessibilityRole="button"
               accessibilityLabel="Sign in"
-              accessibilityHint="TODO: Navigates to sign in"
+              accessibilityHint="Opens caregiver dashboard"
               style={({ pressed }) => [
                 styles.secondaryButton,
                 { borderColor: onPrimary, opacity: pressed ? 0.9 : 1 },
@@ -130,7 +137,7 @@ export default function WelcomeScreen() {
 
           {/* Temporary dev link - remove in production */}
           <Pressable
-            onPress={handleDevScreen}
+            onPress={handleDevScreen} // handleNavigationHub
             accessibilityRole="button"
             accessibilityLabel="Open dev components screen"
             style={({ pressed }) => [
@@ -232,5 +239,17 @@ const createStyles = (colors: typeof Colors.light | typeof Colors.dark) =>
       ...Typography.bodySmall,
       fontFamily: Fonts.sans,
       opacity: 0.7,
+    },
+    navHubLink: {
+      marginTop: 24,
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      borderRadius: 8,
+      borderWidth: 1,
+    },
+    navHubLinkText: {
+      ...Typography.bodySmall,
+      fontFamily: Fonts.sans,
+      opacity: 0.9,
     },
   });
