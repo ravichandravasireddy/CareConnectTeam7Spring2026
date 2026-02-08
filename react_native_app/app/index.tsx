@@ -3,13 +3,14 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  useColorScheme,
   useWindowDimensions,
   View,
   Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 
 import { AppColors, Colors, Fonts, Typography } from "@/constants/theme";
 
@@ -24,6 +25,7 @@ export const calculateBottomSpacing = (height: number) =>
   Math.max(24, height * 0.1);
 
 export default function WelcomeScreen() {
+  const router = useRouter();
   const colorScheme = normalizeColorScheme(useColorScheme());
   const colors = Colors[colorScheme];
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -34,11 +36,11 @@ export default function WelcomeScreen() {
     colorScheme === "dark" ? AppColors.darkTextPrimary : AppColors.white;
 
   const handleGetStarted = () => {
-    // TODO: Navigate to role selection screen
+    router.push("/role-selection");
   };
 
   const handleSignIn = () => {
-    // TODO: Navigate to sign-in screen
+    router.push("/sign-in");
   };
 
   return (

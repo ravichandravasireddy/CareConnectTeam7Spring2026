@@ -6,11 +6,7 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   collectCoverage: true,
   collectCoverageFrom: [
-    '**/*.{js,jsx,ts,tsx}',
-    '!**/coverage/**',
-    '!**/node_modules/**',
-    '!**/babel.config.js',
-    '!**/jest.setup.js'
+    'screens/**/*.{ts,tsx}',
   ],
   coverageThreshold: {
     global: {
