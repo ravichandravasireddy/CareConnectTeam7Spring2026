@@ -60,32 +60,31 @@ npm run test:coverage
 
 The html version is automatically generated and is located at `coverage/index.html`.
 
-## Link to test coverage report - TODO
+## Link to test coverage report
 
-[Test Coverage Screenshot](_images/03%20Code%20Coverage.jpg)
+[Test Coverage Screenshot](assets/screenshots/CodeCoverage.jpg)  
 
-## Screen Images - TODO
+## Screen Images
 
-[01 Welcome](_images/screenshots/01%20Welcome.jpg)  
-[02 Sign in](_images/screenshots/02%20Sign%20in.jpg)  
-[03 Role Selection](_images/screenshots/03%20Role%20Selection.jpg)  
-[04 Registration](_images/screenshots/04%20Registration.jpg)  
-[05 Patient Dashboard](_images/screenshots/05%20Patient%20Dashboard.jpg)  
-[06 Patient tasks](_images/screenshots/06%20Patient%20tasks.jpg)  
-[07 Messages](_images/screenshots/07%20Messages.jpg)  
-[08 Health Logs](_images/screenshots/08%20Health%20Logs.jpg)  
-[09 Profile](_images/screenshots/09%20Profile.jpg)  
-[10 Health timeline](_images/screenshots/10%20Health%20timeline.jpg)  
-[11 Notes](_images/screenshots/11%20Notes.jpg)  
-[12 Preferences](_images/screenshots/12%20Preferences.jpg)  
-[13 Notifications](_images/screenshots/13%20Notifications.jpg)  
-[14 Video](_images/screenshots/14%20Video.jpg)  
-[15 Emergency Alert](_images/screenshots/15%20Emergency%20Alert.jpg)  
-[16 Caregiver dashboard](_images/screenshots/16%20Caregiver%20dashboard.jpg)  
-[17 Caregiver task management](_images/screenshots/17%20Caregiver%20task%20management.jpg)  
-[18 Analytics](_images/screenshots/18%20Analytics.jpg)  
-[19 Patient Monitoring](_images/screenshots/19%20Patient%20Monitoring.jpg)  
-[20 Navigation Hub](_images/screenshots/20%20Navigation%20Hub.jpg)   
+[01 Welcome](assets/screenshots/01%20Welcome.jpg)  
+[02 Sign in](assets/screenshots/02%20Sign%20in.jpg)  
+[03 Role Selection](assets/screenshots/03%20Role%20Selection.jpg)  
+[04 Registration](assets/screenshots/04%20Registration.jpg)  
+[05 Patient Dashboard](assets/screenshots/05%20Patient%20Dashboard.jpg)  
+[06 Patient tasks](assets/screenshots/06%20Patient%20tasks.jpg)  
+[07 Messages](assets/screenshots/07%20Messages.jpg)  
+[08 Health Logs](assets/screenshots/08%20Health%20Logs.jpg)  
+[09 Profile](assets/screenshots/09%20Profile.jpg)  
+[10 Health timeline](assets/screenshots/10%20Health%20timeline.jpg)  
+[11 Notes](assets/screenshots/11%20Notes.jpg)  
+[12 Preferences](assets/screenshots/12%20Preferences.jpg)  
+[13 Notifications](assets/screenshots/13%20Notifications.jpg)  
+[14 Video](assets/screenshots/14%20Video.jpg)  
+[15 Emergency Alert](assets/screenshots/15%20Emergency%20Alert.jpg)  
+[16 Caregiver dashboard](assets/screenshots/16%20Caregiver%20dashboard.jpg)  
+[17 Caregiver task management](assets/screenshots/17%20Caregiver%20task%20management.jpg)  
+[18 Analytics](assets/screenshots/18%20Analytics.jpg)  
+[19 Patient Monitoring](assets/screenshots/19%20Patient%20Monitoring.jpg)   
 
 ## Accessibility (Deaf & Hard of Hearing)
 
