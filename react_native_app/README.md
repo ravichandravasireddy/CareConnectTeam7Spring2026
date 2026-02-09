@@ -97,28 +97,22 @@ This app targets **hearing-impaired caregivers**. All feedback is **visual only*
 - **Touch targets**: Minimum 48×48px for interactive elements
 - **Color contrast**: WCAG AA compliant (see `_AI/GUIDELINES.md`)
 
-## Known issues or limitations - TODO
+## Known issues or limitations
 
 - **Note categories**: The note categories are limited to only three kinds right now (Medication, Exercise, and Appointments).
+- **Note Editing**: The notes are not editable
 - **Call logs and transcripts**: Call logs and transcript screens are not available yet, so video call history is not shown in-app.
 - **Analytics depth**: The Analytics page is still basic and does not provide deeper trends, comparisons, or exportable insights.
-- **Role-specific messaging**: The messages page is not customized by user role, so patient and caregiver views are currently the same.
-- **High-contrast mode**: High-contrast mode has not been implemented yet for users who need stronger visual separation.
-- **Dark mode**: Dark mode has not been implemented yet and the UI is optimized for light mode only.
-- **App bar consistency**: Some screens use the native app bar while others use a custom app bar, which creates visual inconsistency.
 
-## Future Improvements - TODO
+## Future Improvements
 
 - **Notes**: Assign note authors dynamically based on the signed-in user, and add support for more categories (including user-defined ones).
 - **Patient monitoring navigation**: Add clear controls to switch between patients and highlight the active patient context.
 - **Analytics enhancements**: Expand analytics with trend charts, filters, and export options for caregiver reporting.
-- **Messaging personalization**: Tailor message threads and shortcuts based on whether the user is a patient or caregiver.
-- **Accessibility modes**: Implement high-contrast mode and refine focus/keyboard support for accessibility parity.
-- **Dark mode support**: Add a full dark theme that matches the design system tokens and passes contrast checks.
 - **Call history features**: Add call logs, transcripts, and searchable history for video call follow-ups.
 - **Further ASL Support**: Add futher ASL support in the form of educational video content utilizing ASL.
 - **Functional Preferences**: Make the options in the Preferences and Accessibility page functional, making changes to the toggles actually able to update the UI. 
-- **Patient Profile**: Add more medical details about the patient to the patient profile and patient details (for caregiver), including blood type (e.g. A+).
+- **Note Editing**: The notes can be made editable with authorization implemented
 
 ## Team member contributions this week
 
