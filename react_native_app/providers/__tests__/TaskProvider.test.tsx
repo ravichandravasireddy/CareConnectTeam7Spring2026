@@ -6,7 +6,7 @@ import React from "react";
 import { act, render, screen, fireEvent } from "@testing-library/react-native";
 import { View, Text, TouchableOpacity } from "react-native";
 import { TaskProvider, useTaskProvider } from "../TaskProvider";
-import type { Task } from "@/models/Task";
+import type { Task } from "@/models/task";
 
 const mockTask: Task = {
   id: "new-1",

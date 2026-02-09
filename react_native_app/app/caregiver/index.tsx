@@ -23,7 +23,7 @@ import { AppAppBar } from "@/components/app-app-bar";
 import { AppMenu } from "@/components/app-menu";
 import { TaskCard } from "@/components/task-card";
 import { AppColors, Typography, Fonts } from "@/constants/theme";
-import { isTaskCompleted } from "@/models/Task";
+import { isTaskCompleted } from "@/models/task";
 import { useTaskProvider } from "@/providers/TaskProvider";
 import { useTheme } from "@/providers/ThemeProvider";
 import { getGreeting, greetingName, tasksForToday } from "./helpers";

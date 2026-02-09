@@ -11,7 +11,7 @@ import { HealthLogType } from "@/models/HealthLog";
 import { NoteCategory } from "@/models/Note";
 import type { HealthLog } from "@/models/HealthLog";
 import type { Note } from "@/models/Note";
-import type { Task } from "@/models/Task";
+import type { Task } from "@/models/task";
 
 const mockLogs: HealthLog[] = [];
 const mockNotes: Note[] = [];

@@ -13,7 +13,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Typography, AppColors } from '../constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useTaskProvider } from '@/providers/TaskProvider';
-import { isTaskCompleted } from '@/models/Task';
+import { isTaskCompleted } from '@/models/task';
 import { AppAppBar } from '@/components/app-app-bar';
 
 interface PatientDashboardScreenProps {
