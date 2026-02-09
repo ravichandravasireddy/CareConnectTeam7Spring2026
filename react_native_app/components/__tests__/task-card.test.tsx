@@ -34,15 +34,22 @@ jest.mock("@/providers/ThemeProvider", () => {
 jest.mock("@expo/vector-icons/MaterialIcons", () => {
   const React = require("react");
   const { View } = require("react-native");
-  return ({ name }: { name: string }) =>
-    React.createElement(View, { testID: `icon-${name}` });
+  function MockMaterialIcons(props: { name: string }) {
+    return React.createElement(View, { testID: `icon-${props.name}` });
+  }
+  MockMaterialIcons.displayName = "MaterialIcons";
+  return MockMaterialIcons;
 });
 
 jest.mock("@expo/vector-icons/MaterialCommunityIcons", () => {
-  const React = require("react");
-  const { View } = require("react-native");
-  return ({ name }: { name: string }) =>
-    React.createElement(View, { testID: `mci-${name}` });
+  // require() needed in Jest mock factory (hoisted scope; import not available)
+  const React = require("react"); // eslint-disable-line @typescript-eslint/no-require-imports
+  const { View } = require("react-native"); // eslint-disable-line @typescript-eslint/no-require-imports
+  function MockMaterialCommunityIcons(props: { name: string }) {
+    return React.createElement(View, { testID: `mci-${props.name}` });
+  }
+  MockMaterialCommunityIcons.displayName = "MaterialCommunityIcons";
+  return MockMaterialCommunityIcons;
 });
 
 const mockTask: Task = {

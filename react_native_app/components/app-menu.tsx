@@ -27,13 +27,13 @@ interface AppMenuProps {
   onClose: () => void;
 }
 
-interface MenuItem {
+interface MenuItemConfig {
   label: string;
   icon: React.ComponentProps<typeof Ionicons>["name"];
   route: string;
 }
 
-const PATIENT_MENU_ITEMS: MenuItem[] = [
+const PATIENT_MENU_ITEMS: MenuItemConfig[] = [
   { label: "Home", icon: "home-outline", route: "/patient" },
   { label: "Tasks", icon: "calendar-outline", route: "/calendar" },
   { label: "Messages", icon: "chatbubbles-outline", route: "/patient/messages" },
@@ -45,7 +45,7 @@ const PATIENT_MENU_ITEMS: MenuItem[] = [
   { label: "Notifications", icon: "notifications-outline", route: "/notifications" },
 ];
 
-const CAREGIVER_MENU_ITEMS: MenuItem[] = [
+const CAREGIVER_MENU_ITEMS: MenuItemConfig[] = [
   { label: "Dashboard", icon: "grid-outline", route: "/caregiver" },
   { label: "Patients", icon: "people-outline", route: "/caregiver/monitor" },
   { label: "Tasks", icon: "list-outline", route: "/caregiver/tasks" },

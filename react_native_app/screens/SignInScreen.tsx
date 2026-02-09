@@ -11,7 +11,7 @@ import {
   AccessibilityInfo,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Typography, AppColors } from '../constants/theme';
+import { Typography, AppColors } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useUser, UserRole } from '@/providers/UserProvider';

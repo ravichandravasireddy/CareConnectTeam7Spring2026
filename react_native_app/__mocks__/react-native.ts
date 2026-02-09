@@ -23,6 +23,7 @@ module.exports = {
   TouchableOpacity: createMockComponent("TouchableOpacity"),
   Switch: createMockComponent("Switch"),
   ActivityIndicator: createMockComponent("ActivityIndicator"),
+  Modal: createMockComponent("Modal"),
   Alert: { alert: jest.fn() },
   AccessibilityInfo: {
     announceForAccessibility: jest.fn(),

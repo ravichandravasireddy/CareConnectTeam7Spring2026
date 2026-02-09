@@ -25,18 +25,29 @@ jest.mock('@/providers/ThemeProvider', () => {
   };
 });
 
-jest.mock('@react-navigation/native', () => ({
-  ThemeProvider: ({ children, value }: { children: React.ReactNode; value: unknown }) => (
-    <>{children}</>
-  ),
-  DarkTheme: { dark: true },
-  DefaultTheme: { dark: false },
-}));
+jest.mock('@react-navigation/native', () => {
+  function NavThemeProvider({ children }: { children: React.ReactNode; value?: unknown }) {
+    return <>{children}</>;
+  }
+  NavThemeProvider.displayName = 'ThemeProvider';
+  return {
+    ThemeProvider: NavThemeProvider,
+    DarkTheme: { dark: true },
+    DefaultTheme: { dark: false },
+  };
+});
 
 jest.mock('expo-router', () => {
   const React = require('react');
-  const StackFn = ({ children }: { children?: React.ReactNode }) => React.createElement(React.Fragment, {}, children);
-  (StackFn as { Screen?: React.FC }).Screen = () => null;
+  function StackFn({ children }: { children?: React.ReactNode }) {
+    return React.createElement(React.Fragment, {}, children);
+  }
+  StackFn.displayName = 'Stack';
+  function ScreenFn() {
+    return null;
+  }
+  ScreenFn.displayName = 'Screen';
+  (StackFn as { Screen?: React.FC }).Screen = ScreenFn;
   return { Stack: StackFn };
 });
 
@@ -46,9 +57,13 @@ jest.mock('expo-status-bar', () => ({
 
 jest.mock('react-native-reanimated', () => ({}));
 
-jest.mock('@/providers/Providers', () => ({
-  Providers: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-}));
+jest.mock('@/providers/Providers', () => {
+  function MockProviders({ children }: { children: React.ReactNode }) {
+    return <>{children}</>;
+  }
+  MockProviders.displayName = 'Providers';
+  return { Providers: MockProviders };
+});
 
 describe('RootLayout', () => {
   beforeEach(() => {

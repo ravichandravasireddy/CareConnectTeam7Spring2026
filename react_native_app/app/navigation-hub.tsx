@@ -16,7 +16,7 @@ import {
 import { AppAppBar } from "@/components/app-app-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AppColors, Typography, Fonts } from "@/constants/theme";
+import { Typography, Fonts } from "@/constants/theme";
 import { useTheme } from "@/providers/ThemeProvider";
 
 function SectionLabel({ label }: { label: string }) {

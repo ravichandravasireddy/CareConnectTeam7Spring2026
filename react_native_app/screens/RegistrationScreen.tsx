@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Typography, AppColors } from '../constants/theme';
+import { Typography, AppColors } from '@/constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useUser, UserRole } from '@/providers/UserProvider';
 

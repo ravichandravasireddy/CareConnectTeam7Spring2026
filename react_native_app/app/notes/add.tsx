@@ -19,10 +19,9 @@ import {
 import { AppAppBar } from '@/components/app-app-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNoteProvider } from '../../providers/NoteProvider';
 import { Note, NoteCategory, formatNoteCategoryDisplay } from '../../models/Note';
-import { Colors, Typography, AppColors } from '../../constants/theme';
+import { Typography } from '../../constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
 
 const kCurrentUserAuthor = 'Sarah Johnson (Caregiver)';

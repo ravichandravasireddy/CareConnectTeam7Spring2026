@@ -27,7 +27,6 @@ export const calculateBottomSpacing = (height: number) =>
 
 export default function WelcomeScreen() {
   const router = useRouter();
-  const { colors } = useTheme();
   const styles = useMemo(() => createStyles(), []);
   const { height } = useWindowDimensions();
   const topSpacing = calculateTopSpacing(height);

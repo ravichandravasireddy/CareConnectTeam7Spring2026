@@ -19,7 +19,6 @@ import {
 import { AppAppBar } from '@/components/app-app-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useHealthLogProvider } from '../../providers/HealthLogProvider';
 import {
   HealthLog,
@@ -27,7 +26,7 @@ import {
   formatHealthLogTypeDisplay,
 } from '../../models/HealthLog';
 import { DEFAULT_WATER_GOAL_OZ } from '../../providers/HealthLogProvider';
-import { Colors, Typography, AppColors } from '../../constants/theme';
+import { Typography } from '../../constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
 
 const HEALTH_LOG_TYPES = [

@@ -4,7 +4,6 @@
 
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react-native";
-import * as RN from "react-native";
 import { NoteCategory } from "@/models/Note";
 
 jest.mock("react-native", () => {
@@ -37,17 +36,22 @@ jest.mock("react-native-safe-area-context", () => {
 jest.mock("@expo/vector-icons/MaterialIcons", () => {
   const React = require("react");
   const { View } = require("react-native");
-  return ({ name, testID, ...props }: { name: string; testID?: string }) =>
-    React.createElement(View, { testID: testID || `icon-${name}`, ...props });
+  function MockMaterialIcons(props: { name: string; testID?: string }) {
+    const { name, testID, ...rest } = props;
+    return React.createElement(View, { testID: testID || `icon-${name}`, ...rest });
+  }
+  MockMaterialIcons.displayName = "MaterialIcons";
+  return MockMaterialIcons;
 });
 
 jest.mock("@/components/app-app-bar", () => {
   const React = require("react");
   const { View, Text } = require("react-native");
-  return {
-    AppAppBar: ({ title }: { title?: string }) =>
-      React.createElement(View, { testID: "app-app-bar" }, title != null ? React.createElement(Text, {}, title) : null),
-  };
+  function MockAppAppBar(props: { title?: string }) {
+    return React.createElement(View, { testID: "app-app-bar" }, props.title != null ? React.createElement(Text, {}, props.title) : null);
+  }
+  MockAppAppBar.displayName = "AppAppBar";
+  return { AppAppBar: MockAppAppBar };
 });
 
 jest.mock("@/providers/ThemeProvider", () => {
@@ -128,7 +132,6 @@ describe("AddNoteScreen", () => {
   it("shows error border on title input when validation fails", () => {
     render(<AddNoteScreen />);
     fireEvent.press(screen.getByLabelText("Save, button"));
-    const titleInput = screen.getByPlaceholderText("e.g. Medication Side Effects");
     // Input should have error styling (we verify error text is shown)
     expect(screen.getByText("Enter a title")).toBeTruthy();
   });
@@ -136,7 +139,6 @@ describe("AddNoteScreen", () => {
   it("shows error border on body input when validation fails", () => {
     render(<AddNoteScreen />);
     fireEvent.press(screen.getByLabelText("Save, button"));
-    const bodyInput = screen.getByPlaceholderText("Write your note here…");
     // Input should have error styling (we verify error text is shown)
     expect(screen.getByText("Enter note content")).toBeTruthy();
   });
