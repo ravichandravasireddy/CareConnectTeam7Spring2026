@@ -5,7 +5,7 @@
 // Notes are sorted by createdAt descending.
 // =============================================================================
 
-import React, { createContext, useContext, useState, useCallback, ReactNode, useMemo } from 'react';
+import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { Note, NoteCategory } from '../models/Note';
 import { AppColors } from '../constants/theme';
 

@@ -49,14 +49,22 @@ jest.mock("@/components/app-menu", () => {
 jest.mock("@expo/vector-icons/MaterialIcons", () => {
   const React = require("react");
   const { View } = require("react-native");
-  return ({ name, testID, ...props }: { name: string; testID?: string }) =>
-    React.createElement(View, { testID: testID || `icon-${name}`, ...props });
+  function MockMaterialIcons(props: { name: string; testID?: string }) {
+    const { name, testID, ...rest } = props;
+    return React.createElement(View, { testID: testID || `icon-${name}`, ...rest });
+  }
+  MockMaterialIcons.displayName = "MaterialIcons";
+  return MockMaterialIcons;
 });
 jest.mock("@expo/vector-icons/MaterialCommunityIcons", () => {
   const React = require("react");
   const { View } = require("react-native");
-  return ({ name, testID, ...props }: { name: string; testID?: string }) =>
-    React.createElement(View, { testID: testID || `icon-mc-${name}`, ...props });
+  function MockMaterialCommunityIcons(props: { name: string; testID?: string }) {
+    const { name, testID, ...rest } = props;
+    return React.createElement(View, { testID: testID || `icon-mc-${name}`, ...rest });
+  }
+  MockMaterialCommunityIcons.displayName = "MaterialCommunityIcons";
+  return MockMaterialCommunityIcons;
 });
 
 jest.mock("@/providers/ThemeProvider", () => {
@@ -98,14 +106,7 @@ describe("CaregiverDashboardScreen", () => {
 
     it("renders welcome card with greeting", () => {
       render(<CaregiverDashboardScreen />);
-      const greetings = ["Good Morning", "Good Afternoon", "Good Evening"];
-      const found = greetings.some((g) => {
-        try {
-          return screen.getByText(new RegExp(g)).toBeTruthy();
-        } catch {
-          return false;
-        }
-      });
+      
       expect(
         screen.getByText(/Here's your care overview for today/)
       ).toBeTruthy();

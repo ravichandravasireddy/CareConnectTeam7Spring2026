@@ -11,7 +11,7 @@ import {
   AccessibilityInfo,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Typography, AppColors } from '../constants/theme';
+import { Typography } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useUser, UserRole } from '@/providers/UserProvider';
@@ -356,7 +356,7 @@ export default function SignInScreen({
         {/* Sign Up Link */}
         <View style={styles.signUpContainer}>
           <Text style={[styles.signUpPrompt, { color: colors.textSecondary }]}>
-            Don't have an account?{' '}
+            {"Don't have an account? "}
           </Text>
           <TouchableOpacity
             onPress={onNavigateToRegistration}

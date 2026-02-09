@@ -4,7 +4,7 @@ import { useUser } from "@/providers/UserProvider";
 
 export default function PatientProfileScreenRoute() {
   const router = useRouter();
-  const { userRole, setUserRole, setUserInfo } = useUser();
+  const { setUserRole, setUserInfo } = useUser();
 
   const handleSignOut = () => {
     // Clear user info

@@ -18,12 +18,10 @@ import {
 import { AppBottomNavBar, kCaregiverNavHome, kPatientNavHome } from "@/components/app-bottom-nav-bar";
 import { AppAppBar } from "@/components/app-app-bar";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useUser } from '@/providers/UserProvider';
 import { useNotificationProvider } from '../providers/NotificationProvider';
-import { useTaskProvider } from '../providers/TaskProvider';
-import { NotificationItem, NotificationType, getDestinationRoute, isTaskRelated } from '../models/NotificationItem';
+import { NotificationItem, NotificationType } from '../models/NotificationItem';
 import { Typography } from '../constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
 
@@ -215,9 +213,7 @@ const NotificationSection: React.FC<NotificationSectionProps> = ({
 
 export default function NotificationScreen() {
   const { colors } = useTheme();
-  const router = useRouter();
   const notificationProvider = useNotificationProvider();
-  const taskProvider = useTaskProvider();
   const { isPatient } = useUser();
 
   const handleNotificationPress = (item: NotificationItem) => {

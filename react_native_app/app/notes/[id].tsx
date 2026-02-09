@@ -18,7 +18,7 @@ import { useLocalSearchParams } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNoteProvider } from '../../providers/NoteProvider';
 import { formatNoteCategoryDisplay } from '../../models/Note';
-import { Colors, Typography } from '../../constants/theme';
+import { Typography } from '../../constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
 
 

@@ -3,16 +3,27 @@ import { render } from "@testing-library/react-native";
 
 jest.mock("expo-router", () => {
   const R = require("react");
-  const StackFn = ({ children }: { children?: React.ReactNode }) => R.createElement(R.Fragment, {}, children);
-  (StackFn as { Screen?: React.FC }).Screen = () => null;
+  function StackFn({ children }: { children?: React.ReactNode }) {
+    return R.createElement(R.Fragment, {}, children);
+  }
+  StackFn.displayName = "Stack";
+  function ScreenFn() {
+    return null;
+  }
+  ScreenFn.displayName = "Screen";
+  (StackFn as { Screen?: React.FC }).Screen = ScreenFn;
   return { Stack: StackFn };
 });
 
 jest.mock("@/components/app-bottom-nav-bar", () => {
   const R = require("react");
   const { View } = require("react-native");
+  function MockAppBottomNavBar() {
+    return R.createElement(View, { testID: "app-bottom-nav-bar" });
+  }
+  MockAppBottomNavBar.displayName = "AppBottomNavBar";
   return {
-    AppBottomNavBar: () => R.createElement(View, { testID: "app-bottom-nav-bar" }),
+    AppBottomNavBar: MockAppBottomNavBar,
     kCaregiverNavHome: 0,
   };
 });

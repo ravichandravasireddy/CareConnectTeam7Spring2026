@@ -22,7 +22,7 @@ function LayoutContent() {
         <Stack.Screen name="notes" options={{ headerShown: false }} />
         <Stack.Screen name="health-logs" options={{ headerShown: false }} />
         <Stack.Screen name="health-timeline" options={{ headerShown: false }} />
-        <Stack.Screen name="video-call" options={{ headerShown: false}} />
+        <Stack.Screen name="video-call" options={{ headerShown: false }} />
         <Stack.Screen name="emergency-sos" options={{ headerShown: false }} />
         <Stack.Screen name="task-details" options={{ headerShown: false }} />
         <Stack.Screen name="caregiver" options={{ headerShown: false }} />

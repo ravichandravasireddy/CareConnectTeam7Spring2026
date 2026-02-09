@@ -10,11 +10,7 @@ import { Stack, usePathname } from "expo-router";
 
 import {
   AppBottomNavBar,
-  kPatientNavHome,
-  kPatientNavTasks,
-  kPatientNavMessages,
-  kPatientNavHealth,
-  kPatientNavProfile,
+  kPatientNavHome
 } from "@/components/app-bottom-nav-bar";
 
 function patientIndexFromPathname(pathname: string): number {

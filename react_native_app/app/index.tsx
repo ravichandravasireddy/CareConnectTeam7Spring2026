@@ -13,7 +13,6 @@ import { useRouter } from "expo-router";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { AppColors, Fonts, Typography } from "@/constants/theme";
-import { useTheme } from "@/providers/ThemeProvider";
 
 export const normalizeColorScheme = (
   scheme: string | null | undefined,
@@ -27,7 +26,6 @@ export const calculateBottomSpacing = (height: number) =>
 
 export default function WelcomeScreen() {
   const router = useRouter();
-  const { colors } = useTheme();
   const styles = useMemo(() => createStyles(), []);
   const { height } = useWindowDimensions();
   const topSpacing = calculateTopSpacing(height);

@@ -5,16 +5,22 @@
 // =============================================================================
 
 import React from "react";
-import { render, screen } from "@testing-library/react-native";
+import { render } from "@testing-library/react-native";
 
 const mockPush = jest.fn();
 const mockUsePathname = jest.fn(() => "/caregiver");
 
 jest.mock("expo-router", () => {
   const R = require("react");
-  const StackFn = ({ children }: { children?: React.ReactNode }) =>
-    R.createElement(R.Fragment, {}, children);
-  (StackFn as { Screen?: React.ComponentType }).Screen = () => null;
+  function StackFn({ children }: { children?: React.ReactNode }) {
+    return R.createElement(R.Fragment, {}, children);
+  }
+  StackFn.displayName = "Stack";
+  function ScreenFn() {
+    return null;
+  }
+  ScreenFn.displayName = "Screen";
+  (StackFn as { Screen?: React.ComponentType }).Screen = ScreenFn;
   return {
     Stack: StackFn,
     usePathname: () => mockUsePathname(),
@@ -34,20 +40,24 @@ declare global {
   var __caregiverLayoutNavBarCalls: unknown[];
 }
 
-jest.mock("@/components/app-bottom-nav-bar", () => ({
-  AppBottomNavBar: (props: unknown) => {
+jest.mock("@/components/app-bottom-nav-bar", () => {
+  function MockAppBottomNavBar(props: unknown) {
     if (typeof globalThis !== "undefined") {
       (globalThis as any).__caregiverLayoutNavBarCalls =
         (globalThis as any).__caregiverLayoutNavBarCalls || [];
       (globalThis as any).__caregiverLayoutNavBarCalls.push(props);
     }
     return null;
-  },
+  }
+  MockAppBottomNavBar.displayName = "AppBottomNavBar";
+  return {
+  AppBottomNavBar: MockAppBottomNavBar,
   kCaregiverNavHome: 0,
   kCaregiverNavTasks: 1,
   kCaregiverNavAnalytics: 2,
   kCaregiverNavMonitor: 3,
-}));
+};
+});
 
 import CaregiverLayout from "../caregiver/_layout";
 import {
@@ -114,7 +124,7 @@ describe("CaregiverLayout", () => {
 
 
   it("handles null pathname by showing bar with home index", () => {
-    mockUsePathname.mockReturnValue(null);
+    (mockUsePathname as jest.Mock<string | null>).mockReturnValue(null);
     render(<CaregiverLayout />);
     expect(getLastNavBarCall()).toMatchObject({ currentIndex: kCaregiverNavHome, isPatient: false });
   });

@@ -11,7 +11,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { AppAppBar } from '@/components/app-app-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { AppBottomNavBar, kPatientNavHealth } from '@/components/app-bottom-nav-bar';
+import { AppBottomNavBar } from '@/components/app-bottom-nav-bar';
 import { useHealthTimelineEvents } from '../hooks/useHealthTimelineEvents';
 import { TimelineEvent } from '../models/TimelineEvent';
 import { Typography } from '../constants/theme';
