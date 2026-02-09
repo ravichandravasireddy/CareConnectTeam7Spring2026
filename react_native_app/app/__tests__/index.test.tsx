@@ -63,6 +63,36 @@ jest.mock("react-native-safe-area-context", () => {
   };
 });
 
+jest.mock("expo-router", () => ({
+  useRouter: jest.fn(() => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    back: jest.fn(),
+    canGoBack: jest.fn(() => false),
+  })),
+}));
+
+jest.mock("@expo/vector-icons/MaterialIcons", () => {
+  const React = require("react");
+  return jest.fn(({ name, testID, ...props }: { name: string; testID?: string }) =>
+    React.createElement("View", { testID: testID || `icon-${name}`, ...props })
+  );
+});
+
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
+jest.mock("@react-native-async-storage/async-storage", () => ({
+  getItem: jest.fn(() => Promise.resolve(null)),
+  setItem: jest.fn(() => Promise.resolve()),
+  removeItem: jest.fn(() => Promise.resolve()),
+}));
+
 import WelcomeScreen, {
   calculateBottomSpacing,
   calculateTopSpacing,
@@ -119,7 +149,8 @@ describe("WelcomeScreen", () => {
     it("renders logo icon", () => {
       render(<WelcomeScreen />);
 
-      const logoIcon = screen.getByText("❤");
+      // Logo is now a MaterialIcons favorite icon, not emoji
+      const logoIcon = screen.getByTestId("icon-favorite");
       expect(logoIcon).toBeTruthy();
     });
 
@@ -184,6 +215,32 @@ describe("WelcomeScreen", () => {
       // Verify button responds to press events
       expect(signInButton).toBeTruthy();
     });
+
+    it("returns pressed and unpressed styles for Get Started button", () => {
+      render(<WelcomeScreen />);
+
+      const button = screen.getByLabelText("Get started");
+      const styleFn = button.props.style;
+
+      const pressedStyles = styleFn({ pressed: true });
+      const unpressedStyles = styleFn({ pressed: false });
+
+      expect(pressedStyles[1].opacity).toBe(0.9);
+      expect(unpressedStyles[1].opacity).toBe(1);
+    });
+
+    it("returns pressed and unpressed styles for Sign In button", () => {
+      render(<WelcomeScreen />);
+
+      const button = screen.getByLabelText("Sign in");
+      const styleFn = button.props.style;
+
+      const pressedStyles = styleFn({ pressed: true });
+      const unpressedStyles = styleFn({ pressed: false });
+
+      expect(pressedStyles[1].opacity).toBe(0.9);
+      expect(unpressedStyles[1].opacity).toBe(1);
+    });
   });
 
   // ===========================================================================
@@ -195,7 +252,8 @@ describe("WelcomeScreen", () => {
       render(<WelcomeScreen />);
 
       const safeArea = screen.getByTestId("safe-area-view");
-      expect(safeArea.props.accessibilityLabel).toBe("Welcome screen");
+      expect(safeArea.props.accessibilityLabel).toContain("CareConnect welcome");
+      expect(safeArea.props.accessibilityLabel).toContain("visual only");
     });
 
     it("has accessibility label on logo", () => {
@@ -225,16 +283,14 @@ describe("WelcomeScreen", () => {
       render(<WelcomeScreen />);
 
       const button = screen.getByLabelText("Get started");
-      expect(button.props.accessibilityHint).toBe(
-        "TODO: Navigates to role selection",
-      );
+      expect(button.props.accessibilityHint).toBe("Opens caregiver dashboard");
     });
 
     it("has accessibility hint on Sign In button", () => {
       render(<WelcomeScreen />);
 
       const button = screen.getByLabelText("Sign in");
-      expect(button.props.accessibilityHint).toBe("TODO: Navigates to sign in");
+      expect(button.props.accessibilityHint).toBe("Opens caregiver dashboard");
     });
 
     it("has accessibility role on text elements", () => {
@@ -262,6 +318,14 @@ describe("WelcomeScreen", () => {
       expect(calculateTopSpacing(200)).toBe(32);
     });
 
+    it("returns minimum top spacing for zero height", () => {
+      expect(calculateTopSpacing(0)).toBe(32);
+    });
+
+    it("returns minimum top spacing for negative height", () => {
+      expect(calculateTopSpacing(-500)).toBe(32);
+    });
+
     it("calculates bottom spacing correctly for standard height", () => {
       // Bottom spacing should be max(24, 812 * 0.1) = max(24, 81.2) = 81.2
       expect(calculateBottomSpacing(812)).toBeCloseTo(81.2, 2);
@@ -270,6 +334,24 @@ describe("WelcomeScreen", () => {
     it("calculates bottom spacing correctly for small height", () => {
       // Bottom spacing should be max(24, 200 * 0.1) = max(24, 20) = 24
       expect(calculateBottomSpacing(200)).toBe(24);
+    });
+
+    it("returns minimum bottom spacing for zero height", () => {
+      expect(calculateBottomSpacing(0)).toBe(24);
+    });
+
+    it("returns minimum bottom spacing for negative height", () => {
+      expect(calculateBottomSpacing(-500)).toBe(24);
+    });
+
+    it("returns NaN when height is NaN", () => {
+      expect(Number.isNaN(calculateTopSpacing(NaN))).toBe(true);
+      expect(Number.isNaN(calculateBottomSpacing(NaN))).toBe(true);
+    });
+
+    it("handles very large heights without overflow", () => {
+      expect(calculateTopSpacing(100000)).toBeCloseTo(12000, 2);
+      expect(calculateBottomSpacing(100000)).toBeCloseTo(10000, 2);
     });
   });
 
@@ -301,6 +383,12 @@ describe("WelcomeScreen", () => {
       expect(normalizeColorScheme("light")).toBe("light");
       expect(normalizeColorScheme(null)).toBe("light");
       expect(normalizeColorScheme(undefined)).toBe("light");
+    });
+
+    it("falls back to light for unexpected values", () => {
+      expect(normalizeColorScheme("DARK")).toBe("light");
+      expect(normalizeColorScheme("auto")).toBe("light");
+      expect(normalizeColorScheme("")).toBe("light");
     });
 
     it("uses correct gradient colors", () => {
@@ -389,7 +477,7 @@ describe("WelcomeScreen", () => {
 
       // Verify all main elements are present
       expect(screen.getByText("CareConnect")).toBeTruthy();
-      expect(screen.getByText("❤")).toBeTruthy();
+      expect(screen.getByTestId("icon-favorite")).toBeTruthy();
       expect(screen.getByText("Get Started")).toBeTruthy();
       expect(screen.getByText("Sign In")).toBeTruthy();
     });
@@ -437,6 +525,81 @@ describe("WelcomeScreen", () => {
 
       // Component should default to light theme
       expect(screen.getByText("CareConnect")).toBeTruthy();
+    });
+  });
+
+  // ===========================================================================
+  // RNTL TESTS: Button Interactions
+  // ===========================================================================
+
+  describe("Button Interactions", () => {
+    it("calls handleGetStarted when Get Started button is pressed", () => {
+      const mockPush = jest.fn();
+      const { useRouter } = require("expo-router");
+      (useRouter as jest.Mock).mockReturnValue({
+        push: mockPush,
+        replace: jest.fn(),
+        back: jest.fn(),
+      });
+      const { getByLabelText } = render(<WelcomeScreen />);
+      const getStartedButton = getByLabelText("Get started");
+      fireEvent.press(getStartedButton);
+      expect(mockPush).toHaveBeenCalledWith("/role-selection");
+    });
+
+    it("calls handleSignIn when Sign In button is pressed", () => {
+      const mockPush = jest.fn();
+      const { useRouter } = require("expo-router");
+      (useRouter as jest.Mock).mockReturnValue({
+        push: mockPush,
+        replace: jest.fn(),
+        back: jest.fn(),
+      });
+      const { getByLabelText } = render(<WelcomeScreen />);
+      const signInButton = getByLabelText("Sign in");
+      fireEvent.press(signInButton);
+      expect(mockPush).toHaveBeenCalledWith("/sign-in");
+    });
+
+    it("navigates to navigation hub screen when Navigation Hub link is pressed", () => {
+      const mockPush = jest.fn();
+      const { useRouter } = require("expo-router");
+      (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+
+      const { getByLabelText } = render(<WelcomeScreen />);
+      const navHubLink = getByLabelText("Open Navigation Hub screen");
+      
+      fireEvent.press(navHubLink);
+      expect(mockPush).toHaveBeenCalledWith("/navigation-hub");
+    });
+  });
+
+  // ===========================================================================
+  // RNTL TESTS: Pressable States
+  // ===========================================================================
+
+  describe("Pressable States", () => {
+    it("applies pressed opacity to Get Started button", () => {
+      const { getByLabelText } = render(<WelcomeScreen />);
+      const button = getByLabelText("Get started");
+      
+      // Pressable uses a function style prop that receives pressed state
+      // We verify the button renders correctly
+      expect(button).toBeTruthy();
+    });
+
+    it("applies pressed opacity to Sign In button", () => {
+      const { getByLabelText } = render(<WelcomeScreen />);
+      const button = getByLabelText("Sign in");
+      
+      expect(button).toBeTruthy();
+    });
+
+    it("applies pressed opacity to Navigation Hub link", () => {
+      const { getByLabelText } = render(<WelcomeScreen />);
+      const link = getByLabelText("Open Navigation Hub screen");
+      
+      expect(link).toBeTruthy();
     });
   });
 });

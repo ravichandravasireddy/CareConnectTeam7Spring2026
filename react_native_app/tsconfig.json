@@ -1,7 +1,11 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "./node_modules/expo/tsconfig.base.json",
   "compilerOptions": {
     "strict": true,
+    "jsx": "react-native",
+    "lib": ["dom", "es2017"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "types": ["jest", "@testing-library/jest-native"],
     "paths": {
       "@/*": [

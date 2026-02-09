@@ -3,7 +3,7 @@
     "name": "react_native_app",
     "slug": "react_native_app",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "reactnativeapp",
     "userInterfaceStyle": "automatic",

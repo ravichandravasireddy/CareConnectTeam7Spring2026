@@ -63,11 +63,13 @@ export const AppColors = {
 export const Colors = {
   light: {
     text: AppColors.gray900,
+    tint: AppColors.primary600,
     textSecondary: AppColors.gray700,
     background: AppColors.white,
     surface: AppColors.gray100,
     border: AppColors.gray300,
     primary: AppColors.primary600,
+    onPrimary: AppColors.white,
     primarySoft: AppColors.primary100,
     secondary: AppColors.secondary600,
     secondarySoft: AppColors.secondary100,
@@ -83,11 +85,13 @@ export const Colors = {
   },
   dark: {
     text: AppColors.darkTextPrimary,
+    tint: AppColors.primary500,
     textSecondary: AppColors.darkTextSecondary,
     background: AppColors.darkBgPrimary,
     surface: AppColors.darkBgSecondary,
     border: AppColors.darkBorder,
     primary: AppColors.primary500,
+    onPrimary: AppColors.white,
     primarySoft: AppColors.primary700,
     secondary: AppColors.secondary500,
     secondarySoft: AppColors.secondary700,
@@ -101,7 +105,59 @@ export const Colors = {
     tabIconDefault: AppColors.darkTextSecondary,
     tabIconSelected: AppColors.darkTextPrimary,
   },
+
+  // High contrast: maximum contrast for accessibility. Toggle via preferences (coming soon).
+  highContrastLight: {
+    text: "#000000",
+    tint: "#000000",
+    textSecondary: "#000000",
+    background: "#FFFFFF",
+    surface: "#FFFFFF",
+    border: "#000000",
+    primary: "#000000",
+    onPrimary: "#FFFFFF",
+    primarySoft: "#E0E0E0",
+    secondary: "#000000",
+    secondarySoft: "#E0E0E0",
+    accent: "#000000",
+    accentSoft: "#E0E0E0",
+    success: "#000000",
+    warning: "#000000",
+    error: "#000000",
+    info: "#000000",
+    icon: "#000000",
+    tabIconDefault: "#000000",
+    tabIconSelected: "#000000",
+  },
+  highContrastDark: {
+    text: "#FFFFFF",
+    tint: "#FFFFFF",
+    textSecondary: "#FFFFFF",
+    background: "#000000",
+    surface: "#000000",
+    border: "#FFFFFF",
+    primary: "#FFFFFF",
+    onPrimary: "#000000",
+    primarySoft: "#333333",
+    secondary: "#FFFFFF",
+    secondarySoft: "#333333",
+    accent: "#FFFFFF",
+    accentSoft: "#333333",
+    success: "#FFFFFF",
+    warning: "#FFFFFF",
+    error: "#FFFFFF",
+    info: "#FFFFFF",
+    icon: "#FFFFFF",
+    tabIconDefault: "#FFFFFF",
+    tabIconSelected: "#FFFFFF",
+  },
 } as const;
+
+export type ThemeKey =
+  | "light"
+  | "dark"
+  | "highContrastLight"
+  | "highContrastDark";
 
 // =============================================================================
 // Typography (from flutter_app/lib/theme/app_typography.dart & guidelines)
