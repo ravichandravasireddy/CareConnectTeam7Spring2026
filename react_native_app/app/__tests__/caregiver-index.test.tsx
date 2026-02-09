@@ -32,13 +32,32 @@ jest.mock("expo-linear-gradient", () => {
 
 jest.mock("@/components/app-app-bar", () => ({
   AppAppBar: ({ title }: { title: string }) => {
-    const { Text } = require("react-native");
-    return Text({ children: title });
+    const React = require("react");
+    const { Text, View } = require("react-native");
+    return React.createElement(View, { testID: "app-app-bar" }, React.createElement(Text, {}, title));
   },
 }));
 
-jest.mock("@expo/vector-icons/MaterialIcons", () => "MaterialIcons");
-jest.mock("@expo/vector-icons/MaterialCommunityIcons", () => "MaterialCommunityIcons");
+jest.mock("@/components/app-menu", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+  return {
+    AppMenu: () => React.createElement(View, { testID: "app-menu" }),
+  };
+});
+
+jest.mock("@expo/vector-icons/MaterialIcons", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+  return ({ name, testID, ...props }: { name: string; testID?: string }) =>
+    React.createElement(View, { testID: testID || `icon-${name}`, ...props });
+});
+jest.mock("@expo/vector-icons/MaterialCommunityIcons", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+  return ({ name, testID, ...props }: { name: string; testID?: string }) =>
+    React.createElement(View, { testID: testID || `icon-mc-${name}`, ...props });
+});
 
 jest.mock("@/providers/ThemeProvider", () => {
   const { Colors } = require("@/constants/theme");

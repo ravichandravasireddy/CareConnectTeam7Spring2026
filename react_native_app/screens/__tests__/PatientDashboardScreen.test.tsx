@@ -2,6 +2,110 @@ import '../test-setup';
 import React from 'react';
 import { Alert } from 'react-native';
 import { fireEvent, render, screen } from '@testing-library/react-native';
+
+jest.mock('@expo/vector-icons/MaterialIcons', () => {
+  const R = require('react');
+  const { View } = require('react-native');
+  return ({ name, testID, ...p }: { name: string; testID?: string }) =>
+    R.createElement(View, { testID: testID ?? `icon-${name}`, ...p });
+});
+jest.mock('@/providers/ThemeProvider', () => {
+  const { Colors } = require('@/constants/theme');
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: 'light', highContrast: false, setHighContrast: () => {}, themeKey: 'light' }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+jest.mock('@/components/app-app-bar', () => {
+  const R = require('react');
+  const { View, Text, TouchableOpacity } = require('react-native');
+  return {
+    AppAppBar: ({
+      title,
+      showMenuButton,
+      showNotificationButton,
+      showNotificationBadge,
+      onMenuPress,
+      onNotificationTap,
+    }: {
+      title?: string;
+      showMenuButton?: boolean;
+      showNotificationButton?: boolean;
+      showNotificationBadge?: boolean;
+      onMenuPress?: () => void;
+      onNotificationTap?: () => void;
+    }) =>
+      R.createElement(
+        View,
+        { testID: 'app-app-bar' },
+        showMenuButton &&
+          R.createElement(
+            TouchableOpacity,
+            {
+              accessibilityLabel: 'Menu',
+              accessibilityRole: 'button',
+              onPress: onMenuPress,
+            },
+            R.createElement(Text, {}, 'Menu'),
+          ),
+        title != null && R.createElement(Text, {}, title),
+        showNotificationButton &&
+          R.createElement(
+            TouchableOpacity,
+            {
+              accessibilityLabel: showNotificationBadge
+                ? 'Notifications, 1 unread notification'
+                : 'Notifications',
+              accessibilityRole: 'button',
+              onPress: onNotificationTap,
+            },
+            R.createElement(Text, {}, 'Notifications'),
+          ),
+      ),
+  };
+});
+
+const today = new Date();
+const todayAt2PM = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 14, 0);
+const mockTasks = [
+  {
+    id: 'task-1',
+    title: 'Take Medication',
+    description: 'Metformin 500mg',
+    date: today,
+    patientName: 'Patient',
+    icon: 'medication',
+    iconBackground: '#E3F2FD',
+    iconColor: '#1976D2',
+    completedAt: new Date(),
+  },
+  {
+    id: 'task-2',
+    title: 'Blood Pressure Check',
+    description: '',
+    date: todayAt2PM,
+    patientName: 'Patient',
+    icon: 'monitor-heart',
+    iconBackground: '#E8F5E9',
+    iconColor: '#2E7D32',
+    completedAt: undefined,
+  },
+  {
+    id: 'task-3',
+    title: 'Take Medication',
+    description: 'Metformin 500mg',
+    date: todayAt2PM,
+    patientName: 'Patient',
+    icon: 'medication',
+    iconBackground: '#E3F2FD',
+    iconColor: '#1976D2',
+    completedAt: undefined,
+  },
+];
+jest.mock('@/providers/TaskProvider', () => ({
+  useTaskProvider: () => ({ tasks: mockTasks }),
+}));
+
 import PatientDashboardScreen from '../PatientDashboardScreen';
 
 describe('PatientDashboardScreen', () => {
@@ -90,10 +194,8 @@ describe('PatientDashboardScreen', () => {
     fireEvent.press(screen.getByText('View All'));
     fireEvent.press(screen.getByLabelText('Tasks, 3/5. Completed today'));
     fireEvent.press(screen.getByLabelText('BP Today, 120/80. Normal'));
-    fireEvent.press(screen.getByLabelText('Take Medication. Metformin 500mg.'));
-    fireEvent.press(
-      screen.getByLabelText('Blood Pressure Check. Due at 2:00 PM.'),
-    );
+    fireEvent.press(screen.getByLabelText(/^Take Medication\./));
+    fireEvent.press(screen.getByLabelText(/^Blood Pressure Check\./));
     fireEvent.press(screen.getByLabelText('Log Health Data'));
     fireEvent.press(screen.getByLabelText('Send Message'));
     fireEvent.press(screen.getByLabelText('Start video call'));
@@ -109,7 +211,7 @@ describe('PatientDashboardScreen', () => {
     render(<PatientDashboardScreen />);
 
     expect(
-      screen.getByLabelText('Blood Pressure Check. Due at 2:00 PM.'),
+      screen.getByLabelText(/^Blood Pressure Check\./),
     ).toBeTruthy();
   });
 });

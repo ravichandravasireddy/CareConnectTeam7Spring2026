@@ -2,6 +2,29 @@ import '../test-setup';
 import React from 'react';
 import { fireEvent, render, screen, act } from '@testing-library/react-native';
 import { Alert } from 'react-native';
+
+jest.mock('@expo/vector-icons/MaterialIcons', () => {
+  const R = require('react');
+  const { View } = require('react-native');
+  return ({ name, testID, ...p }: { name: string; testID?: string }) =>
+    R.createElement(View, { testID: testID ?? `icon-${name}`, ...p });
+});
+jest.mock('@/providers/ThemeProvider', () => {
+  const { Colors } = require('@/constants/theme');
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: 'light', highContrast: false, setHighContrast: () => {}, themeKey: 'light' }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+jest.mock('@/components/app-app-bar', () => {
+  const R = require('react');
+  const { View, Text } = require('react-native');
+  return {
+    AppAppBar: ({ title }: { title?: string }) =>
+      R.createElement(View, { testID: 'app-app-bar' }, title != null ? R.createElement(Text, {}, title) : null),
+  };
+});
+
 import { MessagingThreadScreen } from '../MessagingThreadScreen';
 
 describe('MessagingThreadScreen', () => {

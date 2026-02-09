@@ -18,6 +18,7 @@ jest.mock("react-native", () => {
 jest.mock("expo-router", () => ({
   Stack: { Screen: ({ children }: { children?: React.ReactNode }) => require("react").createElement(require("react").Fragment, {}, children) },
   useLocalSearchParams: jest.fn(() => ({ id: "1" })),
+  useRouter: () => ({ push: jest.fn(), replace: jest.fn(), back: jest.fn() }),
 }));
 
 jest.mock("react-native-safe-area-context", () => {
@@ -29,7 +30,17 @@ jest.mock("react-native-safe-area-context", () => {
 jest.mock("@expo/vector-icons/MaterialIcons", () => {
   const React = require("react");
   const { View } = require("react-native");
-  return () => React.createElement(View, { testID: "icon-description" });
+  return ({ name, testID, ...props }: { name: string; testID?: string }) =>
+    React.createElement(View, { testID: testID ?? `icon-${name}`, ...props });
+});
+
+jest.mock("@/components/app-app-bar", () => {
+  const React = require("react");
+  const { View, Text } = require("react-native");
+  return {
+    AppAppBar: ({ title }: { title?: string }) =>
+      React.createElement(View, { testID: "app-app-bar" }, title != null ? React.createElement(Text, {}, title) : null),
+  };
 });
 
 jest.mock("@/providers/ThemeProvider", () => {

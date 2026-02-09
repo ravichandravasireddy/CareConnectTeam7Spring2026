@@ -100,47 +100,46 @@ describe('PreferencesAccessibilityScreen', () => {
   });
 
   it('applies language, time, and date selections from dialogs', () => {
+    let lastAlertButtons: { text: string; onPress?: () => void }[] | undefined;
+    jest.spyOn(Alert, 'alert').mockImplementation((_title, _msg, buttons) => {
+      lastAlertButtons = buttons as { text: string; onPress?: () => void }[];
+    });
+
     render(<PreferencesAccessibilityScreen />);
 
     fireEvent.press(screen.getByLabelText('Language. English (US)'));
-    const languageCall = (Alert.alert as jest.Mock).mock.calls.find(
-      ([title]) => title === 'Select Language',
-    );
-    const languageOptions = languageCall?.[2] as { text: string; onPress?: () => void }[];
+    const spanishButton = lastAlertButtons?.find((b) => b.text === 'Spanish');
     act(() => {
-      languageOptions?.[1]?.onPress?.();
+      spanishButton?.onPress?.();
     });
     expect(screen.getByLabelText('Language. Spanish')).toBeTruthy();
+    const englishButton = lastAlertButtons?.find((b) => b.text === 'English (US)');
     act(() => {
-      languageOptions?.[0]?.onPress?.();
+      englishButton?.onPress?.();
     });
     expect(screen.getByLabelText('Language. English (US)')).toBeTruthy();
 
     fireEvent.press(screen.getByLabelText('Time Format. 12-hour'));
-    const timeCall = (Alert.alert as jest.Mock).mock.calls.find(
-      ([title]) => title === 'Time Format',
-    );
-    const timeOptions = timeCall?.[2] as { text: string; onPress?: () => void }[];
+    const time24Button = lastAlertButtons?.find((b) => b.text === '24-hour');
     act(() => {
-      timeOptions?.[1]?.onPress?.();
+      time24Button?.onPress?.();
     });
     expect(screen.getByLabelText('Time Format. 24-hour')).toBeTruthy();
+    const time12Button = lastAlertButtons?.find((b) => b.text === '12-hour');
     act(() => {
-      timeOptions?.[0]?.onPress?.();
+      time12Button?.onPress?.();
     });
     expect(screen.getByLabelText('Time Format. 12-hour')).toBeTruthy();
 
     fireEvent.press(screen.getByLabelText('Date Format. MM/DD/YYYY'));
-    const dateCall = (Alert.alert as jest.Mock).mock.calls.find(
-      ([title]) => title === 'Date Format',
-    );
-    const dateOptions = dateCall?.[2] as { text: string; onPress?: () => void }[];
+    const yyyyMmDdButton = lastAlertButtons?.find((b) => b.text === 'YYYY-MM-DD');
     act(() => {
-      dateOptions?.[2]?.onPress?.();
+      yyyyMmDdButton?.onPress?.();
     });
     expect(screen.getByLabelText('Date Format. YYYY-MM-DD')).toBeTruthy();
+    const ddMmYyyyButton = lastAlertButtons?.find((b) => b.text === 'DD/MM/YYYY');
     act(() => {
-      dateOptions?.[1]?.onPress?.();
+      ddMmYyyyButton?.onPress?.();
     });
     expect(screen.getByLabelText('Date Format. DD/MM/YYYY')).toBeTruthy();
   });

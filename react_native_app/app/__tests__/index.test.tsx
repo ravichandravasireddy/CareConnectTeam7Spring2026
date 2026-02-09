@@ -534,31 +534,31 @@ describe("WelcomeScreen", () => {
 
   describe("Button Interactions", () => {
     it("calls handleGetStarted when Get Started button is pressed", () => {
-      const mockReplace = jest.fn();
+      const mockPush = jest.fn();
       const { useRouter } = require("expo-router");
       (useRouter as jest.Mock).mockReturnValue({
-        push: jest.fn(),
-        replace: mockReplace,
+        push: mockPush,
+        replace: jest.fn(),
         back: jest.fn(),
       });
       const { getByLabelText } = render(<WelcomeScreen />);
       const getStartedButton = getByLabelText("Get started");
       fireEvent.press(getStartedButton);
-      expect(mockReplace).toHaveBeenCalledWith("/caregiver");
+      expect(mockPush).toHaveBeenCalledWith("/role-selection");
     });
 
     it("calls handleSignIn when Sign In button is pressed", () => {
-      const mockReplace = jest.fn();
+      const mockPush = jest.fn();
       const { useRouter } = require("expo-router");
       (useRouter as jest.Mock).mockReturnValue({
-        push: jest.fn(),
-        replace: mockReplace,
+        push: mockPush,
+        replace: jest.fn(),
         back: jest.fn(),
       });
       const { getByLabelText } = render(<WelcomeScreen />);
       const signInButton = getByLabelText("Sign in");
       fireEvent.press(signInButton);
-      expect(mockReplace).toHaveBeenCalledWith("/caregiver");
+      expect(mockPush).toHaveBeenCalledWith("/sign-in");
     });
 
     it("navigates to navigation hub screen when Navigation Hub link is pressed", () => {

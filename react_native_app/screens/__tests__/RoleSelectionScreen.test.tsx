@@ -1,6 +1,26 @@
 import '../test-setup';
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react-native';
+
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  getItem: jest.fn(() => Promise.resolve(null)),
+  setItem: jest.fn(() => Promise.resolve()),
+  removeItem: jest.fn(() => Promise.resolve()),
+}));
+jest.mock('@/providers/ThemeProvider', () => {
+  const { Colors } = require('@/constants/theme');
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: 'light', highContrast: false, setHighContrast: () => {}, themeKey: 'light' }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+jest.mock('react-native-safe-area-context', () => ({
+  SafeAreaView: ({ children }: { children: React.ReactNode }) => children,
+}));
+jest.mock('@expo/vector-icons', () => ({
+  Ionicons: ({ name }: { name: string }) => null,
+}));
+
 import RoleSelectionScreen from '../RoleSelectionScreen';
 
 describe('RoleSelectionScreen', () => {

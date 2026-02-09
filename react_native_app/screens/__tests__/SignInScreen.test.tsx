@@ -2,6 +2,30 @@ import '../test-setup';
 import React from 'react';
 import { Alert } from 'react-native';
 import { fireEvent, render, screen, act } from '@testing-library/react-native';
+
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  getItem: jest.fn(() => Promise.resolve(null)),
+  setItem: jest.fn(() => Promise.resolve()),
+  removeItem: jest.fn(() => Promise.resolve()),
+}));
+jest.mock('@/providers/ThemeProvider', () => {
+  const { Colors } = require('@/constants/theme');
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: 'light', highContrast: false, setHighContrast: () => {}, themeKey: 'light' }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+jest.mock('@/providers/UserProvider', () => ({
+  useUser: () => ({ setUserRole: jest.fn(), setUserInfo: jest.fn() }),
+  UserProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+jest.mock('react-native-safe-area-context', () => ({
+  SafeAreaView: ({ children }: { children: React.ReactNode }) => children,
+}));
+jest.mock('@expo/vector-icons', () => ({
+  Ionicons: ({ name }: { name: string }) => null,
+}));
+
 import SignInScreen from '../SignInScreen';
 
 describe('SignInScreen', () => {
@@ -38,7 +62,7 @@ describe('SignInScreen', () => {
 
     fireEvent.changeText(
       screen.getByPlaceholderText('your.email@example.com'),
-      'user@example.com',
+      'patient@careconnect.demo',
     );
     fireEvent.changeText(
       screen.getByPlaceholderText('Enter your password'),
@@ -51,7 +75,7 @@ describe('SignInScreen', () => {
       jest.advanceTimersByTime(1000);
     });
 
-    expect(Alert.alert).toHaveBeenCalledWith('Success', 'Sign in successful!');
+    expect(onSignInSuccess).toHaveBeenCalledWith('patient');
     expect(onSignInSuccess).toHaveBeenCalledTimes(1);
   });
 

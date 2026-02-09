@@ -41,6 +41,15 @@ jest.mock("@/providers/ThemeProvider", () => {
   };
 });
 
+jest.mock("@/components/app-app-bar", () => {
+  const React = require("react");
+  const { View, Text } = require("react-native");
+  return {
+    AppAppBar: ({ title }: { title?: string }) =>
+      React.createElement(View, { testID: "app-app-bar" }, title != null ? React.createElement(Text, {}, title) : null),
+  };
+});
+
 const mockNotes: Note[] = [];
 jest.mock("../../providers/NoteProvider", () => ({
   useNoteProvider: () => ({ notes: mockNotes, categoryColors: () => ({ bg: "#eee", fg: "#333" }) }),

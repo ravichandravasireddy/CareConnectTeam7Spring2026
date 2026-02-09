@@ -41,6 +41,37 @@ jest.mock("@/providers/ThemeProvider", () => {
   };
 });
 
+jest.mock("@/providers/UserProvider", () => ({
+  useUser: () => ({
+    userRole: "patient" as const,
+    isPatient: true,
+    userName: null,
+    userEmail: null,
+    setUserRole: jest.fn(),
+    setUserInfo: jest.fn(),
+  }),
+  UserProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
+jest.mock("@/components/app-app-bar", () => {
+  const R = require("react");
+  const { View, Text } = require("react-native");
+  return {
+    AppAppBar: ({ title }: { title?: string }) =>
+      R.createElement(View, { testID: "app-app-bar" }, title != null ? R.createElement(Text, {}, title) : null),
+  };
+});
+
+jest.mock("@/components/app-bottom-nav-bar", () => {
+  const R = require("react");
+  const { View } = require("react-native");
+  return {
+    AppBottomNavBar: () => R.createElement(View, { testID: "app-bottom-nav-bar" }),
+    kPatientNavHealth: 3,
+    kCaregiverNavHome: 0,
+  };
+});
+
 const mockTypeColors = jest.fn(() => ({ bg: "#eee", fg: "#333" }));
 jest.mock("../../providers/HealthLogProvider", () => ({
   useHealthLogProvider: () => ({

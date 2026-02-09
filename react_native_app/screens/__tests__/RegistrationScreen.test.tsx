@@ -2,6 +2,24 @@ import '../test-setup';
 import React from 'react';
 import { Alert, AccessibilityInfo } from 'react-native';
 import { fireEvent, render, screen, act } from '@testing-library/react-native';
+
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  getItem: jest.fn(() => Promise.resolve(null)),
+  setItem: jest.fn(() => Promise.resolve()),
+  removeItem: jest.fn(() => Promise.resolve()),
+}));
+jest.mock('@/providers/ThemeProvider', () => {
+  const { Colors } = require('@/constants/theme');
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: 'light', highContrast: false, setHighContrast: () => {}, themeKey: 'light' }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+jest.mock('@/providers/UserProvider', () => ({
+  useUser: () => ({ setUserRole: jest.fn(), setUserInfo: jest.fn() }),
+  UserProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
 import RegistrationScreen from '../RegistrationScreen';
 
 describe('RegistrationScreen', () => {

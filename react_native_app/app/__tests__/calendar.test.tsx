@@ -142,6 +142,39 @@ jest.mock("@/providers/ThemeProvider", () => {
   };
 });
 
+jest.mock("@/providers/UserProvider", () => ({
+  useUser: () => ({
+    userRole: "patient" as const,
+    isPatient: true,
+    userName: null,
+    userEmail: null,
+    setUserRole: jest.fn(),
+    setUserInfo: jest.fn(),
+  }),
+  UserProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
+// Mock AppAppBar (calendar uses it; avoids MaterialIcons/icon deps in test)
+jest.mock("@/components/app-app-bar", () => {
+  const React = require("react");
+  const { View, Text } = require("react-native");
+  return {
+    AppAppBar: ({ title }: { title?: string }) =>
+      React.createElement(View, { testID: "app-app-bar" }, title != null ? React.createElement(Text, {}, title) : null),
+  };
+});
+
+// Mock AppBottomNavBar (calendar uses it)
+jest.mock("@/components/app-bottom-nav-bar", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+  return {
+    AppBottomNavBar: () => React.createElement(View, { testID: "app-bottom-nav-bar" }),
+    kPatientNavTasks: 1,
+    kCaregiverNavTasks: 1,
+  };
+});
+
 import CalendarScreen from "../calendar";
 
 describe("CalendarScreen", () => {

@@ -157,10 +157,10 @@ describe("AppBottomNavBar", () => {
   });
 
   describe("currentIndex clamping", () => {
-    it("treats negative currentIndex as 0", () => {
+    it("treats negative currentIndex as no tab selected (-1)", () => {
       render(<AppBottomNavBar currentIndex={-1} isPatient={false} />);
       const home = screen.getByLabelText("Home");
-      expect(home.props.accessibilityState?.selected).toBe(true);
+      expect(home.props.accessibilityState?.selected).toBe(false);
     });
 
     it("treats out-of-range currentIndex as last tab", () => {

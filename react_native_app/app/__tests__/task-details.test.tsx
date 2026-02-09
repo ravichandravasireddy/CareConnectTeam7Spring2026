@@ -43,8 +43,9 @@ const mockTask = {
   iconBackground: "#eee",
   iconColor: "#333",
 };
+const mockMarkCompleted = jest.fn();
 jest.mock("@/providers/TaskProvider", () => ({
-  useTaskProvider: () => ({ tasks: [mockTask] }),
+  useTaskProvider: () => ({ tasks: [mockTask], markCompleted: mockMarkCompleted }),
 }));
 
 jest.mock("@/providers/ThemeProvider", () => {

@@ -44,6 +44,12 @@ jest.mock("react-native", () => {
 });
 
 // Mock expo-router
+const mockRouter = {
+  push: jest.fn(),
+  replace: jest.fn(),
+  back: jest.fn(),
+  canGoBack: jest.fn(() => false),
+};
 jest.mock("expo-router", () => {
   const React = require("react");
   const StackScreen = ({ children }: { children?: React.ReactNode }) =>
@@ -51,6 +57,7 @@ jest.mock("expo-router", () => {
 
   return {
     __esModule: true,
+    useRouter: () => mockRouter,
     Stack: {
       Screen: StackScreen,
     },
@@ -90,6 +97,15 @@ const mockEvents: TimelineEvent[] = [];
 jest.mock("../../hooks/useHealthTimelineEvents", () => ({
   useHealthTimelineEvents: jest.fn(() => mockEvents),
 }));
+
+jest.mock("@/components/app-app-bar", () => {
+  const R = require("react");
+  const { View, Text } = require("react-native");
+  return {
+    AppAppBar: ({ title }: { title?: string }) =>
+      R.createElement(View, { testID: "app-app-bar" }, title != null ? R.createElement(Text, {}, title) : null),
+  };
+});
 
 jest.mock("@/components/app-bottom-nav-bar", () => {
   const R = require("react");

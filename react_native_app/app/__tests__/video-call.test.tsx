@@ -103,6 +103,23 @@ jest.mock("@expo/vector-icons/MaterialIcons", () => {
   );
 });
 
+jest.mock("@/providers/ThemeProvider", () => {
+  const { Colors } = require("@/constants/theme");
+  return {
+    useTheme: () => ({ colors: Colors.light, colorScheme: "light", highContrast: false, setHighContrast: () => {}, themeKey: "light" }),
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
+
+jest.mock("@/components/app-app-bar", () => {
+  const React = require("react");
+  const { View, Text } = require("react-native");
+  return {
+    AppAppBar: ({ title }: { title?: string }) =>
+      React.createElement(View, { testID: "app-app-bar" }, title != null ? React.createElement(Text, {}, title) : null),
+  };
+});
+
 import VideoCallScreen from "../video-call";
 
 describe("VideoCallScreen", () => {

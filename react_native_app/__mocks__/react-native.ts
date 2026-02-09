@@ -16,10 +16,17 @@ const createMockComponent = (name: string) => {
 module.exports = {
   View: createMockComponent("View"),
   Text: createMockComponent("Text"),
+  TextInput: createMockComponent("TextInput"),
   ScrollView: createMockComponent("ScrollView"),
   Pressable: createMockComponent("Pressable"),
   FlatList: createMockComponent("FlatList"),
   TouchableOpacity: createMockComponent("TouchableOpacity"),
+  Switch: createMockComponent("Switch"),
+  ActivityIndicator: createMockComponent("ActivityIndicator"),
+  Alert: { alert: jest.fn() },
+  AccessibilityInfo: {
+    announceForAccessibility: jest.fn(),
+  },
   StyleSheet: {
     create: (styles: Record<string, unknown>) => styles,
     flatten: (style: unknown) => style,

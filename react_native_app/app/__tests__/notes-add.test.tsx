@@ -37,7 +37,17 @@ jest.mock("react-native-safe-area-context", () => {
 jest.mock("@expo/vector-icons/MaterialIcons", () => {
   const React = require("react");
   const { View } = require("react-native");
-  return () => React.createElement(View, { testID: "icon-close" });
+  return ({ name, testID, ...props }: { name: string; testID?: string }) =>
+    React.createElement(View, { testID: testID || `icon-${name}`, ...props });
+});
+
+jest.mock("@/components/app-app-bar", () => {
+  const React = require("react");
+  const { View, Text } = require("react-native");
+  return {
+    AppAppBar: ({ title }: { title?: string }) =>
+      React.createElement(View, { testID: "app-app-bar" }, title != null ? React.createElement(Text, {}, title) : null),
+  };
 });
 
 jest.mock("@/providers/ThemeProvider", () => {
