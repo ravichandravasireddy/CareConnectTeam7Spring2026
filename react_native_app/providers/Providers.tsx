@@ -12,6 +12,7 @@ import { NoteProvider } from './NoteProvider';
 import { HealthLogProvider } from './HealthLogProvider';
 import { UserProvider } from './UserProvider';
 import { ThemeProvider } from './ThemeProvider';
+import { ThemePreferenceProvider } from "@/context/theme-preference";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -25,17 +26,19 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <ThemeProvider>
-      <UserProvider initialRole="caregiver">
-        <TaskProvider>
-          <NotificationProvider>
-            <NoteProvider>
-              <HealthLogProvider>
-                {children}
-              </HealthLogProvider>
-            </NoteProvider>
-          </NotificationProvider>
-        </TaskProvider>
-      </UserProvider>
+      <ThemePreferenceProvider>
+        <UserProvider initialRole="caregiver">
+          <TaskProvider>
+            <NotificationProvider>
+              <NoteProvider>
+                <HealthLogProvider>
+                  {children}
+                </HealthLogProvider>
+              </NoteProvider>
+            </NotificationProvider>
+          </TaskProvider>
+        </UserProvider>
+      </ThemePreferenceProvider>
     </ThemeProvider>
   );
 }

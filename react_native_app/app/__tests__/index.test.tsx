@@ -87,6 +87,12 @@ jest.mock("@/providers/ThemeProvider", () => {
   };
 });
 
+jest.mock("@react-native-async-storage/async-storage", () => ({
+  getItem: jest.fn(() => Promise.resolve(null)),
+  setItem: jest.fn(() => Promise.resolve()),
+  removeItem: jest.fn(() => Promise.resolve()),
+}));
+
 import WelcomeScreen, {
   calculateBottomSpacing,
   calculateTopSpacing,
@@ -209,6 +215,32 @@ describe("WelcomeScreen", () => {
       // Verify button responds to press events
       expect(signInButton).toBeTruthy();
     });
+
+    it("returns pressed and unpressed styles for Get Started button", () => {
+      render(<WelcomeScreen />);
+
+      const button = screen.getByLabelText("Get started");
+      const styleFn = button.props.style;
+
+      const pressedStyles = styleFn({ pressed: true });
+      const unpressedStyles = styleFn({ pressed: false });
+
+      expect(pressedStyles[1].opacity).toBe(0.9);
+      expect(unpressedStyles[1].opacity).toBe(1);
+    });
+
+    it("returns pressed and unpressed styles for Sign In button", () => {
+      render(<WelcomeScreen />);
+
+      const button = screen.getByLabelText("Sign in");
+      const styleFn = button.props.style;
+
+      const pressedStyles = styleFn({ pressed: true });
+      const unpressedStyles = styleFn({ pressed: false });
+
+      expect(pressedStyles[1].opacity).toBe(0.9);
+      expect(unpressedStyles[1].opacity).toBe(1);
+    });
   });
 
   // ===========================================================================
@@ -286,6 +318,14 @@ describe("WelcomeScreen", () => {
       expect(calculateTopSpacing(200)).toBe(32);
     });
 
+    it("returns minimum top spacing for zero height", () => {
+      expect(calculateTopSpacing(0)).toBe(32);
+    });
+
+    it("returns minimum top spacing for negative height", () => {
+      expect(calculateTopSpacing(-500)).toBe(32);
+    });
+
     it("calculates bottom spacing correctly for standard height", () => {
       // Bottom spacing should be max(24, 812 * 0.1) = max(24, 81.2) = 81.2
       expect(calculateBottomSpacing(812)).toBeCloseTo(81.2, 2);
@@ -294,6 +334,24 @@ describe("WelcomeScreen", () => {
     it("calculates bottom spacing correctly for small height", () => {
       // Bottom spacing should be max(24, 200 * 0.1) = max(24, 20) = 24
       expect(calculateBottomSpacing(200)).toBe(24);
+    });
+
+    it("returns minimum bottom spacing for zero height", () => {
+      expect(calculateBottomSpacing(0)).toBe(24);
+    });
+
+    it("returns minimum bottom spacing for negative height", () => {
+      expect(calculateBottomSpacing(-500)).toBe(24);
+    });
+
+    it("returns NaN when height is NaN", () => {
+      expect(Number.isNaN(calculateTopSpacing(NaN))).toBe(true);
+      expect(Number.isNaN(calculateBottomSpacing(NaN))).toBe(true);
+    });
+
+    it("handles very large heights without overflow", () => {
+      expect(calculateTopSpacing(100000)).toBeCloseTo(12000, 2);
+      expect(calculateBottomSpacing(100000)).toBeCloseTo(10000, 2);
     });
   });
 
@@ -325,6 +383,12 @@ describe("WelcomeScreen", () => {
       expect(normalizeColorScheme("light")).toBe("light");
       expect(normalizeColorScheme(null)).toBe("light");
       expect(normalizeColorScheme(undefined)).toBe("light");
+    });
+
+    it("falls back to light for unexpected values", () => {
+      expect(normalizeColorScheme("DARK")).toBe("light");
+      expect(normalizeColorScheme("auto")).toBe("light");
+      expect(normalizeColorScheme("")).toBe("light");
     });
 
     it("uses correct gradient colors", () => {

@@ -12,7 +12,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { AppColors, Fonts, Typography } from "@/constants/theme";
+import { AppColors, Colors, Fonts, Typography } from "@/constants/theme";
 import { useTheme } from "@/providers/ThemeProvider";
 
 export const normalizeColorScheme = (
@@ -28,19 +28,20 @@ export const calculateBottomSpacing = (height: number) =>
 export default function WelcomeScreen() {
   const router = useRouter();
   const { colors, colorScheme } = useTheme();
+  const normalizedColorScheme = normalizeColorScheme(colorScheme);
   const styles = useMemo(() => createStyles(colors), [colors]);
   const { height } = useWindowDimensions();
   const topSpacing = calculateTopSpacing(height);
   const bottomSpacing = calculateBottomSpacing(height);
   const onPrimary =
-    colorScheme === "dark" ? AppColors.darkTextPrimary : AppColors.white;
+    normalizedColorScheme === "dark" ? AppColors.darkTextPrimary : AppColors.white;
 
   const handleGetStarted = () => {
-    router.replace("/caregiver" as any);
+    router.push("/role-selection" as any);
   };
 
   const handleSignIn = () => {
-    router.replace("/caregiver" as any);
+    router.push("/sign-in" as any);
   };
 
   const handleNavigationHub = () => {

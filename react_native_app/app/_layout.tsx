@@ -25,6 +25,14 @@ function LayoutContent() {
         <Stack.Screen name="video-call" options={{ headerShown: false}} />
         <Stack.Screen name="emergency-sos" options={{ headerShown: false }} />
         <Stack.Screen name="caregiver" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="role-selection" options={{ headerShown: false }} />
+        <Stack.Screen name="sign-in" options={{ headerShown: false }} />
+        <Stack.Screen name="registration" options={{ headerShown: false }} />
+        <Stack.Screen name="patient-dashboard" options={{ headerShown: false }} />
+        <Stack.Screen name="messaging-thread-patient" options={{ headerShown: false }} />
+        <Stack.Screen name="patient-profile" options={{ headerShown: false }} />
+        <Stack.Screen name="preferences-accessibility" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
     </NavThemeProvider>
@@ -34,7 +42,7 @@ function LayoutContent() {
 export default function RootLayout() {
   return (
     <Providers>
-      <LayoutContent />
+        <LayoutContent />
     </Providers>
   );
 }

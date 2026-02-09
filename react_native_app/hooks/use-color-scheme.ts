@@ -1,2 +1,6 @@
-// DELETE ME AT MERGE - Example app hook; only used by (tabs) and example components marked for deletion. CareConnect uses ThemeProvider.
-export { useColorScheme } from 'react-native';
+import { useThemePreference } from '@/context/theme-preference';
+
+export const useColorScheme = () => {
+  const { resolvedScheme } = useThemePreference();
+  return resolvedScheme;
+};
