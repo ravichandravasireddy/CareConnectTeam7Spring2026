@@ -10,9 +10,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Typography, AppColors } from '../constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { useThemePreference } from '@/context/theme-preference';
+import { Typography, AppColors } from '../constants/theme';
+import { useTheme } from '@/providers/ThemeProvider';
 
 interface PreferencesAccessibilityScreenProps {
   onBack?: () => void;
@@ -21,14 +20,10 @@ interface PreferencesAccessibilityScreenProps {
 export default function PreferencesAccessibilityScreen({
   onBack,
 }: PreferencesAccessibilityScreenProps) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colorScheme, preference, setPreference, highContrast, setHighContrast, colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
-  const { resolvedScheme, setPreference } = useThemePreference();
-  const isDarkMode = resolvedScheme === 'dark';
-  const [isHighContrast, setIsHighContrast] = useState(false);
+  const isDarkMode = colorScheme === 'dark';
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(true);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [largeTouchTargets, setLargeTouchTargets] = useState(true);
@@ -111,8 +106,8 @@ export default function PreferencesAccessibilityScreen({
         <SwitchTile
           title="High Contrast"
           subtitle="Increase contrast for visibility"
-          value={isHighContrast}
-          onValueChange={setIsHighContrast}
+          value={highContrast}
+          onValueChange={setHighContrast}
         />
 
         <SectionHeader title="Accessibility" />
@@ -215,7 +210,7 @@ export default function PreferencesAccessibilityScreen({
           accessibilityLabel="Save preferences"
           accessibilityHint="Saves your preferences"
         >
-          <Text style={styles.saveButtonText}>Save Preferences</Text>
+          <Text style={[styles.saveButtonText, { color: colors.onPrimary }]}>Save Preferences</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -223,9 +218,7 @@ export default function PreferencesAccessibilityScreen({
 }
 
 function SectionHeader({ title }: { title: string }) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   return (
@@ -242,9 +235,7 @@ function SettingTile({
   subtitle: string;
   onPress: () => void;
 }) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   return (
@@ -278,9 +269,7 @@ function SwitchTile({
   value: boolean;
   onValueChange: (value: boolean) => void;
 }) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   return (
@@ -303,11 +292,7 @@ function SwitchTile({
   );
 }
 
-type ThemeColors = {
-  [K in keyof typeof Colors.light]: string;
-};
-
-const createStyles = (colors: ThemeColors) =>
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -377,6 +362,5 @@ const createStyles = (colors: ThemeColors) =>
     },
     saveButtonText: {
       ...Typography.buttonLarge,
-      color: AppColors.white,
     },
   });

@@ -8,16 +8,14 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { AppAppBar } from '@/components/app-app-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Stack } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { AppBottomNavBar, kPatientNavHealth } from '@/components/app-bottom-nav-bar';
 import { useHealthTimelineEvents } from '../hooks/useHealthTimelineEvents';
 import { TimelineEvent } from '../models/TimelineEvent';
-import { Colors, Typography } from '../constants/theme';
+import { Typography } from '../constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
-
-type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
 function formatTimelineTimestamp(dateTime: Date): string {
   const now = new Date();
@@ -41,7 +39,7 @@ function TimelineItem({
   colors,
 }: {
   event: TimelineEvent;
-  colors: ThemeColors;
+  colors: ReturnType<typeof useTheme>['colors'];
 }) {
   const ts = event.timestamp instanceof Date ? event.timestamp : new Date(event.timestamp);
   const timeLabel = formatTimelineTimestamp(ts);
@@ -91,15 +89,13 @@ export default function HealthTimelineScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <Stack.Screen
-        options={{
-          title: 'Health Timeline',
-          headerShown: true,
-          headerStyle: { backgroundColor: colors.surface },
-          headerTintColor: colors.text,
-        }}
+      <AppAppBar
+        title="Health Timeline"
+        showMenuButton={false}
+        useBackButton={true}
+        showNotificationButton={false}
       />
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['bottom']}>
         {events.length === 0 ? (
           <View style={styles.emptyState}>
             <Text
@@ -124,7 +120,10 @@ export default function HealthTimelineScreen() {
           </ScrollView>
         )}
       </SafeAreaView>
-      <AppBottomNavBar currentIndex={kPatientNavHealth} isPatient={true} />
+      <AppBottomNavBar 
+        currentIndex={-1}
+        isPatient={true}
+      />
     </View>
   );
 }

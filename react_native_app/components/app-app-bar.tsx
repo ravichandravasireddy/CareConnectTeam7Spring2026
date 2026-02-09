@@ -8,6 +8,7 @@
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
+import { ReactNode } from "react";
 
 import { useTheme } from "@/providers/ThemeProvider";
 import {
@@ -29,6 +30,10 @@ type AppAppBarProps = {
   /** Override default navigation to /notifications when notification icon is pressed. */
   onNotificationTap?: () => void;
   onSettingsPress?: () => void;
+  /** Override default menu behavior when menu button is pressed. */
+  onMenuPress?: () => void;
+  /** Custom action buttons to display on the right side (after notification/settings). */
+  customActions?: ReactNode;
 };
 
 const NOTIFICATIONS_ROUTE = "/notifications";
@@ -41,6 +46,8 @@ export function AppAppBar({
   showNotificationBadge = false,
   onNotificationTap,
   onSettingsPress,
+  onMenuPress,
+  customActions,
 }: AppAppBarProps) {
   const { colors } = useTheme();
   const router = useRouter();
@@ -48,6 +55,11 @@ export function AppAppBar({
   const handleBack = () => router.back();
   const handleNotificationPress = () => {
     (onNotificationTap ?? (() => router.push(NOTIFICATIONS_ROUTE as any)))();
+  };
+  const handleMenuPress = () => {
+    if (onMenuPress) {
+      onMenuPress();
+    }
   };
 
   return (
@@ -68,10 +80,11 @@ export function AppAppBar({
           </Pressable>
         ) : showMenuButton ? (
           <Pressable
-            onPress={() => {}}
+            onPress={handleMenuPress}
             style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]}
             accessibilityRole="button"
             accessibilityLabel="Menu"
+            accessibilityHint="Opens menu options"
           >
             <MaterialIcons
               name="menu"
@@ -126,6 +139,7 @@ export function AppAppBar({
             />
           </Pressable>
         )}
+        {customActions}
       </View>
     </View>
   );
@@ -151,8 +165,9 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: "row",
-    width: 48,
+    minWidth: 48,
     justifyContent: "flex-end",
+    alignItems: "center",
     gap: 4,
   },
   iconButton: {

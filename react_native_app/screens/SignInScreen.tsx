@@ -11,24 +11,29 @@ import {
   AccessibilityInfo,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors, Typography, AppColors } from '../constants/theme';
+import { Typography, AppColors } from '../constants/theme';
 import { Ionicons } from '@expo/vector-icons';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useTheme } from '@/providers/ThemeProvider';
+import { useUser, UserRole } from '@/providers/UserProvider';
 
 interface SignInScreenProps {
   onNavigateToRegistration?: () => void;
   onNavigateBack?: () => void;
-  onSignInSuccess?: () => void;
+  onSignInSuccess?: (role: UserRole) => void;
 }
+
+// Mock credentials matching Flutter app
+const MOCK_PATIENT_EMAIL = 'patient@careconnect.demo';
+const MOCK_CAREGIVER_EMAIL = 'caregiver@careconnect.demo';
+const MOCK_PASSWORD = 'password123';
 
 export default function SignInScreen({
   onNavigateToRegistration,
   onNavigateBack,
   onSignInSuccess,
 }: SignInScreenProps) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
+  const { setUserRole, setUserInfo } = useUser();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -76,15 +81,33 @@ export default function SignInScreen({
 
     setIsLoading(true);
 
-    // Simulate sign in - replace with actual API call
+    // Simulate API call delay
     setTimeout(() => {
       setIsLoading(false);
 
-      // Success feedback
-      AccessibilityInfo.announceForAccessibility('Sign in successful');
-      Alert.alert('Success', 'Sign in successful!');
-      onSignInSuccess?.();
-    }, 1000);
+      const normalizedEmail = email.trim().toLowerCase();
+      const normalizedPassword = password.trim();
+
+      // Check demo credentials
+      if (normalizedEmail === MOCK_PATIENT_EMAIL && normalizedPassword === MOCK_PASSWORD) {
+        // Sign in as patient
+        setUserRole('patient');
+        setUserInfo('Robert Williams', normalizedEmail);
+        AccessibilityInfo.announceForAccessibility('Sign in successful as patient');
+        onSignInSuccess?.('patient');
+      } else if (normalizedEmail === MOCK_CAREGIVER_EMAIL && normalizedPassword === MOCK_PASSWORD) {
+        // Sign in as caregiver
+        setUserRole('caregiver');
+        setUserInfo('Dr. Sarah Johnson', normalizedEmail);
+        AccessibilityInfo.announceForAccessibility('Sign in successful as caregiver');
+        onSignInSuccess?.('caregiver');
+      } else {
+        // Invalid credentials
+        setPasswordError('Invalid email or password');
+        AccessibilityInfo.announceForAccessibility('Sign in failed. Invalid email or password');
+        Alert.alert('Sign In Failed', 'Invalid email or password. Please check your credentials and try again.');
+      }
+    }, 800);
   };
 
   const handleForgotPassword = () => {
@@ -293,7 +316,7 @@ export default function SignInScreen({
             {
               backgroundColor: isLoading
                 ? colors.textSecondary
-                : colors.primary,
+                : colors.primary
             },
           ]}
           accessible={true}
@@ -303,9 +326,9 @@ export default function SignInScreen({
           accessibilityState={{ disabled: isLoading, busy: isLoading }}
         >
           {isLoading ? (
-            <ActivityIndicator color={colors.background} size="small" />
+            <ActivityIndicator color={colors.onPrimary} size="small" />
           ) : (
-            <Text style={styles.signInButtonText}>Sign In</Text>
+            <Text style={[styles.signInButtonText, { color: colors.onPrimary }]}>Sign In</Text>
           )}
         </TouchableOpacity>
 
@@ -352,11 +375,7 @@ export default function SignInScreen({
   );
 }
 
-type ThemeColors = {
-  [K in keyof typeof Colors.light]: string;
-};
-
-const createStyles = (colors: ThemeColors) =>
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -463,7 +482,6 @@ const createStyles = (colors: ThemeColors) =>
     },
     signInButtonText: {
       ...Typography.buttonLarge,
-      color: AppColors.white,
     },
     demoContainer: {
       borderWidth: 1,

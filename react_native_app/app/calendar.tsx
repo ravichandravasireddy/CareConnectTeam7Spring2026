@@ -15,14 +15,17 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from 'react-native';
+import { AppAppBar } from '@/components/app-app-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useTaskProvider } from '../providers/TaskProvider';
 import { areDatesEqual } from '../models/Task';
-import { Colors, Typography } from '../constants/theme';
+import { Typography } from '../constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
 import { TaskCard } from '../components/task-card';
+import { AppBottomNavBar, kPatientNavTasks, kCaregiverNavTasks } from '@/components/app-bottom-nav-bar';
+import { useUser } from '@/providers/UserProvider';
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const WIDE_BREAKPOINT = 1000;
@@ -86,15 +89,13 @@ const isSelected = (date: Date, selectedDate: Date | null): boolean => {
   return areDatesEqual(date, selectedDate);
 };
 
-type ThemeColors = typeof Colors.light | typeof Colors.dark;
-
 interface DateCellProps {
   date: Date;
   currentMonth: Date;
   selectedDate: Date | null;
   hasTasks: boolean;
   onPress: () => void;
-  colors: ThemeColors;
+  colors: ReturnType<typeof useTheme>['colors'];
 }
 
 const DateCell: React.FC<DateCellProps> = ({
@@ -183,6 +184,7 @@ export default function CalendarScreen() {
   const { width } = useWindowDimensions();
   const router = useRouter();
   const taskProvider = useTaskProvider();
+  const { isPatient } = useUser();
 
   const now = useMemo(() => new Date(), []);
   const [currentMonth, setCurrentMonth] = useState<Date>(
@@ -312,8 +314,10 @@ export default function CalendarScreen() {
             key={task.id}
             task={task}
             onPress={() => {
-              // TODO: Navigate to task details screen
-              // router.push(`/task-details?id=${task.id}`);
+              router.push({
+                pathname: "/task-details",
+                params: { taskId: task.id },
+              });
             }}
             showTime={true}
             showPatientName={true}
@@ -325,39 +329,43 @@ export default function CalendarScreen() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: 'Calendar',
-          headerShown: true,
-          headerStyle: { backgroundColor: colors.surface },
-          headerTintColor: colors.text,
-        }}
+      <AppAppBar
+        title="Calendar"
+        showMenuButton={false}
+        useBackButton={true}
+        showNotificationButton={false}
       />
-      <SafeAreaView
-        style={[styles.container, { backgroundColor: colors.surface }]}
-        edges={['bottom']}>
-        {useWideLayout ? (
-          <View style={styles.wideLayout}>
-            <ScrollView
-              style={[{ width: calendarWidth }]}
-              contentContainerStyle={styles.scrollContent}>
-              {calendarSection}
-            </ScrollView>
-            <ScrollView
-              style={styles.tasksScrollView}
-              contentContainerStyle={[styles.scrollContent, styles.tasksPadding]}>
-              {tasksSection}
-            </ScrollView>
-          </View>
-        ) : (
-          <ScrollView contentContainerStyle={styles.scrollContent}>
-            <View style={styles.narrowLayout}>
-              {calendarSection}
-              {tasksSection}
+      <View style={{ flex: 1 }}>
+        <SafeAreaView
+          style={[styles.container, { backgroundColor: colors.surface }]}
+          edges={['bottom']}>
+          {useWideLayout ? (
+            <View style={styles.wideLayout}>
+              <ScrollView
+                style={[{ width: calendarWidth }]}
+                contentContainerStyle={styles.scrollContent}>
+                {calendarSection}
+              </ScrollView>
+              <ScrollView
+                style={styles.tasksScrollView}
+                contentContainerStyle={[styles.scrollContent, styles.tasksPadding]}>
+                {tasksSection}
+              </ScrollView>
             </View>
-          </ScrollView>
-        )}
-      </SafeAreaView>
+          ) : (
+            <ScrollView contentContainerStyle={styles.scrollContent}>
+              <View style={styles.narrowLayout}>
+                {calendarSection}
+                {tasksSection}
+              </View>
+            </ScrollView>
+          )}
+        </SafeAreaView>
+        <AppBottomNavBar 
+          currentIndex={isPatient ? kPatientNavTasks : kCaregiverNavTasks}
+          isPatient={isPatient}
+        />
+      </View>
     </>
   );
 }

@@ -12,8 +12,9 @@ import {
   StyleSheet,
   ScrollView,
 } from 'react-native';
+import { AppAppBar } from '@/components/app-app-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNoteProvider } from '../../providers/NoteProvider';
 import { formatNoteCategoryDisplay } from '../../models/Note';
@@ -46,13 +47,11 @@ export default function NoteDetailScreen() {
   if (!note) {
     return (
       <>
-        <Stack.Screen
-          options={{
-            title: 'Note',
-            headerShown: true,
-            headerStyle: { backgroundColor: colors.surface },
-            headerTintColor: colors.text,
-          }}
+        <AppAppBar
+          title="Note"
+          showMenuButton={false}
+          useBackButton={true}
+          showNotificationButton={false}
         />
         <SafeAreaView
           style={[detailStyles.container, { backgroundColor: colors.surface }]}
@@ -72,13 +71,11 @@ export default function NoteDetailScreen() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: note.title,
-          headerShown: true,
-          headerStyle: { backgroundColor: colors.surface },
-          headerTintColor: colors.text,
-        }}
+      <AppAppBar
+        title={note.title}
+        showMenuButton={false}
+        useBackButton={true}
+        showNotificationButton={false}
       />
       <SafeAreaView
         style={[detailStyles.container, { backgroundColor: colors.surface }]}

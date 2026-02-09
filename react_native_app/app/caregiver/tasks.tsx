@@ -89,7 +89,7 @@ export default function CaregiverTaskManagementScreen() {
                   style={[styles.overdueTaskCard, { borderColor: "transparent", backgroundColor: "transparent" }]}
                   onPress={() =>
                     router.push({
-                      pathname: "/caregiver/task-details",
+                      pathname: "/task-details",
                       params: { taskId: overdueTask.id },
                     })
                   }
@@ -101,7 +101,7 @@ export default function CaregiverTaskManagementScreen() {
                 accessibilityRole="button"
                 accessibilityLabel="Notify patient"
               >
-                <Text style={[styles.notifyButtonText, { color: AppColors.white }]}>
+                <Text style={[styles.notifyButtonText, { color: colors.onPrimary }]}>
                   Notify
                 </Text>
               </Pressable>

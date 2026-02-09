@@ -52,13 +52,12 @@ const CAREGIVER_TABS: TabItem[] = [
   { label: "Monitor", icon: "monitor-heart", route: "/caregiver/monitor" },
 ];
 
-// Patient routes: Home/Profile/Messages point to "/" until patient dashboard, messaging, profile exist.
 const PATIENT_TABS: TabItem[] = [
-  { label: "Home", icon: "home", route: "/" },
+  { label: "Home", icon: "home", route: "/patient" },
   { label: "Tasks", icon: "calendar-today", route: "/calendar" },
-  { label: "Messages", icon: "message", route: "/" },
+  { label: "Messages", icon: "message", route: "/patient/messages" },
   { label: "Health", icon: "favorite", route: "/health-logs" },
-  { label: "Profile", icon: "person", route: "/" },
+  { label: "Profile", icon: "person", route: "/patient/profile" },
 ];
 
 export function AppBottomNavBar({
@@ -73,7 +72,8 @@ export function AppBottomNavBar({
   const router = useRouter();
 
   const tabs = isPatient ? PATIENT_TABS : CAREGIVER_TABS;
-  const clampedIndex = Math.max(0, Math.min(currentIndex, tabs.length - 1));
+  // Use -1 to indicate no tab should be highlighted (e.g., for health timeline)
+  const clampedIndex = currentIndex < 0 ? -1 : Math.max(0, Math.min(currentIndex, tabs.length - 1));
 
   const handlePress = (index: number, route: string) => {
     if (index === clampedIndex) return;

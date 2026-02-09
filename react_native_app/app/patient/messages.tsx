@@ -2,12 +2,12 @@ import { Alert } from "react-native";
 import { useRouter } from "expo-router";
 import MessagingThreadPatientScreen from "@/screens/MessagingThreadPatientScreen";
 
-export default function MessagesTab() {
+export default function PatientMessagesScreen() {
   const router = useRouter();
 
   return (
     <MessagingThreadPatientScreen
-      onBack={() => router.push("/(tabs)/home")}
+      onBack={() => router.back()}
       onCall={() => Alert.alert("Phone Call", "Coming soon.")}
       onVideo={() => Alert.alert("Video Call", "Coming soon.")}
     />

@@ -9,9 +9,12 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
-import { Colors, Typography, AppColors } from '../constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Typography, AppColors } from '../constants/theme';
+import { useTheme } from '@/providers/ThemeProvider';
+import { useTaskProvider } from '@/providers/TaskProvider';
+import { isTaskCompleted } from '@/models/Task';
+import { AppAppBar } from '@/components/app-app-bar';
 
 interface PatientDashboardScreenProps {
   userName?: string;
@@ -20,7 +23,7 @@ interface PatientDashboardScreenProps {
   onTasksPress?: () => void;
   onHealthLogsPress?: () => void;
   onCalendarPress?: () => void;
-  onTaskDetailsPress?: () => void;
+  onTaskDetailsPress?: (taskId: string) => void;
   onVideoCallPress?: () => void;
   onMessagingPress?: () => void;
   onEmergencyPress?: () => void;
@@ -38,50 +41,64 @@ export default function PatientDashboardScreen({
   onMessagingPress,
   onEmergencyPress,
 }: PatientDashboardScreenProps) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
+  const { tasks } = useTaskProvider();
 
   const firstName = userName.trim().split(' ')[0] || userName;
 
+  // Get upcoming tasks for the current user
+  const upcomingTasks = useMemo(() => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    return tasks
+      .filter((task) => {
+        // Filter by patient name
+        if (task.patientName !== userName) return false;
+        // Filter out completed tasks
+        if (isTaskCompleted(task)) return false;
+        // Filter tasks that are today or in the future
+        const taskDate = new Date(task.date.getFullYear(), task.date.getMonth(), task.date.getDate());
+        return taskDate >= today;
+      })
+      .sort((a, b) => a.date.getTime() - b.date.getTime())
+      .slice(0, 2);
+  }, [tasks, userName]);
+
+  // Format time for display
+  const formatTime = (date: Date): string => {
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+  };
+
+  // Calculate "due in" text for urgent tasks
+  const getDueText = (taskDate: Date): { text: string; color: string } | null => {
+    const now = new Date();
+    const diffMs = taskDate.getTime() - now.getTime();
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    
+    if (diffMins < 0) return null; // Past due
+    if (diffMins < 60) {
+      return { text: `DUE IN ${diffMins} MIN`, color: AppColors.error700 };
+    }
+    return null; // Not urgent enough
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={onMenuPress}
-          style={styles.iconButton}
-          accessible={true}
-          accessibilityRole="button"
-          accessibilityLabel="Menu"
-          accessibilityHint="Opens menu options"
-        >
-          <Ionicons name="menu" size={24} color={colors.text} />
-        </TouchableOpacity>
-        <Text
-          style={[styles.headerTitle, { color: colors.text }]}
-          accessible={true}
-          accessibilityRole="header"
-          accessibilityLabel="Home"
-        >
-          Home
-        </Text>
-        <TouchableOpacity
-          onPress={onNotificationsPress}
-          style={styles.iconButton}
-          accessible={true}
-          accessibilityRole="button"
-          accessibilityLabel="Notifications, 1 unread notification"
-          accessibilityHint="Opens notifications"
-        >
-          <Ionicons
-            name="notifications-outline"
-            size={24}
-            color={colors.text}
-          />
-          <View style={styles.notificationDot} />
-        </TouchableOpacity>
-      </View>
+      <AppAppBar
+        title="Home"
+        showMenuButton={true}
+        useBackButton={false}
+        showNotificationButton={true}
+        showNotificationBadge={true}
+        onNotificationTap={onNotificationsPress}
+        onMenuPress={onMenuPress}
+      />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -89,7 +106,7 @@ export default function PatientDashboardScreen({
       >
         {/* Welcome Card */}
         <LinearGradient
-          colors={[colors.primary, AppColors.primary500]}
+          colors={[AppColors.primary700, AppColors.primary600]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.welcomeCard}
@@ -108,7 +125,7 @@ export default function PatientDashboardScreen({
             title="Tasks"
             value="3/5"
             subtitle="Completed today"
-            iconName="checkmark-circle-outline"
+            iconName="check-circle-outline"
             iconColor={AppColors.success700}
             iconBackground={AppColors.success100}
             onPress={onCalendarPress}
@@ -118,7 +135,7 @@ export default function PatientDashboardScreen({
             value="120/80"
             subtitle="Normal"
             subtitleColor={AppColors.success700}
-            iconName="heart-outline"
+            iconName="favorite-outline"
             iconColor={AppColors.error500}
             iconBackground={AppColors.error100}
             onPress={onHealthLogsPress}
@@ -143,27 +160,47 @@ export default function PatientDashboardScreen({
           </TouchableOpacity>
         </View>
 
-        <TaskCard
-          iconName="medkit"
-          iconColor={colors.error}
-          iconBackground={colors.error}
-          title="Take Medication"
-          subtitle="Metformin 500mg"
-          dueText="DUE IN 15 MIN"
-          dueColor={AppColors.error700}
-          backgroundColor={AppColors.error100}
-          onPress={onTaskDetailsPress}
-        />
+        {upcomingTasks.length === 0 ? (
+          <View style={[styles.taskCard, { borderColor: colors.border }]}>
+            <Text style={[styles.taskSubtitle, { color: colors.textSecondary }]}>
+              No upcoming tasks
+            </Text>
+          </View>
+        ) : (
+          upcomingTasks.map((task) => {
+            const dueInfo = getDueText(task.date);
+            const isUrgent = dueInfo !== null;
+            const timeStr = formatTime(task.date);
+            const isToday = new Date(task.date.getFullYear(), task.date.getMonth(), task.date.getDate())
+              .getTime() === new Date().getTime();
+            const subtitle = isToday 
+              ? `Due at ${timeStr}`
+              : task.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ` at ${timeStr}`;
 
-        <TaskCard
-          iconName="heart"
-          iconColor={colors.primary}
-          iconBackground={colors.primarySoft}
-          title="Blood Pressure Check"
-          subtitle="Due at 2:00 PM"
-          showChevron={true}
-          onPress={onTaskDetailsPress}
-        />
+            // Use MaterialIcons directly since Task model uses MaterialIcons names
+            const iconName = task.icon as React.ComponentProps<typeof MaterialIcons>['name'];
+
+            return (
+              <TaskCard
+                key={task.id}
+                iconName={iconName}
+                iconColor={task.iconColor}
+                iconBackground={task.iconBackground}
+                title={task.title}
+                subtitle={subtitle}
+                dueText={dueInfo?.text}
+                dueColor={dueInfo?.color}
+                backgroundColor={isUrgent ? AppColors.error100 : undefined}
+                showChevron={true}
+                onPress={() => {
+                  if (onTaskDetailsPress) {
+                    onTaskDetailsPress(task.id);
+                  }
+                }}
+              />
+            );
+          })
+        )}
 
         {/* Appointments */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
@@ -178,13 +215,13 @@ export default function PatientDashboardScreen({
         {/* Quick Actions */}
         <View style={styles.actionRow}>
           <ActionButton
-            iconName="heart-outline"
+            iconName="favorite-outline"
             label="Log Health Data"
             color={colors.secondary}
             onPress={onHealthLogsPress}
           />
           <ActionButton
-            iconName="chatbubbles-outline"
+            iconName="chat-bubble-outline"
             label="Send Message"
             color={colors.primary}
             onPress={onMessagingPress}
@@ -213,7 +250,7 @@ export default function PatientDashboardScreen({
           accessibilityLabel="Emergency SOS button. Alerts all caregivers with your current location."
           accessibilityHint="Double tap to confirm emergency"
         >
-          <Ionicons name="warning" size={22} color={AppColors.white} />
+          <MaterialIcons name="warning" size={22} color={AppColors.white} />
           <Text style={styles.sosText}>Emergency SOS</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -226,7 +263,7 @@ interface SummaryCardProps {
   value: string;
   subtitle: string;
   subtitleColor?: string;
-  iconName: React.ComponentProps<typeof Ionicons>['name'];
+  iconName: React.ComponentProps<typeof MaterialIcons>['name'];
   iconColor: string;
   iconBackground: string;
   onPress?: () => void;
@@ -242,9 +279,7 @@ function SummaryCard({
   iconBackground,
   onPress,
 }: SummaryCardProps) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   return (
@@ -258,7 +293,7 @@ function SummaryCard({
     >
       <View style={styles.summaryHeader}>
         <View style={[styles.summaryIcon, { backgroundColor: iconBackground }]}>
-          <Ionicons name={iconName} size={20} color={iconColor} />
+          <MaterialIcons name={iconName} size={20} color={iconColor} />
         </View>
         <Text style={[styles.summaryTitle, { color: colors.text }]}>{title}</Text>
       </View>
@@ -276,7 +311,7 @@ function SummaryCard({
 }
 
 interface TaskCardProps {
-  iconName: React.ComponentProps<typeof Ionicons>['name'];
+  iconName: React.ComponentProps<typeof MaterialIcons>['name'];
   iconColor: string;
   iconBackground: string;
   title: string;
@@ -300,9 +335,7 @@ function TaskCard({
   showChevron,
   onPress,
 }: TaskCardProps) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   return (
@@ -318,7 +351,7 @@ function TaskCard({
       accessibilityHint="Double tap to open task details"
     >
       <View style={[styles.taskIcon, { backgroundColor: iconBackground }]}>
-        <Ionicons name={iconName} size={24} color={iconColor} />
+        <MaterialIcons name={iconName} size={24} color={iconColor} />
       </View>
       <View style={styles.taskText}>
         <Text style={[styles.taskTitle, { color: colors.text }]}>{title}</Text>
@@ -332,8 +365,8 @@ function TaskCard({
         </View>
       ) : null}
       {showChevron ? (
-        <Ionicons
-          name="chevron-forward"
+        <MaterialIcons
+          name="chevron-right"
           size={22}
           color={colors.textSecondary}
         />
@@ -349,9 +382,7 @@ interface AppointmentCardProps {
 }
 
 function AppointmentCard({ title, subtitle, onPress }: AppointmentCardProps) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   return (
@@ -362,7 +393,7 @@ function AppointmentCard({ title, subtitle, onPress }: AppointmentCardProps) {
       ]}
     >
       <View style={[styles.appointmentIcon, { backgroundColor: colors.accent }]}>
-        <Ionicons name="videocam" size={24} color={AppColors.white} />
+        <MaterialIcons name="videocam" size={24} color={AppColors.white} />
       </View>
       <View style={styles.appointmentText}>
         <Text style={[styles.appointmentTitle, { color: colors.text }]}>
@@ -380,23 +411,21 @@ function AppointmentCard({ title, subtitle, onPress }: AppointmentCardProps) {
         accessibilityLabel="Start video call"
         accessibilityHint="Opens video call"
       >
-        <Ionicons name="videocam" size={20} color={AppColors.white} />
+        <MaterialIcons name="videocam" size={20} color={AppColors.white} />
       </TouchableOpacity>
     </View>
   );
 }
 
 interface ActionButtonProps {
-  iconName: React.ComponentProps<typeof Ionicons>['name'];
+  iconName: React.ComponentProps<typeof MaterialIcons>['name'];
   label: string;
   color: string;
   onPress?: () => void;
 }
 
 function ActionButton({ iconName, label, color, onPress }: ActionButtonProps) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   return (
@@ -409,50 +438,18 @@ function ActionButton({ iconName, label, color, onPress }: ActionButtonProps) {
       accessibilityHint="Double tap to open"
     >
       <View style={[styles.actionIcon, { backgroundColor: color + '1A' }]}>
-        <Ionicons name={iconName} size={26} color={color} />
+        <MaterialIcons name={iconName} size={26} color={color} />
       </View>
       <Text style={[styles.actionLabel, { color: colors.text }]}>{label}</Text>
     </TouchableOpacity>
   );
 }
 
-type ThemeColors = {
-  [K in keyof typeof Colors.light]: string;
-};
-
-const createStyles = (colors: ThemeColors) =>
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.surface,
-    },
-    header: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-      backgroundColor: colors.background,
-    },
-    headerTitle: {
-      ...Typography.h5,
-      flex: 1,
-      textAlign: 'center',
-    },
-    iconButton: {
-      width: 48,
-      height: 48,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    notificationDot: {
-      position: 'absolute',
-      top: 14,
-      right: 14,
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      backgroundColor: AppColors.error500,
     },
     scrollContent: {
       paddingHorizontal: 16,

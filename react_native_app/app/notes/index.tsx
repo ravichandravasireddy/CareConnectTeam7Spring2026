@@ -13,15 +13,14 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import { AppAppBar } from '@/components/app-app-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNoteProvider } from '../../providers/NoteProvider';
 import { Note, formatNoteCategoryDisplay } from '../../models/Note';
-import { Colors, Typography, AppColors } from '../../constants/theme';
+import { Typography } from '../../constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
-
-type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
 // Format note time: "Today, 10:30 AM", "Yesterday, 5:15 PM", or "Jan 22, 3:30 PM"
 const formatNoteTime = (createdAt: Date): string => {
@@ -46,7 +45,7 @@ interface NoteListTileProps {
   note: Note;
   timeLabel: string;
   onPress: () => void;
-  colors: ThemeColors;
+  colors: ReturnType<typeof useTheme>['colors'];
   categoryColors: { bg: string; fg: string };
 }
 
@@ -132,13 +131,11 @@ export default function NotesScreen() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: 'Notes',
-          headerShown: true,
-          headerStyle: { backgroundColor: colors.surface },
-          headerTintColor: colors.text,
-        }}
+      <AppAppBar
+        title="Notes"
+        showMenuButton={false}
+        useBackButton={true}
+        showNotificationButton={false}
       />
       <SafeAreaView
         style={[notesStyles.container, { backgroundColor: colors.surface }]}
@@ -155,11 +152,11 @@ export default function NotesScreen() {
                 { backgroundColor: colors.primary },
               ]}
               activeOpacity={0.8}>
-              <MaterialIcons name="add" size={22} color={AppColors.white} />
+              <MaterialIcons name="add" size={22} color={colors.onPrimary} />
               <Text
                 style={[
                   Typography.buttonLarge,
-                  { color: AppColors.white },
+                  { color: colors.onPrimary },
                   notesStyles.addButtonText,
                 ]}>
                 Add New Note

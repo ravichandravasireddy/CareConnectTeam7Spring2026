@@ -17,7 +17,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppAppBar } from "@/components/app-app-bar";
-import { AppColors, Colors, Typography, Fonts } from "@/constants/theme";
+import { AppColors, Typography, Fonts } from "@/constants/theme";
 import { useTheme } from "@/providers/ThemeProvider";
 
 const PATIENTS = [
@@ -36,7 +36,7 @@ function ActionCard({
   label: string;
   color: string;
   onPress?: () => void;
-  colors: typeof Colors.light | typeof Colors.dark;
+  colors: ReturnType<typeof useTheme>['colors'];
 }) {
   const content = (
     <View style={styles.actionContent}>
@@ -203,7 +203,7 @@ export default function CaregiverPatientMonitoringScreen() {
               icon="videocam"
               label="Video"
               color={AppColors.accent500}
-              onPress={() => {}}
+              onPress={() => router.push("/video-call" as any)}
               colors={colors}
             />
             <ActionCard

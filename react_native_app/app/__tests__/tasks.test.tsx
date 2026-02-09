@@ -110,7 +110,7 @@ describe("CaregiverTaskManagementScreen", () => {
       const taskCard = screen.getByLabelText(/Maya Patel/);
       fireEvent.press(taskCard);
       expect(mockRouter.push).toHaveBeenCalledWith({
-        pathname: "/caregiver/task-details",
+        pathname: "/task-details",
         params: { taskId: "task-1" },
       });
     });

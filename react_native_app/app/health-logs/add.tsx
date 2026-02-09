@@ -16,8 +16,9 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { AppAppBar } from '@/components/app-app-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useHealthLogProvider } from '../../providers/HealthLogProvider';
 import {
@@ -202,18 +203,11 @@ export default function HealthLogAddScreen() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: 'New Health Log',
-          headerShown: true,
-          headerStyle: { backgroundColor: colors.surface },
-          headerTintColor: colors.text,
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.back()} style={styles.closeBtn} accessibilityLabel="Close">
-              <MaterialIcons name="close" size={24} color={colors.text} />
-            </TouchableOpacity>
-          ),
-        }}
+      <AppAppBar
+        title="New Health Log"
+        showMenuButton={false}
+        useBackButton={true}
+        showNotificationButton={false}
       />
       <SafeAreaView style={[styles.container, { backgroundColor: colors.surface }]} edges={['bottom']}>
         <KeyboardAvoidingView
@@ -228,7 +222,7 @@ export default function HealthLogAddScreen() {
               onPress={save}
               style={[styles.saveButton, { backgroundColor: colors.primary }]}
               activeOpacity={0.8}>
-              <Text style={[Typography.buttonLarge, { color: AppColors.white }]}>Save Log</Text>
+              <Text style={[Typography.buttonLarge, { color: colors.onPrimary }]}>Save Log</Text>
             </TouchableOpacity>
           </View>
           <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -389,7 +383,7 @@ export default function HealthLogAddScreen() {
                       key={h}
                       onPress={() => setSleepHours(h)}
                       style={[styles.sliderBtn, { backgroundColor: sleepHours === h ? colors.primary : colors.border }]}>
-                      <Text style={[Typography.captionBold, { color: sleepHours === h ? AppColors.white : colors.text }]}>{h}h</Text>
+                      <Text style={[Typography.captionBold, { color: sleepHours === h ? colors.onPrimary : colors.text }]}>{h}h</Text>
                     </TouchableOpacity>
                   ))}
                 </View>

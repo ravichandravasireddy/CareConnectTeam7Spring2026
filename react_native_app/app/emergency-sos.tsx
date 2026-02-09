@@ -44,7 +44,7 @@ export default function EmergencySOSAlertScreen() {
             <MaterialIcons
               name="check-circle"
               size={72}
-              color={AppColors.success700}
+              color={colors.success}
               accessibilityLabel="Alert acknowledged"
             />
             <Text style={[styles.ackTitle, { color: colors.text }]}>

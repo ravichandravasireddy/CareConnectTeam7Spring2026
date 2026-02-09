@@ -1,4 +1,7 @@
+import { View } from 'react-native';
 import { MessagingThreadScreen } from './MessagingThreadScreen';
+import { useUser } from '@/providers/UserProvider';
+import { AppBottomNavBar, kPatientNavMessages, kCaregiverNavHome } from '@/components/app-bottom-nav-bar';
 
 const patientMessages = [
   {
@@ -38,14 +41,28 @@ export default function MessagingThreadPatientScreen({
   onCall?: () => void;
   onVideo?: () => void;
 }) {
+  const { isPatient, userName } = useUser();
+  
+  // Determine user names based on role
+  // Current user: from UserProvider (or defaults)
+  // Other user: opposite role (patient talks to caregiver, caregiver talks to patient)
+  const currentUserName = userName ?? (isPatient ? 'Robert Williams' : 'Dr. Sarah Johnson');
+  const otherUserName = isPatient ? 'Dr. Sarah Johnson' : 'Robert Williams';
+
   return (
-    <MessagingThreadScreen
-      currentUserName="Riley Wilson"
-      otherUserName="Dr. Sarah Johnson"
-      initialMessages={patientMessages}
-      onBack={onBack}
-      onCall={onCall}
-      onVideo={onVideo}
-    />
+    <View style={{ flex: 1 }}>
+      <MessagingThreadScreen
+        currentUserName={currentUserName}
+        otherUserName={otherUserName}
+        initialMessages={patientMessages}
+        onBack={onBack}
+        onCall={onCall}
+        onVideo={onVideo}
+      />
+      <AppBottomNavBar 
+        currentIndex={isPatient ? kPatientNavMessages : kCaregiverNavHome}
+        isPatient={isPatient}
+      />
+    </View>
   );
 }

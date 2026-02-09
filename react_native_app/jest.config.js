@@ -19,16 +19,16 @@ module.exports = {
     "!jest.config.js",
     "!.expo/**",
     "!scripts/**",
-    "!hooks/use-theme-color.ts", // DELETE ME AT MERGE
-    "!hooks/use-color-scheme.ts", // DELETE ME AT MERGE
-    "!hooks/use-color-scheme.web.ts", // DELETE ME AT MERGE
-    "!app/modal.tsx", // DELETE ME AT MERGE
-    "!components/ui/**",// DELETE ME AT MERGE
-    "!components/haptic-tab.tsx",// DELETE ME AT MERGE
-    "!components/themed-*.tsx",// DELETE ME AT MERGE
-    "!components/parallax-scroll-view.tsx",// DELETE ME AT MERGE
-    "!components/external-link.tsx",// DELETE ME AT MERGE
-    "!components/hello-wave.tsx",// DELETE ME AT MERGE
+    // "!hooks/use-theme-color.ts", // DELETE ME AT MERGE
+    // "!hooks/use-color-scheme.ts", // DELETE ME AT MERGE
+    // "!hooks/use-color-scheme.web.ts", // DELETE ME AT MERGE
+    // "!app/modal.tsx", // DELETE ME AT MERGE
+    // "!components/ui/**",// DELETE ME AT MERGE
+    // "!components/haptic-tab.tsx",// DELETE ME AT MERGE
+    // "!components/themed-*.tsx",// DELETE ME AT MERGE
+    // "!components/parallax-scroll-view.tsx",// DELETE ME AT MERGE
+    // "!components/external-link.tsx",// DELETE ME AT MERGE
+    // "!components/hello-wave.tsx",// DELETE ME AT MERGE
 
 
   ],

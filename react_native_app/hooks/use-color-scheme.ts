@@ -1,6 +1,11 @@
-import { useThemePreference } from '@/context/theme-preference';
+import { useTheme } from '@/providers/ThemeProvider';
 
+/**
+ * Hook that returns the resolved color scheme (light/dark).
+ * This is a convenience wrapper around useTheme() for components that only need the scheme.
+ * For full theme access (colors, highContrast, etc.), use useTheme() directly.
+ */
 export const useColorScheme = () => {
-  const { resolvedScheme } = useThemePreference();
-  return resolvedScheme;
+  const { colorScheme } = useTheme();
+  return colorScheme;
 };

@@ -16,8 +16,9 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { AppAppBar } from '@/components/app-app-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNoteProvider } from '../../providers/NoteProvider';
 import { Note, NoteCategory, formatNoteCategoryDisplay } from '../../models/Note';
@@ -70,18 +71,11 @@ export default function AddNoteScreen() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: 'New Note',
-          headerShown: true,
-          headerStyle: { backgroundColor: colors.surface },
-          headerTintColor: colors.text,
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.back()} style={styles.closeBtn} accessibilityLabel="Close">
-              <MaterialIcons name="close" size={24} color={colors.text} />
-            </TouchableOpacity>
-          ),
-        }}
+      <AppAppBar
+        title="New Note"
+        showMenuButton={false}
+        useBackButton={true}
+        showNotificationButton={false}
       />
       <SafeAreaView style={[styles.container, { backgroundColor: colors.surface }]} edges={['bottom']}>
         <KeyboardAvoidingView
@@ -96,7 +90,7 @@ export default function AddNoteScreen() {
               onPress={save}
               style={[styles.saveButton, { backgroundColor: colors.primary }]}
               activeOpacity={0.8}>
-              <Text style={[Typography.buttonLarge, { color: AppColors.white }]}>Save</Text>
+              <Text style={[Typography.buttonLarge, { color: colors.onPrimary }]}>Save</Text>
             </TouchableOpacity>
           </View>
           <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>

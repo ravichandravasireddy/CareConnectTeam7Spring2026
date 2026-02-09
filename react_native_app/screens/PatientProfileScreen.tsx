@@ -9,57 +9,56 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Typography, AppColors } from '../constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Typography, AppColors } from '../constants/theme';
+import { useTheme } from '@/providers/ThemeProvider';
+import { useUser } from '@/providers/UserProvider';
+import { AppAppBar } from '@/components/app-app-bar';
+import { AppBottomNavBar, kPatientNavProfile, kCaregiverNavHome } from '@/components/app-bottom-nav-bar';
 
 interface PatientProfileScreenProps {
-  userName?: string;
-  userEmail?: string;
   onBack?: () => void;
   onPreferencesPress?: () => void;
   onSignOut?: () => void;
 }
 
 export default function PatientProfileScreen({
-  userName = 'Robert Williams',
-  userEmail = 'robert.w@email.com',
   onBack,
   onPreferencesPress,
   onSignOut,
 }: PatientProfileScreenProps) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
+  const { userRole, isPatient, userName, userEmail } = useUser();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
-  const initials = getInitials(userName);
+  // Get role-based defaults matching Flutter app
+  const displayName = userName ?? (isPatient ? 'Robert Williams' : 'Dr. Sarah Johnson');
+  const displayEmail = userEmail ?? (isPatient ? 'robert.w@email.com' : 'sarah.johnson@careconnect.demo');
+  const profileId = isPatient ? 'Patient ID: #RW-2847' : 'Caregiver ID: #SJ-1024';
+  const ageValue = isPatient ? '67 years' : '41 years';
+  const phoneValue = isPatient ? '(555) 123-4567' : '(555) 555-0183';
+  const addressValue = isPatient
+    ? '742 Evergreen Terrace\nSpringfield, IL 62701'
+    : '1250 Health Ave\nRochester, NY 14620';
+  const conditionsValue = isPatient ? 'Diabetes, Hypertension' : 'Primary Care';
+  const allergiesValue = isPatient ? 'Penicillin, Shellfish' : 'N/A';
+  const primaryProviderLabel = isPatient ? 'Primary Care Provider' : 'Care Team Lead';
+  const primaryProviderValue = isPatient ? 'Dr. Sarah Johnson' : 'Dr. Avery Chen';
+  const emergencyContactValue = isPatient
+    ? 'Mary Smith (Daughter)\n(555) 987-6543'
+    : 'Operations Desk\n(555) 555-0199';
+
+  const initials = getInitials(displayName);
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={onBack}
-          style={styles.iconButton}
-          accessible={true}
-          accessibilityRole="button"
-          accessibilityLabel="Go back"
-          accessibilityHint="Returns to the previous screen"
-        >
-          <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </TouchableOpacity>
-        <Text
-          style={[styles.headerTitle, { color: colors.text }]}
-          accessible={true}
-          accessibilityRole="header"
-          accessibilityLabel="Profile"
-        >
-          Profile
-        </Text>
-        <View style={styles.headerSpacer} />
-      </View>
-
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+    <View style={styles.container}>
+      <AppAppBar
+        title="Profile"
+        showMenuButton={false}
+        useBackButton={true}
+        showNotificationButton={false}
+      />
+      <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Profile Header */}
         <View style={styles.profileHeader}>
           <View style={[styles.avatar, { backgroundColor: colors.secondary }]}>
@@ -83,7 +82,7 @@ export default function PatientProfileScreen({
             accessibilityLabel="Edit profile"
             accessibilityHint="Opens edit profile"
           >
-            <Text style={styles.editButtonText}>Edit Profile</Text>
+            <Text style={[styles.editButtonText, { color: colors.onPrimary }]}>Edit Profile</Text>
           </TouchableOpacity>
         </View>
 
@@ -91,26 +90,20 @@ export default function PatientProfileScreen({
 
         {/* Personal Information */}
         <SectionHeader title="Personal Information" />
-        <InfoItem label="Age" value="67 years" />
-        <InfoItem label="Blood Type" value="A+" />
-        <InfoItem label="Email" value={userEmail} />
-        <InfoItem label="Phone" value="(555) 123-4567" />
-        <InfoItem
-          label="Address"
-          value={'742 Evergreen Terrace\nSpringfield, IL 62701'}
-        />
+        <InfoItem label="Age" value={ageValue} />
+        {isPatient && <InfoItem label="Blood Type" value="A+" />}
+        <InfoItem label="Email" value={displayEmail} />
+        <InfoItem label="Phone" value={phoneValue} />
+        <InfoItem label="Address" value={addressValue} />
 
         <View style={styles.divider} />
 
         {/* Medical Information */}
         <SectionHeader title="Medical Information" />
-        <InfoItem label="Conditions" value="Diabetes, Hypertension" />
-        <InfoItem label="Allergies" value="Penicillin, Shellfish" />
-        <InfoItem label="Primary Care Provider" value="Dr. Sarah Johnson" />
-        <InfoItem
-          label="Emergency Contact"
-          value={'Mary Smith (Daughter)\n(555) 987-6543'}
-        />
+        <InfoItem label="Conditions" value={conditionsValue} />
+        <InfoItem label="Allergies" value={allergiesValue} />
+        <InfoItem label={primaryProviderLabel} value={primaryProviderValue} />
+        <InfoItem label="Emergency Contact" value={emergencyContactValue} />
 
         <View style={styles.divider} />
 
@@ -130,14 +123,16 @@ export default function PatientProfileScreen({
             Alert.alert('Notification Settings', 'Coming soon.')
           }
         />
-        <SettingItem
-          iconName="people-outline"
-          iconColor={AppColors.success700}
-          label="Connected Caregivers"
-          onPress={() =>
-            Alert.alert('Connected Caregivers', 'Coming soon.')
-          }
-        />
+        {isPatient && (
+          <SettingItem
+            iconName="people-outline"
+            iconColor={AppColors.success700}
+            label="Connected Caregivers"
+            onPress={() =>
+              Alert.alert('Connected Caregivers', 'Coming soon.')
+            }
+          />
+        )}
 
         <TouchableOpacity
           onPress={() => {
@@ -161,14 +156,17 @@ export default function PatientProfileScreen({
           </Text>
         </TouchableOpacity>
       </ScrollView>
-    </SafeAreaView>
+      <AppBottomNavBar 
+        currentIndex={isPatient ? kPatientNavProfile : kCaregiverNavHome}
+        isPatient={isPatient}
+      />
+      </SafeAreaView>
+    </View>
   );
 }
 
 function SectionHeader({ title }: { title: string }) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   return (
@@ -179,9 +177,7 @@ function SectionHeader({ title }: { title: string }) {
 }
 
 function InfoItem({ label, value }: { label: string; value: string }) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   return (
@@ -208,9 +204,7 @@ function SettingItem({
   label: string;
   onPress?: () => void;
 }) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   return (
@@ -243,37 +237,14 @@ function getInitials(name: string) {
   return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
 }
 
-type ThemeColors = {
-  [K in keyof typeof Colors.light]: string;
-};
-
-const createStyles = (colors: ThemeColors) =>
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.surface,
     },
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: 12,
-      paddingVertical: 8,
-      backgroundColor: colors.background,
-    },
-    headerTitle: {
-      ...Typography.h5,
+    safeArea: {
       flex: 1,
-      textAlign: 'center',
-    },
-    iconButton: {
-      width: 48,
-      height: 48,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 24,
-    },
-    headerSpacer: {
-      width: 48,
     },
     scrollContent: {
       paddingBottom: 24,
@@ -308,7 +279,6 @@ const createStyles = (colors: ThemeColors) =>
     },
     editButtonText: {
       ...Typography.buttonMedium,
-      color: AppColors.white,
     },
     divider: {
       height: 1,

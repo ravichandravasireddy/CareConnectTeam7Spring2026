@@ -1,4 +1,3 @@
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import {
   View,
   Text,
@@ -8,7 +7,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Typography } from '../constants/theme';
+import { Typography } from '../constants/theme';
+import { useTheme } from '@/providers/ThemeProvider';
 
 type UserRole = 'patient' | 'caregiver';
 
@@ -21,9 +21,7 @@ export default function RoleSelectionScreen({
   onNavigateBack,
   onSelectRole,
 }: RoleSelectionScreenProps) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   return (
@@ -111,9 +109,7 @@ function RoleCard({
   description,
   onPress,
 }: RoleCardProps) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = createStyles(colors);
 
   return (
@@ -143,11 +139,7 @@ function RoleCard({
   );
 }
 
-type ThemeColors = {
-  [K in keyof typeof Colors.light]: string;
-};
-
-const createStyles = (colors: ThemeColors) =>
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     container: {
       flex: 1,

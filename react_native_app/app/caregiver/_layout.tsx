@@ -17,7 +17,6 @@ import {
 } from "@/components/app-bottom-nav-bar";
 
 function caregiverIndexFromPathname(pathname: string): number {
-  if (pathname.endsWith("/caregiver/task-details")) return -1;
   if (pathname.endsWith("/caregiver/tasks")) return kCaregiverNavTasks;
   if (pathname.endsWith("/caregiver/analytics")) return kCaregiverNavAnalytics;
   if (pathname.endsWith("/caregiver/monitor")) return kCaregiverNavMonitor;
@@ -37,7 +36,6 @@ export default function CaregiverLayout() {
         <Stack.Screen name="tasks" />
         <Stack.Screen name="analytics" />
         <Stack.Screen name="monitor" />
-        <Stack.Screen name="task-details" />
       </Stack>
       {showBar && (
         <AppBottomNavBar currentIndex={currentIndex} isPatient={false} />

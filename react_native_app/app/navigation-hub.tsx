@@ -13,6 +13,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { AppAppBar } from "@/components/app-app-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppColors, Typography, Fonts } from "@/constants/theme";
@@ -44,7 +45,7 @@ function NavButton({
       accessibilityRole="button"
       accessibilityLabel={label}
     >
-      <Text style={[styles.navButtonText, { color: AppColors.white }]}>
+      <Text style={[styles.navButtonText, { color: colors.onPrimary }]}>
         {label}
       </Text>
     </Pressable>
@@ -55,18 +56,14 @@ export default function NavigationHubScreen() {
   const { colors } = useTheme();
   const router = useRouter();
 
-  const showComingSoon = () => {
-    // Alert.alert("Coming Soon", "This screen is not yet implemented.");
-    return;
-  };
-
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
-      <View style={[styles.header, { borderBottomColor: colors.border }]}>
-        <Text style={[styles.title, { color: colors.text }]}>
-          Navigation Hub
-        </Text>
-      </View>
+      <AppAppBar
+        title="Navigation Hub"
+        showMenuButton={false}
+        useBackButton={true}
+        showNotificationButton={false}
+      />
 
       <SafeAreaView edges={["bottom"]} style={styles.safeArea}>
         <ScrollView
@@ -79,9 +76,18 @@ export default function NavigationHubScreen() {
 
           <SectionLabel label="Auth & onboarding" />
           <NavButton label="Welcome" onPress={() => router.replace("/")} />
-          <NavButton label="Role Selection" onPress={showComingSoon} />
-          <NavButton label="Registration" onPress={showComingSoon} />
-          <NavButton label="Sign In" onPress={showComingSoon} />
+          <NavButton
+            label="Role Selection"
+            onPress={() => router.push("/role-selection")}
+          />
+          <NavButton
+            label="Registration"
+            onPress={() => router.push("/registration")}
+          />
+          <NavButton
+            label="Sign In"
+            onPress={() => router.push("/sign-in")}
+          />
 
           <SectionLabel label="Caregiver" />
           <NavButton
@@ -99,6 +105,20 @@ export default function NavigationHubScreen() {
           <NavButton
             label="Caregiver: Analytics"
             onPress={() => router.push("/caregiver/analytics")}
+          />
+
+          <SectionLabel label="Patient" />
+          <NavButton
+            label="Patient Dashboard"
+            onPress={() => router.push("/patient" as any)}
+          />
+          <NavButton
+            label="Patient Profile"
+            onPress={() => router.push("/patient/profile" as any)}
+          />
+          <NavButton
+            label="Messaging Thread (Patient)"
+            onPress={() => router.push("/patient/messages" as any)}
           />
 
           <SectionLabel label="Shared & other" />
@@ -134,10 +154,16 @@ export default function NavigationHubScreen() {
             label="Task Details (sample)"
             onPress={() =>
               router.push({
-                pathname: "/caregiver/task-details",
+                pathname: "/task-details",
                 params: { taskId: "task-1" },
               })
             }
+          />
+
+          <SectionLabel label="Settings" />
+          <NavButton
+            label="Preferences & Accessibility"
+            onPress={() => router.push("/preferences-accessibility")}
           />
         </ScrollView>
       </SafeAreaView>
@@ -147,16 +173,6 @@ export default function NavigationHubScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    alignItems: "center",
-  },
-  title: {
-    ...Typography.h2,
-    fontFamily: Fonts.sans,
-  },
   safeArea: { flex: 1 },
   scrollContent: {
     padding: 16,

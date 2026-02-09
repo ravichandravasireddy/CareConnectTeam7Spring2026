@@ -55,7 +55,7 @@ jest.mock("@/providers/ThemeProvider", () => {
   };
 });
 
-import TaskDetailsScreen from "../caregiver/task-details";
+import TaskDetailsScreen from "../task-details";
 
 describe("TaskDetailsScreen", () => {
   beforeEach(() => {

@@ -112,17 +112,6 @@ describe("CaregiverLayout", () => {
     });
   });
 
-  it("does not render AppBottomNavBar when pathname is task-details", () => {
-    mockUsePathname.mockReturnValue("/caregiver/task-details");
-    render(<CaregiverLayout />);
-    expect((globalThis as any).__caregiverLayoutNavBarCalls).toHaveLength(0);
-  });
-
-  it("does not render AppBottomNavBar when pathname ends with /caregiver/task-details", () => {
-    mockUsePathname.mockReturnValue("/some/prefix/caregiver/task-details");
-    render(<CaregiverLayout />);
-    expect((globalThis as any).__caregiverLayoutNavBarCalls).toHaveLength(0);
-  });
 
   it("handles null pathname by showing bar with home index", () => {
     mockUsePathname.mockReturnValue(null);

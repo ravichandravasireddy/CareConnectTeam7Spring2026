@@ -14,7 +14,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppAppBar } from "@/components/app-app-bar";
-import { AppColors, Colors, Typography, Fonts } from "@/constants/theme";
+import { AppColors, Typography, Fonts } from "@/constants/theme";
 import { useTheme } from "@/providers/ThemeProvider";
 
 function MetricCard({
@@ -28,7 +28,7 @@ function MetricCard({
   value: string;
   delta: string;
   valueColor: string;
-  colors: typeof Colors.light;
+  colors: ReturnType<typeof useTheme>['colors'];
 }) {
   return (
     <View

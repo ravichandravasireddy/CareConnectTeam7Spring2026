@@ -5,11 +5,17 @@ import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import PreferencesAccessibilityScreen from '../PreferencesAccessibilityScreen';
 
 const mockSetPreference = jest.fn();
+const mockSetHighContrast = jest.fn();
 
-jest.mock('@/context/theme-preference', () => ({
-  useThemePreference: () => ({
-    resolvedScheme: 'light',
+jest.mock('@/providers/ThemeProvider', () => ({
+  useTheme: () => ({
+    colorScheme: 'light',
+    preference: 'system',
     setPreference: mockSetPreference,
+    highContrast: false,
+    setHighContrast: mockSetHighContrast,
+    colors: require('@/constants/theme').Colors.light,
+    themeKey: 'light',
   }),
 }));
 

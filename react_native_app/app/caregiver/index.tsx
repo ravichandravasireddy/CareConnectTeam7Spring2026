@@ -9,7 +9,7 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -20,6 +20,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AppAppBar } from "@/components/app-app-bar";
+import { AppMenu } from "@/components/app-menu";
 import { TaskCard } from "@/components/task-card";
 import { AppColors, Typography, Fonts } from "@/constants/theme";
 import { isTaskCompleted } from "@/models/Task";
@@ -37,6 +38,7 @@ const PATIENTS = [
 export default function CaregiverDashboardScreen() {
   const { colors } = useTheme();
   const router = useRouter();
+  const [menuVisible, setMenuVisible] = useState(false);
 
   const { getTasksForDate } = useTaskProvider();
   const todayTasks = useMemo(
@@ -61,7 +63,7 @@ export default function CaregiverDashboardScreen() {
         showMenuButton={true}
         useBackButton={false}
         showNotificationBadge={true}
-        onSettingsPress={() => {}}
+        onMenuPress={() => setMenuVisible(true)}
       />
 
       <SafeAreaView edges={["bottom"]} style={styles.safeArea}>
@@ -76,10 +78,10 @@ export default function CaregiverDashboardScreen() {
             end={{ x: 1, y: 1 }}
             style={styles.welcomeCard}
           >
-            <Text style={styles.welcomeTitle}>
+            <Text style={[styles.welcomeTitle, { color: colors.onPrimary }]}>
               {greeting}, {name}!
             </Text>
-            <Text style={styles.welcomeSubtitle}>
+            <Text style={[styles.welcomeSubtitle, { color: colors.onPrimary }]}>
               Here&apos;s your care overview for today
             </Text>
           </LinearGradient>
@@ -201,7 +203,7 @@ export default function CaregiverDashboardScreen() {
                   showPatientName={true}
                   onPress={() =>
                     router.push({
-                      pathname: "/caregiver/task-details",
+                      pathname: "/task-details",
                       params: { taskId: task.id },
                     })
                   }
@@ -211,11 +213,12 @@ export default function CaregiverDashboardScreen() {
           </View>
         </ScrollView>
       </SafeAreaView>
+      <AppMenu visible={menuVisible} onClose={() => setMenuVisible(false)} />
     </View>
   );
 }
 
-const createStyles = (colors: typeof Colors.light | typeof Colors.dark) =>
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     container: { flex: 1 },
     safeArea: { flex: 1 },
@@ -230,13 +233,11 @@ const createStyles = (colors: typeof Colors.light | typeof Colors.dark) =>
     welcomeTitle: {
       ...Typography.h5,
       fontFamily: Fonts.sans,
-      color: AppColors.white,
       fontWeight: "700",
     },
     welcomeSubtitle: {
       ...Typography.bodyLarge,
       fontFamily: Fonts.sans,
-      color: AppColors.white,
       marginTop: 8,
     },
     statsRow: {

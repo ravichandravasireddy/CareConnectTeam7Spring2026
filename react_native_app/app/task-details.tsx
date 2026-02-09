@@ -1,7 +1,7 @@
 // =============================================================================
 // TASK DETAILS SCREEN (SHARED)
 // =============================================================================
-// Shows task details for caregiver flow. Feature parity with Flutter.
+// Shows task details for both patient and caregiver flows. Feature parity with Flutter.
 // Deaf/HoH: All details as text. Visual status (completed/due). No audio cues.
 // =============================================================================
 
@@ -27,7 +27,7 @@ export default function TaskDetailsScreen() {
   const { taskId } = useLocalSearchParams<{ taskId: string }>();
   const { colors } = useTheme();
   const router = useRouter();
-  const { tasks } = useTaskProvider();
+  const { tasks, markCompleted } = useTaskProvider();
 
   const task = taskId
     ? tasks.find((t) => t.id === taskId) ?? tasks[0]
@@ -59,6 +59,13 @@ export default function TaskDetailsScreen() {
     month: "long",
     day: "numeric",
   });
+
+  const handleMarkComplete = () => {
+    if (task && !completed) {
+      markCompleted(task.id);
+    }
+    router.back();
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
@@ -139,16 +146,16 @@ export default function TaskDetailsScreen() {
                 { backgroundColor: colors.primary },
                 pressed && styles.pressed,
               ]}
-              onPress={() => router.back()}
+              onPress={handleMarkComplete}
               accessibilityRole="button"
               accessibilityLabel="Mark task as complete"
             >
               <MaterialIcons
                 name="check"
                 size={20}
-                color={AppColors.white}
+                color={colors.onPrimary}
               />
-              <Text style={styles.completeButtonText}>Mark as Complete</Text>
+              <Text style={[styles.completeButtonText, { color: colors.onPrimary }]}>Mark as Complete</Text>
             </Pressable>
           ) : (
             <View
@@ -261,11 +268,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 20,
   },
-  completeButtonText: {
-    ...Typography.buttonLarge,
-    fontFamily: Fonts.sans,
-    color: AppColors.white,
-  },
+    completeButtonText: {
+      ...Typography.buttonLarge,
+      fontFamily: Fonts.sans,
+    },
   completedBanner: {
     flexDirection: "row",
     alignItems: "center",

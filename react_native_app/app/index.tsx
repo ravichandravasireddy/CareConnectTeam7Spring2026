@@ -12,7 +12,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { AppColors, Colors, Fonts, Typography } from "@/constants/theme";
+import { AppColors, Fonts, Typography } from "@/constants/theme";
 import { useTheme } from "@/providers/ThemeProvider";
 
 export const normalizeColorScheme = (
@@ -27,14 +27,11 @@ export const calculateBottomSpacing = (height: number) =>
 
 export default function WelcomeScreen() {
   const router = useRouter();
-  const { colors, colorScheme } = useTheme();
-  const normalizedColorScheme = normalizeColorScheme(colorScheme);
-  const styles = useMemo(() => createStyles(colors), [colors]);
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(), []);
   const { height } = useWindowDimensions();
   const topSpacing = calculateTopSpacing(height);
   const bottomSpacing = calculateBottomSpacing(height);
-  const onPrimary =
-    normalizedColorScheme === "dark" ? AppColors.darkTextPrimary : AppColors.white;
 
   const handleGetStarted = () => {
     router.push("/role-selection" as any);
@@ -69,21 +66,21 @@ export default function WelcomeScreen() {
       >
         <View style={styles.content}>
           <View
-            style={[styles.iconCircle, { backgroundColor: colors.surface }]}
+            style={[styles.iconCircle, { backgroundColor: AppColors.white }]}
             accessibilityLabel="CareConnect logo"
             accessible
           >
             <MaterialIcons
               name="favorite"
               size={56}
-              color={colors.primary}
+              color={AppColors.primary700}
             />
           </View>
 
-          <Text style={[styles.title, { color: onPrimary }]}>CareConnect</Text>
+          <Text style={[styles.title, { color: AppColors.white }]}>CareConnect</Text>
 
           <Text
-            style={[styles.subtitle, { color: onPrimary }]}
+            style={[styles.subtitle, { color: AppColors.white }]}
             accessibilityRole="text"
           >
             Remote health management and coordination for patients and
@@ -98,11 +95,11 @@ export default function WelcomeScreen() {
               accessibilityHint="Opens caregiver dashboard"
               style={({ pressed }) => [
                 styles.primaryButton,
-                { backgroundColor: colors.surface, opacity: pressed ? 0.9 : 1 },
+                { backgroundColor: AppColors.white, opacity: pressed ? 0.9 : 1 },
               ]}
             >
               <Text
-                style={[styles.primaryButtonText, { color: colors.primary }]}
+                style={[styles.primaryButtonText, { color: AppColors.primary700, fontWeight: 'bold' }]}
               >
                 Get Started
               </Text>
@@ -115,17 +112,17 @@ export default function WelcomeScreen() {
               accessibilityHint="Opens caregiver dashboard"
               style={({ pressed }) => [
                 styles.secondaryButton,
-                { borderColor: onPrimary, opacity: pressed ? 0.9 : 1 },
+                { borderColor: AppColors.white, opacity: pressed ? 0.9 : 1 },
               ]}
             >
-              <Text style={[styles.secondaryButtonText, { color: onPrimary }]}>
+              <Text style={[styles.secondaryButtonText, { color: AppColors.white }]}>
                 Sign In
               </Text>
             </Pressable>
           </View>
 
           <Text
-            style={[styles.complianceText, { color: onPrimary }]}
+            style={[styles.complianceText, { color: AppColors.white }]}
             accessibilityRole="text"
           >
             HIPAA-compliant • Secure • Private
@@ -138,10 +135,10 @@ export default function WelcomeScreen() {
             accessibilityLabel="Open Navigation Hub screen"
             style={({ pressed }) => [
               styles.devLink,
-              { borderColor: onPrimary, opacity: pressed ? 0.7 : 0.5 },
+              { borderColor: AppColors.white, opacity: pressed ? 0.7 : 0.5 },
             ]}
           >
-            <Text style={[styles.devLinkText, { color: onPrimary }]}>
+            <Text style={[styles.devLinkText, { color: AppColors.white }]}>
             Navigation Hub →
             </Text>
           </Pressable>
@@ -151,7 +148,7 @@ export default function WelcomeScreen() {
   );
 }
 
-const createStyles = (colors: typeof Colors.light | typeof Colors.dark) =>
+const createStyles = () =>
   StyleSheet.create({
     safeArea: {
       flex: 1,

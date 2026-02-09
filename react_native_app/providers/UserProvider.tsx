@@ -12,7 +12,10 @@ export type UserRole = "caregiver" | "patient";
 interface UserContextType {
   userRole: UserRole;
   isPatient: boolean;
+  userName: string | null;
+  userEmail: string | null;
   setUserRole: (role: UserRole) => void;
+  setUserInfo: (name: string | null, email: string | null) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -29,21 +32,38 @@ interface UserProviderProps {
   children: ReactNode;
   /** Initial role. Default "caregiver". */
   initialRole?: UserRole;
+  /** Initial user name. */
+  initialUserName?: string | null;
+  /** Initial user email. */
+  initialUserEmail?: string | null;
 }
 
 export function UserProvider({
   children,
   initialRole = "caregiver",
+  initialUserName = null,
+  initialUserEmail = null,
 }: UserProviderProps) {
   const [userRole, setUserRoleState] = useState<UserRole>(initialRole);
+  const [userName, setUserNameState] = useState<string | null>(initialUserName);
+  const [userEmail, setUserEmailState] = useState<string | null>(initialUserEmail);
+  
   const setUserRole = useCallback((role: UserRole) => {
     setUserRoleState(role);
+  }, []);
+
+  const setUserInfo = useCallback((name: string | null, email: string | null) => {
+    setUserNameState(name);
+    setUserEmailState(email);
   }, []);
 
   const value: UserContextType = {
     userRole,
     isPatient: userRole === "patient",
+    userName,
+    userEmail,
     setUserRole,
+    setUserInfo,
   };
 
   return (

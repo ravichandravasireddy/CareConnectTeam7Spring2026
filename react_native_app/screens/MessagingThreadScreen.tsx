@@ -10,8 +10,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Typography, AppColors } from '../constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Typography } from '../constants/theme';
+import { useTheme } from '@/providers/ThemeProvider';
+import { AppAppBar } from '@/components/app-app-bar';
 
 type Message = {
   id: string;
@@ -37,9 +39,7 @@ export function MessagingThreadScreen({
   onCall,
   onVideo,
 }: MessagingThreadScreenProps) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
 
   const scrollRef = useRef<ScrollView>(null);
@@ -71,51 +71,40 @@ export function MessagingThreadScreen({
     setTimeout(() => setIsTyping(false), 2000);
   };
 
+  const customActions = (
+    <>
+      <TouchableOpacity
+        onPress={onCall}
+        style={styles.iconButton}
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel="Start phone call"
+        accessibilityHint="Calls this contact"
+      >
+        <MaterialIcons name="phone" size={24} color={colors.text} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={onVideo}
+        style={styles.iconButton}
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel="Start video call"
+        accessibilityHint="Opens video call"
+      >
+        <MaterialIcons name="videocam" size={24} color={colors.text} />
+      </TouchableOpacity>
+    </>
+  );
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={onBack}
-          style={styles.iconButton}
-          accessible={true}
-          accessibilityRole="button"
-          accessibilityLabel="Go back"
-          accessibilityHint="Returns to the previous screen"
-        >
-          <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </TouchableOpacity>
-        <Text
-          style={[styles.headerTitle, { color: colors.text }]}
-          accessible={true}
-          accessibilityRole="header"
-          accessibilityLabel={otherUserName}
-        >
-          {otherUserName}
-        </Text>
-        <View style={styles.headerActions}>
-          <TouchableOpacity
-            onPress={onCall}
-            style={styles.iconButton}
-            accessible={true}
-            accessibilityRole="button"
-            accessibilityLabel="Start phone call"
-            accessibilityHint="Calls this contact"
-          >
-            <Ionicons name="call-outline" size={22} color={colors.text} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={onVideo}
-            style={styles.iconButton}
-            accessible={true}
-            accessibilityRole="button"
-            accessibilityLabel="Start video call"
-            accessibilityHint="Opens video call"
-          >
-            <Ionicons name="videocam-outline" size={22} color={colors.text} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <AppAppBar
+        title={otherUserName}
+        showMenuButton={false}
+        useBackButton={true}
+        showNotificationButton={false}
+        customActions={customActions}
+      />
 
       <ScrollView
         ref={scrollRef}
@@ -134,7 +123,7 @@ export function MessagingThreadScreen({
           const isCurrentUser = message.fromCurrentUser;
           const initials = isCurrentUser ? currentInitials : otherInitials;
           const bubbleColor = isCurrentUser ? colors.primary : colors.surface;
-          const textColor = isCurrentUser ? AppColors.white : colors.text;
+          const textColor = isCurrentUser ? colors.onPrimary : colors.text;
 
           return (
             <View
@@ -156,7 +145,7 @@ export function MessagingThreadScreen({
                     { backgroundColor: colors.primary },
                   ]}
                 >
-                  <Text style={[styles.avatarText, { color: AppColors.white }]}>
+                  <Text style={[styles.avatarText, { color: colors.onPrimary }]}>
                     {initials}
                   </Text>
                 </View>
@@ -178,7 +167,7 @@ export function MessagingThreadScreen({
                     { backgroundColor: colors.secondary },
                   ]}
                 >
-                  <Text style={[styles.avatarText, { color: AppColors.white }]}>
+                  <Text style={[styles.avatarText, { color: colors.onPrimary }]}>
                     {initials}
                   </Text>
                 </View>
@@ -192,7 +181,7 @@ export function MessagingThreadScreen({
             <View
               style={[styles.avatar, { backgroundColor: colors.primary }]}
             >
-              <Text style={[styles.avatarText, { color: AppColors.white }]}>
+              <Text style={[styles.avatarText, { color: colors.onPrimary }]}>
                 {otherInitials}
               </Text>
             </View>
@@ -241,7 +230,7 @@ export function MessagingThreadScreen({
           accessibilityLabel="Send message"
           accessibilityHint="Sends your message"
         >
-          <Ionicons name="send" size={20} color={AppColors.white} />
+          <Ionicons name="send" size={20} color={colors.onPrimary} />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -255,32 +244,11 @@ function getInitials(name: string) {
   return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
 }
 
-type ThemeColors = {
-  [K in keyof typeof Colors.light]: string;
-};
-
-const createStyles = (colors: ThemeColors) =>
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.surface,
-    },
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: 12,
-      paddingVertical: 8,
-      backgroundColor: colors.background,
-    },
-    headerTitle: {
-      ...Typography.h5,
-      flex: 1,
-      textAlign: 'center',
-    },
-    headerActions: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 4,
     },
     iconButton: {
       width: 48,

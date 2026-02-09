@@ -15,11 +15,13 @@ import {
   TouchableOpacity,
   Animated,
 } from 'react-native';
+import { AppAppBar } from '@/components/app-app-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { AppColors, Typography } from '../constants/theme';
+import { useTheme } from '@/providers/ThemeProvider';
 
 const IMG_ROBERT = require('../assets/images/robert.jpg');
 const IMG_SARAH = require('../assets/images/sarah.jpg');
@@ -188,6 +190,7 @@ function CallButton({
 }
 
 export default function VideoCallScreen() {
+  const { colors } = useTheme();
   const router = useRouter();
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [micOn, setMicOn] = useState(true);
@@ -216,17 +219,14 @@ export default function VideoCallScreen() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: 'Video Call',
-          headerShown: true,
-          headerStyle: { backgroundColor: AppColors.darkBgPrimary },
-          headerTintColor: AppColors.darkTextPrimary,
-          headerLeft: () => null,
-        }}
+      <AppAppBar
+        title="Video Call"
+        showMenuButton={false}
+        useBackButton={true}
+        showNotificationButton={false}
       />
       <View style={styles.screen}>
-        <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
+        <SafeAreaView style={styles.safe} edges={['left', 'right']}>
           <View style={styles.mainArea}>
             <TouchableOpacity
               style={styles.patientTouchable}

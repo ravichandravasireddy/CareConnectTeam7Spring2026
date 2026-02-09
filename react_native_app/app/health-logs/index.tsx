@@ -13,9 +13,12 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import { AppAppBar } from '@/components/app-app-bar';
+import { AppBottomNavBar, kPatientNavHealth, kCaregiverNavHome } from '@/components/app-bottom-nav-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useUser } from '@/providers/UserProvider';
 import { useHealthLogProvider } from '../../providers/HealthLogProvider';
 import {
   HealthLog,
@@ -25,10 +28,8 @@ import {
   healthLogHasProgress,
   healthLogProgressRatio,
 } from '../../models/HealthLog';
-import { Colors, Typography, AppColors } from '../../constants/theme';
+import { Typography } from '../../constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
-
-type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
 const QUICK_LOG_OPTIONS: { type: HealthLogType; label: string; icon: string }[] = [
   { type: HealthLogType.mood, label: 'Mood', icon: 'sentiment-satisfied' },
@@ -56,7 +57,7 @@ function LatestLogCard({
   icon: string;
   latestLog: HealthLog | undefined;
   onPress: () => void;
-  colors: ThemeColors;
+  colors: ReturnType<typeof useTheme>['colors'];
   typeColorsFn: (t: HealthLogType) => { bg: string; fg: string };
 }) {
   const { bg, fg } = typeColorsFn(type);
@@ -134,6 +135,7 @@ export default function HealthLogsScreen() {
   const { colors } = useTheme();
   const router = useRouter();
   const healthLogProvider = useHealthLogProvider();
+  const { isPatient } = useUser();
 
   const openAdd = (initialType?: HealthLogType) => {
     const type = initialType ?? HealthLogType.general;
@@ -142,13 +144,11 @@ export default function HealthLogsScreen() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: 'Health Logs',
-          headerShown: true,
-          headerStyle: { backgroundColor: colors.surface },
-          headerTintColor: colors.text,
-        }}
+      <AppAppBar
+        title="Health Logs"
+        showMenuButton={false}
+        useBackButton={true}
+        showNotificationButton={false}
       />
       <SafeAreaView style={[styles.container, { backgroundColor: colors.surface }]} edges={['bottom']}>
         <View style={styles.topButton}>
@@ -159,7 +159,7 @@ export default function HealthLogsScreen() {
             onPress={() => openAdd()}
             style={[styles.addButton, { backgroundColor: colors.primary }]}
             activeOpacity={0.8}>
-            <Text style={[Typography.buttonLarge, { color: AppColors.white }]}>Add a Log</Text>
+            <Text style={[Typography.buttonLarge, { color: colors.onPrimary }]}>Add a Log</Text>
           </TouchableOpacity>
         </View>
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -205,6 +205,10 @@ export default function HealthLogsScreen() {
           </View>
         </ScrollView>
       </SafeAreaView>
+      <AppBottomNavBar 
+        currentIndex={isPatient ? kPatientNavHealth : kCaregiverNavHome}
+        isPatient={isPatient}
+      />
     </>
   );
 }

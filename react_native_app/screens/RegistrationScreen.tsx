@@ -12,10 +12,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Typography, AppColors } from '../constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-type UserRole = 'patient' | 'caregiver';
+import { Typography, AppColors } from '../constants/theme';
+import { useTheme } from '@/providers/ThemeProvider';
+import { useUser, UserRole } from '@/providers/UserProvider';
 
 interface RegistrationScreenProps {
   selectedRole?: UserRole;
@@ -30,9 +29,8 @@ export default function RegistrationScreen({
   onNavigateToSignIn,
   onRegistrationSuccess,
 }: RegistrationScreenProps) {
-  const colorScheme = useColorScheme();
-  const scheme = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[scheme] as ThemeColors;
+  const { colors } = useTheme();
+  const { setUserRole, setUserInfo } = useUser();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -132,10 +130,13 @@ export default function RegistrationScreen({
 
     setTimeout(() => {
       setIsLoading(false);
-      AccessibilityInfo.announceForAccessibility('Registration successful');
+      // Set the user role and info based on selectedRole from role selection
+      setUserRole(selectedRole);
+      setUserInfo(`${normalizedFirst} ${normalizedLast}`, normalizedEmail);
+      AccessibilityInfo.announceForAccessibility(`Registration successful as ${selectedRole}`);
       Alert.alert(
         'Account created',
-        `Welcome ${normalizedFirst} ${normalizedLast}!\nEmail: ${normalizedEmail}\nPhone: ${normalizedPhone}`
+        `Welcome ${normalizedFirst} ${normalizedLast}!\nEmail: ${normalizedEmail}\nPhone: ${normalizedPhone}\nRole: ${selectedRole === 'patient' ? 'Care Recipient' : 'Caregiver'}`
       );
       onRegistrationSuccess?.(selectedRole);
     }, 1000);
@@ -542,11 +543,7 @@ export default function RegistrationScreen({
   );
 }
 
-type ThemeColors = {
-  [K in keyof typeof Colors.light]: string;
-};
-
-const createStyles = (colors: ThemeColors) =>
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     container: {
       flex: 1,

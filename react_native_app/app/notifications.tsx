@@ -15,17 +15,17 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { AppBottomNavBar, kCaregiverNavHome } from "@/components/app-bottom-nav-bar";
+import { AppBottomNavBar, kCaregiverNavHome, kPatientNavHome } from "@/components/app-bottom-nav-bar";
+import { AppAppBar } from "@/components/app-app-bar";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useUser } from '@/providers/UserProvider';
 import { useNotificationProvider } from '../providers/NotificationProvider';
 import { useTaskProvider } from '../providers/TaskProvider';
 import { NotificationItem, NotificationType, getDestinationRoute, isTaskRelated } from '../models/NotificationItem';
-import { Colors, Typography } from '../constants/theme';
+import { Typography } from '../constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
-
-type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
 // Format notification time dynamically: relative for today ("X min ago"), "Yesterday" + time, or date for older.
 const formatNotificationTime = (createdAt: Date): string => {
@@ -70,7 +70,7 @@ const getIconForType = (type: NotificationType): string => {
 const getTypeStyles = (
   type: NotificationType,
   isRead: boolean,
-  colors: ThemeColors
+  colors: ReturnType<typeof useTheme>['colors']
 ): { borderColor: string; backgroundColor: string; avatarColor: string; iconColor: string } => {
   if (isRead) {
     return {
@@ -112,7 +112,7 @@ interface NotificationCardProps {
   item: NotificationItem;
   onPress: () => void;
   timeLabel: string;
-  colors: ThemeColors;
+  colors: ReturnType<typeof useTheme>['colors'];
 }
 
 const NotificationCard: React.FC<NotificationCardProps> = ({ item, onPress, timeLabel, colors }) => {
@@ -177,7 +177,7 @@ interface NotificationSectionProps {
   title: string;
   notifications: NotificationItem[];
   onPress: (item: NotificationItem) => void;
-  colors: ThemeColors;
+  colors: ReturnType<typeof useTheme>['colors'];
 }
 
 const NotificationSection: React.FC<NotificationSectionProps> = ({
@@ -218,6 +218,7 @@ export default function NotificationScreen() {
   const router = useRouter();
   const notificationProvider = useNotificationProvider();
   const taskProvider = useTaskProvider();
+  const { isPatient } = useUser();
 
   const handleNotificationPress = (item: NotificationItem) => {
     // Mark as read
@@ -230,17 +231,15 @@ export default function NotificationScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <Stack.Screen
-        options={{
-          title: 'Notifications',
-          headerShown: true,
-          headerStyle: { backgroundColor: colors.surface },
-          headerTintColor: colors.text,
-        }}
+      <AppAppBar
+        title="Notifications"
+        showMenuButton={false}
+        useBackButton={true}
+        showNotificationButton={false}
       />
       <SafeAreaView
         style={[notificationStyles.container, { backgroundColor: colors.surface }]}
-        edges={['top']}>
+        edges={['bottom']}>
         {notificationProvider.unreadCount > 0 && (
           <View style={notificationStyles.markAllContainer}>
             <TouchableOpacity
@@ -272,7 +271,10 @@ export default function NotificationScreen() {
           ))}
         </ScrollView>
       </SafeAreaView>
-      <AppBottomNavBar currentIndex={kCaregiverNavHome} />
+      <AppBottomNavBar 
+        currentIndex={isPatient ? kPatientNavHome : kCaregiverNavHome}
+        isPatient={isPatient}
+      />
     </View>
   );
 }

@@ -102,7 +102,7 @@ describe("NavigationHubScreen", () => {
       render(<NavigationHubScreen />);
       fireEvent.press(screen.getByText("Task Details (sample)"));
       expect(mockRouter.push).toHaveBeenCalledWith({
-        pathname: "/caregiver/task-details",
+        pathname: "/task-details",
         params: { taskId: "task-1" },
       });
     });

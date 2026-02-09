@@ -10,10 +10,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Task } from '@/models/Task';
-import { Colors, Typography, AppColors } from '@/constants/theme';
+import { Typography, AppColors } from '@/constants/theme';
 import { useTheme } from '@/providers/ThemeProvider';
-
-type ThemeColors = typeof Colors.light | typeof Colors.dark;
 
 export interface TaskCardProps {
   task: Task;
@@ -152,7 +150,7 @@ export function TaskCard({
   );
 }
 
-const createStyles = (colors: ThemeColors) =>
+const createStyles = (colors: ReturnType<typeof useTheme>['colors']) =>
   StyleSheet.create({
     touchable: {
       marginBottom: 12,
