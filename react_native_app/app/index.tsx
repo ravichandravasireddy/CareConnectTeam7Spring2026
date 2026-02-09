@@ -152,7 +152,7 @@ const createStyles = () =>
       flex: 1,
     },
     gradient: {
-      ...StyleSheet.absoluteFill,
+      ...(StyleSheet.absoluteFill as object),
     },
     scrollContent: {
       flexGrow: 1,
