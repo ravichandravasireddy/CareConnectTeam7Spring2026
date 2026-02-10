@@ -60,6 +60,45 @@ npm run test:coverage
 
 The html version is automatically generated and is located at `coverage/index.html`.
 
+## Building an APK (Android)
+
+There is no pre-built APK in the repo. To generate one:
+
+### Option 1: Local build (no Expo account)
+
+1. Generate the native `android/` project:
+
+   ```bash
+   cd react_native_app
+   npx expo prebuild --platform android
+   ```
+
+2. Build a release APK:
+
+   **Windows (PowerShell or Command Prompt):**
+   ```bash
+   cd android
+   .\gradlew.bat assembleRelease
+   ```
+
+   **macOS/Linux:**
+   ```bash
+   cd android
+   ./gradlew assembleRelease
+   ```
+
+3. The APK will be at:
+   `android/app/build/outputs/apk/release/app-release.apk`
+
+You need [Android Studio](https://developer.android.com/studio) (or the Android SDK + JDK) installed and `ANDROID_HOME` set for the Gradle step.
+
+### Option 2: EAS Build (Expo cloud)
+
+1. Install EAS CLI and log in: `npm i -g eas-cli` then `eas login`.
+2. Configure the project: `eas build:configure`.
+3. Build for Android: `eas build --platform android --profile preview` (or `production`).
+4. Download the APK from the link Expo provides.
+
 ## Link to test coverage report
 
 [Test Coverage Screenshot](assets/screenshots/CodeCoverage.jpg)  
