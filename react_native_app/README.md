@@ -22,6 +22,8 @@ Link: [Team Charter](https://docs.google.com/document/d/1xMF6upCBABr3dtR3aLjk2lL
 git clone < Repository link >
 ```
 
+**Windows:** Clone or place the project in a short path (e.g. `C:\proj` or `C:\Users\<you>\proj`). Windows has a 260-character path limit by default; long paths (e.g. deep under Documents or OneDrive) can cause "path too long" or build failures. If you see path-length errors, move the project to a shorter location on the C: drive and try again.
+
 2. Get Dependencies
   
 ```bash
@@ -64,6 +66,8 @@ The html version is automatically generated and is located at `coverage/index.ht
 
 There is no pre-built APK in the repo. To generate one:
 
+**Windows:** The project must be in a short path (e.g. on `C:\`). If the build fails with path-too-long or file-not-found errors, move the repo to a shorter folder (e.g. `C:\proj`) and rebuild.
+
 ### Option 1: Local build (no Expo account)
 
 1. Generate the native `android/` project:
@@ -90,7 +94,33 @@ There is no pre-built APK in the repo. To generate one:
 3. The APK will be at:
    `android/app/build/outputs/apk/release/app-release.apk`
 
+**If the build fails with a dirty file or incremental build problem:** from the `android` folder run `.\gradlew.bat clean` (Windows) or `./gradlew clean` (macOS/Linux), then run the build again (e.g. `.\gradlew.bat assembleRelease` or `./gradlew assembleRelease`).
+
 You need [Android Studio](https://developer.android.com/studio) (or the Android SDK + JDK) installed and `ANDROID_HOME` set for the Gradle step.
+
+**If the build fails with *"restricted method in java.lang.System"* (JDK 21+):** use the Java 17 wrapper so Gradle runs with JDK 17:
+
+1. **Install JDK 17** (if needed), e.g. [Eclipse Temurin 17](https://adoptium.net/temurin/releases/?version=17) or [Oracle JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html).
+
+2. **Set `JAVA_17_HOME`** to the JDK 17 installation (no trailing backslash).  
+   In Command Prompt, for the current session:
+   ```bat
+   set JAVA_17_HOME=C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot
+   ```
+   Or in PowerShell:
+   ```powershell
+   $env:JAVA_17_HOME = "C:\Program Files\Eclipse Adoptium\jdk-17.0.18.8-hotspot"
+   ```
+   Use your actual path (e.g. `C:\Program Files\Java\jdk-17`).
+
+3. **Build with the wrapper** (from `react_native_app\android`):
+   ```bat
+   .\gradlew-jdk17.bat assembleRelease
+   ```
+
+To make `JAVA_17_HOME` permanent: set it in **System Properties → Environment Variables** (user or system), or in your shell profile.
+
+**macOS/Linux:** Install JDK 17, set `export JAVA_17_HOME=/path/to/jdk-17` (e.g. `/usr/lib/jvm/java-17-openjdk-amd64` or `$(/usr/libexec/java_home -v 17)` on macOS), then run `chmod +x gradlew-jdk17` and `./gradlew-jdk17 assembleRelease`.
 
 ### Option 2: EAS Build (Expo cloud)
 
