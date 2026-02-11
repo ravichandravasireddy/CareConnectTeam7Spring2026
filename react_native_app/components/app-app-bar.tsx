@@ -119,7 +119,7 @@ export function AppAppBar({
               />
               {showNotificationBadge && (
                 <View
-                  style={[styles.badge, { backgroundColor: AppColors.error500 }]}
+                  style={[styles.badge, { backgroundColor: AppColors.error700 }]}
                 />
               )}
             </View>

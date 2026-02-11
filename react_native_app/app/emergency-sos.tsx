@@ -64,7 +64,7 @@ export default function EmergencySOSAlertScreen() {
 
   return (
     <View
-      style={[styles.container, { backgroundColor: AppColors.error500 }]}
+      style={[styles.container, { backgroundColor: AppColors.error700 }]}
       accessibilityRole="alert"
       accessibilityLabel="Emergency alert from Robert Williams. Patient ID RW-2847. Location 742 Evergreen Terrace, Springfield. Tap Acknowledge Alert to confirm."
     >

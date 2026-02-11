@@ -61,7 +61,7 @@ export default function CaregiverTaskManagementScreen() {
               <MaterialIcons
                 name="warning-amber"
                 size={24}
-                color={AppColors.error500}
+                color={AppColors.error700}
               />
               <Text
                 style={[styles.overdueTitle, { color: AppColors.error700 }]}

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCAG Contrast Checker – CareConnect React Native App</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      color: #212121;
+      border-bottom: 3px solid #1976D2;
+      padding-bottom: 10px;
+    }
+    h2 {
+      color: #212121;
+      border-bottom: 2px solid #1976D2;
+      padding-bottom: 8px;
+      margin-top: 40px;
+    }
+    .checker-container,
+    .table-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .table-container { overflow-x: auto; margin-top: 20px; }
+    .color-input-group {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      align-items: center;
+    }
+    .color-input-group label { min-width: 120px; font-weight: 500; }
+    input[type="color"] {
+      width: 60px; height: 40px;
+      border: 1px solid #ddd; border-radius: 4px; cursor: pointer;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #ddd; border-radius: 4px;
+      font-family: monospace;
+    }
+    button {
+      background-color: #1976D2;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    button:hover { background-color: #1565C0; }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 4px;
+      border-left: 4px solid #1976D2;
+      background-color: #f9f9f9;
+    }
+    .result h3 { margin-top: 0; }
+    .ratio { font-size: 24px; font-weight: bold; color: #1976D2; }
+    .pass { color: #006605; font-weight: bold; }
+    .fail { color: #C62828; font-weight: bold; }
+    .preview { display: flex; gap: 20px; margin-top: 15px; }
+    .preview-box {
+      flex: 1;
+      padding: 20px;
+      border-radius: 4px;
+      text-align: center;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ddd;
+    }
+    .preview-text { font-size: 18px; font-weight: 500; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th {
+      background-color: #1976D2;
+      color: #fff;
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid #E0E0E0; }
+    tr:hover { background-color: #f9f9f9; }
+    .ratio-cell { font-weight: bold; font-family: monospace; }
+    .pass-badge { color: #006605; font-weight: bold; }
+    .fail-badge { color: #C62828; font-weight: bold; }
+    .color-preview {
+      display: inline-block;
+      width: 20px; height: 20px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+    .note-box {
+      background: #FFF8E1;
+      border: 1px solid #FFC107;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 20px;
+    }
+    .note-box h3 { margin-top: 0; color: #F57C00; }
+    .note-box ul { margin-bottom: 0; }
+  </style>
+</head>
+<body>
+  <h1>WCAG 2.1 Contrast Ratio Checker – React Native App</h1>
+  <p>Enter foreground and background colors to check WCAG AA (4.5:1 normal text, 3:1 large text). Values below match <code>constants/theme.ts</code> (AppColors + Colors.light).</p>
+
+  <div class="checker-container">
+    <div class="color-input-group">
+      <label>Foreground:</label>
+      <input type="color" id="fgColor" value="#212121" />
+      <input type="text" id="fgHex" value="#212121" placeholder="#RRGGBB" />
+    </div>
+    <div class="color-input-group">
+      <label>Background:</label>
+      <input type="color" id="bgColor" value="#FFFFFF" />
+      <input type="text" id="bgHex" value="#FFFFFF" placeholder="#RRGGBB" />
+    </div>
+    <button onclick="checkContrast()">Check Contrast</button>
+    <div id="result" class="result" style="display: none;">
+      <h3>Contrast Results</h3>
+      <div class="ratio" id="ratio"></div>
+      <div id="aa-normal"></div>
+      <div id="aa-large"></div>
+      <div id="aaa-normal"></div>
+      <div id="aaa-large"></div>
+      <div class="preview">
+        <div class="preview-box" id="previewBox">
+          <span class="preview-text" id="previewText">Sample Text</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note-box">
+    <h3>Places not using app theme</h3>
+    <p>These screens or components use <strong>AppColors</strong> (or hardcoded hex) instead of <code>useTheme().colors</code>. They do not follow light/dark or high-contrast preferences.</p>
+    <ul>
+      <li><strong>app/index.tsx (Welcome):</strong> Gradient (primary600, accent500), logo circle (white bg, primary700 icon), title/subtitle/buttons (white text or primary on white). All colors from <code>AppColors</code>.</li>
+      <li><strong>screens/PatientDashboardScreen.tsx:</strong> Welcome card uses <code>AppColors.primary700/primary600</code> and <code>AppColors.white</code>; summary cards use <code>AppColors.success700/success100</code>, <code>AppColors.error500/error100</code>, <code>AppColors.error700</code>; task cards and SOS button use theme <code>colors</code> plus <code>AppColors</code> for urgency/due text.</li>
+      <li><strong>components/app-app-bar.tsx:</strong> Notification badge uses <code>AppColors.error500</code>; rest uses theme <code>colors.text</code>, <code>colors.border</code>.</li>
+      <li><strong>app/video-call.tsx:</strong> Entire screen uses <code>AppColors</code> (darkBgPrimary, darkBgSecondary, darkBgElevated, darkTextPrimary, darkTextSecondary, primary700, accent600, white, error700) – no <code>useTheme().colors</code> for main UI.</li>
+      <li><strong>app/emergency-sos.tsx:</strong> Alert state uses <code>AppColors.error500/error700/error100</code>, <code>AppColors.white</code>, <code>AppColors.secondary600</code>; acknowledged state uses theme <code>colors.surface</code>, <code>colors.text</code>, <code>colors.textSecondary</code>, <code>colors.success</code>.</li>
+      <li><strong>app/caregiver/index.tsx (Caregiver dashboard):</strong> Welcome gradient uses <code>AppColors.primary600</code>; stat card icons use <code>AppColors.info500</code>, <code>AppColors.success500</code>, <code>AppColors.error500</code> on theme <code>colors.surface</code>; divider uses <code>AppColors.primary600</code>. Rest uses theme (light theme now uses primary700, secondary700, accent600, success700, error700, info700).</li>
+    </ul>
+  </div>
+
+  <h2>All app color combinations</h2>
+  <div class="table-container">
+    <table id="colorTable">
+      <thead>
+        <tr>
+          <th>Foreground</th>
+          <th>Background</th>
+          <th>Theme label</th>
+          <th>Usage example</th>
+          <th>WCAG ratio</th>
+          <th>Passes AA?</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <script src="contrast-checker.js"></script>
+  <script>
+    var colorCombinations = [
+      { fg: "#FFFFFF", bg: "#1976D2", theme: "onPrimary/primary (Welcome)", usage: "Welcome gradient (AppColors.primary600)" },
+      { fg: "#FFFFFF", bg: "#2E60BE", theme: "primary700/white", usage: "Welcome gradient start, theme primary bg" },
+      { fg: "#FFFFFF", bg: "#7B1FA2", theme: "accent500", usage: "Welcome gradient end (AppColors)" },
+      { fg: "#2E60BE", bg: "#FFFFFF", theme: "primary/surface (light)", usage: "Get Started text (Welcome), theme primary = primary700" },
+      { fg: "#212121", bg: "#FFFFFF", theme: "text/background", usage: "Sign In header, labels, input text" },
+      { fg: "#616161", bg: "#FFFFFF", theme: "textSecondary/background", usage: "Sign In subtitle, hints, placeholder" },
+      { fg: "#2E60BE", bg: "#FFFFFF", theme: "primary/background (light)", usage: "Forgot password, Sign Up link, Manage tasks" },
+      { fg: "#FFFFFF", bg: "#2E60BE", theme: "onPrimary/primary (light)", usage: "Sign In button bg, Notes Add bg (theme primary)" },
+      { fg: "#C62828", bg: "#FFFFFF", theme: "error/background (light)", usage: "Error message text, Sign Out menu (theme error = error700)" },
+      { fg: "#212121", bg: "#F5F5F5", theme: "text/surface", usage: "Role selection title, card title" },
+      { fg: "#616161", bg: "#F5F5F5", theme: "textSecondary/surface", usage: "Role selection subtitle, info box" },
+      { fg: "#2E60BE", bg: "#E3ECFC", theme: "primary/primarySoft (light)", usage: "Care Recipient role icon" },
+      { fg: "#6A1B9A", bg: "#E1BEE7", theme: "accent/accentSoft (light)", usage: "Caregiver role icon (accent600)" },
+      { fg: "#FFFFFF", bg: "#2E60BE", theme: "white/primary700", usage: "Patient dashboard welcome card" },
+      { fg: "#006605", bg: "#DDF4DD", theme: "success700/success100", usage: "Tasks summary card icon (AppColors)" },
+      { fg: "#C62828", bg: "#FFE5E8", theme: "error700/error100", usage: "BP summary card icon (AppColors)" },
+      { fg: "#2E60BE", bg: "#FFFFFF", theme: "primary/surface (light)", usage: "View All link, bottom nav selected" },
+      { fg: "#616161", bg: "#FFFFFF", theme: "textSecondary/surface", usage: "Bottom nav unselected" },
+      { fg: "#C62828", bg: "#FFFFFF", theme: "error700/white", usage: "Due text, Emergency SOS dialog" },
+      { fg: "#FFFFFF", bg: "#C62828", theme: "onError/error", usage: "Emergency SOS button" },
+      { fg: "#212121", bg: "#FFFFFF", theme: "text/surface", usage: "App bar title, menu items" },
+      { fg: "#C62828", bg: "#FFFFFF", theme: "error700/surface", usage: "Notification badge (AppColors.error500)" },
+      { fg: "#FFFFFF", bg: "#121212", theme: "darkTextPrimary/darkBgPrimary", usage: "Video call screen text" },
+      { fg: "#FFFFFF", bg: "#1E1E1E", theme: "white/darkBgSecondary", usage: "Video call control bar" },
+      { fg: "#FFFFFF", bg: "#2C2C2C", theme: "white/darkBgElevated", usage: "Video call buttons (mic/video on)" },
+      { fg: "#FFFFFF", bg: "#C62828", theme: "white/error700", usage: "Video call buttons (mic/video off)" },
+      { fg: "#B3B3B3", bg: "#121212", theme: "darkTextSecondary/darkBgPrimary", usage: "Video call PIP, ASL connecting" },
+      { fg: "#FFFFFF", bg: "#C62828", theme: "white/error700", usage: "Emergency from card" },
+      { fg: "#C62828", bg: "#FFE5E8", theme: "error700/error100", usage: "Emergency alert icon (AppColors)" },
+      { fg: "#FFFFFF", bg: "#00796B", theme: "white/secondary600", usage: "Emergency avatar (AppColors)" },
+      { fg: "#C62828", bg: "#FFFFFF", theme: "error700/white", usage: "Acknowledge Alert button text" },
+      { fg: "#006605", bg: "#FFFFFF", theme: "success/background (light)", usage: "Alert acknowledged icon (theme success700)" },
+      { fg: "#212121", bg: "#FFFFFF", theme: "text/surface", usage: "Notification card title" },
+      { fg: "#616161", bg: "#FFFFFF", theme: "textSecondary/surface", usage: "Notification summary, time" },
+      { fg: "#FFFFFF", bg: "#2E60BE", theme: "background/primary (light)", usage: "Notification medication avatar" },
+      { fg: "#FFFFFF", bg: "#6A1B9A", theme: "white/accent (light)", usage: "Notification message avatar (accent600)" },
+      { fg: "#FFFFFF", bg: "#00695C", theme: "white/secondary (light)", usage: "Notification appointment avatar (secondary700)" },
+      { fg: "#2E60BE", bg: "#FFFFFF", theme: "primary/surface (light)", usage: "Mark all as read, Notes Add button" },
+      { fg: "#FFFFFF", bg: "#2E60BE", theme: "onPrimary/primary (light)", usage: "Notes Add bg, Health Logs Add" },
+      { fg: "#2E60BE", bg: "#F5F5F5", theme: "primary/surface (light)", usage: "Progress bar fill" },
+      { fg: "#0277BD", bg: "#FFFFFF", theme: "info700/white (light)", usage: "Caregiver dashboard Patients (theme info)" },
+      { fg: "#006605", bg: "#FFFFFF", theme: "success700/white", usage: "Caregiver dashboard Tasks stat (AppColors.success700)" },
+      { fg: "#C62828", bg: "#FFFFFF", theme: "error700/white", usage: "Caregiver dashboard Alerts stat (AppColors.error700)" },
+      { fg: "#2E60BE", bg: "#FFFFFF", theme: "primary/white (light)", usage: "Manage tasks link" },
+    ];
+
+    function populateTable() {
+      var tbody = document.getElementById("tableBody");
+      for (var i = 0; i < colorCombinations.length; i++) {
+        var combo = colorCombinations[i];
+        var row = document.createElement("tr");
+        var fgRgb = hexToRgb(combo.fg);
+        var bgRgb = hexToRgb(combo.bg);
+        var ratio = 0;
+        var ratioText = "N/A";
+        var passes = false;
+        if (fgRgb && bgRgb) {
+          ratio = getContrastRatio(fgRgb, bgRgb);
+          ratioText = formatRatio(ratio) + ":1";
+          passes = ratio >= 4.5;
+        }
+        var fgCell = document.createElement("td");
+        fgCell.innerHTML = '<span class="color-preview" style="background-color:' + combo.fg + '"></span>' + combo.fg;
+        var bgCell = document.createElement("td");
+        bgCell.innerHTML = '<span class="color-preview" style="background-color:' + combo.bg + '"></span>' + combo.bg;
+        var themeCell = document.createElement("td");
+        themeCell.textContent = combo.theme;
+        var usageCell = document.createElement("td");
+        usageCell.textContent = combo.usage;
+        var ratioCell = document.createElement("td");
+        ratioCell.className = "ratio-cell";
+        ratioCell.textContent = ratioText;
+        if (ratio > 0) ratioCell.style.color = passes ? "#006605" : "#C62828";
+        var passCell = document.createElement("td");
+        if (ratio > 0) {
+          passCell.innerHTML = passes
+            ? '<span class="pass-badge">✓ PASS</span>'
+            : '<span class="fail-badge">✗ FAIL</span>';
+        } else {
+          passCell.textContent = "N/A";
+        }
+        row.appendChild(fgCell);
+        row.appendChild(bgCell);
+        row.appendChild(themeCell);
+        row.appendChild(usageCell);
+        row.appendChild(ratioCell);
+        row.appendChild(passCell);
+        tbody.appendChild(row);
+      }
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      populateTable();
+    });
+  </script>
+</body>
+</html>
