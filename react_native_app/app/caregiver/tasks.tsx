@@ -76,7 +76,7 @@ export default function CaregiverTaskManagementScreen() {
                 styles.overdueItem,
                 {
                   backgroundColor: `${AppColors.error100}4D`,
-                  borderLeftColor: AppColors.error500,
+                  borderLeftColor: AppColors.error700,
                 },
               ]}
             >
