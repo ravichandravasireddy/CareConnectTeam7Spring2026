@@ -27,7 +27,7 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
 
     return Scaffold(
       backgroundColor:
-          _isAcknowledged ? colorScheme.surface : AppColors.error500,
+          _isAcknowledged ? colorScheme.surface : AppColors.error700,
       body: SafeArea(
         child: _isAcknowledged
             ? Center(
@@ -97,7 +97,7 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           decoration: BoxDecoration(
-            color: AppColors.error700,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -105,7 +105,7 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
               Text(
                 'From: Robert Williams',
                 style: textTheme.headlineSmall?.copyWith(
-                  color: AppColors.white,
+                  color: AppColors.error700,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -113,7 +113,7 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
               Text(
                 'Patient ID: #RW-2847',
                 style: textTheme.bodyMedium?.copyWith(
-                  color: AppColors.white.withValues(alpha: 0.9),
+                  color: AppColors.error700.withValues(alpha: 0.9),
                 ),
                 textAlign: TextAlign.center,
               ),

@@ -21,7 +21,7 @@ class AppColors {
   static const secondary700 = Color(0xFF00695C);
   static const secondary600 = Color(0xFF00796B);
   static const secondary500 = Color(0xFF26A69A);
-  static const secondary100 = Color(0xFFB2DFDB);
+  static const secondary100 = Color(0xFFDFF6F4);
 
   // --- Accent (sleep, timeline, gradients) ---
   static const accent600 = Color(0xFF6A1B9A);
@@ -30,23 +30,19 @@ class AppColors {
   static const accent100 = Color(0xFFE1BEE7);
 
   // --- Semantic: Success (mood, positive states) ---
-  static const success700 = Color(0xFF388E3C);
-  static const success500 = Color(0xFF4CAF50);
-  static const success100 = Color(0xFFC8E6C9);
+  static const success700 = Color(0xFF006605);
+  static const success100 = Color(0xFFDDF4DD);
 
   // --- Semantic: Warning (meals, caution) ---
-  static const warning700 = Color(0xFFEF6C00);
-  static const warning500 = Color(0xFFFF9800);
-  static const warning100 = Color(0xFFFFE0B2);
+  static const warning700 = Color(0xFFA25100);
+  static const warning100 = Color(0xFFFDE8C9);
 
   // --- Semantic: Error (symptoms, danger, mic/video off) ---
   static const error700 = Color(0xFFC62828);
-  static const error500 = Color(0xFFF44336);
-  static const error100 = Color(0xFFFFCDD2);
+  static const error100 = Color(0xFFFFE5E8);
 
   // --- Semantic: Info (water, appointments) ---
   static const info700 = Color(0xFF0277BD);
-  static const info500 = Color(0xFF03A9F4);
   static const info100 = Color(0xFFB3E5FC);
 
   // --- Neutral (light mode text, borders, surfaces) ---

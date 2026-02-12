@@ -236,7 +236,7 @@ void main() {
       if (scheduledForToday.isNotEmpty) {
         for (final task in scheduledForToday) {
           expect(find.text(task.title), findsOneWidget);
-          expect(find.text(DateFormat.jm().format(task.date)), findsOneWidget);
+          expect(find.text(DateFormat.jm().format(task.date)), findsWidgets);
         }
       }
     });

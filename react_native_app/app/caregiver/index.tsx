@@ -105,7 +105,7 @@ export default function CaregiverDashboardScreen() {
               <MaterialIcons
                 name="people-outline"
                 size={28}
-                color={AppColors.info500}
+                color={AppColors.info700}
               />
               <Text style={[styles.statValue, { color: colors.text }]}>
                 {PATIENTS.length}
@@ -128,7 +128,7 @@ export default function CaregiverDashboardScreen() {
               <MaterialIcons
                 name="check-circle-outline"
                 size={28}
-                color={AppColors.success500}
+                color={AppColors.success700}
               />
               <Text style={[styles.statValue, { color: colors.text }]}>
                 {completedCount}/{totalCount}
@@ -152,7 +152,7 @@ export default function CaregiverDashboardScreen() {
               <MaterialIcons
                 name="warning-amber"
                 size={28}
-                color={AppColors.error500}
+                color={AppColors.error700}
               />
               <Text style={[styles.statValue, { color: colors.text }]}>1</Text>
               <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
