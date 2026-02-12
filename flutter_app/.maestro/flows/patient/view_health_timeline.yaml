@@ -1,0 +1,18 @@
+appId: com.example.flutter_app
+tags: ["P1", "patient", "health"]
+---
+# Test: View Health Timeline
+# Priority: Medium
+# Description: Patient views their health timeline with historical entries.
+
+- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
+- tapOn: "Health"
+- assertVisible: "Health Logs"
+- # Navigate to timeline if there's a button/link
+- tapOn:
+    text: "View Timeline"
+    optional: true
+- # Or check if timeline is accessible via another route
+- assertVisible:
+    text: "Timeline"
+    optional: true

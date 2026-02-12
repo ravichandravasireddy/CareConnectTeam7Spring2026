@@ -1,0 +1,16 @@
+appId: com.example.flutter_app
+tags: ["P1", "auth", "signout"]
+---
+# Test: Sign Out Flow
+# Priority: Medium
+# Description: Authenticated user signs out and returns to welcome screen.
+
+- runFlow: "../../helpers/common_flows/sign_in_patient.yaml"
+- assertVisible: "Dashboard"
+- tapOn:
+    id: "menu"
+- assertVisible: "Sign Out"
+- tapOn: "Sign Out"
+- waitForAnimationToEnd
+- assertVisible: "Get Started"
+- assertVisible: "CareConnect"

@@ -1,0 +1,19 @@
+appId: com.example.flutter_app
+tags: ["P1", "patient", "health"]
+---
+# Test: Add Blood Pressure Log Entry
+# Priority: High
+# Description: Patient records blood pressure reading.
+
+- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
+- tapOn: "Health"
+- assertVisible: "Health Logs"
+- tapOn: "Add a Log"
+- tapOn: "Blood Pressure"
+- inputText: ${TEST_BP_SYSTOLIC}
+- inputText: ${TEST_BP_DIASTOLIC}
+- inputText: "Normal reading"
+- tapOn: "Save Log"
+- waitForAnimationToEnd
+- assertVisible: "Health Logs"
+- assertVisible: "120/80"

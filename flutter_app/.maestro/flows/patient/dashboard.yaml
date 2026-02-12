@@ -1,0 +1,17 @@
+appId: com.example.flutter_app
+tags: ["P0", "patient", "dashboard"]
+---
+# Test: Patient Dashboard Overview
+# Priority: High
+# Description: Patient views their dashboard and sees all key information.
+
+- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
+- assertVisible: "Dashboard"
+- assertVisible: "Home"
+- assertVisible: "Good"
+- assertVisible: "Upcoming Tasks"
+- assertVisible: "Today's Appointments"
+- scroll
+- assertVisible: "Tasks"
+- assertVisible: "Health"
+- assertVisible: "Profile"

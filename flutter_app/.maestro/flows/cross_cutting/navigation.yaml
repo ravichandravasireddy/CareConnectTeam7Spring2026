@@ -1,0 +1,34 @@
+appId: com.example.flutter_app
+tags: ["P0", "navigation", "cross-cutting"]
+---
+# Test: Navigation and Drawer Menu
+# Priority: High
+# Description: User navigates using drawer menu and bottom navigation.
+
+- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
+- assertVisible: "Dashboard"
+- # Test drawer menu
+- tapOn:
+    id: "menu"
+- assertVisible: "Dashboard"
+- assertVisible: "Tasks"
+- assertVisible: "Calendar"
+- assertVisible: "Health Logs"
+- assertVisible: "Notes"
+- assertVisible: "Profile"
+- assertVisible: "Preferences"
+- assertVisible: "Sign Out"
+- # Navigate via drawer
+- tapOn: "Calendar"
+- assertVisible: "Calendar"
+- # Test bottom navigation
+- tapOn: "Health"
+- assertVisible: "Health Logs"
+- tapOn: "Tasks"
+- assertVisible:
+    text: "Tasks"
+    optional: true
+- tapOn: "Profile"
+- assertVisible: "Profile"
+- tapOn: "Home"
+- assertVisible: "Dashboard"

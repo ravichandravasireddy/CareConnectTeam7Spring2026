@@ -1,0 +1,24 @@
+appId: com.example.flutter_app
+tags: ["P1", "patient", "preferences"]
+---
+# Test: Access Preferences and Accessibility Settings
+# Priority: Medium
+# Description: Patient accesses and modifies accessibility preferences.
+
+- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
+- tapOn:
+    id: "menu"
+- assertVisible: "Preferences"
+- tapOn: "Preferences"
+- assertVisible: "Preferences"
+- assertVisible: "Text Size"
+- # Modify text size if applicable
+- tapOn:
+    text: "Text Size"
+    optional: true
+- # Save preferences
+- tapOn:
+    text: "Save Preferences"
+    optional: true
+- back
+- assertVisible: "Dashboard"

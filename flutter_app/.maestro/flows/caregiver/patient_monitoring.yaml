@@ -1,0 +1,24 @@
+appId: com.example.flutter_app
+tags: ["P0", "caregiver", "monitoring"]
+---
+# Test: View Patient Monitoring
+# Priority: High
+# Description: Caregiver monitors patient health data and status.
+
+- runFlow: "maestro/helpers/common_flows/sign_in_caregiver.yaml"
+- tapOn: "Monitor"
+- assertVisible: "Patient Monitoring"
+- # Verify patient list is displayed
+- assertVisible:
+    text: "Robert Williams"
+    optional: true
+- assertVisible:
+    text: "Maya Patel"
+    optional: true
+- # Tap on a patient card if available
+- tapOn:
+    text: "Robert Williams"
+    optional: true
+- # Verify patient details are shown if detail view exists
+- back
+- assertVisible: "Patient Monitoring"

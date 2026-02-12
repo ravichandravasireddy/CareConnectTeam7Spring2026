@@ -1,0 +1,24 @@
+appId: com.example.flutter_app
+tags: ["P0", "auth", "caregiver"]
+---
+# Test: Caregiver Sign In Flow
+# Priority: High
+# Description: Caregiver signs in and accesses caregiver dashboard.
+
+- launchApp
+- assertVisible: "Get Started"
+- tapOn: "Get Started"
+- waitForAnimationToEnd
+- assertVisible: "Caregiver"
+- tapOn: "Caregiver"
+- assertVisible: "Email"
+- inputText: ${TEST_CAREGIVER_EMAIL}
+- assertVisible: "Password"
+- inputText: ${TEST_CAREGIVER_PASSWORD}
+- tapOn: "Sign In"
+- waitForAnimationToEnd
+- assertVisible: "Dashboard"
+- assertVisible: ${TEST_CAREGIVER_NAME}
+- assertVisible: "Patients"
+- assertVisible: "Tasks"
+- assertVisible: "Alerts"

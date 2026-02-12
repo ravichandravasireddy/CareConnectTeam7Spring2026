@@ -1,0 +1,45 @@
+appId: com.example.flutter_app
+tags: ["P0", "auth", "registration"]
+# env:
+#   NEW_USER_FIRST_NAME: "John"
+#   NEW_USER_LAST_NAME: "Doe"
+#   NEW_USER_EMAIL: "john.doe@example.com"
+#   NEW_USER_PHONE: "1235551234"
+#   NEW_USER_PASSWORD: "password345"
+---
+# Test: Welcome Screen → Registration Flow
+# Priority: High
+# Description: New user registers for an account.
+
+- runScript: "../../scripts/test_data.js"
+- launchApp
+- assertVisible: "Get Started"
+- tapOn: "Get Started"
+- waitForAnimationToEnd
+- assertVisible: "Care Recipient.*"
+- tapOn: "Care Recipient.*"
+- assertVisible: "Create Account"
+- tapOn: "John"
+- inputText: "${output.data.NEW_USER_FIRST_NAME}"
+- tapOn: "Doe"
+- inputText: ${output.data.NEW_USER_LAST_NAME}
+- tapOn: "your.email@example.com"
+- inputText: ${output.data.NEW_USER_EMAIL}
+- tapOn: "(555) 123-4567"
+- inputText: ${output.data.NEW_USER_PHONE}
+- tapOn: "Create a strong password"
+- inputText: ${output.data.NEW_USER_PASSWORD}
+- hideKeyboard
+- tapOn: "Re-enter your password"
+- inputText: ${output.data.NEW_USER_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: "terms_and_conditions_checkbox"
+- scrollUntilVisible:
+    element:
+        text: "Create Account"
+    timeout: 10000
+    direction: DOWN
+- tapOn: "Create Account"
+- waitForAnimationToEnd
+- assertVisible: "Home"

@@ -1,0 +1,21 @@
+appId: com.example.flutter_app
+tags: ["P0", "patient", "health"]
+---
+# Test: Add Health Log Entry
+# Priority: High
+# Description: Patient records a health log entry (e.g., mood, blood pressure).
+
+- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
+- tapOn: "Health"
+- assertVisible: "Health Logs"
+- assertVisible: "Add a Log"
+- tapOn: "Add a Log"
+- assertVisible: "Select Log Type"
+- tapOn: "Mood"
+- assertVisible: "😊 Happy"
+- tapOn: "😊 Happy"
+- inputText: "Feeling good today"
+- tapOn: "Save Log"
+- waitForAnimationToEnd
+- assertVisible: "Health Logs"
+- assertVisible: "😊 Happy"

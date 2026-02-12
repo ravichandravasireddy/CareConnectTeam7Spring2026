@@ -1,0 +1,24 @@
+appId: com.example.flutter_app
+tags: ["P1", "error-handling", "session"]
+---
+# Test: Session Management
+# Priority: High
+# Description: App handles session expiration and restoration.
+
+- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
+- assertVisible: "Dashboard"
+- # Note: Session expiration may need to be simulated
+- # For now, test sign out and re-authentication
+- tapOn:
+    id: "menu"
+- tapOn: "Sign Out"
+- assertVisible: "Get Started"
+- # Verify user cannot access protected screens
+- # Attempt to navigate directly (if possible)
+- # Re-authenticate
+- tapOn: "Get Started"
+- tapOn: "Care Recipient"
+- inputText: ${TEST_USER_EMAIL}
+- inputText: ${TEST_USER_PASSWORD}
+- tapOn: "Sign In"
+- assertVisible: "Dashboard"

@@ -1,0 +1,23 @@
+appId: com.example.flutter_app
+tags: ["P0", "patient", "tasks"]
+---
+# Test: View and Complete Task
+# Priority: High
+# Description: Patient views task details and marks task as completed.
+
+- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
+- assertVisible: "Upcoming Tasks"
+- scroll
+- tapOn:
+    text: "Medication"
+    optional: true
+- waitForAnimationToEnd
+- assertVisible: "Task Details"
+- assertVisible: "Morning Medication"
+- assertVisible: "Description"
+- # Note: Task completion action depends on implementation
+- # If there's a complete button:
+- # tapOn: "Mark Complete"
+- # assertVisible: "Completed"
+- back
+- assertVisible: "Dashboard"

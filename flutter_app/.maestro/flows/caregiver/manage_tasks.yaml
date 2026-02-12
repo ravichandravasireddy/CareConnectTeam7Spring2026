@@ -1,0 +1,23 @@
+appId: com.example.flutter_app
+tags: ["P0", "caregiver", "tasks"]
+---
+# Test: Manage Tasks (Caregiver)
+# Priority: High
+# Description: Caregiver views and manages tasks for all patients.
+
+- runFlow: "maestro/helpers/common_flows/sign_in_caregiver.yaml"
+- assertVisible: "Today's Tasks"
+- tapOn: "Manage"
+- waitForAnimationToEnd
+- assertVisible: "Tasks"
+- # Verify task list shows tasks for all patients
+- scroll
+- tapOn:
+    text: "Medication"
+    optional: true
+- waitForAnimationToEnd
+- assertVisible:
+    text: "Task Details"
+    optional: true
+- back
+- assertVisible: "Tasks"

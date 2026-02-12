@@ -1,0 +1,25 @@
+appId: com.example.flutter_app
+tags: ["P1", "patient", "notes"]
+---
+# Test: Create and View Note
+# Priority: Medium
+# Description: Patient creates a note and views it in the notes list.
+
+- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
+- tapOn:
+    id: "menu"
+- assertVisible: "Notes"
+- tapOn: "Notes"
+- assertVisible: "Notes"
+- assertVisible: "Add New Note"
+- tapOn: "Add New Note"
+- assertVisible: "Title"
+- inputText: ${TEST_NOTE_TITLE}
+- assertVisible: "Content"
+- inputText: ${TEST_NOTE_CONTENT}
+- tapOn: "Save"
+- waitForAnimationToEnd
+- assertVisible: "Notes"
+- assertVisible: ${TEST_NOTE_TITLE}
+- tapOn: ${TEST_NOTE_TITLE}
+- assertVisible: ${TEST_NOTE_CONTENT}

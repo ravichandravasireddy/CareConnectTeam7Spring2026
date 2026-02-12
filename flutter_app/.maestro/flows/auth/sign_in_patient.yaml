@@ -1,0 +1,27 @@
+appId: com.example.flutter_app
+tags: ["P0", "auth", "patient"]
+---
+# Test: Welcome Screen → Sign In Flow (Patient)
+# Priority: High
+# Description: User starts at welcome screen and successfully signs in as a patient.
+
+- launchApp
+- takeScreenshot: "01_welcome_screen"
+- assertVisible: "Get Started"
+- assertVisible: "CareConnect"
+- tapOn: "Get Started"
+- waitForAnimationToEnd
+- takeScreenshot: "02_role_selection"
+- assertVisible: "Care Recipient"
+- assertVisible: "Caregiver"
+- tapOn: "Care Recipient"
+- takeScreenshot: "03_sign_in_screen"
+- assertVisible: "Email"
+- assertVisible: "Password"
+- inputText: ${TEST_USER_EMAIL}
+- inputText: ${TEST_USER_PASSWORD}
+- tapOn: "Sign In"
+- waitForAnimationToEnd
+- assertVisible: "Dashboard"
+- assertVisible: ${TEST_PATIENT_NAME}
+- takeScreenshot: "04_patient_dashboard"

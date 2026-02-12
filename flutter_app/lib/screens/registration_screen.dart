@@ -496,6 +496,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: Row(
                     children: [
                       Checkbox(
+                        id: "terms_and_conditions_checkbox",
                         value: _agreedToTerms,
                         onChanged: (value) {
                           setState(() => _agreedToTerms = value ?? false);

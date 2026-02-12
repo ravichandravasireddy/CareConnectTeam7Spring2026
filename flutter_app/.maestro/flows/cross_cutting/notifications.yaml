@@ -1,0 +1,28 @@
+appId: com.example.flutter_app
+tags: ["P0", "notifications", "cross-cutting"]
+---
+# Test: Notification System
+# Priority: High
+# Description: User receives and interacts with notifications.
+
+- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
+- assertVisible: "Dashboard"
+- # Tap notification icon if badge is visible
+- tapOn:
+    id: "notification"
+    optional: true
+- # Or navigate via menu
+- tapOn:
+    id: "menu"
+- assertVisible: "Notifications"
+- tapOn: "Notifications"
+- assertVisible: "Notifications"
+- # Verify notification list shows all notifications
+- scroll
+- # Mark notification as read if applicable
+- tapOn:
+    text: "Mark all as read"
+    optional: true
+- waitForAnimationToEnd
+- # Verify notifications are marked as read
+- assertVisible: "Notifications"

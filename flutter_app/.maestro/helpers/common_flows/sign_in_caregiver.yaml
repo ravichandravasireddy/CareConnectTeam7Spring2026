@@ -1,0 +1,18 @@
+appId: com.example.flutter_app
+---
+# Common flow: Sign in as caregiver
+# This flow can be reused in other tests using runFlow
+
+- launchApp
+- assertVisible: "Get Started"
+- tapOn: "Get Started"
+- waitForAnimationToEnd
+- assertVisible: "Caregiver"
+- tapOn: "Caregiver"
+- assertVisible: "Email"
+- inputText: ${TEST_CAREGIVER_EMAIL}
+- assertVisible: "Password"
+- inputText: ${TEST_CAREGIVER_PASSWORD}
+- tapOn: "Sign In"
+- waitForAnimationToEnd
+- assertVisible: "Dashboard"

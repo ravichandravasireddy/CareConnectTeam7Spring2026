@@ -1,0 +1,15 @@
+appId: com.example.flutter_app
+tags: ["P1", "caregiver", "analytics"]
+---
+# Test: View Analytics
+# Priority: Medium
+# Description: Caregiver views analytics and reports.
+
+- runFlow: "maestro/helpers/common_flows/sign_in_caregiver.yaml"
+- tapOn: "Analytics"
+- assertVisible: "Analytics"
+- # Verify analytics charts/graphs are displayed if implemented
+- scroll
+- assertVisible:
+    text: "Analytics"
+    optional: true

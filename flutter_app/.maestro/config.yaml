@@ -1,0 +1,5 @@
+appId: com.example.flutter_app
+includeTags: []
+excludeTags: []
+
+testOutputDir: .maestro/test_output
