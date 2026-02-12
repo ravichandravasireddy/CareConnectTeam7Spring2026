@@ -75,12 +75,32 @@ void main() {
 
     testWidgets('tapping task card navigates to task details', (tester) async {
       await tester.pumpWidget(createTestHarness());
+      await tester.pumpAndSettle();
 
+      // Find the task card text
       final taskTitle = find.textContaining('Medication');
       if (taskTitle.evaluate().isNotEmpty) {
-        await tester.tap(taskTitle.first);
+        // Scroll to make the widget visible if it's off-screen
+        await tester.scrollUntilVisible(
+          taskTitle.first,
+          500.0,
+          scrollable: find.byType(Scrollable),
+        );
+        await tester.pumpAndSettle();
+
+        // Find the InkWell ancestor that handles the tap
+        final inkWell = find.ancestor(
+          of: taskTitle.first,
+          matching: find.byType(InkWell),
+        );
+        
+        expect(inkWell, findsWidgets);
+        await tester.tap(inkWell.first);
         await tester.pumpAndSettle();
         expect(find.byType(TaskDetailsScreen), findsOneWidget);
+      } else {
+        // If no medication task for today, verify tasks section exists
+        expect(find.text("Today's Tasks"), findsOneWidget);
       }
     });
 
