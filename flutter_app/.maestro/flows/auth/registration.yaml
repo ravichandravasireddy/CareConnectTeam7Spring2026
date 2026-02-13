@@ -34,7 +34,7 @@ tags: ["P0", "auth", "registration"]
 - inputText: ${output.data.NEW_USER_PASSWORD}
 - hideKeyboard
 - tapOn:
-    id: "terms_and_conditions_checkbox"
+    point: "16%,73%"
 - scrollUntilVisible:
     element:
         text: "Create Account"

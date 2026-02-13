@@ -5,20 +5,26 @@ tags: ["P0", "auth", "caregiver"]
 # Priority: High
 # Description: Caregiver signs in and accesses caregiver dashboard.
 
+#get global variable
+- runScript: "../../scripts/test_data.js"
+
+# flow
 - launchApp
-- assertVisible: "Get Started"
-- tapOn: "Get Started"
+- assertVisible: "Sign in"
+- tapOn: "Sign in"
 - waitForAnimationToEnd
-- assertVisible: "Caregiver"
-- tapOn: "Caregiver"
-- assertVisible: "Email"
-- inputText: ${TEST_CAREGIVER_EMAIL}
+- assertVisible: ".*Welcome Back.*"
+- assertVisible: "Email Address"
+- tapOn: "your.email@example.com"
+- inputText: ${output.data.CAREGIVER_EMAIL}
 - assertVisible: "Password"
-- inputText: ${TEST_CAREGIVER_PASSWORD}
+- tapOn: "Enter your password"
+- inputText: ${output.data.CAREGIVER_PASSWORD}
+- hideKeyboard
 - tapOn: "Sign In"
 - waitForAnimationToEnd
 - assertVisible: "Dashboard"
-- assertVisible: ${TEST_CAREGIVER_NAME}
-- assertVisible: "Patients"
-- assertVisible: "Tasks"
-- assertVisible: "Alerts"
+- assertVisible: ".*${output.data.CAREGIVER_NAME}.*"
+- assertVisible: ".*Patients"
+- assertVisible: ".*Tasks"
+- assertVisible: ".*Alerts"

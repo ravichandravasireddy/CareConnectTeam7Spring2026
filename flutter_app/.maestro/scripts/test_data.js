@@ -6,10 +6,10 @@ output.data = {
   NEW_USER_PHONE: "1235551234",
   NEW_USER_PASSWORD: "password345",
   // === Test data for sign in and use
-  RECIPIENT_NAME: "Robert Williams",
+  RECIPIENT_NAME: "Robert",
   RECIPIENT_EMAIL: "patient@careconnect.demo",
   RECIPIENT_PASSWORD: "password123",
-  CAREGIVER_NAME: "Dr. Sarah Johnson",
+  CAREGIVER_NAME: "Sarah",
   CAREGIVER_EMAIL: "caregiver@careconnect.demo",
   CAREGIVER_PASSWORD: "password123",
   // === Health log test data

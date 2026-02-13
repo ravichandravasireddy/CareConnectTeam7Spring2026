@@ -3,16 +3,22 @@ appId: com.example.flutter_app
 # Common flow: Sign in as patient
 # This flow can be reused in other tests using runFlow
 
+#get global variables
+- runScript: "../../scripts/test_data.js"
+
+# flow
 - launchApp
-- assertVisible: "Get Started"
-- tapOn: "Get Started"
+- assertVisible: "Sign in"
+- tapOn: "Sign in"
 - waitForAnimationToEnd
-- assertVisible: "Care Recipient"
-- tapOn: "Care Recipient"
-- assertVisible: "Email"
-- inputText: ${TEST_USER_EMAIL}
+- assertVisible: ".*Welcome Back.*"
+- assertVisible: "Email Address"
+- tapOn: "your.email@example.com"
+- inputText: ${output.data.RECIPIENT_EMAIL}
 - assertVisible: "Password"
-- inputText: ${TEST_USER_PASSWORD}
+- tapOn: "Enter your password"
+- inputText: ${output.data.RECIPIENT_PASSWORD}
+- hideKeyboard
 - tapOn: "Sign In"
 - waitForAnimationToEnd
-- assertVisible: "Dashboard"
+- assertVisible: "Home"

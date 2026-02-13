@@ -5,23 +5,25 @@ tags: ["P0", "auth", "patient"]
 # Priority: High
 # Description: User starts at welcome screen and successfully signs in as a patient.
 
+#get global variables
+- runScript: "../../scripts/test_data.js"
+
+# flow
 - launchApp
-- takeScreenshot: "01_welcome_screen"
-- assertVisible: "Get Started"
-- assertVisible: "CareConnect"
-- tapOn: "Get Started"
+- assertVisible: "Sign in"
+- tapOn: "Sign in"
 - waitForAnimationToEnd
-- takeScreenshot: "02_role_selection"
-- assertVisible: "Care Recipient"
-- assertVisible: "Caregiver"
-- tapOn: "Care Recipient"
-- takeScreenshot: "03_sign_in_screen"
-- assertVisible: "Email"
+- assertVisible: ".*Welcome Back.*"
+- assertVisible: "Email Address"
+- tapOn: "your.email@example.com"
+- inputText: ${output.data.RECIPIENT_EMAIL}
 - assertVisible: "Password"
-- inputText: ${TEST_USER_EMAIL}
-- inputText: ${TEST_USER_PASSWORD}
+- tapOn: "Enter your password"
+- inputText: ${output.data.RECIPIENT_PASSWORD}
+- hideKeyboard
 - tapOn: "Sign In"
 - waitForAnimationToEnd
-- assertVisible: "Dashboard"
-- assertVisible: ${TEST_PATIENT_NAME}
-- takeScreenshot: "04_patient_dashboard"
+- assertVisible: "Home"
+- assertVisible: ".*${output.data.RECIPIENT_NAME}.*"
+- assertVisible: ".*Tasks.*"
+- assertVisible: ".*BP Today.*"

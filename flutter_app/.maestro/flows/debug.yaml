@@ -1,6 +1,4 @@
 appId: com.example.flutter_app
-# env:
-  # NEW_USER_FIRST_NAME: "John"
 ---
 - runScript: "../scripts/test_data.js"
 - evalScript: ${console.log('VALUE:', output.data.NEW_USER_FIRST_NAME)}
