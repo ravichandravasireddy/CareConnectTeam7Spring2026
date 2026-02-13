@@ -5,13 +5,21 @@ tags: ["P0", "patient", "dashboard"]
 # Priority: High
 # Description: Patient views their dashboard and sees all key information.
 
-- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
-- assertVisible: "Dashboard"
+# get to dahsboard
+- runFlow:
+    when:
+      notVisible: "Home"
+    file: "../../helpers/common_flows/sign_in_patient.yaml"
 - assertVisible: "Home"
-- assertVisible: "Good"
+- assertVisible: "Good.*"
+- assertVisible: "Tasks.*"
+- assertVisible: "BP Today.*"
 - assertVisible: "Upcoming Tasks"
+- assertVisible: "View All"
 - assertVisible: "Today's Appointments"
 - scroll
-- assertVisible: "Tasks"
-- assertVisible: "Health"
-- assertVisible: "Profile"
+- assertVisible: "Home.*"
+- assertVisible: "Tasks.*"
+- assertVisible: "Messages.*"
+- assertVisible: "Health.*"
+- assertVisible: "Profile.*"

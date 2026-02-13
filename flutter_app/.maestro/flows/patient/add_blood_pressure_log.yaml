@@ -1,19 +1,40 @@
 appId: com.example.flutter_app
-tags: ["P1", "patient", "health"]
+tags: ["P1", "patient", "log"]
 ---
 # Test: Add Blood Pressure Log Entry
 # Priority: High
 # Description: Patient records blood pressure reading.
 
-- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
-- tapOn: "Health"
+#get globals if necessary
+- runScript:
+    when:
+      true: ${!output.data}
+    file: "../../scripts/test_data.js"
+
+# get to dahsboard
+- runFlow:
+    when:
+      notVisible: "Home"
+    file: "../../helpers/common_flows/sign_in_patient.yaml"
+
+# flow
+- tapOn: "Health.*"
 - assertVisible: "Health Logs"
 - tapOn: "Add a Log"
+- assertVisible: "New Health Log"
+- tapOn: ".*General"
 - tapOn: "Blood Pressure"
-- inputText: ${TEST_BP_SYSTOLIC}
-- inputText: ${TEST_BP_DIASTOLIC}
+- tapOn: "Systolic.*"
+- inputText: ${output.data.TEST_BP_SYSTOLIC}
+- tapOn: "Diastolic.*"
+- inputText: ${output.data.TEST_BP_DIASTOLIC}
+- tapOn: "Note.*"
 - inputText: "Normal reading"
 - tapOn: "Save Log"
-- waitForAnimationToEnd
-- assertVisible: "Health Logs"
-- assertVisible: "120/80"
+- scrollUntilVisible:
+    element:
+      text: "No General logged.*"
+    timeout: 10000
+    direction: DOWN
+- assertVisible: ".*Blood Pressure: ${output.data.TEST_BP_SYSTOLIC}/${output.data.TEST_BP_DIASTOLIC} mmHg.*Normal reading.*"
+- back
