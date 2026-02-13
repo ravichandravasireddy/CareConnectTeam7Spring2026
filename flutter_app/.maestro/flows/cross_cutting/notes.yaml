@@ -1,0 +1,31 @@
+appId: com.example.flutter_app
+tags: ["P1", "notes", "cross-cutting"]
+---
+# Test: Notes
+# Priority: Medium
+# Description: User can create and view notes.
+
+- runFlow: 
+    when: 
+        notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- tapOn:
+    point: "7%,6%" #menu button
+- assertVisible: "Notes"
+- tapOn: "Notes"
+- assertVisible: "Notes"
+- assertVisible: "Add New Note"
+- tapOn: "Add New Note"
+- assertVisible: "New Note"
+- tapOn: "Title" 
+- inputText: "Test Maestro Title"
+- tapOn: "Note"
+- inputText: "Test Maestro note content"
+- tapOn: "Category.*"
+- tapOn: "Appointment"
+- tapOn: "Save"
+- assertVisible: "Test Maestro Title.*Test Maestro note content.*APPOINTMENT.*"
+- tapOn: "Test Maestro Title.*Test Maestro note content.*APPOINTMENT.*"
+- assertVisible: "Test Maestro Title"
+- back
+- back

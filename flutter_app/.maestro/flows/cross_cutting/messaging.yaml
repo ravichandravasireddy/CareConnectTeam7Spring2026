@@ -5,21 +5,19 @@ tags: ["P1", "messaging", "cross-cutting"]
 # Priority: Medium
 # Description: User sends and receives messages.
 
-- runFlow: "maestro/helpers/common_flows/sign_in_patient.yaml"
+- runFlow: 
+    when: 
+        notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
 - tapOn:
-    id: "menu"
-- assertVisible: "Messages"
-- tapOn: "Messages"
-- assertVisible: "Messages"
-- # Verify message thread is displayed
+    point: "7%,6%"
+- assertVisible: "Messages.*"
+- tapOn: "Messages.*"
 - assertVisible: "Dr. Sarah Johnson"
-- scroll
-- # Type a new message
+- tapOn: "Type a message..." 
 - inputText: "Test message from Maestro"
 - tapOn:
-    text: "Send"
-    optional: true
-- # Or press enter/send button
-- waitForAnimationToEnd
-- # Verify message appears in thread
-- assertVisible: "Test message from Maestro"
+    point: "90%,87%" #send button
+- assertVisible: "Test message from Maestro.*"
+- back
+- back
