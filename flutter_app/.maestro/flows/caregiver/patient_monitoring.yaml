@@ -5,20 +5,20 @@ tags: ["P0", "caregiver", "monitoring"]
 # Priority: High
 # Description: Caregiver monitors patient health data and status.
 
-- runFlow: "maestro/helpers/common_flows/sign_in_caregiver.yaml"
-- tapOn: "Monitor"
-- assertVisible: "Patient Monitoring"
-- # Verify patient list is displayed
-- assertVisible:
-    text: "Robert Williams"
-    optional: true
-- assertVisible:
-    text: "Maya Patel"
-    optional: true
-- # Tap on a patient card if available
-- tapOn:
-    text: "Robert Williams"
-    optional: true
-- # Verify patient details are shown if detail view exists
+- runFlow: 
+    when: 
+      notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- tapOn: "Monitor.*"
+- assertVisible: "Patient Details"
 - back
-- assertVisible: "Patient Monitoring"
+- tapOn: ".*Patients"
+- assertVisible: "Patient Details"
+- assertVisible:
+    text: ".*Robert Williams.*"
+    optional: true
+- assertVisible:
+    text: ".*Maya Patel.*"
+    optional: true
+- back
+

@@ -5,19 +5,24 @@ tags: ["P0", "caregiver", "tasks"]
 # Priority: High
 # Description: Caregiver views and manages tasks for all patients.
 
-- runFlow: "maestro/helpers/common_flows/sign_in_caregiver.yaml"
-- assertVisible: "Today's Tasks"
+- runFlow: 
+    when: 
+      notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- assertVisible: ".*Today's Tasks.*"
 - tapOn: "Manage"
-- waitForAnimationToEnd
 - assertVisible: "Tasks"
-- # Verify task list shows tasks for all patients
-- scroll
-- tapOn:
-    text: "Medication"
-    optional: true
-- waitForAnimationToEnd
-- assertVisible:
-    text: "Task Details"
-    optional: true
 - back
+- tapOn: ".*Tasks"
 - assertVisible: "Tasks"
+- back
+- tapOn: "Tasks.*"
+- assertVisible: "Tasks"
+- tapOn: ".*Medication.*"
+- assertVisible: "Task Details"
+- assertVisible: ".*Medication reminder.*"
+- assertVisible: ".*Mark as Complete.*"
+- back
+- back
+
+# TODO: task screen is not connected to tasks provider and dashboard task don't update basked on marked complete

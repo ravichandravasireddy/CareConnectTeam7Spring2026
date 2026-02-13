@@ -5,18 +5,13 @@ tags: ["P0", "caregiver", "emergency"]
 # Priority: Critical
 # Description: Caregiver receives and acknowledges an emergency alert.
 
-- runFlow: "maestro/helpers/common_flows/sign_in_caregiver.yaml"
-- # Note: Emergency SOS alert may need to be triggered via test data
-- # For now, check if alert screen is accessible
-- assertVisible:
-    text: "Emergency"
-    optional: true
-- # If alert appears, acknowledge it
-- tapOn:
-    text: "Acknowledge Alert"
-    optional: true
+- runFlow: 
+    when: 
+      notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- assertVisible: ".*Alerts.*"
+- tapOn: ".*Alerts.*"
+- assertVisible: "EMERGENCY ALERT"
+- tapOn: ".*Acknowledge Alert.*"
 - waitForAnimationToEnd
-- # Verify alert is handled
-- assertVisible:
-    text: "Dashboard"
-    optional: true
+- assertVisible: "Dashboard"
