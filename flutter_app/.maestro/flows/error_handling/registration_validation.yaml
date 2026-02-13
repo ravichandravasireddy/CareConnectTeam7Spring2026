@@ -1,0 +1,84 @@
+appId: com.example.flutter_app
+tags: ["P1", "error-handling", "validation"]
+---
+# Test: Form Validation
+# Priority: High
+# Description: App validates user input correctly.
+
+- launchApp
+- tapOn: "Get Started"
+- tapOn: "Caregiver.*"
+# Test invalid email format
+- tapOn: "John"
+- inputText: "Joey"
+- tapOn: "Doe"
+- inputText: "Dillon"
+- tapOn: "your.email@example.com"
+- inputText: "invalid-email"
+- tapOn: "(555) 123-4567"
+- inputText: "1231234567"
+- tapOn: "Create a strong password"
+- inputText: "password123"
+- hideKeyboard
+- tapOn: "Re-enter your password"
+- inputText: "password123"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      text: "Sign In"
+    timeout: 10000
+    direction: DOWN
+- tapOn: "Create Account"
+# Verify validation error is shown
+- assertVisible: "Enter a valid email"
+
+# Test not checking terms checkbox
+- tapOn: "invalid-email"
+- eraseText
+- inputRandomEmail
+- scrollUntilVisible:
+    element:
+      text: "Sign In"
+    timeout: 10000
+    direction: DOWN
+- tapOn: "Create Account"
+# Verify validation error is shown
+- assertVisible: "Please agree.*"
+
+# Test short password
+- tapOn:
+    point: "16%,73%" # terms checkbox
+- tapOn:
+    text: "•••••••••••"
+    index: 0
+- eraseText
+- inputText: "short"
+- hideKeyboard
+- tapOn:
+    text: "•••••••••••"
+- eraseText
+- inputText: "short"
+- scrollUntilVisible:
+    element:
+      text: "Sign In"
+    timeout: 10000
+    direction: DOWN
+- tapOn: "Create Account"
+# Verify validation error is shown
+- assertVisible: "At least 8 characters required"
+
+# Test password mismatch
+- tapOn:
+    text: "•••••"
+    index: 0
+- eraseText
+- inputText: "password123"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      text: "Sign In"
+    timeout: 10000
+    direction: DOWN
+- tapOn: "Create Account"
+# Verify validation error is shown
+- assertVisible: "Passwords do not match"

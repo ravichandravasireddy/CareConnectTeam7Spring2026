@@ -1,0 +1,35 @@
+appId: com.example.flutter_app
+tags: ["P1", "error-handling", "validation"]
+---
+# Test: Form Validation
+# Priority: High
+# Description: App validates user input correctly.
+
+- runFlow: 
+    when: 
+        notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- tapOn:
+    point: "7%,6%" # menu
+- tapOn: Notes
+- tapOn: Add New Note
+
+# Test empty note content
+- tapOn: Title
+- inputText: Test Title
+- tapOn: Save
+- assertNotVisible: Enter a title
+- assertVisible: Enter note content
+
+# Test empty title
+- tapOn: Test Title
+- eraseText
+- tapOn: "Note"
+- inputText: Note content
+- tapOn: Save
+- assertNotVisible: Enter note content
+- assertVisible: Enter a title
+ 
+
+
+
