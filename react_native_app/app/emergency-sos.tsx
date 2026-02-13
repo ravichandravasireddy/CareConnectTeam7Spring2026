@@ -73,7 +73,11 @@ export default function EmergencySOSAlertScreen() {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.alertIcon} accessibilityLabel="Emergency alert icon">
+          <View
+            style={styles.alertIcon}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          >
             <View style={[styles.alertIconCircle, { borderColor: AppColors.error100 }]}>
               <MaterialIcons
                 name="warning-amber"
