@@ -1,4 +1,4 @@
 appId: com.example.flutter_app
 ---
-- runScript: "../scripts/test_data.js"
+- runScript: "scripts/test_data.js"
 - evalScript: ${console.log('VALUE:', output.data.NEW_USER_FIRST_NAME)}

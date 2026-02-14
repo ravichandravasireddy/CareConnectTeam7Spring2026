@@ -49,6 +49,9 @@ electron_app/out/
 .pub/
 build/
 
+# Maestro
+flutter_app/.maestro/test_output
+
 ############################################
 # Android (Flutter / React Native)
 ############################################
