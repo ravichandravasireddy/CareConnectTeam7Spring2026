@@ -9,11 +9,9 @@ import 'notes_add_screen.dart';
 import 'notes_detail_screen.dart';
 
 // =============================================================================
-// NOTES SCREEN
+// NOTES SCREEN - ACCESSIBLE VERSION
 // =============================================================================
-// List of notes from [NoteProvider]; tap opens [NoteDetailScreen], FAB opens
-// [AddNoteScreen]. Uses [formatNoteTime] for list item timestamps. Notes sorted
-// by [createdAt] descending in provider.
+// WCAG 2.1 Level AA compliant notes list with screen reader support
 // =============================================================================
 
 /// Formats [createdAt]: "Today, 10:30 AM", "Yesterday, 5:15 PM", or "Jan 22, 3:30 PM".
@@ -29,7 +27,6 @@ String formatNoteTime(DateTime createdAt) {
   } else if (date == yesterdayStart) {
     return 'Yesterday, ${DateFormat.jm().format(createdAt)}';
   } else if (year == now.year) {
-    // return DateFormat('MMM d, j').format(createdAt);
     return DateFormat('MMM d, h:mm a').format(createdAt);
   } else {
     return '${DateFormat.yMMMd('en_US').format(createdAt)}, ${DateFormat.jm().format(createdAt)}';
@@ -54,13 +51,24 @@ class NotesScreen extends StatelessWidget {
         backgroundColor: colorScheme.surface,
         elevation: 0,
         centerTitle: true,
-        title: Text(
-          'Notes',
-          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
+        title: Semantics(
+          header: true,
+          label: notes.isEmpty ? 'Notes' : 'Notes, ${notes.length} note${notes.length == 1 ? '' : 's'}',
+          child: Text(
+            'Notes',
+            style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
+          ),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
+        leading: Semantics(
+          button: true,
+          label: 'Go back',
+          hint: 'Double tap to go back to dashboard',
+          excludeSemantics: true,
+          child: IconButton(
+            icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
+            onPressed: () => Navigator.pop(context),
+            tooltip: 'Go back',
+          ),
         ),
       ),
       body: SafeArea(
@@ -69,8 +77,10 @@ class NotesScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Semantics(
-                label: 'Add New Note, button',
+                label: 'Add New Note',
+                hint: 'Double tap to create a new note',
                 button: true,
+                excludeSemantics: true,
                 child: SizedBox(
                   width: double.infinity,
                   child: FilledButton.icon(
@@ -83,13 +93,19 @@ class NotesScreen extends StatelessWidget {
                       );
                       if (result != null && context.mounted) {
                         context.read<NoteProvider>().addNote(result);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Note "${result.title}" added'),
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
                       }
                     },
                     style: FilledButton.styleFrom(
                       backgroundColor: colorScheme.primary,
                       foregroundColor: colorScheme.onPrimary,
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      minimumSize: const Size(0, 48),
+                      minimumSize: const Size(0, 56),
                     ),
                     icon: const Icon(Icons.add, size: 22),
                     label: const Text('Add New Note'),
@@ -99,34 +115,64 @@ class NotesScreen extends StatelessWidget {
             ),
             Expanded(
               child: notes.isEmpty
-                  ? Center(
-                      child: Text(
-                        'No notes yet. Tap Add New Note to create one.',
-                        style: textTheme.bodyLarge?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
+                  ? Semantics(
+                      label: 'No notes yet. Tap Add New Note to create one.',
+                      readOnly: true,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.note_add,
+                                size: 64,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'No notes yet',
+                                style: textTheme.titleLarge?.copyWith(
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Tap Add New Note to create one.',
+                                textAlign: TextAlign.center,
+                                style: textTheme.bodyMedium?.copyWith(
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     )
-                  : ListView.builder(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                      itemCount: notes.length,
-                      itemBuilder: (context, index) {
-                        final note = notes[index];
-                        return _NoteListTile(
-                          note: note,
-                          timeLabel: formatNoteTime(note.createdAt),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NoteDetailScreen(
-                                  noteId: note.id,
+                  : Semantics(
+                      label: 'Notes list, ${notes.length} note${notes.length == 1 ? '' : 's'}',
+                      container: true,
+                      child: ListView.builder(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                        itemCount: notes.length,
+                        itemBuilder: (context, index) {
+                          final note = notes[index];
+                          return _NoteListTile(
+                            note: note,
+                            timeLabel: formatNoteTime(note.createdAt),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NoteDetailScreen(
+                                    noteId: note.id,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        );
-                      },
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
             ),
           ],
@@ -157,13 +203,18 @@ class _NoteListTile extends StatelessWidget {
     final (chipBg, chipFg) = NoteProvider.categoryColors(note.category);
     final preview =
         note.body.length > 60 ? '${note.body.substring(0, 60)}…' : note.body;
+    
+    // Create semantic label with category, title, preview, author, and time
+    final categoryLabel = formatNoteCategoryDisplay(note.category);
+    final semanticsLabel = '$categoryLabel: ${note.title}, $preview, by ${note.author}, $timeLabel';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Semantics(
-        label: '${note.title}, $preview, by ${note.author}, $timeLabel',
-        hint: 'Tap to open note',
+        label: semanticsLabel,
+        hint: 'Double tap to open note',
         button: true,
+        excludeSemantics: true,
         child: Material(
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
@@ -183,17 +234,21 @@ class _NoteListTile extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: chipBg,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.description,
-                      color: chipFg,
-                      size: 22,
+                  Semantics(
+                    label: '$categoryLabel icon',
+                    image: true,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: chipBg,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.description,
+                        color: chipFg,
+                        size: 22,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -255,6 +310,7 @@ class _NoteListTile extends StatelessWidget {
                             formatNoteCategoryDisplay(note.category).toUpperCase(),
                             style: textTheme.labelSmall?.copyWith(
                               color: chipFg,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),

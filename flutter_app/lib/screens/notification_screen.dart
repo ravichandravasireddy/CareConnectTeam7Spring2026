@@ -6,11 +6,9 @@ import '../providers/notification_provider.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 
 // =============================================================================
-// NOTIFICATION SCREEN
+// NOTIFICATION SCREEN - ACCESSIBLE VERSION
 // =============================================================================
-// Lists notifications grouped by [NotificationProvider.notificationSections]
-// (Today / Yesterday / date). Tap should navigate via [NotificationItem.destinationRoute].
-// Uses [formatNotificationTime] for relative/absolute timestamps.
+// WCAG 2.1 Level AA compliant notification list with screen reader support
 // =============================================================================
 
 /// Formats [createdAt] dynamically: relative for today ("X min ago"), "Yesterday" + time, or date for older.
@@ -43,36 +41,58 @@ class NotificationScreen extends StatelessWidget {
     final textTheme = theme.textTheme;
     final notificationProvider = context.watch<NotificationProvider>();
     final sections = notificationProvider.notificationSections;
+    final unreadCount = notificationProvider.unreadCount;
 
     return Scaffold(
-      // using scaffoldBackgroundColor set in main.dart
       appBar: AppBar(
         backgroundColor: colorScheme.surface,
         elevation: 0,
         centerTitle: true,
-        title: Text(
-          'Notifications',
-          style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
+        title: Semantics(
+          header: true,
+          label: unreadCount > 0 
+              ? 'Notifications, $unreadCount unread'
+              : 'Notifications',
+          child: Text(
+            'Notifications',
+            style: textTheme.headlineLarge?.copyWith(color: colorScheme.onSurface),
+          ),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
+        leading: Semantics(
+          button: true,
+          label: 'Go back',
+          hint: 'Double tap to go back to dashboard',
+          excludeSemantics: true,
+          child: IconButton(
+            icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
+            onPressed: () => Navigator.pop(context),
+            tooltip: 'Go back',
+          ),
         ),
       ),
       body: SafeArea(
         child: Column(
           children: [
-            if (notificationProvider.unreadCount > 0)
+            if (unreadCount > 0)
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Semantics(
-                    label: 'Mark all as read, button',
+                    label: 'Mark all as read',
+                    hint: 'Double tap to mark all $unreadCount notifications as read',
                     button: true,
+                    excludeSemantics: true,
                     child: TextButton(
-                      onPressed: () =>
-                          context.read<NotificationProvider>().markAllAsRead(),
+                      onPressed: () {
+                        context.read<NotificationProvider>().markAllAsRead();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('All notifications marked as read'),
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                      },
                       style: TextButton.styleFrom(
                         minimumSize: const Size(48, 48),
                         padding: const EdgeInsets.symmetric(
@@ -93,23 +113,59 @@ class NotificationScreen extends StatelessWidget {
               ),
             Expanded(
               child: Semantics(
-                label: 'Notifications list',
+                label: unreadCount > 0
+                    ? 'Notifications list, $unreadCount unread'
+                    : 'Notifications list',
+                container: true,
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (final section in sections)
-                        _NotificationSection(
-                          title: section.label,
-                          notifications: section.items,
-                          onTap: (item) {
-                            context.read<NotificationProvider>().markAsRead(
-                              item,
-                            );
-                            // TODO: Navigate to item.destinationRoute (e.g. TasksScreen, MessagesScreen) when those screens exist.
-                          },
-                          timeFormatter: formatNotificationTime,
-                        ),
+                      if (sections.isEmpty)
+                        Semantics(
+                          label: 'No notifications',
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(48.0),
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.notifications_none,
+                                    size: 64,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    'No notifications',
+                                    style: textTheme.titleLarge?.copyWith(
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      else
+                        for (final section in sections)
+                          _NotificationSection(
+                            title: section.label,
+                            notifications: section.items,
+                            onTap: (item) {
+                              context.read<NotificationProvider>().markAsRead(item);
+                              
+                              // Announce to screen reader
+                              ScaffoldMessenger.of(context).clearSnackBars();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('${item.title} marked as read'),
+                                  duration: const Duration(milliseconds: 500),
+                                ),
+                              );
+                              // TODO: Navigate to item.destinationRoute
+                            },
+                            timeFormatter: formatNotificationTime,
+                          ),
                     ],
                   ),
                 ),
@@ -153,10 +209,12 @@ class _NotificationSection extends StatelessWidget {
         children: [
           Semantics(
             header: true,
+            label: title,
             child: Text(
               title,
               style: textTheme.labelMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -204,11 +262,19 @@ class _NotificationCard extends StatelessWidget {
       colorScheme,
     );
 
-    final semanticsLabel = '${item.title}, ${item.summary}, $timeLabel, button';
+    // Create semantic label with type, read status, content, and time
+    final typeLabel = _typeToLabel(item.type);
+    final readStatus = item.isRead ? '' : 'Unread, ';
+    final semanticsLabel = '$readStatus$typeLabel: ${item.title}, ${item.summary}, $timeLabel';
+    final semanticsHint = item.isRead 
+        ? 'Double tap to open' 
+        : 'Double tap to mark as read and open';
+
     return Semantics(
       label: semanticsLabel,
-      hint: 'Tap to mark as read',
+      hint: semanticsHint,
       button: true,
+      excludeSemantics: true,
       child: Material(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(12),
@@ -219,23 +285,33 @@ class _NotificationCard extends StatelessWidget {
             constraints: const BoxConstraints(minHeight: 48),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              border: Border(left: BorderSide(color: borderColor, width: 4)),
+              border: Border(
+                left: BorderSide(
+                  color: borderColor,
+                  width: 4,
+                ),
+              ),
             ),
             padding: const EdgeInsets.all(16),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: avatarColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    _iconForType(item.type),
-                    color: iconColor,
-                    size: 22,
+                // Icon avatar
+                Semantics(
+                  label: '$typeLabel icon',
+                  image: true,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: avatarColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      _iconForType(item.type),
+                      color: iconColor,
+                      size: 22,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -251,18 +327,24 @@ class _NotificationCard extends StatelessWidget {
                               item.title,
                               style: textTheme.titleMedium?.copyWith(
                                 color: colorScheme.onSurface,
+                                fontWeight: item.isRead 
+                                    ? FontWeight.normal 
+                                    : FontWeight.bold,
                               ),
                             ),
                           ),
                           if (!item.isRead)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4),
-                              child: Container(
-                                width: 8,
-                                height: 8,
-                                decoration: BoxDecoration(
-                                  color: colorScheme.primary,
-                                  shape: BoxShape.circle,
+                            Semantics(
+                              label: 'Unread indicator',
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 4),
+                                child: Container(
+                                  width: 8,
+                                  height: 8,
+                                  decoration: BoxDecoration(
+                                    color: colorScheme.primary,
+                                    shape: BoxShape.circle,
+                                  ),
                                 ),
                               ),
                             ),
@@ -291,6 +373,21 @@ class _NotificationCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _typeToLabel(NotificationType type) {
+    switch (type) {
+      case NotificationType.medication:
+        return 'Medication';
+      case NotificationType.message:
+        return 'Message';
+      case NotificationType.appointment:
+        return 'Appointment';
+      case NotificationType.healthReminder:
+        return 'Health Reminder';
+      case NotificationType.generalReminder:
+        return 'General Reminder';
+    }
   }
 
   IconData _iconForType(NotificationType type) {

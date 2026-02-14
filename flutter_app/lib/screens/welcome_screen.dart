@@ -11,16 +11,16 @@ class WelcomeScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
+
     return Scaffold(
       body: Container(
-        // Gradient background matching your Figma design
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Theme.of(context).colorScheme.primary,
-              Theme.of(context).colorScheme.tertiary,
+              colorScheme.primary,
+              colorScheme.tertiary,
             ],
           ),
         ),
@@ -36,37 +36,40 @@ class WelcomeScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Flexible space so content stays centered when scrollable
                         SizedBox(height: constraints.maxHeight * 0.15),
 
-                        // Heart Icon in white circle
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.favorite,
-                            size: 60,
-                            color: Theme.of(context).colorScheme.primary,
+                        // Decorative heart icon (excluded from screen readers)
+                        ExcludeSemantics(
+                          child: Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              color: colorScheme.surface,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.favorite,
+                              size: 60,
+                              color: colorScheme.primary,
+                            ),
                           ),
                         ),
 
                         const SizedBox(height: 40),
 
-                        // App Title
-                        Text(
-                          'CareConnect',
-                          style: textTheme.displayLarge?.copyWith(
-                            color: colorScheme.onPrimary,
+                        // App Title as header
+                        Semantics(
+                          header: true,
+                          child: Text(
+                            'CareConnect',
+                            style: textTheme.displayLarge?.copyWith(
+                              color: colorScheme.onPrimary,
+                            ),
                           ),
                         ),
 
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
 
-                        // Description
                         Text(
                           'Remote health management and coordination for patients and caregivers',
                           textAlign: TextAlign.center,
@@ -77,96 +80,108 @@ class WelcomeScreen extends StatelessWidget {
 
                         SizedBox(height: constraints.maxHeight * 0.15),
 
-                        // Get Started Button (Primary)
+                        // Get Started Button
                         SizedBox(
                           width: double.infinity,
                           height: 56,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/role-selection');
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(
-                                context,
-                              ).colorScheme.surface,
-                              foregroundColor: Theme.of(
-                                context,
-                              ).colorScheme.primary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                          child: Semantics(
+                            button: true,
+                            label:
+                                'Get started. Navigate to role selection screen.',
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, '/role-selection');
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: colorScheme.surface,
+                                foregroundColor: colorScheme.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                elevation: 0,
                               ),
-                              elevation: 0,
-                            ),
-                            child: Text(
-                              'Get Started',
-                              style: textTheme.headlineMedium?.copyWith(
-                                color: colorScheme.primary,
+                              child: Text(
+                                'Get Started',
+                                style: textTheme.headlineMedium?.copyWith(
+                                  color: colorScheme.primary,
+                                ),
                               ),
                             ),
                           ),
                         ),
 
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
 
-                        // Sign In Button (Outlined)
+                        // Sign In Button
                         SizedBox(
                           width: double.infinity,
                           height: 56,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/signin');
-                            },
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: Theme.of(
-                                context,
-                              ).colorScheme.onPrimary,
-                              side: BorderSide(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                width: 2,
+                          child: Semantics(
+                            button: true,
+                            label:
+                                'Sign in to your existing CareConnect account.',
+                            child: OutlinedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/signin');
+                              },
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: colorScheme.onPrimary,
+                                side: BorderSide(
+                                  color: colorScheme.onPrimary,
+                                  width: 2,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: Text(
-                              'Sign In',
-                              style: textTheme.headlineMedium?.copyWith(
-                                color: colorScheme.onPrimary,
+                              child: Text(
+                                'Sign In',
+                                style: textTheme.headlineMedium?.copyWith(
+                                  color: colorScheme.onPrimary,
+                                ),
                               ),
                             ),
                           ),
                         ),
 
-                        SizedBox(height: 32),
+                        const SizedBox(height: 32),
 
-                        // HIPAA compliance text
                         Text(
                           'HIPAA-compliant • Secure • Private',
                           style: textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onPrimary.withValues(alpha: 0.8),
+                            color: colorScheme.onPrimary
+                                .withValues(alpha: 0.8),
                           ),
                         ),
 
-                        SizedBox(height: 24),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const NavigationHubScreen(),
+                        const SizedBox(height: 24),
+
+                        // Navigation Hub Button
+                        Semantics(
+                          button: true,
+                          label: 'Open navigation hub screen.',
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NavigationHubScreen(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Open Navigation Hub',
+                              style: textTheme.bodySmall?.copyWith(
+                                color: colorScheme.onPrimary,
+                                decoration: TextDecoration.underline,
                               ),
-                            );
-                          },
-                          child: Text(
-                            'Open Navigation Hub',
-                            style: textTheme.bodySmall?.copyWith(
-                              color: colorScheme.onPrimary,
-                              decoration: TextDecoration.underline,
                             ),
                           ),
                         ),
-                        SizedBox(height: 16),
+
+                        const SizedBox(height: 16),
                       ],
                     ),
                   ),

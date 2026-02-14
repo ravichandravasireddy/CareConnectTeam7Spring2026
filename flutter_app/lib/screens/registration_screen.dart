@@ -57,9 +57,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     setState(() => _isLoading = true);
 
     final role = widget.selectedRole;
-    final defaultFirst = role == UserRole.caregiver
-        ? 'Caregiver'
-        : 'Care Recipient';
+    final defaultFirst =
+        role == UserRole.caregiver ? 'Caregiver' : 'Care Recipient';
     final defaultLast = 'User';
     final defaultEmail = role == UserRole.caregiver
         ? 'caregiver.user@careconnect.demo'
@@ -80,13 +79,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         : _phoneController.text.trim();
 
     final success = await context.read<AuthProvider>().register(
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      phone: phone,
-      password: _passwordController.text,
-      role: role,
-    );
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          phone: phone,
+          password: _passwordController.text,
+          role: role,
+        );
 
     if (!mounted) return;
     setState(() => _isLoading = false);
@@ -101,9 +100,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return;
     }
 
-    final nextRoute = role == UserRole.caregiver
-        ? '/caregiver-dashboard'
-        : '/dashboard';
+    final nextRoute =
+        role == UserRole.caregiver ? '/caregiver-dashboard' : '/dashboard';
     Navigator.pushReplacementNamed(context, nextRoute);
   }
 
@@ -112,15 +110,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+        leading: Semantics(
+          button: true,
+          label: 'Go back',
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
-        title: const Text('Create Account'),
+        title: Semantics(
+          header: true,
+          child: Text('Create Account'),
+        ),
         centerTitle: true,
-        backgroundColor: Theme.of(
-          context,
-        ).colorScheme.surface.withValues(alpha: 0),
+        backgroundColor:
+            Theme.of(context).colorScheme.surface.withValues(alpha: 0),
         elevation: 0,
       ),
       body: SafeArea(
@@ -132,18 +136,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Header
-                Text(
-                  'Join CareConnect',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
+                Semantics(
+                  header: true,
+                  child: Text(
+                    'Join CareConnect',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Create your account to get started',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                 ),
                 const SizedBox(height: 32),
 
@@ -156,11 +163,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         children: [
                           Text(
                             'First Name',
-                            style: Theme.of(context).textTheme.titleMedium
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
                                 ?.copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                 ),
                           ),
                           const SizedBox(height: 8),
@@ -168,11 +176,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             controller: _firstNameController,
                             decoration: InputDecoration(
                               hintText: 'John',
-                              hintStyle: Theme.of(context).textTheme.bodyMedium
+                              hintStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
                                   ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
                                   ),
                               filled: true,
                               fillColor: Theme.of(context).colorScheme.surface,
@@ -191,7 +201,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color:
+                                      Theme.of(context).colorScheme.primary,
                                   width: 2,
                                 ),
                               ),
@@ -210,11 +221,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         children: [
                           Text(
                             'Last Name',
-                            style: Theme.of(context).textTheme.titleMedium
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
                                 ?.copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                 ),
                           ),
                           const SizedBox(height: 8),
@@ -222,11 +234,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             controller: _lastNameController,
                             decoration: InputDecoration(
                               hintText: 'Doe',
-                              hintStyle: Theme.of(context).textTheme.bodyMedium
+                              hintStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
                                   ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
                                   ),
                               filled: true,
                               fillColor: Theme.of(context).colorScheme.surface,
@@ -245,7 +259,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color:
+                                      Theme.of(context).colorScheme.primary,
                                   width: 2,
                                 ),
                               ),
@@ -265,8 +280,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Text(
                   'Email Address',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
@@ -275,8 +290,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   decoration: InputDecoration(
                     hintText: 'your.email@example.com',
                     hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurfaceVariant,
+                        ),
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
@@ -314,8 +331,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Text(
                   'Phone Number',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
@@ -324,8 +341,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   decoration: InputDecoration(
                     hintText: '(555) 123-4567',
                     hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurfaceVariant,
+                        ),
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
@@ -358,8 +377,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Text(
                   'Password',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
@@ -368,8 +387,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   decoration: InputDecoration(
                     hintText: 'Create a strong password',
                     hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurfaceVariant,
+                        ),
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
@@ -391,16 +412,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         width: 2,
                       ),
                     ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    suffixIcon: Semantics(
+                      button: true,
+                      label:
+                          _obscurePassword ? 'Show password' : 'Hide password',
+                      child: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        onPressed: () {
+                          setState(() => _obscurePassword = !_obscurePassword);
+                        },
                       ),
-                      onPressed: () {
-                        setState(() => _obscurePassword = !_obscurePassword);
-                      },
                     ),
                   ),
                   validator: (value) {
@@ -417,8 +443,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Text(
                   'At least 8 characters with letters and numbers',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                 ),
                 const SizedBox(height: 24),
 
@@ -426,8 +452,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Text(
                   'Confirm Password',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
@@ -436,8 +462,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   decoration: InputDecoration(
                     hintText: 'Re-enter your password',
                     hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurfaceVariant,
+                        ),
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(
@@ -459,19 +487,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         width: 2,
                       ),
                     ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureConfirmPassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    suffixIcon: Semantics(
+                      button: true,
+                      label: _obscureConfirmPassword
+                          ? 'Show confirm password'
+                          : 'Hide confirm password',
+                      child: IconButton(
+                        icon: Icon(
+                          _obscureConfirmPassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        onPressed: () {
+                          setState(() => _obscureConfirmPassword =
+                              !_obscureConfirmPassword);
+                        },
                       ),
-                      onPressed: () {
-                        setState(
-                          () => _obscureConfirmPassword =
-                              !_obscureConfirmPassword,
-                        );
-                      },
                     ),
                   ),
                   validator: (value) {
@@ -495,12 +527,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   child: Row(
                     children: [
-                      Checkbox(
-                        value: _agreedToTerms,
-                        onChanged: (value) {
-                          setState(() => _agreedToTerms = value ?? false);
-                        },
-                        activeColor: Theme.of(context).colorScheme.primary,
+                      Semantics(
+                        label: 'Agree to Terms of Service and Privacy Policy',
+                        toggled: _agreedToTerms,
+                        child: Checkbox(
+                          value: _agreedToTerms,
+                          onChanged: (value) {
+                            setState(() => _agreedToTerms = value ?? false);
+                          },
+                          activeColor: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                       Expanded(
                         child: Wrap(
@@ -509,46 +545,54 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               'I agree to the ',
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface,
-                                  ),
+                                color:
+                                    Theme.of(context).colorScheme.onSurface,
+                              ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                // TODO: Open Terms of Service
-                              },
-                              child: Text(
-                                'Terms of Service',
-                                style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                    ),
+                            Semantics(
+                              button: true,
+                              label: 'Terms of Service',
+                              child: GestureDetector(
+                                onTap: () {
+                                  // TODO: Open Terms of Service
+                                },
+                                child: Text(
+                                  'Terms of Service',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
                               ),
                             ),
                             Text(
                               ' and ',
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface,
-                                  ),
+                                color:
+                                    Theme.of(context).colorScheme.onSurface,
+                              ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                // TODO: Open Privacy Policy
-                              },
-                              child: Text(
-                                'Privacy Policy',
-                                style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                    ),
+                            Semantics(
+                              button: true,
+                              label: 'Privacy Policy',
+                              child: GestureDetector(
+                                onTap: () {
+                                  // TODO: Open Privacy Policy
+                                },
+                                child: Text(
+                                  'Privacy Policy',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -562,31 +606,36 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 // Create Account Button
                 SizedBox(
                   height: 56,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _handleRegistration,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  child: Semantics(
+                    button: true,
+                    label:
+                        _isLoading ? 'Creating account' : 'Create account',
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _handleRegistration,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
                       ),
-                      elevation: 0,
-                    ),
-                    child: _isLoading
-                        ? SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).colorScheme.onPrimary,
+                      child: _isLoading
+                          ? SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Theme.of(context).colorScheme.onPrimary,
+                                ),
                               ),
+                            )
+                          : Text(
+                              'Create Account',
+                              style: Theme.of(context).textTheme.labelLarge,
                             ),
-                          )
-                        : Text(
-                            'Create Account',
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -598,17 +647,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Text(
                       'Already have an account? ',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurfaceVariant,
+                          ),
                     ),
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Text(
-                        'Sign In',
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
+                    Semantics(
+                      button: true,
+                      label: 'Return to sign in screen',
+                      child: GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Text(
+                          'Sign In',
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
                       ),
                     ),
                   ],
