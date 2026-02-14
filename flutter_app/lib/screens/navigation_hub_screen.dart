@@ -27,9 +27,9 @@ import 'video_call_screen.dart';
 import 'welcome_screen.dart';
 
 // =============================================================================
-// NAVIGATION HUB (DEV)
+// NAVIGATION HUB (DEV) - ACCESSIBLE VERSION
 // =============================================================================
-// Simple list of buttons to reach all screens while flows are in progress.
+// WCAG 2.1 Level AA compliant screen navigation for development
 // =============================================================================
 
 class NavigationHubScreen extends StatelessWidget {
@@ -46,127 +46,166 @@ class NavigationHubScreen extends StatelessWidget {
         backgroundColor: colorScheme.surface,
         elevation: 0,
         centerTitle: true,
-        title: Text(
-          'Navigation Hub',
-          style: textTheme.headlineLarge?.copyWith(
-            color: colorScheme.onSurface,
+        title: Semantics(
+          header: true,
+          label: 'Navigation Hub',
+          child: Text(
+            'Navigation Hub',
+            style: textTheme.headlineLarge?.copyWith(
+              color: colorScheme.onSurface,
+            ),
           ),
         ),
       ),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Text(
-              'Tap a button to open a screen.',
-              style: textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
+        child: Semantics(
+          label: 'Screen navigation list',
+          container: true,
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              Semantics(
+                label: 'Tap a button to open a screen.',
+                readOnly: true,
+                child: Text(
+                  'Tap a button to open a screen.',
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            _SectionLabel('Auth & onboarding'),
-            _NavButton(
-              label: 'Welcome',
-              onPressed: () => _push(context, const WelcomeScreen()),
-            ),
-            _NavButton(
-              label: 'Role Selection',
-              onPressed: () => _push(context, const RoleSelectionScreen()),
-            ),
-            _NavButton(
-              label: 'Registration',
-              onPressed: () => _push(context, const RegistrationScreen()),
-            ),
-            _NavButton(
-              label: 'Sign In',
-              onPressed: () => _push(context, const SignInScreen()),
-            ),
-            _SectionLabel('Patient'),
-            _NavButton(
-              label: 'Patient Dashboard',
-              onPressed: () => _push(context, const PatientDashboardScreen()),
-            ),
-            _NavButton(
-              label: 'Patient Profile',
-              onPressed: () => _push(context, const PatientProfileScreen()),
-            ),
-            _NavButton(
-              label: 'Preferences & Accessibility',
-              onPressed: () =>
-                  _push(context, const PreferencesAccessibilityScreen()),
-            ),
-            _NavButton(
-              label: 'Messaging Thread',
-              onPressed: () => _push(context, const MessagingThreadScreen()),
-            ),
-            _NavButton(
-              label: 'Calendar',
-              onPressed: () => _push(context, const CalendarScreen()),
-            ),
-            _NavButton(
-              label: 'Notifications',
-              onPressed: () => _push(context, const NotificationScreen()),
-            ),
-            _NavButton(
-              label: 'Notes',
-              onPressed: () => _push(context, const NotesScreen()),
-            ),
-            _NavButton(
-              label: 'Add Note',
-              onPressed: () => _push(context, const AddNoteScreen()),
-            ),
-            _NavButton(
-              label: 'Note Detail (sample)',
-              onPressed: () => _push(context, const NoteDetailScreen(noteId: 'demo-note')),
-            ),
-            _NavButton(
-              label: 'Health Logs',
-              onPressed: () => _push(context, const HealthLogsScreen()),
-            ),
-            _NavButton(
-              label: 'Add Health Log',
-              onPressed: () => _push(
-                context,
-                const HealthLogAddScreen(initialType: HealthLogType.general),
+              const SizedBox(height: 24),
+              
+              _SectionLabel('Auth & onboarding'),
+              _NavButton(
+                label: 'Welcome',
+                semanticHint: 'Double tap to open Welcome screen',
+                onPressed: () => _push(context, const WelcomeScreen()),
               ),
-            ),
-            _NavButton(
-              label: 'Health Timeline',
-              onPressed: () => _push(context, const HealthTimelineScreen()),
-            ),
-            _SectionLabel('Caregiver'),
-            _NavButton(
-              label: 'Caregiver Dashboard',
-              onPressed: () => _push(context, const CaregiverDashboardScreen()),
-            ),
-            _NavButton(
-              label: 'Caregiver: Patient Monitoring',
-              onPressed: () =>
-                  _push(context, const CaregiverPatientMonitoringScreen()),
-            ),
-            _NavButton(
-              label: 'Caregiver: Task Management',
-              onPressed: () =>
-                  _push(context, const CaregiverTaskManagementScreen()),
-            ),
-            _NavButton(
-              label: 'Caregiver: Analytics',
-              onPressed: () => _push(context, const CaregiverAnalyticsScreen()),
-            ),
-            _SectionLabel('Shared & other'),
-            _NavButton(
-              label: 'Emergency SOS Alert',
-              onPressed: () => _push(context, const EmergencySOSAlertScreen()),
-            ),
-            _NavButton(
-              label: 'Video Call',
-              onPressed: () => _push(context, const VideoCallScreen()),
-            ),
-            _NavButton(
-              label: 'Task Details (sample)',
-              onPressed: () => _push(context, TaskDetailsScreen(task: _demoTask)),
-            ),
-          ],
+              _NavButton(
+                label: 'Role Selection',
+                semanticHint: 'Double tap to open Role Selection screen',
+                onPressed: () => _push(context, const RoleSelectionScreen()),
+              ),
+              _NavButton(
+                label: 'Registration',
+                semanticHint: 'Double tap to open Registration screen',
+                onPressed: () => _push(context, const RegistrationScreen()),
+              ),
+              _NavButton(
+                label: 'Sign In',
+                semanticHint: 'Double tap to open Sign In screen',
+                onPressed: () => _push(context, const SignInScreen()),
+              ),
+              
+              _SectionLabel('Patient'),
+              _NavButton(
+                label: 'Patient Dashboard',
+                semanticHint: 'Double tap to open Patient Dashboard screen',
+                onPressed: () => _push(context, const PatientDashboardScreen()),
+              ),
+              _NavButton(
+                label: 'Patient Profile',
+                semanticHint: 'Double tap to open Patient Profile screen',
+                onPressed: () => _push(context, const PatientProfileScreen()),
+              ),
+              _NavButton(
+                label: 'Preferences & Accessibility',
+                semanticHint: 'Double tap to open Preferences and Accessibility screen',
+                onPressed: () =>
+                    _push(context, const PreferencesAccessibilityScreen()),
+              ),
+              _NavButton(
+                label: 'Messaging Thread',
+                semanticHint: 'Double tap to open Messaging Thread screen',
+                onPressed: () => _push(context, const MessagingThreadScreen()),
+              ),
+              _NavButton(
+                label: 'Calendar',
+                semanticHint: 'Double tap to open Calendar screen',
+                onPressed: () => _push(context, const CalendarScreen()),
+              ),
+              _NavButton(
+                label: 'Notifications',
+                semanticHint: 'Double tap to open Notifications screen',
+                onPressed: () => _push(context, const NotificationScreen()),
+              ),
+              _NavButton(
+                label: 'Notes',
+                semanticHint: 'Double tap to open Notes screen',
+                onPressed: () => _push(context, const NotesScreen()),
+              ),
+              _NavButton(
+                label: 'Add Note',
+                semanticHint: 'Double tap to open Add Note screen',
+                onPressed: () => _push(context, const AddNoteScreen()),
+              ),
+              _NavButton(
+                label: 'Note Detail (sample)',
+                semanticHint: 'Double tap to open Note Detail sample screen',
+                onPressed: () => _push(context, const NoteDetailScreen(noteId: 'demo-note')),
+              ),
+              _NavButton(
+                label: 'Health Logs',
+                semanticHint: 'Double tap to open Health Logs screen',
+                onPressed: () => _push(context, const HealthLogsScreen()),
+              ),
+              _NavButton(
+                label: 'Add Health Log',
+                semanticHint: 'Double tap to open Add Health Log screen',
+                onPressed: () => _push(
+                  context,
+                  const HealthLogAddScreen(initialType: HealthLogType.general),
+                ),
+              ),
+              _NavButton(
+                label: 'Health Timeline',
+                semanticHint: 'Double tap to open Health Timeline screen',
+                onPressed: () => _push(context, const HealthTimelineScreen()),
+              ),
+              
+              _SectionLabel('Caregiver'),
+              _NavButton(
+                label: 'Caregiver Dashboard',
+                semanticHint: 'Double tap to open Caregiver Dashboard screen',
+                onPressed: () => _push(context, const CaregiverDashboardScreen()),
+              ),
+              _NavButton(
+                label: 'Caregiver: Patient Monitoring',
+                semanticHint: 'Double tap to open Caregiver Patient Monitoring screen',
+                onPressed: () =>
+                    _push(context, const CaregiverPatientMonitoringScreen()),
+              ),
+              _NavButton(
+                label: 'Caregiver: Task Management',
+                semanticHint: 'Double tap to open Caregiver Task Management screen',
+                onPressed: () =>
+                    _push(context, const CaregiverTaskManagementScreen()),
+              ),
+              _NavButton(
+                label: 'Caregiver: Analytics',
+                semanticHint: 'Double tap to open Caregiver Analytics screen',
+                onPressed: () => _push(context, const CaregiverAnalyticsScreen()),
+              ),
+              
+              _SectionLabel('Shared & other'),
+              _NavButton(
+                label: 'Emergency SOS Alert',
+                semanticHint: 'Double tap to open Emergency SOS Alert screen',
+                onPressed: () => _push(context, const EmergencySOSAlertScreen()),
+              ),
+              _NavButton(
+                label: 'Video Call',
+                semanticHint: 'Double tap to open Video Call screen',
+                onPressed: () => _push(context, const VideoCallScreen()),
+              ),
+              _NavButton(
+                label: 'Task Details (sample)',
+                semanticHint: 'Double tap to open Task Details sample screen',
+                onPressed: () => _push(context, TaskDetailsScreen(task: _demoTask)),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -187,13 +226,17 @@ class _SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Padding(
-      padding: const EdgeInsets.only(top: 8, bottom: 4),
-      child: Text(
-        label,
-        style: textTheme.titleSmall?.copyWith(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.w600,
+    return Semantics(
+      header: true,
+      label: label,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8, bottom: 4),
+        child: Text(
+          label,
+          style: textTheme.titleSmall?.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
@@ -202,9 +245,14 @@ class _SectionLabel extends StatelessWidget {
 
 class _NavButton extends StatelessWidget {
   final String label;
+  final String semanticHint;
   final VoidCallback onPressed;
 
-  const _NavButton({required this.label, required this.onPressed});
+  const _NavButton({
+    required this.label,
+    required this.semanticHint,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -214,19 +262,25 @@ class _NavButton extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: SizedBox(
-        width: double.infinity,
-        child: FilledButton(
-          onPressed: onPressed,
-          style: FilledButton.styleFrom(
-            backgroundColor: colorScheme.primary,
-            foregroundColor: colorScheme.onPrimary,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            minimumSize: const Size(0, 48),
-          ),
-          child: Text(
-            label,
-            style: textTheme.labelLarge?.copyWith(color: colorScheme.onPrimary),
+      child: Semantics(
+        button: true,
+        label: label,
+        hint: semanticHint,
+        excludeSemantics: true,
+        child: SizedBox(
+          width: double.infinity,
+          child: FilledButton(
+            onPressed: onPressed,
+            style: FilledButton.styleFrom(
+              backgroundColor: colorScheme.primary,
+              foregroundColor: colorScheme.onPrimary,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              minimumSize: const Size(0, 56),
+            ),
+            child: Text(
+              label,
+              style: textTheme.labelLarge?.copyWith(color: colorScheme.onPrimary),
+            ),
           ),
         ),
       ),

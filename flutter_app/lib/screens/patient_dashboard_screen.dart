@@ -7,7 +7,7 @@ import '../widgets/app_app_bar.dart';
 import '../widgets/app_bottom_nav_bar.dart';
 import '../widgets/app_drawer.dart';
 
-/// Patient dashboard screen showing health overview and tasks
+
 class PatientDashboardScreen extends StatelessWidget {
   const PatientDashboardScreen({super.key});
 
@@ -33,97 +33,125 @@ class PatientDashboardScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Welcome Card with Gradient
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(
-                        context,
-                      ).colorScheme.primary.withValues(alpha: 0.7),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+              Semantics(
+                label: 'Good Morning, $firstName! Here\'s your health overview for today',
+                header: true,
+                readOnly: true,
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(
+                          context,
+                        ).colorScheme.primary.withValues(alpha: 0.7),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Good Morning, $firstName!',
-                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
+                  child: ExcludeSemantics(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Good Morning, $firstName!',
+                          style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "Here's your health overview for today",
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "Here's your health overview for today",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
 
               // Tasks and BP Cards
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildSummaryCard(
-                      context,
-                      icon: Icons.check_circle_outline,
-                      iconColor: AppColors.success700,
-                      iconBgColor: AppColors.success100,
-                      title: 'Tasks',
-                      value: '3/5',
-                      subtitle: 'Completed today',
-                      onTap: () => Navigator.pushNamed(context, '/calendar'),
+              Semantics(
+                label: 'Health summary cards',
+                container: true,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _buildSummaryCard(
+                        context,
+                        icon: Icons.check_circle_outline,
+                        iconColor: AppColors.success700,
+                        iconBgColor: AppColors.success100,
+                        title: 'Tasks',
+                        value: '3/5',
+                        subtitle: 'Completed today',
+                        semanticLabel: 'Tasks: 3 out of 5 completed today',
+                        semanticHint: 'Double tap to view all tasks',
+                        onTap: () => Navigator.pushNamed(context, '/calendar'),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _buildSummaryCard(
-                      context,
-                      icon: Icons.favorite_outline,
-                      iconColor: AppColors.error500,
-                      iconBgColor: AppColors.error100,
-                      title: 'BP Today',
-                      value: '120/80',
-                      subtitle: 'Normal',
-                      subtitleColor: AppColors.success700,
-                      onTap: () => Navigator.pushNamed(context, '/health-logs'),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildSummaryCard(
+                        context,
+                        icon: Icons.favorite_outline,
+                        iconColor: AppColors.error500,
+                        iconBgColor: AppColors.error100,
+                        title: 'BP Today',
+                        value: '120/80',
+                        subtitle: 'Normal',
+                        subtitleColor: AppColors.success700,
+                        semanticLabel: 'Blood Pressure Today: 120 over 80, Normal',
+                        semanticHint: 'Double tap to view health logs',
+                        onTap: () => Navigator.pushNamed(context, '/health-logs'),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const SizedBox(height: 24),
 
-              // Upcoming Tasks Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Upcoming Tasks',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/calendar');
-                    },
-                    child: Text(
-                      'View All',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
+              // Upcoming Tasks Section Header
+              Semantics(
+                container: true,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Semantics(
+                      header: true,
+                      label: 'Upcoming Tasks',
+                      child: Text(
+                        'Upcoming Tasks',
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    Semantics(
+                      button: true,
+                      label: 'View All Tasks',
+                      hint: 'Double tap to view all tasks in calendar',
+                      excludeSemantics: true,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/calendar');
+                        },
+                        child: Text(
+                          'View All',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 12),
 
@@ -138,6 +166,9 @@ class PatientDashboardScreen extends StatelessWidget {
                 dueText: 'DUE IN 15 MIN',
                 dueColor: AppColors.error700,
                 bgColor: AppColors.error100,
+                semanticLabel: 'Take Medication: Metformin 500 milligrams, Due in 15 minutes',
+                semanticHint: 'Double tap to view medication details',
+                isUrgent: true,
                 onTap: () {
                   final task = Task(
                     id: 'medication-1',
@@ -168,6 +199,8 @@ class PatientDashboardScreen extends StatelessWidget {
                 title: 'Blood Pressure Check',
                 subtitle: 'Due at 2:00 PM',
                 showChevron: true,
+                semanticLabel: 'Blood Pressure Check, Due at 2:00 PM',
+                semanticHint: 'Double tap to view task details',
                 onTap: () {
                   final task = Task(
                     id: 'bp-check-1',
@@ -189,11 +222,15 @@ class PatientDashboardScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24),
 
-              // Today's Appointments
-              Text(
-                "Today's Appointments",
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
+              // Today's Appointments Header
+              Semantics(
+                header: true,
+                label: "Today's Appointments",
+                child: Text(
+                  "Today's Appointments",
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -202,88 +239,112 @@ class PatientDashboardScreen extends StatelessWidget {
                 context,
                 title: 'Virtual Appointment',
                 subtitle: 'Dr. Johnson • 3:00 PM',
+                semanticLabel: 'Virtual Appointment with Dr. Johnson at 3:00 PM',
+                semanticHint: 'Double tap to join video call',
                 onTap: () {
                   Navigator.pushNamed(context, '/video-call');
                 },
               ),
               const SizedBox(height: 24),
 
-              // Quick Actions
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildActionButton(
-                      context,
-                      icon: Icons.favorite_outline,
-                      label: 'Log Health Data',
-                      color: Theme.of(context).colorScheme.secondary,
-                      onTap: () {
-                        Navigator.pushNamed(context, '/health-logs');
-                      },
+              // Quick Actions Section
+              Semantics(
+                label: 'Quick Actions',
+                container: true,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildActionButton(
+                            context,
+                            icon: Icons.favorite_outline,
+                            label: 'Log Health Data',
+                            color: Theme.of(context).colorScheme.secondary,
+                            semanticLabel: 'Log Health Data',
+                            semanticHint: 'Double tap to record health measurements',
+                            onTap: () {
+                              Navigator.pushNamed(context, '/health-logs');
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _buildActionButton(
+                            context,
+                            icon: Icons.message_outlined,
+                            label: 'Send Message',
+                            color: Theme.of(context).colorScheme.primary,
+                            semanticLabel: 'Send Message',
+                            semanticHint: 'Double tap to send a message to your care team',
+                            onTap: () {
+                              Navigator.pushNamed(context, '/messaging');
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _buildActionButton(
-                      context,
-                      icon: Icons.message_outlined,
-                      label: 'Send Message',
-                      color: Theme.of(context).colorScheme.primary,
-                      onTap: () {
-                        Navigator.pushNamed(context, '/messaging');
-                      },
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const SizedBox(height: 16),
 
               // Emergency SOS Button
-              ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('Emergency SOS'),
-                      content: const Text('Are you experiencing an emergency?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pushNamed(context, '/emergency-sos');
-                          },
-                          child: const Text('Yes, Call Help'),
+              Semantics(
+                button: true,
+                label: 'Emergency SOS',
+                hint: 'Double tap to call for emergency help',
+                liveRegion: true,
+                child: ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Emergency SOS'),
+                        content: const Text('Are you experiencing an emergency?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, '/emergency-sos');
+                            },
+                            child: const Text('Yes, Call Help'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    foregroundColor: Theme.of(context).colorScheme.onError,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                    minimumSize: const Size(double.infinity, 56),
+                  ),
+                  child: Semantics(
+                    excludeSemantics: true,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.warning, size: 24),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Emergency SOS',
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.onError,
+                              ),
                         ),
                       ],
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.error,
-                  foregroundColor: Theme.of(context).colorScheme.onError,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
                   ),
-                  elevation: 0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.warning, size: 24),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Emergency SOS',
-                      style: Theme.of(context).textTheme.headlineMedium
-                          ?.copyWith(
-                            color: Theme.of(context).colorScheme.onError,
-                          ),
-                    ),
-                  ],
                 ),
               ),
               const SizedBox(height: 24),
@@ -307,6 +368,8 @@ class PatientDashboardScreen extends StatelessWidget {
     required String value,
     required String subtitle,
     Color? subtitleColor,
+    required String semanticLabel,
+    required String semanticHint,
     VoidCallback? onTap,
   }) {
     final content = Container(
@@ -314,26 +377,35 @@ class PatientDashboardScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).colorScheme.outline),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline,
+          width: 1,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: iconBgColor,
-                  shape: BoxShape.circle,
+              Semantics(
+                label: '$title icon',
+                image: true,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: iconBgColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: iconColor, size: 20),
                 ),
-                child: Icon(icon, color: iconColor, size: 20),
               ),
               const SizedBox(width: 8),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
+              Expanded(
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ),
             ],
@@ -362,14 +434,26 @@ class PatientDashboardScreen extends StatelessWidget {
       ),
     );
 
-    if (onTap == null) return content;
+    if (onTap == null) {
+      return Semantics(
+        label: semanticLabel,
+        readOnly: true,
+        child: ExcludeSemantics(child: content),
+      );
+    }
 
-    return Material(
-      color: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: content,
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      hint: semanticHint,
+      excludeSemantics: true,
+      child: Material(
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: content,
+        ),
       ),
     );
   }
@@ -385,6 +469,9 @@ class PatientDashboardScreen extends StatelessWidget {
     Color? dueColor,
     Color? bgColor,
     bool showChevron = false,
+    required String semanticLabel,
+    required String semanticHint,
+    bool isUrgent = false,
     VoidCallback? onTap,
   }) {
     final content = Container(
@@ -392,18 +479,27 @@ class PatientDashboardScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor ?? Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).colorScheme.outline),
+        border: Border.all(
+          color: isUrgent 
+              ? Theme.of(context).colorScheme.error 
+              : Theme.of(context).colorScheme.outline,
+          width: isUrgent ? 2 : 1,
+        ),
       ),
       child: Row(
         children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: iconBgColor,
-              shape: BoxShape.circle,
+          Semantics(
+            label: '${title.replaceAll('\n', ' ')} icon',
+            image: true,
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: iconBgColor,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: iconColor, size: 24),
             ),
-            child: Icon(icon, color: iconColor, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -414,6 +510,7 @@ class PatientDashboardScreen extends StatelessWidget {
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: isUrgent ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -427,36 +524,63 @@ class PatientDashboardScreen extends StatelessWidget {
             ),
           ),
           if (dueText != null)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                dueText,
-                style: Theme.of(
-                  context,
-                ).textTheme.labelSmall?.copyWith(color: dueColor),
+            Semantics(
+              label: dueText.replaceAll('DUE IN', 'Due in'),
+              readOnly: true,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: dueColor ?? Theme.of(context).colorScheme.outline,
+                    width: 1,
+                  ),
+                ),
+                child: Text(
+                  dueText,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelSmall?.copyWith(
+                    color: dueColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           if (showChevron)
-            Icon(
-              Icons.chevron_right,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            Semantics(
+              label: 'Navigate',
+              image: true,
+              child: Icon(
+                Icons.chevron_right,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
         ],
       ),
     );
 
-    if (onTap == null) return content;
+    if (onTap == null) {
+      return Semantics(
+        label: semanticLabel,
+        readOnly: true,
+        child: ExcludeSemantics(child: content),
+      );
+    }
 
-    return Material(
-      color: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: content,
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      hint: semanticHint,
+      excludeSemantics: true,
+      child: Material(
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: content,
+        ),
       ),
     );
   }
@@ -465,62 +589,91 @@ class PatientDashboardScreen extends StatelessWidget {
     BuildContext context, {
     required String title,
     required String subtitle,
+    required String semanticLabel,
+    required String semanticHint,
     required VoidCallback onTap,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).colorScheme.tertiary),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      hint: semanticHint,
+      excludeSemantics: true,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.tertiary,
-              shape: BoxShape.circle,
+              color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.tertiary,
+                width: 1,
+              ),
             ),
-            child: Icon(
-              Icons.videocam,
-              color: Theme.of(context).colorScheme.onTertiary,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
+                Semantics(
+                  label: 'Video call icon',
+                  image: true,
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.videocam,
+                      color: Theme.of(context).colorScheme.onTertiary,
+                      size: 24,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Semantics(
+                  button: true,
+                  label: 'Join video call',
+                  excludeSemantics: true,
+                  child: IconButton(
+                    onPressed: onTap,
+                    icon: Icon(
+                      Icons.videocam,
+                      color: Theme.of(context).colorScheme.onTertiary,
+                    ),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.tertiary,
+                      minimumSize: const Size(48, 48),
+                    ),
+                    tooltip: 'Join video call',
                   ),
                 ),
               ],
             ),
           ),
-          IconButton(
-            onPressed: onTap,
-            icon: Icon(
-              Icons.videocam,
-              color: Theme.of(context).colorScheme.onTertiary,
-            ),
-            style: IconButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.tertiary,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -530,37 +683,56 @@ class PatientDashboardScreen extends StatelessWidget {
     required IconData icon,
     required String label,
     required Color color,
+    required String semanticLabel,
+    required String semanticHint,
     required VoidCallback onTap,
   }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      hint: semanticHint,
+      excludeSemantics: true,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Theme.of(context).colorScheme.outline),
-        ),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: color, size: 28),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.outline,
+                width: 1,
               ),
             ),
-          ],
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Semantics(
+                  label: '$label icon',
+                  image: true,
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(icon, color: color, size: 28),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
