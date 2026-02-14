@@ -33,13 +33,13 @@ tags: ["P0", "auth", "registration"]
 - tapOn: "Re-enter your password"
 - inputText: ${output.data.NEW_USER_PASSWORD}
 - hideKeyboard
-- tapOn:
-    point: "16%,73%" # terms checkbox
 - scrollUntilVisible:
     element:
       text: "Sign In"
     timeout: 10000
     direction: DOWN
+- tapOn:
+    point: "16%,73%" # terms checkbox
 - tapOn: "Create Account"
 - waitForAnimationToEnd
 - assertVisible: "Home"
