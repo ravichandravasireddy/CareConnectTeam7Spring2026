@@ -1,0 +1,37 @@
+appId: com.anonymous.react_native_app
+tags: ["P0", "patient", "log"]
+---
+# Test: Add Health Log Entry
+# Priority: High
+# Description: Patient records a health log entry (e.g., mood, blood pressure).
+
+#get globals if necessary
+- runScript:
+    when:
+      true: ${!output.data}
+    file: "../../scripts/test_data.js"
+
+# get to dashboard
+- runFlow:
+    when:
+      notVisible: "Home"
+    file: "../../helpers/common_flows/sign_in_patient.yaml"
+
+# flow
+- tapOn: "Health.*"
+- assertVisible: "Health Logs"
+- tapOn: "Heart Rate"
+- assertVisible: "New Health Log"
+- tapOn: "72"
+- inputText: ${output.data.TEST_HEART_RATE}
+- tapOn: "e.g. resting, after exercise"
+- inputText: ${output.data.TEST_HEART_RATE_NOTE}
+- tapOn: "Save Log"
+- scrollUntilVisible:
+    element:
+      text: "No General logged.*"
+    timeout: 10000
+    direction: DOWN
+- assertVisible: ".*Heart Rate: ${output.data.TEST_HEART_RATE} bpm.*"
+- assertVisible: ".*${output.data.TEST_HEART_RATE_NOTE}.*"
+- back

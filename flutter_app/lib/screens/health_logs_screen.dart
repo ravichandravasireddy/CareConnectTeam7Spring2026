@@ -464,19 +464,23 @@ class _HealthLogCard extends StatelessWidget {
       semanticParts.insert(1, statusChip);
     }
     
-    
+    final semanticLabel = semanticParts.join(', ');
 
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colorScheme.outline, width: 1),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: ExcludeSemantics(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+    return Semantics(
+      label: semanticLabel,
+      button: true,
+      excludeSemantics: true,
+      child: Container(
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: colorScheme.outline, width: 1),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: ExcludeSemantics(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
             Semantics(
               label: '${formatHealthLogTypeDisplay(log.type)} icon',
               image: true,
@@ -579,7 +583,8 @@ class _HealthLogCard extends StatelessWidget {
                   ),
                 ),
               ),
-          ],
+            ],
+          ),
         ),
       ),
     );

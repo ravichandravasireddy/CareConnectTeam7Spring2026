@@ -1,0 +1,31 @@
+appId: com.anonymous.react_native_app
+tags: ["P1", "error-handling", "validation"]
+---
+# Test: Form Validation
+# Priority: High
+# Description: App validates user input correctly.
+
+- launchApp
+- tapOn: "Sign In"
+# Test invalid email format
+- tapOn: "your.email@example.com"
+- inputText: "invalid-email"
+- tapOn: "Enter your password"
+- tapOn: 
+    text: "Welcome Back.*"
+# Verify validation error is shown
+- assertVisible: "Enter a valid email"
+
+# Test credential incorrect
+- tapOn: "invalid-email"
+- eraseText
+- inputText: "test@example.com"
+- tapOn: "Enter your password"
+- eraseText
+- inputText: "notauser"
+# - hideKeyboard
+- tapOn: 
+    text: "Sign In"
+    index: 1
+# Verify login validation error
+- assertVisible: "Invalid email or password.*"

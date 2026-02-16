@@ -178,7 +178,7 @@ class CaregiverDashboardScreen extends StatelessWidget {
               title: 'Patients',
               value: '$patientCount',
               icon: Icons.people_outline,
-              color: AppColors.info500,
+              color: AppColors.info700,
               colorScheme: colorScheme,
               textTheme: textTheme,
               onTap: () =>
@@ -192,7 +192,7 @@ class CaregiverDashboardScreen extends StatelessWidget {
               title: 'Tasks',
               value: '$tasksCompleted/$tasksTotal',
               icon: Icons.check_circle_outline,
-              color: AppColors.success500,
+              color: AppColors.success700,
               colorScheme: colorScheme,
               textTheme: textTheme,
               onTap: () =>
@@ -206,7 +206,7 @@ class CaregiverDashboardScreen extends StatelessWidget {
               title: 'Alerts',
               value: '$alertCount',
               icon: Icons.warning_amber_outlined,
-              color: AppColors.error500,
+              color: AppColors.error700,
               colorScheme: colorScheme,
               textTheme: textTheme,
               onTap: () => Navigator.pushNamed(context, '/emergency-sos'),

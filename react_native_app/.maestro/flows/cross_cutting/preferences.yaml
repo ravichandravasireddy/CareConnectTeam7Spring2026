@@ -1,0 +1,22 @@
+appId: com.anonymous.react_native_app
+tags: ["P0", "preferences", "cross-cutting"]
+---
+# Test: Preferences
+# Priority: High
+# Description: User can view preferences. Changeable in the future
+
+- runFlow:
+    when:
+        notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- tapOn:
+    point: "7%,6%" #menu button
+- assertVisible: "Preferences"
+- tapOn: "Preferences"
+- assertVisible: "Preferences & Accessibility"
+- assertVisible: "Text Size.*"
+- assertVisible: "Dark Mode.*"
+- assertVisible: "High Contrast.*"
+- assertVisible: "Accessibility.*"
+- assertVisible: "Screen Reader.*"
+- back

@@ -1,0 +1,30 @@
+appId: com.example.flutter_app
+tags: ["P0", "auth", "caregiver"]
+---
+# Test: Caregiver Sign In Flow
+# Priority: High
+# Description: Caregiver signs in and accesses caregiver dashboard.
+
+#get global variable
+- runScript: "../../scripts/test_data.js"
+
+# flow
+- launchApp
+- assertVisible: "Sign in"
+- tapOn: "Sign in"
+- waitForAnimationToEnd
+- assertVisible: ".*Welcome Back.*"
+- assertVisible: "Email Address.*"
+- tapOn: "Email Address.*"
+- inputText: ${output.data.CAREGIVER_EMAIL}
+- assertVisible: "Password.*"
+- tapOn: "Password.*"
+- inputText: ${output.data.CAREGIVER_PASSWORD}
+- hideKeyboard
+- tapOn: "Sign In"
+- waitForAnimationToEnd
+- assertVisible: "Dashboard"
+- assertVisible: ".*${output.data.CAREGIVER_NAME}.*"
+- assertVisible: ".*Patients"
+- assertVisible: ".*Tasks"
+- assertVisible: ".*Alerts"

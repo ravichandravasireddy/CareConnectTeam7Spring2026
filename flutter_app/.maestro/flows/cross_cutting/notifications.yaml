@@ -1,0 +1,26 @@
+appId: com.example.flutter_app
+tags: ["P0", "notifications", "cross-cutting"]
+---
+# Test: Notification System
+# Priority: High
+# Description: User receives and interacts with notifications.
+
+- runFlow: 
+    when: 
+        notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- tapOn:
+    point: "83%,6%" #notifications button
+# if flow was run before, we need to reset notification provider with a re-login
+- runFlow: 
+    when: 
+        notVisible: "Mark all as read"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- tapOn:
+    point: "83%,6%" #notifications button area
+    optional: true
+- assertVisible: "Notifications.*"
+- assertVisible: ".*Mark all as read.*"
+- tapOn: ".*Mark all as read.*"
+- assertNotVisible: ".*Mark all as read.*"
+- back

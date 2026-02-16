@@ -28,7 +28,7 @@ class _EmergencySOSAlertScreenState extends State<EmergencySOSAlertScreen> {
 
     return Scaffold(
       backgroundColor:
-          _isAcknowledged ? colorScheme.surface : AppColors.error500,
+          _isAcknowledged ? colorScheme.surface : AppColors.error700,
       body: SafeArea(
         child: _isAcknowledged
             ? Semantics(

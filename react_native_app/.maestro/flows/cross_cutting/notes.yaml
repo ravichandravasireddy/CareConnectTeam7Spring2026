@@ -1,0 +1,45 @@
+appId: com.anonymous.react_native_app
+tags: ["P1", "notes", "cross-cutting"]
+---
+# Test: Notes
+# Priority: Medium
+# Description: User can create and view notes.
+
+#get globals if necessary
+- runScript:
+    when:
+      true: ${!output.data}
+    file: "../../scripts/test_data.js"
+
+# get to dashboard
+- runFlow:
+    when:
+        notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+
+# flow
+- tapOn:
+    point: "7%,6%" #menu button
+- assertVisible: "Notes"
+- tapOn: "Notes"
+- assertVisible: "Notes"
+- assertVisible: "Add New Note"
+- tapOn: "Add New Note"
+- assertVisible: "New Note"
+- tapOn: "e.g. Medication Side Effects"
+- inputText: ${output.data.TEST_NOTE_TITLE}
+- tapOn: "Write your note here…"
+- inputText: ${output.data.TEST_NOTE_CONTENT}
+- tapOn: "Appointment"
+- tapOn: "Appointment"
+- tapOn: "Save"
+- assertVisible: "${output.data.TEST_NOTE_TITLE}"
+- assertVisible: "${output.data.TEST_NOTE_CONTENT}"
+- assertVisible: "APPOINTMENT"
+- tapOn: "${output.data.TEST_NOTE_TITLE}"
+- assertVisible: "${output.data.TEST_NOTE_TITLE}"
+- assertVisible: "${output.data.TEST_NOTE_CONTENT}"
+- assertVisible: "APPOINTMENT"
+- assertNotVisible: "Add New Note"
+- back
+- back

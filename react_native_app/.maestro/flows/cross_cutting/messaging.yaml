@@ -1,0 +1,25 @@
+appId: com.anonymous.react_native_app
+tags: ["P1", "messaging", "cross-cutting"]
+---
+# Test: Messaging Thread
+# Priority: Medium
+# Description: User sends and receives messages.
+
+- runFlow:
+    when:
+        notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- tapOn:
+    point: "7%,6%"
+- assertVisible: "Messages.*"
+- tapOn: "Messages.*"
+- assertVisible: "Robert Williams"
+- tapOn: "Type a message..."
+- inputText: "Test message from Maestro"
+# - hideKeyboard
+- tapOn:
+    point: "90%,87%" #send button
+- assertVisible: "Test message from Maestro.*"
+- back
+- back
+

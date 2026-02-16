@@ -1,0 +1,18 @@
+appId: com.example.flutter_app
+tags: ["P1", "patient", "history"]
+---
+# Test: View Health Timeline History
+# Priority: Medium
+# Description: Patient views their health timeline with historical entries.
+
+# get to dahsboard
+- runFlow:
+    when:
+      notVisible: "Home"
+    file: "../../helpers/common_flows/sign_in_patient.yaml"
+
+- tapOn:
+    point: "7%,6%" #menu button
+- tapOn: "Health Timeline"
+- assertVisible: "Health Timeline.*"
+- back

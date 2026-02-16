@@ -1,0 +1,12 @@
+appId: com.example.flutter_app
+includeTags: []
+excludeTags: []
+
+flows:
+  - "flows/auth/*"
+  - "flows/caregiver/*"
+  - "flows/cross_cutting/*"
+  - "flows/error_handling/*"
+  - "flows/patient/*"
+
+testOutputDir: .maestro/test_output

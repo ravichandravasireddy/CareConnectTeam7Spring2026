@@ -7,7 +7,7 @@ import {
   getTaskDateOnly,
   areDatesEqual,
   type Task,
-} from "../Task";
+} from "../task";
 
 describe("Task model", () => {
   describe("isTaskCompleted", () => {
@@ -50,7 +50,7 @@ describe("Task model", () => {
         icon: "check-circle" as const,
         iconBackground: "#eee",
         iconColor: "#333",
-        completedAt: null,
+        completedAt: undefined,
       };
       expect(isTaskCompleted(task)).toBe(false);
     });

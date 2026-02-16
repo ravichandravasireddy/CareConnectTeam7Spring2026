@@ -1,0 +1,19 @@
+appId: com.anonymous.react_native_app
+tags: ["P1", "auth", "signout"]
+---
+# Test: Sign Out Flow
+# Priority: Medium
+# Description: Authenticated user signs out and returns to welcome screen.
+
+- runFlow: "../../helpers/common_flows/sign_in_patient.yaml"
+- assertVisible: "Home"
+- tapOn:
+    point: "7%,6%" #menu button
+- assertVisible: "Sign Out"
+- tapOn: "Sign Out"
+- assertVisible: "Sign Out"
+- tapOn: "Sign Out"
+- waitForAnimationToEnd
+- assertVisible: "Welcome Back"
+- assertVisible: "Email Address"
+- assertVisible: "Password"

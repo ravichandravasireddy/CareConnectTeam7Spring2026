@@ -1,0 +1,17 @@
+appId: com.example.flutter_app
+tags: ["P0", "caregiver", "emergency"]
+---
+# Test: Respond to Emergency SOS Alert
+# Priority: Critical
+# Description: Caregiver receives and acknowledges an emergency alert.
+
+- runFlow: 
+    when: 
+      notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- assertVisible: ".*Alerts.*"
+- tapOn: ".*Alerts.*"
+- assertVisible: "EMERGENCY ALERT"
+- tapOn: ".*Acknowledge emergency alert.*"
+- waitForAnimationToEnd
+- assertVisible: "Dashboard"

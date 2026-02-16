@@ -3,6 +3,11 @@ module.exports = {
   transformIgnorePatterns: [
     "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)",
   ],
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "/_AI/",
+    "/.maestro/",
+  ],
   setupFiles: ['<rootDir>/jest.setup.early.js'],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   collectCoverage: false,
@@ -19,25 +24,17 @@ module.exports = {
     "!jest.config.js",
     "!.expo/**",
     "!scripts/**",
-    // "!hooks/use-theme-color.ts", // DELETE ME AT MERGE
-    // "!hooks/use-color-scheme.ts", // DELETE ME AT MERGE
-    // "!hooks/use-color-scheme.web.ts", // DELETE ME AT MERGE
-    // "!app/modal.tsx", // DELETE ME AT MERGE
-    // "!components/ui/**",// DELETE ME AT MERGE
-    // "!components/haptic-tab.tsx",// DELETE ME AT MERGE
-    // "!components/themed-*.tsx",// DELETE ME AT MERGE
-    // "!components/parallax-scroll-view.tsx",// DELETE ME AT MERGE
-    // "!components/external-link.tsx",// DELETE ME AT MERGE
-    // "!components/hello-wave.tsx",// DELETE ME AT MERGE
+    "!**/_AI/**",
+    "!**/.maestro/**",
 
 
   ],
   coverageThreshold: {
     global: {
-      branches: 0,
-      functions: 0,
-      lines: 0,
-      statements: 0,
+      branches: 75,
+      functions: 75,
+      lines: 75,
+      statements: 75,
     },
   },
   coverageReporters: ["text", "lcov", "html"],

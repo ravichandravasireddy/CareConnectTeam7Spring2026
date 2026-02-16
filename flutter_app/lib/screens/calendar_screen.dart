@@ -260,7 +260,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
           const SizedBox(height: 8),
           Semantics(
-            label: 'Calendar grid for $_monthYearText',
+            label: 'Calendar, $_monthYearText',
             container: true,
             child: GridView.count(
               crossAxisCount: 7,

@@ -1,0 +1,25 @@
+appId: com.example.flutter_app
+tags: ["P0", "caregiver", "profile"]
+---
+# Test: View Caregiver Profile
+# Priority: High
+# Description: Caregiver can view profile details.
+
+- runFlow:
+    when:
+      notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- tapOn:
+    point: "7%,6%" #menu button
+- assertVisible: "Profile"
+- tapOn: "Profile"
+- assertVisible: "Profile"
+- assertVisible: ".*DJ.*"
+- assertVisible: ".*Dr. Sarah Johnson.*"
+- assertVisible: ".*Caregiver ID.*"
+- assertVisible: ".*Personal Information.*"
+- assertVisible: ".*Age.*"
+- assertVisible: ".*Email.*"
+- assertVisible: ".*Phone.*"
+- assertVisible: ".*Address.*"
+- back

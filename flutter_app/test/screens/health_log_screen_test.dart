@@ -310,7 +310,7 @@ void main() {
       (tester) async {
         await tester.pumpWidget(createTestHarness());
         final bloodPressureButton = find.bySemanticsLabel(
-          'Blood Pressure quick log, button',
+          'Log Blood Pressure',
         );
         await tester.ensureVisible(bloodPressureButton);
         await tester.tap(bloodPressureButton);
@@ -327,7 +327,7 @@ void main() {
       (tester) async {
         await tester.pumpWidget(createTestHarness());
         final heartRateButton = find.bySemanticsLabel(
-          'Heart Rate quick log, button',
+          'Log Heart Rate',
         );
         await tester.ensureVisible(heartRateButton);
         await tester.tap(heartRateButton);
@@ -466,26 +466,14 @@ void main() {
       await tester.pumpWidget(createTestHarness());
 
       // Each quick log button should have a descriptive semantic label
-      expect(find.bySemanticsLabel('Mood quick log, button'), findsOneWidget);
-      expect(
-        find.bySemanticsLabel('Symptoms quick log, button'),
-        findsOneWidget,
-      );
-      expect(find.bySemanticsLabel('Meals quick log, button'), findsOneWidget);
-      expect(find.bySemanticsLabel('Water quick log, button'), findsOneWidget);
-      expect(
-        find.bySemanticsLabel('Exercise quick log, button'),
-        findsOneWidget,
-      );
-      expect(find.bySemanticsLabel('Sleep quick log, button'), findsOneWidget);
-      expect(
-        find.bySemanticsLabel('Blood Pressure quick log, button'),
-        findsOneWidget,
-      );
-      expect(
-        find.bySemanticsLabel('Heart Rate quick log, button'),
-        findsOneWidget,
-      );
+      expect(find.bySemanticsLabel('Log Mood'), findsOneWidget);
+      expect(find.bySemanticsLabel('Log Symptoms'), findsOneWidget);
+      expect(find.bySemanticsLabel('Log Meals'), findsOneWidget);
+      expect(find.bySemanticsLabel('Log Water'), findsOneWidget);
+      expect(find.bySemanticsLabel('Log Exercise'), findsOneWidget);
+      expect(find.bySemanticsLabel('Log Sleep'), findsOneWidget);
+      expect(find.bySemanticsLabel('Log Blood Pressure'), findsOneWidget);
+      expect(find.bySemanticsLabel('Log Heart Rate'), findsOneWidget);
     });
 
     testWidgets('log cards should have semantic labels with content', (
@@ -763,6 +751,7 @@ void main() {
       );
       await tester.pumpWidget(createTestHarness(provider: provider));
 
+      // The log card now has a Semantics wrapper with the description and note
       final semanticsWithNote = find.byWidgetPredicate(
         (w) =>
             w is Semantics &&

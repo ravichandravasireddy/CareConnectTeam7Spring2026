@@ -1,0 +1,17 @@
+appId: com.example.flutter_app
+tags: ["P1", "caregiver", "analytics"]
+---
+# Test: View Analytics
+# Priority: Medium
+# Description: Caregiver views analytics and reports.
+
+- runFlow: 
+    when: 
+        notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- tapOn: "Analytics.*"
+- assertVisible: ".*Analytics.*"
+- assertVisible: ".*Weekly Overview.*"
+- assertVisible: ".*Task Completion.*"
+- assertVisible: ".*Avg Response Time.*"
+- back

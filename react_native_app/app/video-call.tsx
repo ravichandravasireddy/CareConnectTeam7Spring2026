@@ -58,7 +58,12 @@ function PatientCameraOffView() {
 function PatientCameraOnView() {
   return (
     <View style={styles.patientWrapper}>
-      <Image source={IMG_ROBERT} style={styles.patientImage} resizeMode="cover" />
+      <Image
+        source={IMG_ROBERT}
+        style={styles.patientImage}
+        resizeMode="cover"
+        accessibilityLabel="Robert Williams, patient video"
+      />
       <View style={styles.patientLabelBottom} pointerEvents="none">
         <Text style={[Typography.h4, styles.patientName]}>{'Robert Williams'}</Text>
         <Text style={[Typography.bodySmall, styles.patientRole]}>{'Patient'}</Text>
@@ -73,7 +78,12 @@ function CaregiverPip({ cameraOn }: { cameraOn: boolean }) {
     <View style={styles.pipContainer}>
       <View style={styles.pipVideoArea}>
         {cameraOn ? (
-          <Image source={IMG_SARAH} style={styles.pipImage} resizeMode="cover" />
+          <Image
+            source={IMG_SARAH}
+            style={styles.pipImage}
+            resizeMode="cover"
+            accessibilityLabel="Sarah Johnson, caregiver video"
+          />
         ) : (
           <View style={[StyleSheet.absoluteFill, styles.pipPlaceholder]}>
             <MaterialIcons name="person" size={32} color={AppColors.darkTextSecondary} />
@@ -231,7 +241,11 @@ export default function VideoCallScreen() {
             <TouchableOpacity
               style={styles.patientTouchable}
               onPress={() => setPatientCameraOn((p) => !p)}
-              activeOpacity={1}>
+              activeOpacity={1}
+              accessible
+              accessibilityRole="button"
+              accessibilityLabel={patientCameraOn ? 'Patient camera on. Tap to turn off.' : 'Patient camera off. Tap to turn on.'}
+            >
               {patientCameraOn ? <PatientCameraOnView /> : <PatientCameraOffView />}
             </TouchableOpacity>
 

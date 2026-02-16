@@ -1,0 +1,31 @@
+appId: com.example.flutter_app
+tags: ["P1", "error-handling", "validation"]
+---
+# Test: Form Validation
+# Priority: High
+# Description: App validates user input correctly.
+
+- launchApp
+- tapOn: "Sign In"
+# Test invalid email format
+- tapOn: ".*Email Address.*"
+- inputText: "invalid-email"
+- tapOn: ".*Password.*"
+- inputText: "password123"
+- hideKeyboard
+- tapOn: "Sign In"
+# Verify validation error is shown
+- assertVisible: "Enter a valid email"
+
+# Test credential incorrect
+- back
+- tapOn: "Sign In"
+- tapOn: ".*Email Address.*"
+- inputText: "test@example.com"
+- tapOn: ".*Password.*"
+- inputText: "notauser"
+- hideKeyboard
+- tapOn: "Sign In"
+# Verify login validation error
+- assertVisible: "Invalid email or password.*"
+- back

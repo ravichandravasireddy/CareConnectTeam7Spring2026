@@ -1,0 +1,22 @@
+appId: com.anonymous.react_native_app
+---
+# Common flow: Sign in as caregiver
+# This flow can be reused in other tests using runFlow
+
+#get global variable
+- runScript: "../../scripts/test_data.js"
+
+# flow
+- launchApp
+- tapOn: "Sign In"
+- waitForAnimationToEnd
+- tapOn: "your.email@example.com"
+- inputText: ${output.data.CAREGIVER_EMAIL}
+- tapOn: "Enter your password"
+- inputText: ${output.data.CAREGIVER_PASSWORD}
+# - hideKeyboard
+- tapOn: 
+    text: "Sign In"
+    index: 1
+- waitForAnimationToEnd
+- assertVisible: "Dashboard"

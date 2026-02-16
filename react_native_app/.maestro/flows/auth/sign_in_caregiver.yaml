@@ -1,0 +1,33 @@
+appId: com.anonymous.react_native_app
+tags: ["P0", "auth", "caregiver"]
+---
+# Test: Caregiver Sign In Flow
+# Priority: High
+# Description: Caregiver signs in and accesses caregiver dashboard.
+
+#get global variable
+- runScript: "../../scripts/test_data.js"
+
+# flow
+- launchApp
+- assertVisible: "Sign In"
+- tapOn: "Sign In"
+- waitForAnimationToEnd
+- assertVisible: ".*Welcome Back.*"
+- assertVisible: "Email Address"
+- tapOn: "your.email@example.com"
+- inputText: ${output.data.CAREGIVER_EMAIL}
+# - hideKeyboard
+- assertVisible: "Password"
+- tapOn: "Enter your password"
+- inputText: ${output.data.CAREGIVER_PASSWORD}
+# - hideKeyboard
+- tapOn: 
+    text: "Sign In"
+    index: 1
+- waitForAnimationToEnd
+- assertVisible: "Dashboard"
+- assertVisible: ".*${output.data.CAREGIVER_NAME}.*"
+- assertVisible: ".*Patients"
+- assertVisible: ".*Tasks"
+- assertVisible: ".*Alerts"
