@@ -136,7 +136,7 @@ export default function PatientDashboardScreen({
             subtitle="Normal"
             subtitleColor={AppColors.success700}
             iconName="favorite-outline"
-            iconColor={AppColors.error500}
+            iconColor={AppColors.error700}
             iconBackground={AppColors.error100}
             onPress={onHealthLogsPress}
           />
