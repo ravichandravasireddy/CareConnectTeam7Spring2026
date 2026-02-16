@@ -1,0 +1,32 @@
+appId: com.anonymous.react_native_app
+tags: ["P0", "auth", "patient"]
+---
+# Test: Welcome Screen → Sign In Flow (Patient)
+# Priority: High
+# Description: User starts at welcome screen and successfully signs in as a patient.
+
+#get global variables
+- runScript: "../../scripts/test_data.js"
+
+# flow
+- launchApp
+- assertVisible: "Sign In"
+- tapOn: "Sign In"
+- waitForAnimationToEnd
+- assertVisible: ".*Welcome Back.*"
+- assertVisible: "Email Address"
+- tapOn: "your.email@example.com"
+- inputText: ${output.data.RECIPIENT_EMAIL}
+# - hideKeyboard
+- assertVisible: "Password"
+- tapOn: "Enter your password"
+- inputText: ${output.data.RECIPIENT_PASSWORD}
+# - hideKeyboard
+- tapOn: 
+    text: "Sign In"
+    index: 1
+- waitForAnimationToEnd
+- assertVisible: "Home"
+- assertVisible: ".*${output.data.RECIPIENT_NAME}.*"
+- assertVisible: ".*Tasks.*"
+- assertVisible: ".*BP Today.*"

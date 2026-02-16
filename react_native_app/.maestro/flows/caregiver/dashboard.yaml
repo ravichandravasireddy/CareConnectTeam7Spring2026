@@ -1,0 +1,22 @@
+appId: com.anonymous.react_native_app
+tags: ["P0", "caregiver", "dashboard"]
+---
+# Test: Caregiver Dashboard Overview
+# Priority: High
+# Description: Caregiver views dashboard with patient stats and tasks.
+
+- runFlow:
+    when:
+      notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- assertVisible: ".*Patients.*"
+- assertVisible: ".*Tasks.*"
+- assertVisible: ".*Alerts.*"
+- assertVisible: ".*Today's Tasks.*"
+- assertVisible: ".*Manage.*"
+- assertVisible: "Dashboard"
+# bottom nav
+- assertVisible: "Home.*"
+- assertVisible: "Tasks.*"
+- assertVisible: "Analytics.*"
+- assertVisible: "Monitor.*"

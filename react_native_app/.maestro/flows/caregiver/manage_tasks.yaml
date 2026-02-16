@@ -1,0 +1,26 @@
+appId: com.anonymous.react_native_app
+tags: ["P0", "caregiver", "tasks"]
+---
+# Test: Manage Tasks (Caregiver)
+# Priority: High
+# Description: Caregiver views and manages tasks for all patients.
+
+- runFlow:
+    when:
+      notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- assertVisible: ".*Today's Tasks.*"
+- tapOn: "Manage"
+- assertVisible: "Tasks"
+- back
+- tapOn: ".*Tasks"
+- assertVisible: "Tasks"
+- back
+- tapOn: "Tasks.*"
+- assertVisible: "Tasks"
+- tapOn: ".*Physical Therapy.*"
+- assertVisible: "Task Details"
+- assertVisible: ".*Physical Therapy.*"
+- assertVisible: ".*Mark as Complete.*"
+- back
+- back

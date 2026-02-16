@@ -1,0 +1,37 @@
+appId: com.anonymous.react_native_app
+tags: ["P1", "patient", "log"]
+---
+# Test: Add Blood Pressure Log Entry
+# Priority: High
+# Description: Patient records blood pressure reading.
+
+#get globals if necessary
+- runScript:
+    when:
+      true: ${!output.data}
+    file: "../../scripts/test_data.js"
+
+# get to dashboard
+- runFlow:
+    when:
+      notVisible: "Home"
+    file: "../../helpers/common_flows/sign_in_patient.yaml"
+
+# flow
+- tapOn: "Health.*"
+- assertVisible: "Health Logs"
+- tapOn: "Add a Log"
+- assertVisible: "New Health Log"
+- tapOn: "Sleep"
+- tapOn: "${output.data.TEST_SLEEP_HOURS}h"
+- tapOn: "How did you sleep?"
+- inputText: ${output.data.TEST_SLEEP_NOTE}
+- tapOn: "Save Log"
+- scrollUntilVisible:
+    element:
+      text: "No General logged.*"
+    timeout: 10000
+    direction: DOWN
+- assertVisible: ".*Slept ${output.data.TEST_SLEEP_HOURS}.0 hours"
+- assertVisible: ".*${output.data.TEST_SLEEP_NOTE}.*"
+- back

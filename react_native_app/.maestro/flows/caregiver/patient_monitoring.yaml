@@ -1,0 +1,23 @@
+appId: com.anonymous.react_native_app
+tags: ["P0", "caregiver", "monitoring"]
+---
+# Test: View Patient Monitoring
+# Priority: High
+# Description: Caregiver monitors patient health data and status.
+
+- runFlow:
+    when:
+      notVisible: "Dashboard"
+    file: "../../helpers/common_flows/sign_in_caregiver.yaml"
+- tapOn: "Monitor.*"
+- assertVisible: "Patient Details"
+- back
+- tapOn: ".*Patients"
+- assertVisible: "Patient Details"
+- assertVisible:
+    text: ".*Robert Williams.*"
+    optional: true
+- assertVisible:
+    text: ".*Maya Patel.*"
+    optional: true
+- back
