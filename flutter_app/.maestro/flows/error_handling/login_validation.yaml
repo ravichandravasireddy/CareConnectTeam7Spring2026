@@ -8,9 +8,9 @@ tags: ["P1", "error-handling", "validation"]
 - launchApp
 - tapOn: "Sign In"
 # Test invalid email format
-- tapOn: "your.email@example.com"
+- tapOn: ".*Email Address.*"
 - inputText: "invalid-email"
-- tapOn: "Enter your password"
+- tapOn: ".*Password.*"
 - inputText: "password123"
 - hideKeyboard
 - tapOn: "Sign In"
@@ -20,11 +20,12 @@ tags: ["P1", "error-handling", "validation"]
 # Test credential incorrect
 - back
 - tapOn: "Sign In"
-- tapOn: "your.email@example.com"
+- tapOn: ".*Email Address.*"
 - inputText: "test@example.com"
-- tapOn: "Enter your password"
+- tapOn: ".*Password.*"
 - inputText: "notauser"
 - hideKeyboard
 - tapOn: "Sign In"
 # Verify login validation error
 - assertVisible: "Invalid email or password.*"
+- back

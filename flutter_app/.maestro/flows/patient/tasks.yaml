@@ -15,11 +15,11 @@ tags: ["P1", "patient", "calendar"]
 - assertVisible: "Calendar"
 - assertVisible: ".*Medication.*"
 - tapOn: ".*Medication.*"
-- assertVisible: "Task Details"
-- assertVisible: "Mark as Complete"
+- assertVisible: "Task Details.*"
+- assertVisible: "Mark task as Complete.*"
 - back
 
 # Test empty task day
-- tapOn: "10.*"
+- tapOn: ".*10.*"
 - assertVisible: ".*No tasks scheduled for this day.*"
 - back

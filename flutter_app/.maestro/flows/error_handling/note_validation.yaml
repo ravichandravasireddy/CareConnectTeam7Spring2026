@@ -12,12 +12,12 @@ tags: ["P1", "error-handling", "validation"]
 - tapOn:
     point: "7%,6%" # menu
 - tapOn: Notes
-- tapOn: Add New Note
+- tapOn: ".*Add New Note.*"
 
 # Test empty note content
 - tapOn: Title
 - inputText: Test Title
-- tapOn: Save
+- tapOn: "Save.*"
 - assertNotVisible: Enter a title
 - assertVisible: Enter note content
 
@@ -26,7 +26,7 @@ tags: ["P1", "error-handling", "validation"]
 - eraseText
 - tapOn: "Note"
 - inputText: Note content
-- tapOn: Save
+- tapOn: "Save.*"
 - assertNotVisible: Enter note content
 - assertVisible: Enter a title
  

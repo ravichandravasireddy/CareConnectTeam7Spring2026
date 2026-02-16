@@ -18,6 +18,6 @@ tags: ["P1", "messaging", "cross-cutting"]
 - inputText: "Test message from Maestro"
 - tapOn:
     point: "90%,87%" #send button
-- assertVisible: "Test message from Maestro.*"
+- assertVisible: ".*Test message from Maestro.*"
 - back
 - back

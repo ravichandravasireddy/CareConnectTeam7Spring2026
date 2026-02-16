@@ -25,7 +25,7 @@ tags: ["P1", "error-handling", "validation"]
 - hideKeyboard
 - scrollUntilVisible:
     element:
-      text: "Sign In"
+      text: ".*Sign In.*"
     timeout: 10000
     direction: DOWN
 - tapOn: "Create Account"
@@ -38,7 +38,7 @@ tags: ["P1", "error-handling", "validation"]
 - inputRandomEmail
 - scrollUntilVisible:
     element:
-      text: "Sign In"
+      text: ".*Sign In.*"
     timeout: 10000
     direction: DOWN
 - tapOn: "Create Account"
@@ -60,7 +60,7 @@ tags: ["P1", "error-handling", "validation"]
 - inputText: "short"
 - scrollUntilVisible:
     element:
-      text: "Sign In"
+      text: ".*Sign In.*"
     timeout: 10000
     direction: DOWN
 - tapOn: "Create Account"
@@ -76,9 +76,10 @@ tags: ["P1", "error-handling", "validation"]
 - hideKeyboard
 - scrollUntilVisible:
     element:
-      text: "Sign In"
+      text: ".*Sign In.*"
     timeout: 10000
     direction: DOWN
 - tapOn: "Create Account"
 # Verify validation error is shown
 - assertVisible: "Passwords do not match"
+- back

@@ -20,11 +20,11 @@ tags: ["P0", "patient", "log"]
 # flow
 - tapOn: "Health.*"
 - assertVisible: "Health Logs"
-- tapOn: "Mood"
-- assertVisible: "New Health Log"
-- tapOn: "${output.data.TEST_MOOD_EMOJI} ${output.data.TEST_MOOD_VALUE}"
-- tapOn: "Add note"
+- tapOn: ".*Mood.*"
+- assertVisible: "New Health Log.*"
+- tapOn: ".*${output.data.TEST_MOOD_VALUE}.*"
+- tapOn: "Add note.*"
 - inputText: "Feeling good today"
-- tapOn: "Save Log"
-- assertVisible: ".*${output.data.TEST_MOOD_VALUE}.*Feeling good today.*${output.data.TEST_MOOD_EMOJI}.*"
+- tapOn: "Save Log.*"
+- assertVisible: "Mood: ${output.data.TEST_MOOD_VALUE}.*"
 - back

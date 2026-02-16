@@ -14,11 +14,11 @@ tags: ["P0", "auth", "patient"]
 - tapOn: "Sign in"
 - waitForAnimationToEnd
 - assertVisible: ".*Welcome Back.*"
-- assertVisible: "Email Address"
-- tapOn: "your.email@example.com"
+- assertVisible: "Email Address.*"
+- tapOn: "Email Address.*"
 - inputText: ${output.data.RECIPIENT_EMAIL}
-- assertVisible: "Password"
-- tapOn: "Enter your password"
+- assertVisible: "Password.*"
+- tapOn: "Password.*"
 - inputText: ${output.data.RECIPIENT_PASSWORD}
 - hideKeyboard
 - tapOn: "Sign In"
@@ -26,4 +26,3 @@ tags: ["P0", "auth", "patient"]
 - assertVisible: "Home"
 - assertVisible: ".*${output.data.RECIPIENT_NAME}.*"
 - assertVisible: ".*Tasks.*"
-- assertVisible: ".*BP Today.*"

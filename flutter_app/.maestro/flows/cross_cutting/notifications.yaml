@@ -19,8 +19,8 @@ tags: ["P0", "notifications", "cross-cutting"]
 - tapOn:
     point: "83%,6%" #notifications button area
     optional: true
-- assertVisible: "Notifications"
-- assertVisible: "Mark all as read"
-- tapOn: "Mark all as read"
-- assertNotVisible: "Mark all as read"
+- assertVisible: "Notifications.*"
+- assertVisible: ".*Mark all as read.*"
+- tapOn: ".*Mark all as read.*"
+- assertNotVisible: ".*Mark all as read.*"
 - back

@@ -8,12 +8,11 @@ appId: com.example.flutter_app
 
 # flow
 - launchApp
-- assertVisible: "Sign in"
 - tapOn: "Sign in"
 - waitForAnimationToEnd
-- tapOn: "your.email@example.com"
+- tapOn: "Email Address.*"
 - inputText: ${output.data.CAREGIVER_EMAIL}
-- tapOn: "Enter your password"
+- tapOn: "Password.*"
 - inputText: ${output.data.CAREGIVER_PASSWORD}
 - hideKeyboard
 - tapOn: "Sign In"

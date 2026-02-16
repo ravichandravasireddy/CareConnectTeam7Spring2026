@@ -10,7 +10,7 @@ tags: ["P0", "caregiver", "tasks"]
       notVisible: "Dashboard"
     file: "../../helpers/common_flows/sign_in_caregiver.yaml"
 - assertVisible: ".*Today's Tasks.*"
-- tapOn: "Manage"
+- tapOn: "Manage.*"
 - assertVisible: "Tasks"
 - back
 - tapOn: ".*Tasks"
@@ -19,9 +19,9 @@ tags: ["P0", "caregiver", "tasks"]
 - tapOn: "Tasks.*"
 - assertVisible: "Tasks"
 - tapOn: ".*Medication.*"
-- assertVisible: "Task Details"
+- assertVisible: "Task Details.*"
 - assertVisible: ".*Medication reminder.*"
-- assertVisible: ".*Mark as Complete.*"
+- assertVisible: ".*Mark task as complete.*"
 - back
 - back
 

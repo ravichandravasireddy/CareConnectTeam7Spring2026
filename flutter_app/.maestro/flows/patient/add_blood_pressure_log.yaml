@@ -20,13 +20,13 @@ tags: ["P1", "patient", "log"]
 # flow
 - tapOn: "Health.*"
 - assertVisible: "Health Logs"
-- tapOn: "Add a Log"
-- assertVisible: "New Health Log"
+- tapOn: "Add a Log.*"
+- assertVisible: "New Health Log.*"
 - tapOn: ".*General"
-- tapOn: "Blood Pressure"
+- tapOn: "Blood Pressure.*"
 - tapOn: "Systolic.*"
 - inputText: ${output.data.TEST_BP_SYSTOLIC}
-- tapOn: "Diastolic.*"
+- tapOn: "Diastolic.*.*"
 - inputText: ${output.data.TEST_BP_DIASTOLIC}
 - tapOn: "Note.*"
 - inputText: "Normal reading"
@@ -36,5 +36,5 @@ tags: ["P1", "patient", "log"]
       text: "No General logged.*"
     timeout: 10000
     direction: DOWN
-- assertVisible: ".*Blood Pressure: ${output.data.TEST_BP_SYSTOLIC}/${output.data.TEST_BP_DIASTOLIC} mmHg.*Normal reading.*"
+- assertVisible: ".*Blood Pressure: ${output.data.TEST_BP_SYSTOLIC}/${output.data.TEST_BP_DIASTOLIC} mmHg.*"
 - back

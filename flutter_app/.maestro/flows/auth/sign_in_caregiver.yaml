@@ -14,11 +14,11 @@ tags: ["P0", "auth", "caregiver"]
 - tapOn: "Sign in"
 - waitForAnimationToEnd
 - assertVisible: ".*Welcome Back.*"
-- assertVisible: "Email Address"
-- tapOn: "your.email@example.com"
+- assertVisible: "Email Address.*"
+- tapOn: "Email Address.*"
 - inputText: ${output.data.CAREGIVER_EMAIL}
-- assertVisible: "Password"
-- tapOn: "Enter your password"
+- assertVisible: "Password.*"
+- tapOn: "Password.*"
 - inputText: ${output.data.CAREGIVER_PASSWORD}
 - hideKeyboard
 - tapOn: "Sign In"

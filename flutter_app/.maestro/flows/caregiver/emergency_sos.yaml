@@ -12,6 +12,6 @@ tags: ["P0", "caregiver", "emergency"]
 - assertVisible: ".*Alerts.*"
 - tapOn: ".*Alerts.*"
 - assertVisible: "EMERGENCY ALERT"
-- tapOn: ".*Acknowledge Alert.*"
+- tapOn: ".*Acknowledge emergency alert.*"
 - waitForAnimationToEnd
 - assertVisible: "Dashboard"

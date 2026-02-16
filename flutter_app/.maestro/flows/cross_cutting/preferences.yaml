@@ -11,12 +11,12 @@ tags: ["P0", "preferences", "cross-cutting"]
     file: "../../helpers/common_flows/sign_in_caregiver.yaml"
 - tapOn:
     point: "7%,6%" #menu button
-- assertVisible: "Preferences"
-- tapOn: "Preferences"
-- assertVisible: "Preferences & Accessibility"
-- assertVisible: "Text Size.*"
-- assertVisible: "Dark Mode.*"
-- assertVisible: "High Contrast.*"
-- assertVisible: "Accessibility.*"
-- assertVisible: "Screen Reader.*"
+- assertVisible: ".*Preferences.*"
+- tapOn: ".*Preferences.*"
+- assertVisible: ".*Preferences & Accessibility.*"
+- assertVisible: ".*Text Size.*"
+- assertVisible: ".*Dark Mode.*"
+- assertVisible: ".*High Contrast.*"
+- assertVisible: ".*Accessibility.*"
+- assertVisible: ".*Screen Reader.*"
 - back

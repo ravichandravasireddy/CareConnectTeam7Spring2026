@@ -14,5 +14,5 @@ tags: ["P1", "patient", "history"]
 - tapOn:
     point: "7%,6%" #menu button
 - tapOn: "Health Timeline"
-- assertVisible: "Health Timeline"
+- assertVisible: "Health Timeline.*"
 - back

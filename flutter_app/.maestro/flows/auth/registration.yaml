@@ -35,11 +35,10 @@ tags: ["P0", "auth", "registration"]
 - hideKeyboard
 - scrollUntilVisible:
     element:
-      text: "Sign In"
+      text: ".*Sign In.*"
     timeout: 10000
     direction: DOWN
-- tapOn:
-    point: "16%,73%" # terms checkbox
+- tapOn: "Agree to Terms of Service and Privacy Policy"
 - tapOn: "Create Account"
 - waitForAnimationToEnd
 - assertVisible: "Home"
