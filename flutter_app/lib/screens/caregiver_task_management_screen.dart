@@ -114,7 +114,7 @@ class _OverdueTasksCard extends StatelessWidget {
               child: ExcludeSemantics(
                 child: Row(
                   children: [
-                    Icon(Icons.warning_amber_rounded, color: AppColors.error500),
+                    Icon(Icons.warning_amber_rounded, color: AppColors.error700),
                     const SizedBox(width: 8),
                     Text(
                       'Overdue Tasks (2)',
@@ -145,7 +145,7 @@ class _OverdueTasksCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                       border: Border(
                         left: BorderSide(
-                          color: AppColors.error500,
+                          color: AppColors.error700,
                           width: 4,
                         ),
                       ),

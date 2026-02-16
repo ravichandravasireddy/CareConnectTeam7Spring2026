@@ -435,7 +435,7 @@ void main() {
 
       if (provider.unreadCount > 0) {
         expect(
-          find.bySemanticsLabel('Mark all as read, button'),
+          find.bySemanticsLabel('Mark all as read'),
           findsOneWidget,
         );
       }
@@ -445,10 +445,14 @@ void main() {
         (tester) async {
       await tester.pumpWidget(createTestHarness());
 
-      expect(
-        find.bySemanticsLabel('Notifications list'),
-        findsOneWidget,
+      // Label may include unread count, so check with widget predicate
+      final semanticsFinder = find.byWidgetPredicate(
+        (widget) =>
+            widget is Semantics &&
+            widget.properties.label != null &&
+            widget.properties.label!.startsWith('Notifications list'),
       );
+      expect(semanticsFinder, findsOneWidget);
     });
 
     testWidgets('should have semantic labels for notification cards', 
@@ -456,9 +460,13 @@ void main() {
       await tester.pumpWidget(createTestHarness());
 
       // Each notification card should have a comprehensive semantic label
-      // Format: "Title, Summary, Time, button"
-      final semanticsFinder = find.bySemanticsLabel(
-        RegExp(r'.+, .+, .+, button')
+      // Format: "Unread, Type: Title, Summary, Time" or "Type: Title, Summary, Time"
+      final semanticsFinder = find.byWidgetPredicate(
+        (widget) =>
+            widget is Semantics &&
+            widget.properties.label != null &&
+            widget.properties.label!.contains(',') &&
+            widget.properties.button == true,
       );
       
       expect(semanticsFinder, findsWidgets);

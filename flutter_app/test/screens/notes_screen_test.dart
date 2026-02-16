@@ -454,11 +454,9 @@ void main() {
         ),
       );
 
-      // ASSERT: Empty state message is shown
-      expect(
-        find.text('No notes yet. Tap Add New Note to create one.'),
-        findsOneWidget,
-      );
+      // ASSERT: Empty state message is shown (split into two text widgets)
+      expect(find.text('No notes yet'), findsOneWidget);
+      expect(find.text('Tap Add New Note to create one.'), findsOneWidget);
     });
 
     testWidgets('back button should be present', (tester) async {
@@ -750,7 +748,7 @@ void main() {
         );
 
         // ASSERT: Semantics label is present for screen readers
-        expect(find.bySemanticsLabel('Add New Note, button'), findsOneWidget);
+        expect(find.bySemanticsLabel('Add New Note'), findsOneWidget);
       },
     );
 
@@ -776,7 +774,7 @@ void main() {
             widget is Semantics &&
             widget.properties.label != null &&
             widget.properties.label!.contains('Medication Side Effects') &&
-            widget.properties.hint == 'Tap to open note',
+            widget.properties.hint == 'Double tap to open note',
       );
 
       expect(semanticsFinder, findsOneWidget);

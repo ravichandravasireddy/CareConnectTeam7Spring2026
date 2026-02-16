@@ -158,13 +158,13 @@ class _TimelineBody extends StatelessWidget {
         return Stack(
           children: [
             // Vertical line
-            Semantics(
-              label: 'Timeline connector',
-              image: true,
-              child: Positioned(
-                left: 23,
-                top: 24,
-                bottom: 24,
+            Positioned(
+              left: 23,
+              top: 24,
+              bottom: 24,
+              child: Semantics(
+                label: 'Timeline connector',
+                image: true,
                 child: Container(
                   width: 2,
                   color: colorScheme.outline,

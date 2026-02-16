@@ -247,7 +247,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                     children: [
                       _CallButton(
                         icon: _micOn ? Icons.mic : Icons.mic_off,
-                        semanticLabel: _micOn ? 'Mute microphone' : 'Unmute microphone',
+                        semanticLabel: _micOn ? 'Microphone on' : 'Microphone off',
                         semanticState: _micOn ? 'Microphone on' : 'Microphone off',
                         semanticHint: _micOn 
                             ? 'Double tap to mute your microphone'
@@ -271,7 +271,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                       const SizedBox(width: 16),
                       _CallButton(
                         icon: _videoOn ? Icons.videocam : Icons.videocam_off,
-                        semanticLabel: _videoOn ? 'Turn off video' : 'Turn on video',
+                        semanticLabel: _videoOn ? 'Video on' : 'Video off',
                         semanticState: _videoOn ? 'Video on' : 'Video off',
                         semanticHint: _videoOn 
                             ? 'Double tap to turn off your camera'

@@ -101,7 +101,7 @@ class PatientDashboardScreen extends StatelessWidget {
                       child: _buildSummaryCard(
                         context,
                         icon: Icons.favorite_outline,
-                        iconColor: AppColors.error500,
+                        iconColor: AppColors.error700,
                         iconBgColor: AppColors.error100,
                         title: 'BP Today',
                         value: '120/80',

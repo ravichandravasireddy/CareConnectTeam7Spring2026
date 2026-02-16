@@ -134,12 +134,9 @@ void main() {
         ),
       );
 
-      expect(
-        find.text(
-          'No timeline events yet. Add health logs, notes, or tasks to see them here.',
-        ),
-        findsOneWidget,
-      );
+      // Empty state message is split into two text widgets
+      expect(find.text('No timeline events yet'), findsOneWidget);
+      expect(find.text('Add health logs, notes, or tasks to see them here.'), findsOneWidget);
     });
 
     testWidgets('empty state should be centered', (tester) async {
@@ -151,10 +148,8 @@ void main() {
         ),
       );
 
-      // Only the screen's body Center contains the empty message (AppBar adds 2 more Centers)
-      final emptyMessage = find.text(
-        'No timeline events yet. Add health logs, notes, or tasks to see them here.',
-      );
+      // Empty state should be centered (checking the first text widget)
+      final emptyMessage = find.text('No timeline events yet');
       final centerFinder = find.ancestor(
         of: emptyMessage,
         matching: find.byType(Center),
@@ -596,7 +591,9 @@ void main() {
       );
       final positioned = tester.widget<Positioned>(positionedFinder);
 
-      final container = positioned.child as Container;
+      // Positioned now wraps Semantics, which wraps Container
+      final semantics = positioned.child as Semantics;
+      final container = semantics.child as Container;
       expect(container.constraints?.maxWidth, 2);
     });
 
@@ -841,12 +838,9 @@ void main() {
       );
 
       // Initially empty
-      expect(
-        find.text(
-          'No timeline events yet. Add health logs, notes, or tasks to see them here.',
-        ),
-        findsOneWidget,
-      );
+      // Empty state message is split into two text widgets
+      expect(find.text('No timeline events yet'), findsOneWidget);
+      expect(find.text('Add health logs, notes, or tasks to see them here.'), findsOneWidget);
 
       // Add a log
       healthLogProvider.addLog(
