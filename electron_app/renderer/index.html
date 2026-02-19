@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+  <title>CareConnect</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app" role="main">
+    <!-- Welcome Screen -->
+    <section id="screen-welcome" class="screen screen-welcome" aria-label="Welcome">
+      <div class="welcome-hero">
+        <div class="logo-circle" aria-hidden="true">
+          <span class="logo-icon" aria-hidden="true">♥</span>
+        </div>
+        <h1>CareConnect</h1>
+        <p class="welcome-subtitle">Remote health management and coordination for patients and caregivers</p>
+      </div>
+      <div class="welcome-actions">
+        <button type="button" id="btn-get-started" class="btn btn-primary">Get Started</button>
+        <button type="button" id="btn-sign-in" class="btn btn-outline">Sign In</button>
+      </div>
+      <p class="compliance-text">HIPAA-compliant • Secure • Private</p>
+    </section>
+
+    <!-- Role Selection Screen (between Welcome and Registration) -->
+    <section id="screen-role" class="screen screen-role" aria-label="Choose your role" hidden>
+      <button type="button" class="back-btn" id="role-back" aria-label="Go back">← Back</button>
+      <h2>Choose Your Role</h2>
+      <p class="role-subtitle">How will you use CareConnect?</p>
+      <div class="role-cards">
+        <button type="button" class="role-card" id="role-patient" data-role="patient">
+          <span class="role-icon" aria-hidden="true">👤</span>
+          <span class="role-label">Care Recipient</span>
+          <span class="role-desc">I receive care</span>
+        </button>
+        <button type="button" class="role-card" id="role-caregiver" data-role="caregiver">
+          <span class="role-icon" aria-hidden="true">🩺</span>
+          <span class="role-label">Caregiver</span>
+          <span class="role-desc">I provide care</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Sign In Screen -->
+    <section id="screen-signin" class="screen screen-signin" aria-label="Sign in" hidden>
+      <button type="button" class="back-btn" id="signin-back" aria-label="Go back to welcome">← Back</button>
+      <div class="logo-circle logo-small" aria-hidden="true">
+        <span class="logo-icon" aria-hidden="true">♥</span>
+      </div>
+      <h2>Welcome Back</h2>
+      <p class="signin-subtitle">Sign in to your CareConnect account</p>
+      <form id="form-signin" class="auth-form" novalidate>
+        <div class="field">
+          <label for="signin-email">Email Address</label>
+          <input type="email" id="signin-email" name="email" placeholder="your.email@example.com" autocomplete="email" required>
+          <span class="field-error" id="signin-email-error" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="signin-password">Password</label>
+          <div class="input-with-toggle">
+            <input type="password" id="signin-password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+            <button type="button" class="toggle-password" id="signin-toggle-pw" aria-label="Show password">Show</button>
+          </div>
+          <span class="field-error" id="signin-password-error" aria-live="polite"></span>
+        </div>
+        <button type="button" class="link-btn" id="btn-forgot-password">Forgot Password?</button>
+        <button type="submit" class="btn btn-primary btn-full" id="btn-signin-submit">Sign In</button>
+      </form>
+      <p class="auth-switch">
+        Don't have an account? <button type="button" class="link-btn inline" id="signin-to-register">Sign Up</button>
+      </p>
+      <div class="demo-credentials" role="status" aria-live="polite">
+        <strong>Demo login</strong>
+        <p>Patient: patient@careconnect.demo / password123</p>
+        <p>Caregiver: caregiver@careconnect.demo / password123</p>
+      </div>
+    </section>
+
+    <!-- Registration Screen -->
+    <section id="screen-registration" class="screen screen-registration" aria-label="Create account" hidden>
+      <button type="button" class="back-btn" id="reg-back" aria-label="Go back">← Back</button>
+      <h2>Join CareConnect</h2>
+      <p class="reg-subtitle">Create your account to get started</p>
+      <form id="form-registration" class="auth-form" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="reg-first">First Name</label>
+            <input type="text" id="reg-first" name="firstName" placeholder="John" autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label for="reg-last">Last Name</label>
+            <input type="text" id="reg-last" name="lastName" placeholder="Doe" autocomplete="family-name">
+          </div>
+        </div>
+        <div class="field">
+          <label for="reg-email">Email Address</label>
+          <input type="email" id="reg-email" name="email" placeholder="your.email@example.com" autocomplete="email">
+          <span class="field-error" id="reg-email-error" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="reg-phone">Phone Number</label>
+          <input type="tel" id="reg-phone" name="phone" placeholder="(555) 123-4567" autocomplete="tel">
+        </div>
+        <div class="field">
+          <label for="reg-password">Password</label>
+          <div class="input-with-toggle">
+            <input type="password" id="reg-password" name="password" placeholder="Create a strong password" autocomplete="new-password">
+            <button type="button" class="toggle-password" id="reg-toggle-pw" aria-label="Show password">Show</button>
+          </div>
+          <span class="field-hint">At least 8 characters with letters and numbers</span>
+          <span class="field-error" id="reg-password-error" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="reg-confirm">Confirm Password</label>
+          <div class="input-with-toggle">
+            <input type="password" id="reg-confirm" name="confirmPassword" placeholder="Re-enter your password" autocomplete="new-password">
+            <button type="button" class="toggle-password" id="reg-toggle-confirm" aria-label="Show confirm password">Show</button>
+          </div>
+          <span class="field-error" id="reg-confirm-error" aria-live="polite"></span>
+        </div>
+        <div class="field checkbox-field">
+          <label class="checkbox-label" for="reg-terms">
+            <input type="checkbox" id="reg-terms" name="terms" required>
+            <span>I agree to the <button type="button" class="link-btn inline" id="link-terms">Terms of Service</button> and <button type="button" class="link-btn inline" id="link-privacy">Privacy Policy</button></span>
+          </label>
+          <span class="field-error" id="reg-terms-error" aria-live="polite"></span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="btn-reg-submit">Create Account</button>
+      </form>
+      <p class="auth-switch">
+        Already have an account? <button type="button" class="link-btn inline" id="reg-to-signin">Sign In</button>
+      </p>
+    </section>
+
+    <!-- Status message for screen readers -->
+    <div id="status-announce" aria-live="polite" aria-atomic="true" class="sr-only" role="status"></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
