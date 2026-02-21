@@ -7,11 +7,21 @@ const MOCK_PATIENT_EMAIL = 'patient@careconnect.demo';
 const MOCK_CAREGIVER_EMAIL = 'caregiver@careconnect.demo';
 const MOCK_PASSWORD = 'password123';
 
+const authView = document.getElementById('auth-view');
+const dashboardView = document.getElementById('dashboard-view');
+const app = document.getElementById('app');
+
 const screens = {
   welcome: document.getElementById('screen-welcome'),
   role: document.getElementById('screen-role'),
   signin: document.getElementById('screen-signin'),
   registration: document.getElementById('screen-registration'),
+};
+
+const dashboardScreens = {
+  dashboard: document.getElementById('screen-dashboard'),
+  'patient-detail': document.getElementById('screen-patient-detail'),
+  communication: document.getElementById('screen-communication'),
 };
 
 const statusAnnounce = document.getElementById('status-announce');
@@ -29,6 +39,48 @@ function showScreen(name) {
   }
 }
 
+function showDashboardView() {
+  authView.hidden = true;
+  dashboardView.hidden = false;
+  app.classList.add('dashboard-mode');
+  showDashboardScreen('dashboard');
+  announce('Caregiver dashboard');
+}
+
+function showAuthView() {
+  dashboardView.hidden = true;
+  authView.hidden = false;
+  app.classList.remove('dashboard-mode');
+  showScreen('welcome');
+  announce('Welcome screen');
+}
+
+function showDashboardScreen(name) {
+  Object.entries(dashboardScreens).forEach(([key, el]) => {
+    if (el) {
+      el.hidden = key !== name;
+    }
+  });
+  const navMap = { dashboard: 'dashboard', 'patient-detail': 'dashboard', communication: 'messages' };
+  const activeNav = navMap[name] || 'dashboard';
+  document.querySelectorAll('.nav-item, .top-nav-item').forEach((btn) => {
+    const screen = btn.getAttribute('data-screen');
+    btn.classList.toggle('active', screen === activeNav);
+    btn.setAttribute('aria-current', screen === activeNav ? 'page' : null);
+  });
+  const breadcrumbEl = document.getElementById('breadcrumb-text');
+  if (breadcrumbEl) {
+    if (name === 'patient-detail') {
+      breadcrumbEl.innerHTML = '<button type="button" class="link-btn" id="breadcrumb-dashboard">Dashboard</button> <span class="breadcrumb-sep">›</span> Robert Smith';
+      document.getElementById('breadcrumb-dashboard')?.addEventListener('click', () => showDashboardScreen('dashboard'));
+    } else {
+      const labels = { dashboard: 'Dashboard', communication: 'Communication Center' };
+      breadcrumbEl.textContent = labels[name] || 'Dashboard';
+    }
+  }
+  announce(`${name} screen`);
+}
+
 function announce(message) {
   if (statusAnnounce) {
     statusAnnounce.textContent = message;
@@ -37,6 +89,15 @@ function announce(message) {
 
 let selectedRole = 'patient';
 let prevScreen = 'signin';
+
+// ----- Skip link (WCAG 2.4.1 Bypass Blocks) -----
+document.getElementById('skip-link')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  const main = document.getElementById('main-content');
+  const auth = document.getElementById('auth-view');
+  if (auth && !auth.hidden && auth.focus) auth.focus();
+  else if (main) main.focus();
+});
 
 // ----- Navigation -----
 document.getElementById('btn-get-started')?.addEventListener('click', () => showScreen('role'));
@@ -171,7 +232,7 @@ formSignIn?.addEventListener('submit', (e) => {
       } else {
         alert('Sign in successful as patient');
       }
-      // TODO: Navigate to patient dashboard
+      showDashboardView();
     } else if (normalizedEmail === MOCK_CAREGIVER_EMAIL && normalizedPassword === MOCK_PASSWORD) {
       announce('Sign in successful as caregiver');
       if (window.electronAPI?.invoke) {
@@ -183,7 +244,7 @@ formSignIn?.addEventListener('submit', (e) => {
       } else {
         alert('Sign in successful as caregiver');
       }
-      // TODO: Navigate to caregiver dashboard
+      showDashboardView();
     } else {
       if (passwordError) passwordError.textContent = 'Invalid email or password';
       passwordInput?.classList.add('error');
@@ -290,6 +351,39 @@ formReg?.addEventListener('submit', (e) => {
     btnRegSubmit.textContent = 'Create Account';
     showScreen('signin');
   }, 800);
+});
+
+// ----- Dashboard navigation -----
+function handleNavClick(screen) {
+  if (screen === 'messages' || screen === 'video') {
+    showDashboardScreen('communication');
+  } else {
+    showDashboardScreen(screen === 'dashboard' ? 'dashboard' : 'dashboard');
+  }
+}
+
+document.querySelectorAll('.nav-item').forEach((btn) => {
+  btn.addEventListener('click', () => handleNavClick(btn.getAttribute('data-screen')));
+});
+
+document.querySelectorAll('.top-nav-item').forEach((btn) => {
+  btn.addEventListener('click', () => handleNavClick(btn.getAttribute('data-screen')));
+});
+
+document.querySelector('[data-patient="robert"]')?.addEventListener('click', () => {
+  showDashboardScreen('patient-detail');
+});
+
+document.getElementById('patient-detail-back')?.addEventListener('click', () => {
+  showDashboardScreen('dashboard');
+});
+
+document.getElementById('btn-sign-out')?.addEventListener('click', () => {
+  showAuthView();
+});
+
+document.getElementById('btn-start-video')?.addEventListener('click', () => {
+  announce('Start video call - feature coming soon');
 });
 
 // Start on welcome screen
