@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+  <title>CareConnect</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a href="#" class="skip-link" id="skip-link">Skip to main content</a>
+  <main id="app" role="main">
+    <!-- Auth View (Welcome, Sign In, Registration) -->
+    <div id="auth-view" class="app-view" tabindex="-1">
+    <!-- Welcome Screen -->
+    <section id="screen-welcome" class="screen screen-welcome" aria-label="Welcome">
+      <div class="welcome-hero">
+        <div class="logo-circle" aria-hidden="true">
+          <span class="logo-icon" aria-hidden="true">♥</span>
+        </div>
+        <h1>CareConnect</h1>
+        <p class="welcome-subtitle">Remote health management and coordination for patients and caregivers</p>
+      </div>
+      <div class="welcome-actions">
+        <button type="button" id="btn-get-started" class="btn btn-primary">Get Started</button>
+        <button type="button" id="btn-sign-in" class="btn btn-outline">Sign In</button>
+      </div>
+      <p class="compliance-text">HIPAA-compliant • Secure • Private</p>
+    </section>
+
+    <!-- Role Selection Screen (between Welcome and Registration) -->
+    <section id="screen-role" class="screen screen-role" aria-label="Choose your role" hidden>
+      <button type="button" class="back-btn" id="role-back" aria-label="Go back">← Back</button>
+      <h2>Choose Your Role</h2>
+      <p class="role-subtitle">How will you use CareConnect?</p>
+      <div class="role-cards">
+        <button type="button" class="role-card" id="role-patient" data-role="patient">
+          <span class="role-icon" aria-hidden="true">👤</span>
+          <span class="role-label">Care Recipient</span>
+          <span class="role-desc">I receive care</span>
+        </button>
+        <button type="button" class="role-card" id="role-caregiver" data-role="caregiver">
+          <span class="role-icon" aria-hidden="true">🩺</span>
+          <span class="role-label">Caregiver</span>
+          <span class="role-desc">I provide care</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Sign In Screen -->
+    <section id="screen-signin" class="screen screen-signin" aria-label="Sign in" hidden>
+      <button type="button" class="back-btn" id="signin-back" aria-label="Go back to welcome">← Back</button>
+      <div class="logo-circle logo-small" aria-hidden="true">
+        <span class="logo-icon" aria-hidden="true">♥</span>
+      </div>
+      <h2>Welcome Back</h2>
+      <p class="signin-subtitle">Sign in to your CareConnect account</p>
+      <form id="form-signin" class="auth-form" novalidate>
+        <div class="field">
+          <label for="signin-email">Email Address</label>
+          <input type="email" id="signin-email" name="email" placeholder="your.email@example.com" autocomplete="email" required>
+          <span class="field-error" id="signin-email-error" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="signin-password">Password</label>
+          <div class="input-with-toggle">
+            <input type="password" id="signin-password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+            <button type="button" class="toggle-password" id="signin-toggle-pw" aria-label="Show password">Show</button>
+          </div>
+          <span class="field-error" id="signin-password-error" aria-live="polite"></span>
+        </div>
+        <button type="button" class="link-btn" id="btn-forgot-password">Forgot Password?</button>
+        <button type="submit" class="btn btn-primary btn-full" id="btn-signin-submit">Sign In</button>
+      </form>
+      <p class="auth-switch">
+        Don't have an account? <button type="button" class="link-btn inline" id="signin-to-register">Sign Up</button>
+      </p>
+      <div class="demo-credentials" role="status" aria-live="polite">
+        <strong>Demo login</strong>
+        <p>Patient: patient@careconnect.demo / password123</p>
+        <p>Caregiver: caregiver@careconnect.demo / password123</p>
+      </div>
+    </section>
+
+    <!-- Registration Screen -->
+    <section id="screen-registration" class="screen screen-registration" aria-label="Create account" hidden>
+      <button type="button" class="back-btn" id="reg-back" aria-label="Go back">← Back</button>
+      <h2>Join CareConnect</h2>
+      <p class="reg-subtitle">Create your account to get started</p>
+      <form id="form-registration" class="auth-form" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="reg-first">First Name</label>
+            <input type="text" id="reg-first" name="firstName" placeholder="John" autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label for="reg-last">Last Name</label>
+            <input type="text" id="reg-last" name="lastName" placeholder="Doe" autocomplete="family-name">
+          </div>
+        </div>
+        <div class="field">
+          <label for="reg-email">Email Address</label>
+          <input type="email" id="reg-email" name="email" placeholder="your.email@example.com" autocomplete="email">
+          <span class="field-error" id="reg-email-error" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="reg-phone">Phone Number</label>
+          <input type="tel" id="reg-phone" name="phone" placeholder="(555) 123-4567" autocomplete="tel">
+        </div>
+        <div class="field">
+          <label for="reg-password">Password</label>
+          <div class="input-with-toggle">
+            <input type="password" id="reg-password" name="password" placeholder="Create a strong password" autocomplete="new-password">
+            <button type="button" class="toggle-password" id="reg-toggle-pw" aria-label="Show password">Show</button>
+          </div>
+          <span class="field-hint">At least 8 characters with letters and numbers</span>
+          <span class="field-error" id="reg-password-error" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="reg-confirm">Confirm Password</label>
+          <div class="input-with-toggle">
+            <input type="password" id="reg-confirm" name="confirmPassword" placeholder="Re-enter your password" autocomplete="new-password">
+            <button type="button" class="toggle-password" id="reg-toggle-confirm" aria-label="Show confirm password">Show</button>
+          </div>
+          <span class="field-error" id="reg-confirm-error" aria-live="polite"></span>
+        </div>
+        <div class="field checkbox-field">
+          <label class="checkbox-label" for="reg-terms">
+            <input type="checkbox" id="reg-terms" name="terms" required>
+            <span>I agree to the <button type="button" class="link-btn inline" id="link-terms">Terms of Service</button> and <button type="button" class="link-btn inline" id="link-privacy">Privacy Policy</button></span>
+          </label>
+          <span class="field-error" id="reg-terms-error" aria-live="polite"></span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="btn-reg-submit">Create Account</button>
+      </form>
+      <p class="auth-switch">
+        Already have an account? <button type="button" class="link-btn inline" id="reg-to-signin">Sign In</button>
+      </p>
+    </section>
+    </div><!-- /auth-view -->
+
+    <!-- Dashboard View (Caregiver only) -->
+    <div id="dashboard-view" class="app-view" hidden>
+      <header class="app-header" role="banner">
+        <div class="header-left">
+          <div class="app-brand">
+            <span class="logo-icon" aria-hidden="true">♥</span>
+            <span>CareConnect</span>
+          </div>
+          <nav class="top-nav" aria-label="Primary navigation">
+            <button type="button" class="top-nav-item active" data-screen="dashboard" aria-current="page">Dashboard</button>
+            <button type="button" class="top-nav-item" data-screen="patients">Patients</button>
+            <button type="button" class="top-nav-item" data-screen="schedule">Schedule</button>
+            <button type="button" class="top-nav-item" data-screen="reports">Reports</button>
+          </nav>
+        </div>
+        <div class="header-right">
+          <span class="header-alerts" aria-live="polite">3 critical alerts</span>
+          <div class="header-user" aria-label="Dr. Smith, Caregiver">
+            <span class="user-avatar">DS</span>
+            <span class="user-info">
+              <span class="user-name">Dr. Smith</span>
+              <span class="user-role">Caregiver</span>
+            </span>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-sign-out">Sign Out</button>
+        </div>
+      </header>
+      <div class="app-body">
+        <aside class="sidebar" aria-label="Secondary navigation">
+          <nav class="sidebar-nav">
+            <div class="nav-group">
+              <span class="nav-group-label">Monitoring</span>
+              <button type="button" class="nav-item active" data-screen="dashboard" aria-current="page">Dashboard</button>
+              <button type="button" class="nav-item" data-screen="patients">All Patients</button>
+              <button type="button" class="nav-item" data-screen="health">Health Data</button>
+            </div>
+            <div class="nav-group">
+              <span class="nav-group-label">Communication</span>
+              <button type="button" class="nav-item" data-screen="messages">
+                Messages
+                <span class="nav-badge" aria-label="5 unread">5</span>
+              </button>
+              <button type="button" class="nav-item" data-screen="video">Video Calls</button>
+            </div>
+            <div class="nav-group">
+              <span class="nav-group-label">Tools</span>
+              <button type="button" class="nav-item" data-screen="schedule">Schedule</button>
+              <button type="button" class="nav-item" data-screen="reports">Reports</button>
+              <button type="button" class="nav-item" data-screen="settings">Settings</button>
+            </div>
+          </nav>
+        </aside>
+        <div class="dashboard-main" id="main-content" tabindex="-1">
+        <div class="dashboard-toolbar">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <span id="breadcrumb-text">Dashboard</span>
+          </nav>
+        </div>
+        <div class="dashboard-content">
+          <!-- Screen: Caregiver Dashboard -->
+          <section id="screen-dashboard" class="dashboard-screen" aria-label="Caregiver Dashboard">
+            <p class="dashboard-greeting">Good morning, Dr. Smith</p>
+            <p class="dashboard-date">Wednesday, February 18, 2026 • You have 3 critical alerts</p>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <span class="stat-value">24</span>
+                <span class="stat-label">Active Patients</span>
+                <span class="stat-change positive">↑ 8%</span>
+              </div>
+              <div class="stat-card stat-alert">
+                <span class="stat-value">3</span>
+                <span class="stat-label">Critical Alerts</span>
+                <span class="stat-meta">Today</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-value">12</span>
+                <span class="stat-label">Scheduled Tasks</span>
+                <span class="stat-meta">5</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-value">5</span>
+                <span class="stat-label">Unread Messages</span>
+              </div>
+            </div>
+            <div class="dashboard-section">
+              <h2>Critical Alerts</h2>
+              <p class="section-subtitle">3 patients need immediate attention</p>
+              <div class="alert-list">
+                <div class="alert-card alert-critical" role="alert">
+                  <h3>Robert Smith - Heart Rate Abnormal</h3>
+                  <p>BPM: 125 • 15 minutes ago • High Priority</p>
+                  <div class="alert-actions">
+                    <button type="button" class="btn btn-primary btn-sm" data-patient="robert">View Details</button>
+                    <button type="button" class="btn btn-secondary btn-sm">Dismiss</button>
+                  </div>
+                </div>
+                <div class="alert-card alert-warning" role="alert">
+                  <h3>Mary Johnson - Missed Medication</h3>
+                  <p>Morning dose overdue by 2 hours • Medium Priority</p>
+                  <div class="alert-actions">
+                    <button type="button" class="btn btn-primary btn-sm">Contact Patient</button>
+                    <button type="button" class="btn btn-secondary btn-sm">Dismiss</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="dashboard-section">
+              <h2>Recent Patient Activity</h2>
+              <div class="data-table-wrapper">
+                <table class="data-table" role="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Patient</th>
+                      <th scope="col">Activity</th>
+                      <th scope="col">Time</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="patient-avatar">JD</span> John Doe</td>
+                      <td>Vitals recorded</td>
+                      <td>2 hours ago</td>
+                      <td><span class="badge badge-normal">Normal</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="patient-avatar">MJ</span> Mary Johnson</td>
+                      <td>Medication due</td>
+                      <td>5 hours ago</td>
+                      <td><span class="badge badge-overdue">Overdue</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="patient-avatar">RS</span> Robert Smith</td>
+                      <td>Heart rate check</td>
+                      <td>15 min ago</td>
+                      <td><span class="badge badge-critical">Critical</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- Screen: Patient Detail -->
+          <section id="screen-patient-detail" class="dashboard-screen" aria-label="Patient Detail" hidden>
+            <button type="button" class="back-btn" id="patient-detail-back">← Back to Dashboard</button>
+            <div class="patient-header">
+              <span class="patient-avatar patient-avatar-lg">RS</span>
+              <div>
+                <h2>Robert Smith</h2>
+                <p class="patient-meta">ID: 12347 • Age: 68 • Male</p>
+                <div class="patient-actions">
+                  <button type="button" class="btn btn-primary btn-sm">Message</button>
+                  <button type="button" class="btn btn-primary btn-sm">Video Call</button>
+                  <button type="button" class="btn btn-secondary btn-sm">Alert Emergency</button>
+                </div>
+              </div>
+            </div>
+            <div class="alert-card alert-critical" role="alert">
+              <h3>Critical: Heart Rate Abnormal</h3>
+              <p>Current BPM: 125 • Last updated: 15 minutes ago</p>
+              <button type="button" class="btn btn-primary btn-sm">Contact Patient</button>
+            </div>
+            <div class="vitals-grid">
+              <div class="vital-card vital-critical">
+                <span class="vital-value">125</span>
+                <span class="vital-label">Heart Rate (BPM)</span>
+                <span class="vital-note">↑ 35 above normal</span>
+              </div>
+              <div class="vital-card">
+                <span class="vital-value">120/80</span>
+                <span class="vital-label">Blood Pressure</span>
+                <span class="vital-note">Within range</span>
+              </div>
+              <div class="vital-card">
+                <span class="vital-value">98.6°F</span>
+                <span class="vital-label">Temperature</span>
+                <span class="vital-note">Normal</span>
+              </div>
+              <div class="vital-card">
+                <span class="vital-value">98%</span>
+                <span class="vital-label">Blood Oxygen</span>
+                <span class="vital-note">Normal range</span>
+              </div>
+            </div>
+            <div class="detail-grid">
+              <div class="detail-section">
+                <h3>Today's Activity Log</h3>
+                <ul class="activity-list">
+                  <li><strong>Heart Rate Alert</strong> — BPM exceeded 120 threshold <span class="time">3:45 PM</span></li>
+                  <li><strong>Medication Taken</strong> — Afternoon dose completed <span class="time">2:00 PM</span></li>
+                  <li><strong>Vitals Recorded</strong> — Blood pressure: 120/80 mmHg <span class="time">10:30 AM</span></li>
+                </ul>
+              </div>
+              <div class="detail-section">
+                <h3>Patient Info</h3>
+                <dl class="info-list">
+                  <dt>Date of Birth</dt><dd>Jan 15, 1958</dd>
+                  <dt>Gender</dt><dd>Male</dd>
+                  <dt>Blood Type</dt><dd>O+</dd>
+                  <dt>Emergency Contact</dt><dd>(555) 123-4567</dd>
+                </dl>
+              </div>
+              <div class="detail-section">
+                <h3>Medications</h3>
+                <ul class="med-list">
+                  <li><strong>Lisinopril</strong> 10mg • Once daily • Morning</li>
+                  <li><strong>Metformin</strong> 500mg • Twice daily • With meals</li>
+                  <li><strong>Aspirin</strong> 81mg • Once daily • Morning</li>
+                </ul>
+              </div>
+              <div class="detail-section">
+                <h3>Conditions</h3>
+                <p class="conditions">Hypertension • Type 2 Diabetes • Heart Disease</p>
+                <button type="button" class="link-btn">View Full Medical History</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Screen: Communication Center -->
+          <section id="screen-communication" class="dashboard-screen" aria-label="Communication Center" hidden>
+            <h2>Communication Center</h2>
+            <button type="button" class="btn btn-primary" id="btn-start-video">Start Video Call</button>
+            <div class="communication-layout">
+              <div class="message-list">
+                <h3>Messages</h3>
+                <button type="button" class="message-item active">
+                  <span class="patient-avatar">JD</span>
+                  <div>
+                    <strong>John Doe</strong>
+                    <span class="message-preview">Thank you for checking in!</span>
+                    <span class="message-time">10:30 AM</span>
+                  </div>
+                </button>
+                <button type="button" class="message-item">
+                  <span class="patient-avatar">MJ</span>
+                  <div>
+                    <strong>Mary Johnson</strong>
+                    <span class="message-preview">I need help with my medication</span>
+                    <span class="message-time">Yesterday</span>
+                    <span class="nav-badge">2</span>
+                  </div>
+                </button>
+                <button type="button" class="message-item">
+                  <span class="patient-avatar">RS</span>
+                  <div>
+                    <strong>Robert Smith</strong>
+                    <span class="message-preview">Feeling better today</span>
+                    <span class="message-time">2 days ago</span>
+                  </div>
+                </button>
+              </div>
+              <div class="chat-area">
+                <div class="chat-header">
+                  <strong>John Doe</strong>
+                  <span>Online • Last vitals: 2 hours ago</span>
+                </div>
+                <div class="chat-messages" role="log" aria-live="polite">
+                  <div class="chat-msg">
+                    <span class="patient-avatar">JD</span>
+                    <p>Good morning Dr. Smith! I just took my morning vitals.</p>
+                    <span class="msg-time">10:15 AM</span>
+                  </div>
+                  <div class="chat-msg">
+                    <span class="patient-avatar">JD</span>
+                    <p>My blood pressure was 118/78 and heart rate was 72.</p>
+                    <span class="msg-time">10:16 AM</span>
+                  </div>
+                  <div class="chat-msg chat-msg-self">
+                    <p>That's excellent John! Your vitals look great. Keep up the good work!</p>
+                    <span class="msg-time">10:18 AM</span>
+                  </div>
+                  <div class="chat-msg chat-msg-self">
+                    <p>Don't forget to take your afternoon medication at 2 PM. I'll send you a reminder.</p>
+                    <span class="msg-time">10:18 AM</span>
+                  </div>
+                  <div class="chat-msg">
+                    <span class="patient-avatar">JD</span>
+                    <p>Thank you for checking in! I really appreciate your help.</p>
+                    <span class="msg-time">10:30 AM</span>
+                  </div>
+                </div>
+                <div class="chat-input-area">
+                  <input type="text" placeholder="Type a message..." class="chat-input" aria-label="Message input">
+                  <button type="button" class="btn btn-primary">Send</button>
+                </div>
+                <p class="chat-hint">Enable live captions • Ctrl+Enter to send</p>
+              </div>
+            </div>
+          </section>
+        </div>
+        </div><!-- /dashboard-main -->
+      </div><!-- /app-body -->
+    </div><!-- /dashboard-view -->
+
+    <!-- Status message for screen readers -->
+    <div id="status-announce" aria-live="polite" aria-atomic="true" class="sr-only" role="status"></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
