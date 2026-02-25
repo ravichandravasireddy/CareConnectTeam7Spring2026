@@ -41,6 +41,13 @@ These shortcuts work across all CareConnect screens for keyboard and screen read
 
 ## 2. Application Menu Shortcuts (Electron Desktop)
 
+The application menu (File, Edit, Go, View, Window, Help) is **native OS UI**, not part of the web page. It is **not in the tab order** of the document.
+
+| Platform | How to focus the menu |
+|----------|------------------------|
+| **Windows / Linux** | Press **Alt** once to focus the menu bar. Then use **Arrow keys** to move between menus, **Enter** or **↓** to open a menu, **Arrow keys** to move between items, **Enter** to choose. You can also press **Alt** plus the underlined letter (e.g. **Alt+F** for File, **Alt+G** for Go). |
+| **macOS** | The menu bar is at the top of the screen. Click a menu name or use **Ctrl+F2** (or **Fn+Ctrl+F2**) to focus the menu bar, then arrow keys and Enter. |
+
 ### File
 
 | Shortcut | Action |
@@ -48,6 +55,16 @@ These shortcuts work across all CareConnect screens for keyboard and screen read
 | Ctrl/Cmd+N | New |
 | Ctrl/Cmd+O | Open |
 | Alt+F4 | Exit (Windows/Linux) |
+
+### Go (navigation — same as top nav bar)
+
+| Menu item | Action |
+|-----------|--------|
+| Dashboard | Go to Dashboard |
+| Patients | Go to All Patients |
+| Schedule | Go to Schedule |
+| Reports | Go to Reports |
+| Messages | Go to Communication Center |
 
 ### Edit
 
@@ -114,6 +131,7 @@ Use the section below as a quick reference. Print or save as PDF.
 | Enter / Space | Activate |
 | Esc | Close dialog |
 | Arrows | Lists / menus |
+| **Alt** (Win/Linux) | Focus application menu (then use arrows / letter keys) |
 
 **File & Edit**
 

@@ -419,6 +419,24 @@ document.getElementById('btn-start-video')?.addEventListener('click', () => {
   announce('Start video call - feature coming soon');
 });
 
+// ----- Application menu: Go (nav) actions -----
+if (window.electronAPI?.onMenuAction) {
+  window.electronAPI.onMenuAction((action) => {
+    const goMap = {
+      'go-dashboard': () => handleNavClick('dashboard'),
+      'go-patients': () => handleNavClick('patients'),
+      'go-schedule': () => handleNavClick('schedule'),
+      'go-reports': () => handleNavClick('reports'),
+      'go-messages': () => handleNavClick('messages'),
+    };
+    const fn = goMap[action];
+    if (fn) {
+      if (dashboardView.hidden) showDashboardView();
+      fn();
+    }
+  });
+}
+
 // ----- Keyboard: Home / End in lists (per KEYBOARD-SHORTCUTS.md) -----
 const LIST_CONTAINER_SELECTORS = [
   '.sidebar-nav',

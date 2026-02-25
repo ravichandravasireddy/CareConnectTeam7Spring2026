@@ -79,6 +79,17 @@ function createMenu() {
       ],
     },
     {
+      label: 'Go',
+      submenu: [
+        { label: 'Dashboard', click: () => mainWindow?.webContents.send('menu-action', 'go-dashboard') },
+        { label: 'Patients', click: () => mainWindow?.webContents.send('menu-action', 'go-patients') },
+        { label: 'Schedule', click: () => mainWindow?.webContents.send('menu-action', 'go-schedule') },
+        { label: 'Reports', click: () => mainWindow?.webContents.send('menu-action', 'go-reports') },
+        { type: 'separator' },
+        { label: 'Messages', click: () => mainWindow?.webContents.send('menu-action', 'go-messages') },
+      ],
+    },
+    {
       label: 'View',
       submenu: [
         { label: 'Reload', accelerator: 'CmdOrCtrl+R', role: 'reload' },
