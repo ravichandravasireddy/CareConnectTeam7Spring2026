@@ -179,7 +179,7 @@
               <span class="nav-group-label">Communication</span>
               <button type="button" class="nav-item" data-screen="messages">
                 Messages
-                <span class="nav-badge" aria-label="5 unread">5</span>
+                <span class="nav-badge" aria-label="5 unread">3</span>
               </button>
               <button type="button" class="nav-item" data-screen="video">Video Calls</button>
             </div>
@@ -231,7 +231,7 @@
                   <h3>Robert Smith - Heart Rate Abnormal</h3>
                   <p>BPM: 125 • 15 minutes ago • High Priority</p>
                   <div class="alert-actions">
-                    <button type="button" class="btn btn-primary btn-sm" data-patient="robert">View Details</button>
+                    <button type="button" class="btn btn-primary btn-sm">Contact Patient</button>
                     <button type="button" class="btn btn-secondary btn-sm">Dismiss</button>
                   </div>
                 </div>
@@ -282,79 +282,179 @@
             </div>
           </section>
 
-          <!-- Screen: Patient Detail -->
-          <section id="screen-patient-detail" class="dashboard-screen" aria-label="Patient Detail" hidden>
-            <button type="button" class="back-btn" id="patient-detail-back">← Back to Dashboard</button>
-            <div class="patient-header">
-              <span class="patient-avatar patient-avatar-lg">RS</span>
-              <div>
-                <h2>Robert Smith</h2>
-                <p class="patient-meta">ID: 12347 • Age: 68 • Male</p>
-                <div class="patient-actions">
-                  <button type="button" class="btn btn-primary btn-sm">Message</button>
-                  <button type="button" class="btn btn-primary btn-sm">Video Call</button>
-                  <button type="button" class="btn btn-secondary btn-sm">Alert Emergency</button>
+          <!-- Screen: Patients List -->
+          <section id="screen-patients" class="dashboard-screen" aria-label="All Patients" hidden>
+            <h2 class="dashboard-greeting">All Patients</h2>
+            <p class="dashboard-date">24 active patients under your care</p>
+            <div class="patient-cards-grid">
+              <a href="#" class="patient-card" data-patient-id="john" aria-label="View John Doe details">
+                <span class="patient-avatar patient-avatar-lg">JD</span>
+                <div class="patient-card-info">
+                  <h3>John Doe</h3>
+                  <p class="patient-card-meta">ID: 12345 • Age: 72</p>
+                  <span class="badge badge-normal">Normal</span>
+                </div>
+              </a>
+              <a href="#" class="patient-card" data-patient-id="mary" aria-label="View Mary Johnson details">
+                <span class="patient-avatar patient-avatar-lg">MJ</span>
+                <div class="patient-card-info">
+                  <h3>Mary Johnson</h3>
+                  <p class="patient-card-meta">ID: 12346 • Age: 65</p>
+                  <span class="badge badge-overdue">Overdue</span>
+                </div>
+              </a>
+              <a href="#" class="patient-card" data-patient-id="robert" aria-label="View Robert Smith details">
+                <span class="patient-avatar patient-avatar-lg">RS</span>
+                <div class="patient-card-info">
+                  <h3>Robert Smith</h3>
+                  <p class="patient-card-meta">ID: 12347 • Age: 68</p>
+                  <span class="badge badge-critical">Critical</span>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Screen: Patient Detail (Health Trends & Vitals) -->
+          <section id="screen-patient-detail" class="dashboard-screen dashboard-screen-detail" aria-label="Patient Detail" hidden>
+            <div class="patient-detail-topbar">
+              <div class="patient-detail-topbar-left">
+                <button type="button" class="back-btn" id="patient-detail-back">← Back to Patients</button>
+                <span class="patient-detail-divider" aria-hidden="true"></span>
+                <div class="patient-detail-identity">
+                  <span class="patient-avatar patient-avatar-lg" id="patient-detail-avatar">RS</span>
+                  <div>
+                    <h3 class="patient-detail-name" id="patient-detail-name">Robert Smith</h3>
+                    <p class="patient-detail-meta" id="patient-detail-meta">ID: 12347 • Age: 68 • Male</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="alert-card alert-critical" role="alert">
-              <h3>Critical: Heart Rate Abnormal</h3>
-              <p>Current BPM: 125 • Last updated: 15 minutes ago</p>
-              <button type="button" class="btn btn-primary btn-sm">Contact Patient</button>
-            </div>
-            <div class="vitals-grid">
-              <div class="vital-card vital-critical">
-                <span class="vital-value">125</span>
-                <span class="vital-label">Heart Rate (BPM)</span>
-                <span class="vital-note">↑ 35 above normal</span>
-              </div>
-              <div class="vital-card">
-                <span class="vital-value">120/80</span>
-                <span class="vital-label">Blood Pressure</span>
-                <span class="vital-note">Within range</span>
-              </div>
-              <div class="vital-card">
-                <span class="vital-value">98.6°F</span>
-                <span class="vital-label">Temperature</span>
-                <span class="vital-note">Normal</span>
-              </div>
-              <div class="vital-card">
-                <span class="vital-value">98%</span>
-                <span class="vital-label">Blood Oxygen</span>
-                <span class="vital-note">Normal range</span>
+              <div class="patient-detail-actions">
+                <button type="button" class="btn btn-secondary btn-sm">Message</button>
+                <button type="button" class="btn btn-primary btn-sm">Video Call</button>
+                <button type="button" class="btn btn-sm patient-detail-emergency">Alert Emergency</button>
               </div>
             </div>
-            <div class="detail-grid">
-              <div class="detail-section">
-                <h3>Today's Activity Log</h3>
-                <ul class="activity-list">
-                  <li><strong>Heart Rate Alert</strong> — BPM exceeded 120 threshold <span class="time">3:45 PM</span></li>
-                  <li><strong>Medication Taken</strong> — Afternoon dose completed <span class="time">2:00 PM</span></li>
-                  <li><strong>Vitals Recorded</strong> — Blood pressure: 120/80 mmHg <span class="time">10:30 AM</span></li>
-                </ul>
+
+            <div class="patient-detail-layout">
+              <div class="patient-detail-main">
+                <div class="alert-card alert-critical patient-detail-alert" role="alert">
+                  <h4>Critical: Heart Rate Abnormal</h4>
+                  <p>Current BPM: 125 • Last updated: 15 minutes ago</p>
+                  <button type="button" class="btn btn-primary btn-sm">Contact Patient</button>
+                </div>
+
+                <div class="vitals-grid patient-detail-vitals">
+                  <div class="vital-card vital-critical">
+                    <span class="vital-value">125</span>
+                    <span class="vital-label">Heart Rate (BPM)</span>
+                    <span class="vital-note">↑ 35 above normal</span>
+                  </div>
+                  <div class="vital-card">
+                    <span class="vital-value">120/80</span>
+                    <span class="vital-label">Blood Pressure</span>
+                    <span class="vital-note">Within range</span>
+                  </div>
+                  <div class="vital-card">
+                    <span class="vital-value">98.6°F</span>
+                    <span class="vital-label">Temperature</span>
+                    <span class="vital-note">Normal</span>
+                  </div>
+                  <div class="vital-card">
+                    <span class="vital-value">98%</span>
+                    <span class="vital-label">Blood Oxygen</span>
+                    <span class="vital-note">Normal range</span>
+                  </div>
+                </div>
+
+                <div class="patient-detail-trends">
+                  <div class="patient-detail-trends-header">
+                    <h3>Heart Rate Trends (Last 7 Days)</h3>
+                    <div class="trend-period-btns">
+                      <button type="button" class="btn btn-primary btn-sm">7 Days</button>
+                      <button type="button" class="btn btn-secondary btn-sm">30 Days</button>
+                      <button type="button" class="btn btn-secondary btn-sm">90 Days</button>
+                    </div>
+                  </div>
+                  <div class="trend-chart" aria-hidden="true">
+                    <div class="trend-chart-bars">
+                      <span class="trend-bar trend-normal" style="height: 60%"></span>
+                      <span class="trend-bar trend-normal" style="height: 65%"></span>
+                      <span class="trend-bar trend-normal" style="height: 58%"></span>
+                      <span class="trend-bar trend-elevated" style="height: 75%"></span>
+                      <span class="trend-bar trend-elevated" style="height: 78%"></span>
+                      <span class="trend-bar trend-critical" style="height: 85%"></span>
+                      <span class="trend-bar trend-critical" style="height: 95%"></span>
+                    </div>
+                    <div class="trend-chart-labels">
+                      <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                    </div>
+                  </div>
+                  <div class="trend-legend">
+                    <span><i class="trend-legend-dot trend-normal"></i> Normal (60–90 BPM)</span>
+                    <span><i class="trend-legend-dot trend-elevated"></i> Elevated (90–110 BPM)</span>
+                    <span><i class="trend-legend-dot trend-critical"></i> Critical (110+ BPM)</span>
+                  </div>
+                </div>
+
+                <div class="patient-detail-activity">
+                  <h3>Today's Activity Log</h3>
+                  <ul class="activity-log-list">
+                    <li class="activity-log-item activity-log-critical">
+                      <span class="activity-log-icon" aria-hidden="true">♥</span>
+                      <div>
+                        <h4>Heart Rate Alert</h4>
+                        <p>BPM exceeded 120 threshold</p>
+                      </div>
+                      <span class="activity-log-time">3:45 PM</span>
+                    </li>
+                    <li class="activity-log-item activity-log-success">
+                      <span class="activity-log-icon" aria-hidden="true">✓</span>
+                      <div>
+                        <h4>Medication Taken</h4>
+                        <p>Afternoon dose completed</p>
+                      </div>
+                      <span class="activity-log-time">2:00 PM</span>
+                    </li>
+                    <li class="activity-log-item activity-log-info">
+                      <span class="activity-log-icon" aria-hidden="true">◉</span>
+                      <div>
+                        <h4>Vitals Recorded</h4>
+                        <p>Blood pressure: 120/80 mmHg</p>
+                      </div>
+                      <span class="activity-log-time">10:30 AM</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div class="detail-section">
-                <h3>Patient Info</h3>
-                <dl class="info-list">
-                  <dt>Date of Birth</dt><dd>Jan 15, 1958</dd>
-                  <dt>Gender</dt><dd>Male</dd>
-                  <dt>Blood Type</dt><dd>O+</dd>
-                  <dt>Emergency Contact</dt><dd>(555) 123-4567</dd>
-                </dl>
-              </div>
-              <div class="detail-section">
-                <h3>Medications</h3>
-                <ul class="med-list">
-                  <li><strong>Lisinopril</strong> 10mg • Once daily • Morning</li>
-                  <li><strong>Metformin</strong> 500mg • Twice daily • With meals</li>
-                  <li><strong>Aspirin</strong> 81mg • Once daily • Morning</li>
-                </ul>
-              </div>
-              <div class="detail-section">
-                <h3>Conditions</h3>
-                <p class="conditions">Hypertension • Type 2 Diabetes • Heart Disease</p>
-                <button type="button" class="link-btn">View Full Medical History</button>
-              </div>
+
+              <aside class="patient-detail-sidebar">
+                <div class="detail-section">
+                  <h3>Patient Info</h3>
+                  <dl class="info-list">
+                    <dt>Date of Birth</dt><dd>Jan 15, 1958</dd>
+                    <dt>Gender</dt><dd>Male</dd>
+                    <dt>Blood Type</dt><dd>O+</dd>
+                    <dt>Emergency Contact</dt><dd>(555) 123-4567</dd>
+                  </dl>
+                </div>
+                <div class="detail-section">
+                  <h3>Medications</h3>
+                  <div class="med-cards">
+                    <div class="med-card"><h4>Lisinopril</h4><p>10mg • Once daily • Morning</p></div>
+                    <div class="med-card"><h4>Metformin</h4><p>500mg • Twice daily • With meals</p></div>
+                    <div class="med-card"><h4>Aspirin</h4><p>81mg • Once daily • Morning</p></div>
+                  </div>
+                </div>
+                <div class="detail-section">
+                  <h3>Conditions</h3>
+                  <div class="conditions-tags">
+                    <span>Hypertension</span>
+                    <span>Type 2 Diabetes</span>
+                    <span>Heart Disease</span>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-full">View Full Medical History</button>
+              </aside>
             </div>
           </section>
 
