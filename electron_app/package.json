@@ -9,7 +9,8 @@
     "test:watch": "jest --watch --coverage",
     "build": "electron-builder --win",
     "build:portable": "electron-builder --win portable",
-    "watch": "nodemon --exec electron . --watch electron_app/ --ext html,css,js"
+    "watch": "nodemon --exec electron . --watch electron_app/ --ext html,css,js",
+    "test:integration": "jest --testPathPattern=integration --testTimeout=20000"
   },
   "build": {
     "appId": "com.careconnect.team7",

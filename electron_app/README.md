@@ -82,24 +82,25 @@ electron_app/
 From the `electron_app` directory:
 
 ```bash
+cd electron_app
+npm install
 npm test
 ```
 
-This runs the full test suite with coverage:
+### Test commands
+
+| Command | Description |
+|---------|-------------|
+| `npm test` | Run all tests with coverage report |
+| `npm run test:watch` | Run tests in watch mode (re-runs on file changes) |
+| `npm run test:integration` | Run only integration tests (launches real Electron app) |
+
+### What gets tested
+
 - **Unit tests** — Auth flow, forms, dashboard navigation, IPC handlers
 - **Keyboard navigation tests** — Tab, Shift+Tab, Home, End, Enter, Space, skip link
 - **Integration tests (~10%)** — IPC communication (main ↔ renderer), window management
-- **Coverage** — Targets >90% line coverage
-
-For watch mode:
-```bash
-npm run test:watch
-```
-
-To run only integration tests (launches real Electron app):
-```bash
-npm run test:integration
-```
+- **Coverage** — Targets >90% line coverage (reported in terminal and `coverage/` folder)
 
 ## Packaging for Windows
 
