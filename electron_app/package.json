@@ -1,12 +1,38 @@
 {
   "name": "electron_app",
   "version": "1.0.0",
-  "description": "",
+  "description": "CareConnect Electron desktop app",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch --coverage",
+    "build": "electron-builder --win",
+    "build:portable": "electron-builder --win portable",
     "watch": "nodemon --exec electron . --watch electron_app/ --ext html,css,js"
+  },
+  "build": {
+    "appId": "com.careconnect.team7",
+    "productName": "CareConnect",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   },
   "keywords": [],
   "author": "",
@@ -16,6 +42,10 @@
     "electron": "^39.2.7"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "electron-builder": "^25.1.8",
+    "jest": "^29.7.0",
+    "jsdom": "^25.0.1",
+    "nodemon": "^3.1.14",
+    "playwright": "^1.58.2"
   }
 }
