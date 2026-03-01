@@ -20,8 +20,15 @@ const screens = {
 
 const dashboardScreens = {
   dashboard: document.getElementById('screen-dashboard'),
+  patients: document.getElementById('screen-patients'),
   'patient-detail': document.getElementById('screen-patient-detail'),
   communication: document.getElementById('screen-communication'),
+};
+
+const PATIENTS = {
+  john: { name: 'John Doe', meta: 'ID: 12345 • Age: 72 • Male', initials: 'JD' },
+  mary: { name: 'Mary Johnson', meta: 'ID: 12346 • Age: 65 • Female', initials: 'MJ' },
+  robert: { name: 'Robert Smith', meta: 'ID: 12347 • Age: 68 • Male', initials: 'RS' },
 };
 
 const statusAnnounce = document.getElementById('status-announce');
@@ -55,13 +62,13 @@ function showAuthView() {
   announce('Welcome screen');
 }
 
-function showDashboardScreen(name) {
+function showDashboardScreen(name, patientId) {
   Object.entries(dashboardScreens).forEach(([key, el]) => {
     if (el) {
       el.hidden = key !== name;
     }
   });
-  const navMap = { dashboard: 'dashboard', 'patient-detail': 'dashboard', communication: 'messages' };
+  const navMap = { dashboard: 'dashboard', patients: 'patients', 'patient-detail': 'patients', communication: 'messages' };
   const activeNav = navMap[name] || 'dashboard';
   document.querySelectorAll('.nav-item, .top-nav-item').forEach((btn) => {
     const screen = btn.getAttribute('data-screen');
@@ -70,15 +77,33 @@ function showDashboardScreen(name) {
   });
   const breadcrumbEl = document.getElementById('breadcrumb-text');
   if (breadcrumbEl) {
-    if (name === 'patient-detail') {
-      breadcrumbEl.innerHTML = '<button type="button" class="link-btn" id="breadcrumb-dashboard">Dashboard</button> <span class="breadcrumb-sep">›</span> Robert Smith';
-      document.getElementById('breadcrumb-dashboard')?.addEventListener('click', () => showDashboardScreen('dashboard'));
+    if (name === 'patient-detail' && patientId && PATIENTS[patientId]) {
+      const patient = PATIENTS[patientId];
+      breadcrumbEl.innerHTML = '<button type="button" class="link-btn" id="breadcrumb-patients">Patients</button> <span class="breadcrumb-sep">›</span> ' + escapeHtml(patient.name);
+      document.getElementById('breadcrumb-patients')?.addEventListener('click', () => showDashboardScreen('patients'));
+    } else if (name === 'patients') {
+      breadcrumbEl.textContent = 'Patients';
     } else {
       const labels = { dashboard: 'Dashboard', communication: 'Communication Center' };
       breadcrumbEl.textContent = labels[name] || 'Dashboard';
     }
   }
+  if (name === 'patient-detail' && patientId && PATIENTS[patientId]) {
+    const p = PATIENTS[patientId];
+    const elName = document.getElementById('patient-detail-name');
+    const elMeta = document.getElementById('patient-detail-meta');
+    const elAvatar = document.getElementById('patient-detail-avatar');
+    if (elName) elName.textContent = p.name;
+    if (elMeta) elMeta.textContent = p.meta;
+    if (elAvatar) elAvatar.textContent = p.initials;
+  }
   announce(`${name} screen`);
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 function announce(message) {
@@ -357,8 +382,12 @@ formReg?.addEventListener('submit', (e) => {
 function handleNavClick(screen) {
   if (screen === 'messages' || screen === 'video') {
     showDashboardScreen('communication');
+  } else if (screen === 'patients') {
+    showDashboardScreen('patients');
+  } else if (screen === 'dashboard') {
+    showDashboardScreen('dashboard');
   } else {
-    showDashboardScreen(screen === 'dashboard' ? 'dashboard' : 'dashboard');
+    showDashboardScreen('dashboard');
   }
 }
 
@@ -370,12 +399,16 @@ document.querySelectorAll('.top-nav-item').forEach((btn) => {
   btn.addEventListener('click', () => handleNavClick(btn.getAttribute('data-screen')));
 });
 
-document.querySelector('[data-patient="robert"]')?.addEventListener('click', () => {
-  showDashboardScreen('patient-detail');
+document.querySelectorAll('.patient-card').forEach((card) => {
+  card.addEventListener('click', (e) => {
+    e.preventDefault();
+    const id = card.getAttribute('data-patient-id');
+    if (id) showDashboardScreen('patient-detail', id);
+  });
 });
 
 document.getElementById('patient-detail-back')?.addEventListener('click', () => {
-  showDashboardScreen('dashboard');
+  showDashboardScreen('patients');
 });
 
 document.getElementById('btn-sign-out')?.addEventListener('click', () => {
@@ -386,5 +419,72 @@ document.getElementById('btn-start-video')?.addEventListener('click', () => {
   announce('Start video call - feature coming soon');
 });
 
-// Start on welcome screen
+// ----- Application menu: Go (nav) actions -----
+if (window.electronAPI?.onMenuAction) {
+  window.electronAPI.onMenuAction((action) => {
+    const goMap = {
+      'go-dashboard': () => handleNavClick('dashboard'),
+      'go-patients': () => handleNavClick('patients'),
+      'go-schedule': () => handleNavClick('schedule'),
+      'go-reports': () => handleNavClick('reports'),
+      'go-messages': () => handleNavClick('messages'),
+    };
+    const fn = goMap[action];
+    if (fn) {
+      if (dashboardView.hidden) showDashboardView();
+      fn();
+    }
+  });
+}
+
+// ----- Keyboard: Home / End in lists (per KEYBOARD-SHORTCUTS.md) -----
+const LIST_CONTAINER_SELECTORS = [
+  '.sidebar-nav',
+  '.top-nav',
+  '.patient-cards-grid',
+  '.message-list',
+  '.alert-list',
+  '.stats-grid',
+  '.trend-period-btns',
+  '.patient-detail-actions',
+  '.activity-log-list',
+].join(', ');
+
+const FOCUSABLE_SELECTOR = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex^="-"])',
+].join(', ');
+
+function getFocusableElements(container) {
+  if (!container || !container.querySelectorAll) return [];
+  return Array.from(container.querySelectorAll(FOCUSABLE_SELECTOR));
+}
+
+function handleListHomeEnd(e) {
+  if (e.key !== 'Home' && e.key !== 'End') return;
+  const target = e.target;
+  if (!target || !target.closest) return;
+  const container = target.closest(LIST_CONTAINER_SELECTORS);
+  if (!container) return;
+  const focusable = getFocusableElements(container);
+  if (focusable.length <= 1) return;
+  const index = focusable.indexOf(target);
+  if (index === -1) return;
+  if (e.key === 'Home') {
+    focusable[0].focus();
+    e.preventDefault();
+  } else if (e.key === 'End') {
+    focusable[focusable.length - 1].focus();
+    e.preventDefault();
+  }
+}
+
+document.addEventListener('keydown', handleListHomeEnd, true);
+
+// Start on welcome screen (toggle to showDashboardView() to open dashboard first)
 showScreen('welcome');
+// showDashboardView();

@@ -10,7 +10,7 @@ The app is built with accessibility in mind (WCAG 2.1 AA), including keyboard na
 
 - Dominique Rattray (Team Lead)
 - Ravichandra Vasireddy
-- Jordene Downer
+- Zechariah Hillman
 
 ## Team Charter
 
@@ -82,10 +82,36 @@ electron_app/
 From the `electron_app` directory:
 
 ```bash
+cd electron_app
+npm install
 npm test
 ```
 
-*(Note: Test suite is not yet configured. Add unit or E2E tests as needed.)*
+### Test commands
+
+| Command | Description |
+|---------|-------------|
+| `npm test` | Run all tests with coverage report |
+| `npm run test:watch` | Run tests in watch mode (re-runs on file changes) |
+| `npm run test:integration` | Run only integration tests (launches real Electron app) |
+
+### What gets tested
+
+- **Unit tests** — Auth flow, forms, dashboard navigation, IPC handlers
+- **Keyboard navigation tests** — Tab, Shift+Tab, Home, End, Enter, Space, skip link
+- **Integration tests (~10%)** — IPC communication (main ↔ renderer), window management
+- **Coverage** — Targets >90% line coverage (reported in terminal and `coverage/` folder)
+
+## Packaging for Windows
+
+See [PACKAGING.md](PACKAGING.md) for detailed instructions to build a Windows installer:
+
+```bash
+npm install --save-dev electron-builder
+npm run build
+```
+
+Output: `dist/CareConnect Setup 1.0.0.exe`
 
 ## Related Documentation
 
