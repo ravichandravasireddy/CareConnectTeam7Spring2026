@@ -502,13 +502,16 @@ document.addEventListener('keydown', handleListHomeEnd, true);
     script.onload = function () {
       if (typeof window.axe !== 'undefined') {
         window.runAxeCheck = function (context) {
-          window.axe.run(document, {}, function (err, results) {
-            if (err) throw err;
-            var label = 'Axe-core accessibility violations';
-            if (context) {
-              label += ' (' + context + ')';
-            }
-            console.log(label + ':', results.violations);
+          return new Promise(function (resolve, reject) {
+            window.axe.run(document, {}, function (err, results) {
+              if (err) return reject(err);
+              var label = 'Axe-core accessibility violations';
+              if (context) {
+                label += ' (' + context + ')';
+              }
+              console.log(label + ':', results.violations);
+              resolve(results);
+            });
           });
         };
         // initial run on first load
