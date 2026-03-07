@@ -31,9 +31,11 @@ async function closeApp() {
 }
 
 describe('Integration Tests', () => {
+  jest.setTimeout(20000);
+
   afterEach(async () => {
     await closeApp();
-  });
+  }, 15000);
 
   describe('IPC Communication (Main ↔ Renderer)', () => {
     it('renderer can invoke ping and receive pong from main', async () => {

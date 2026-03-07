@@ -42,6 +42,9 @@ function showScreen(name) {
   });
   const target = screens[name];
   if (target) {
+    if (typeof window.runAxeCheck === 'function') {
+      window.runAxeCheck('auth:' + name);
+    }
     announce(`${name} screen`);
   }
 }
@@ -96,6 +99,9 @@ function showDashboardScreen(name, patientId) {
     if (elName) elName.textContent = p.name;
     if (elMeta) elMeta.textContent = p.meta;
     if (elAvatar) elAvatar.textContent = p.initials;
+  }
+  if (typeof window.runAxeCheck === 'function') {
+    window.runAxeCheck('dashboard:' + name);
   }
   announce(`${name} screen`);
 }
@@ -485,6 +491,39 @@ function handleListHomeEnd(e) {
 
 document.addEventListener('keydown', handleListHomeEnd, true);
 
+// Axe-core accessibility testing (dev only; run after DOM is ready)
+(function runAxeInDev() {
+  var api = typeof window !== 'undefined' && window.electronAPI;
+  if (!api || !api.getIsDev) return;
+  api.getIsDev().then(function (isDev) {
+    if (!isDev) return;
+    var script = document.createElement('script');
+    script.src = 'axe.min.js';
+    script.onload = function () {
+      if (typeof window.axe !== 'undefined') {
+        window.runAxeCheck = function (context) {
+          return new Promise(function (resolve, reject) {
+            window.axe.run(document, {}, function (err, results) {
+              if (err) return reject(err);
+              var label = 'Axe-core accessibility violations';
+              if (context) {
+                label += ' (' + context + ')';
+              }
+              console.log(label + ':', results.violations);
+              resolve(results);
+            });
+          });
+        };
+        // initial run on first load
+        window.runAxeCheck('initial-load');
+      }
+    };
+    script.onerror = function () {
+      console.warn('Axe-core not loaded. Run: npm run copy-axe');
+    };
+    document.head.appendChild(script);
+  });
+})();
 // Start on welcome screen (toggle to showDashboardView() to open dashboard first)
 showScreen('welcome');
 // showDashboardView();

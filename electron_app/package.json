@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "electron .",
+    "copy-axe": "node -e \"require('fs').copyFileSync(require('path').join('node_modules','axe-core','axe.min.js'), require('path').join('renderer','axe.min.js'))\"",
+    "postinstall": "node -e \"try { require('fs').copyFileSync(require('path').join('node_modules','axe-core','axe.min.js'), require('path').join('renderer','axe.min.js')) } catch (e) {}\"",
     "test": "jest --coverage",
     "test:watch": "jest --watch --coverage",
     "build": "electron-builder --win",
     "build:portable": "electron-builder --win portable",
     "watch": "nodemon --exec electron . --watch electron_app/ --ext html,css,js",
-    "test:integration": "jest --testPathPattern=integration --testTimeout=20000"
+    "test:integration": "jest --testPathPattern=integration --testTimeout=20000",
+    "test:axe": "jest __tests__/axe.test.js --no-coverage --testTimeout=25000"
   },
   "build": {
     "appId": "com.careconnect.team7",
@@ -43,6 +46,7 @@
     "electron": "^39.2.7"
   },
   "devDependencies": {
+    "axe-core": "^4.10.2",
     "electron-builder": "^25.1.8",
     "jest": "^29.7.0",
     "jsdom": "^25.0.1",

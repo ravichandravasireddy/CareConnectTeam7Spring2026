@@ -21,6 +21,8 @@ function setupIpcHandlers() {
   });
 
   ipcMain.handle('ping', () => 'pong');
+
+  ipcMain.handle('get-is-dev', () => !app.isPackaged);
 }
 
 function createWindow() {

@@ -8,7 +8,9 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a href="#" class="skip-link" id="skip-link">Skip to main content</a>
+  <header class="app-header-global" role="banner">
+    <a href="#" class="skip-link" id="skip-link">Skip to main content</a>
+  </header>
   <main id="app" role="main">
     <!-- Auth View (Welcome, Sign In, Registration) -->
     <div id="auth-view" class="app-view" tabindex="-1">
@@ -31,7 +33,7 @@
     <!-- Role Selection Screen (between Welcome and Registration) -->
     <section id="screen-role" class="screen screen-role" aria-label="Choose your role" hidden>
       <button type="button" class="back-btn" id="role-back" aria-label="Go back">← Back</button>
-      <h2>Choose Your Role</h2>
+      <h1>Choose Your Role</h1>
       <p class="role-subtitle">How will you use CareConnect?</p>
       <div class="role-cards">
         <button type="button" class="role-card" id="role-patient" data-role="patient">
@@ -53,7 +55,7 @@
       <div class="logo-circle logo-small" aria-hidden="true">
         <span class="logo-icon" aria-hidden="true">♥</span>
       </div>
-      <h2>Welcome Back</h2>
+      <h1>Welcome Back</h1>
       <p class="signin-subtitle">Sign in to your CareConnect account</p>
       <form id="form-signin" class="auth-form" novalidate>
         <div class="field">
@@ -85,7 +87,7 @@
     <!-- Registration Screen -->
     <section id="screen-registration" class="screen screen-registration" aria-label="Create account" hidden>
       <button type="button" class="back-btn" id="reg-back" aria-label="Go back">← Back</button>
-      <h2>Join CareConnect</h2>
+      <h1>Join CareConnect</h1>
       <p class="reg-subtitle">Create your account to get started</p>
       <form id="form-registration" class="auth-form" novalidate>
         <div class="field-row">
@@ -141,7 +143,7 @@
 
     <!-- Dashboard View (Caregiver only) -->
     <div id="dashboard-view" class="app-view" hidden>
-      <header class="app-header" role="banner">
+      <header class="app-header">
         <div class="header-left">
           <div class="app-brand">
             <span class="logo-icon" aria-hidden="true">♥</span>
@@ -200,6 +202,7 @@
         <div class="dashboard-content">
           <!-- Screen: Caregiver Dashboard -->
           <section id="screen-dashboard" class="dashboard-screen" aria-label="Caregiver Dashboard">
+            <h1 class="dashboard-title">Caregiver Dashboard</h1>
             <p class="dashboard-greeting">Good morning, Dr. Smith</p>
             <p class="dashboard-date">Wednesday, February 18, 2026 • You have 3 critical alerts</p>
             <div class="stats-grid">
@@ -284,29 +287,29 @@
 
           <!-- Screen: Patients List -->
           <section id="screen-patients" class="dashboard-screen" aria-label="All Patients" hidden>
-            <h2 class="dashboard-greeting">All Patients</h2>
+            <h1 class="dashboard-greeting">All Patients</h1>
             <p class="dashboard-date">24 active patients under your care</p>
             <div class="patient-cards-grid">
-              <a href="#" class="patient-card" data-patient-id="john" aria-label="View John Doe details">
-                <span class="patient-avatar patient-avatar-lg">JD</span>
+              <a href="#" class="patient-card" data-patient-id="john" aria-label="View John Doe details. ID: 12345, Age: 72, Status: Normal">
+                <span class="patient-avatar patient-avatar-lg" aria-hidden="true">JD</span>
                 <div class="patient-card-info">
-                  <h3>John Doe</h3>
+                  <h2>John Doe</h2>
                   <p class="patient-card-meta">ID: 12345 • Age: 72</p>
                   <span class="badge badge-normal">Normal</span>
                 </div>
               </a>
-              <a href="#" class="patient-card" data-patient-id="mary" aria-label="View Mary Johnson details">
-                <span class="patient-avatar patient-avatar-lg">MJ</span>
+              <a href="#" class="patient-card" data-patient-id="mary" aria-label="View Mary Johnson details. ID: 12346, Age: 65, Status: Overdue">
+                <span class="patient-avatar patient-avatar-lg" aria-hidden="true">MJ</span>
                 <div class="patient-card-info">
-                  <h3>Mary Johnson</h3>
+                  <h2>Mary Johnson</h2>
                   <p class="patient-card-meta">ID: 12346 • Age: 65</p>
                   <span class="badge badge-overdue">Overdue</span>
                 </div>
               </a>
-              <a href="#" class="patient-card" data-patient-id="robert" aria-label="View Robert Smith details">
-                <span class="patient-avatar patient-avatar-lg">RS</span>
+              <a href="#" class="patient-card" data-patient-id="robert" aria-label="View Robert Smith details. ID: 12347, Age: 68, Status: Critical">
+                <span class="patient-avatar patient-avatar-lg" aria-hidden="true">RS</span>
                 <div class="patient-card-info">
-                  <h3>Robert Smith</h3>
+                  <h2>Robert Smith</h2>
                   <p class="patient-card-meta">ID: 12347 • Age: 68</p>
                   <span class="badge badge-critical">Critical</span>
                 </div>
@@ -323,7 +326,7 @@
                 <div class="patient-detail-identity">
                   <span class="patient-avatar patient-avatar-lg" id="patient-detail-avatar">RS</span>
                   <div>
-                    <h3 class="patient-detail-name" id="patient-detail-name">Robert Smith</h3>
+                    <h1 class="patient-detail-name" id="patient-detail-name">Robert Smith</h1>
                     <p class="patient-detail-meta" id="patient-detail-meta">ID: 12347 • Age: 68 • Male</p>
                   </div>
                 </div>
@@ -338,8 +341,8 @@
             <div class="patient-detail-layout">
               <div class="patient-detail-main">
                 <div class="alert-card alert-critical patient-detail-alert" role="alert">
-                  <h4>Critical: Heart Rate Abnormal</h4>
-                  <p>Current BPM: 125 • Last updated: 15 minutes ago</p>
+                  <span class="stat-value">Critical: Heart Rate Abnormal</span>
+                  <span class="stat-label">Current BPM: 125 • Last updated: 15 minutes ago</span>
                   <button type="button" class="btn btn-primary btn-sm">Contact Patient</button>
                 </div>
 
@@ -368,7 +371,7 @@
 
                 <div class="patient-detail-trends">
                   <div class="patient-detail-trends-header">
-                    <h3>Heart Rate Trends (Last 7 Days)</h3>
+                    <h2>Heart Rate Trends (Last 7 Days)</h2>
                     <div class="trend-period-btns">
                       <button type="button" class="btn btn-primary btn-sm">7 Days</button>
                       <button type="button" class="btn btn-secondary btn-sm">30 Days</button>
@@ -397,12 +400,12 @@
                 </div>
 
                 <div class="patient-detail-activity">
-                  <h3>Today's Activity Log</h3>
+                  <h2>Today's Activity Log</h2>
                   <ul class="activity-log-list">
                     <li class="activity-log-item activity-log-critical">
                       <span class="activity-log-icon" aria-hidden="true">♥</span>
                       <div>
-                        <h4>Heart Rate Alert</h4>
+                        <span class="activity-log-title">Heart Rate Alert</span>
                         <p>BPM exceeded 120 threshold</p>
                       </div>
                       <span class="activity-log-time">3:45 PM</span>
@@ -410,7 +413,7 @@
                     <li class="activity-log-item activity-log-success">
                       <span class="activity-log-icon" aria-hidden="true">✓</span>
                       <div>
-                        <h4>Medication Taken</h4>
+                        <span class="activity-log-title">Medication Taken</span>
                         <p>Afternoon dose completed</p>
                       </div>
                       <span class="activity-log-time">2:00 PM</span>
@@ -418,7 +421,7 @@
                     <li class="activity-log-item activity-log-info">
                       <span class="activity-log-icon" aria-hidden="true">◉</span>
                       <div>
-                        <h4>Vitals Recorded</h4>
+                        <span class="activity-log-title">Vitals Recorded</span>
                         <p>Blood pressure: 120/80 mmHg</p>
                       </div>
                       <span class="activity-log-time">10:30 AM</span>
@@ -427,9 +430,9 @@
                 </div>
               </div>
 
-              <aside class="patient-detail-sidebar">
+              <div class="patient-detail-sidebar">
                 <div class="detail-section">
-                  <h3>Patient Info</h3>
+                  <h2>Patient Info</h2>
                   <dl class="info-list">
                     <dt>Date of Birth</dt><dd>Jan 15, 1958</dd>
                     <dt>Gender</dt><dd>Male</dd>
@@ -438,15 +441,15 @@
                   </dl>
                 </div>
                 <div class="detail-section">
-                  <h3>Medications</h3>
+                  <h2>Medications</h2>
                   <div class="med-cards">
-                    <div class="med-card"><h4>Lisinopril</h4><p>10mg • Once daily • Morning</p></div>
-                    <div class="med-card"><h4>Metformin</h4><p>500mg • Twice daily • With meals</p></div>
-                    <div class="med-card"><h4>Aspirin</h4><p>81mg • Once daily • Morning</p></div>
+                    <div class="med-card"><strong>Lisinopril</strong><p>10mg • Once daily • Morning</p></div>
+                    <div class="med-card"><strong>Metformin</strong><p>500mg • Twice daily • With meals</p></div>
+                    <div class="med-card"><strong>Aspirin</strong><p>81mg • Once daily • Morning</p></div>
                   </div>
                 </div>
                 <div class="detail-section">
-                  <h3>Conditions</h3>
+                  <h2>Conditions</h2>
                   <div class="conditions-tags">
                     <span>Hypertension</span>
                     <span>Type 2 Diabetes</span>
@@ -454,17 +457,17 @@
                   </div>
                 </div>
                 <button type="button" class="btn btn-secondary btn-full">View Full Medical History</button>
-              </aside>
+              </div>
             </div>
           </section>
 
           <!-- Screen: Communication Center -->
           <section id="screen-communication" class="dashboard-screen" aria-label="Communication Center" hidden>
-            <h2>Communication Center</h2>
+            <h1>Communication Center</h1>
             <button type="button" class="btn btn-primary" id="btn-start-video">Start Video Call</button>
             <div class="communication-layout">
               <div class="message-list">
-                <h3>Messages</h3>
+                <h2>Messages</h2>
                 <button type="button" class="message-item active">
                   <span class="patient-avatar">JD</span>
                   <div>
