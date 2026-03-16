@@ -1,0 +1,158 @@
+.back-link {
+  display: inline-block;
+  margin-bottom: var(--space-4);
+  color: var(--color-primary-700);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.tab-nav {
+  display: flex;
+  gap: var(--space-1);
+  margin-bottom: var(--space-8);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.tab-nav__item {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-gray-600);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+
+.tab-nav__item:hover {
+  color: var(--color-gray-900);
+}
+
+.tab-nav__item--active {
+  color: var(--color-primary-700);
+  border-bottom-color: var(--color-primary-700);
+}
+
+.section {
+  margin-bottom: var(--space-8);
+}
+
+.section-title {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+
+.vitals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.vital-card {
+  background: white;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-gray-200);
+}
+
+.vital-card__status {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-success-700);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.vital-card__label {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+  margin-bottom: var(--space-1);
+}
+
+.vital-card__value {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-gray-900);
+}
+
+.trends-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.trend-item {
+  background: white;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-gray-200);
+}
+
+.trend-item__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.trend-item__label {
+  font-weight: 500;
+  color: var(--color-gray-900);
+}
+
+.trend-item__value {
+  font-weight: 600;
+  color: var(--color-primary-700);
+}
+
+.trend-item__bar {
+  height: 8px;
+  background: var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.trend-item__fill {
+  height: 100%;
+  background: var(--color-primary-600);
+  border-radius: var(--radius-sm);
+  transition: width 0.3s;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-4);
+}
+
+.achievement-card {
+  background: white;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-gray-200);
+}
+
+.achievement-card__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+
+.achievement-card__subtitle {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+}
+
+.placeholder {
+  color: var(--color-gray-500);
+  font-style: italic;
+}

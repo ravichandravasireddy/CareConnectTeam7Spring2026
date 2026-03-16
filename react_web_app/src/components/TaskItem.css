@@ -1,0 +1,37 @@
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-gray-200);
+}
+
+.task-item__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.task-item__title {
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+
+.task-item__patient {
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+}
+
+.task-item__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.task-item__time {
+  font-size: var(--text-sm);
+  color: var(--color-gray-600);
+}
