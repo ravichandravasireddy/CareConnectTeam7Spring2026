@@ -1,70 +1,98 @@
-# Getting Started with Create React App
+# React Web App (Vite)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project uses [Vite](https://vitejs.dev/) for fast development and optimized production builds.
+
+## Project Structure & Scaffolding
+
+### Initialized Project Structure
+
+```
+react_web_app/
+├── public/                 # Static assets
+│   ├── manifest.json
+│   ├── offline.html
+│   ├── robots.txt
+│   └── service-worker.js
+├── src/
+│   ├── components/         # Reusable UI components
+│   │   ├── Layout.jsx      # Main layout wrapper (renders Outlet for child routes)
+│   │   ├── Layout.css
+│   │   ├── OfflineBanner.jsx
+│   │   ├── PageMeta.jsx
+│   │   ├── PatientCard.jsx
+│   │   ├── StatCard.jsx
+│   │   ├── TaskItem.jsx
+│   │   ├── Icons.jsx
+│   │   └── Button.css
+│   ├── pages/              # Route-level page components
+│   │   ├── Dashboard.jsx
+│   │   ├── PatientDetails.jsx
+│   │   ├── Messages.jsx
+│   │   └── Login.jsx
+│   ├── App.jsx             # Root app + routing
+│   ├── main.jsx            # Entry point
+│   └── index.css           # Global styles
+├── index.html
+├── vite.config.js
+└── package.json
+```
+
+### Routing Setup
+
+Routes are defined in `App.jsx` using React Router:
+
+| Path | Component | Layout |
+|------|-----------|--------|
+| `/` | Dashboard | Layout |
+| `/patient/:id` | PatientDetails | Layout |
+| `/messages` | Messages | Layout |
+| `/login` | Login | (standalone) |
+
+The `Layout` component wraps Dashboard, PatientDetails, and Messages. Login renders without the layout.
+
+### Layout Component (Rendered in Browser)
+
+The `Layout` component (`src/components/Layout.jsx`) provides the shared shell for the app:
+
+- **OfflineBanner** – Shown when network is unavailable
+- **Skip link** – Accessibility: "Skip to main content"
+- **Main** – Renders child route content via `<Outlet />`
+
+Child routes (Dashboard, PatientDetails, Messages) render inside the `<main>` area. Run `npm run dev` and open http://localhost:5173 to see the Layout with Dashboard rendered.
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm run dev`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Runs the app in development mode.\
+Open [http://localhost:5173](http://localhost:5173) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The page will reload when you make changes.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the app for production to the `dist` folder.\
+The build is minified and optimized for deployment.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `npm run preview`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Serves the production build locally for testing before deployment.
 
-### `npm run eject`
+### `npm test`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Launches the test runner (Vitest) in interactive watch mode.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### `npm run test:run`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Runs tests once without watch mode (useful for CI).
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### `npm run test:ui`
+
+Launches the Vitest UI for a visual test interface.
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [Vite documentation](https://vitejs.dev/)
+- [React documentation](https://reactjs.org/)
