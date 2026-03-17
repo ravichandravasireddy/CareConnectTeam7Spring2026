@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import StatCard from '../components/StatCard'
 import PatientCard from '../components/PatientCard'
 import TaskItem from '../components/TaskItem'
+import PageMeta from '../components/PageMeta'
+import { VideoIcon, BellIcon } from '../components/Icons'
 import '../components/Button.css'
 import './Dashboard.css'
 
@@ -60,13 +62,26 @@ const tasks = [
 export default function Dashboard() {
   return (
     <>
+      <PageMeta
+        title="Caregiver Dashboard – CareConnect"
+        description="Monitor patients, track vitals, and manage care tasks with CareConnect."
+        path="/"
+      />
       <header role="banner" className="page-header">
         <div>
-          <h2 className="page-title">Caregiver Dashboard</h2>
-          <p className="page-subtitle">
-            Monitor multiple patients, track vitals, manage tasks, and receive real-time alerts.
-          </p>
+          <h1 className="page-title">Caregiver Dashboard</h1>
+          <p className="page-subtitle">Welcome back, Dr. Anderson</p>
         </div>
+        <nav aria-label="Dashboard actions" className="page-header__actions">
+          <button type="button" className="btn btn--primary" aria-label="Start video call">
+            <VideoIcon size={18} />
+            Start Video Call
+          </button>
+          <button type="button" className="btn btn--secondary" aria-label="View 2 alerts">
+            <BellIcon size={18} />
+            Alerts (2)
+          </button>
+        </nav>
       </header>
 
       <section aria-label="Quick statistics" className="stats-grid">
@@ -81,7 +96,7 @@ export default function Dashboard() {
 
       <section aria-label="Patient list" className="section">
         <div className="section-header">
-          <h3 className="section-title">Active Patients</h3>
+          <h2 className="section-title">Active Patients</h2>
           <Link to="/" className="link">View All</Link>
         </div>
         <div className="patient-grid">
@@ -92,7 +107,7 @@ export default function Dashboard() {
       </section>
 
       <section aria-label="Upcoming tasks" className="section">
-        <h3 className="section-title">Upcoming Tasks</h3>
+        <h2 className="section-title">Upcoming Tasks</h2>
         <div className="task-list" role="list">
           {tasks.map((task, i) => (
             <TaskItem

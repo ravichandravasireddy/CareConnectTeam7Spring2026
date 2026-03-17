@@ -1,6 +1,6 @@
 {
   "short_name": "CareConnect",
-  "name": "CareConnect - Caregiver Dashboard",
+  "name": "CareConnect",
   "description": "Caregiver dashboard for patient care management, vitals tracking, and HIPAA-compliant messaging",
   "categories": ["health", "medical"],
   "icons": [

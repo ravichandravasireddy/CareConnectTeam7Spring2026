@@ -1,13 +1,101 @@
-.back-link {
-  display: inline-block;
+.patient-details-header {
   margin-bottom: var(--space-4);
-  color: var(--color-primary-700);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-gray-700);
   font-weight: 500;
   text-decoration: none;
 }
 
 .back-link:hover {
-  text-decoration: underline;
+  color: var(--color-primary-700);
+}
+
+.patient-info-card {
+  background: white;
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-gray-200);
+  margin-bottom: var(--space-6);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  align-items: flex-start;
+}
+
+.patient-info-card__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-success-700);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--text-xl);
+  flex-shrink: 0;
+}
+
+.patient-info-card__main {
+  flex: 1;
+  min-width: 200px;
+}
+
+.patient-info-card__name {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-gray-900);
+}
+
+.patient-info-card__status {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 9999px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-4);
+}
+
+.patient-info-card__status--stable {
+  background: var(--color-success-600);
+  color: white;
+}
+
+.patient-info-card__status--attention {
+  background: var(--color-warning-600);
+  color: white;
+}
+
+.patient-info-card__details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-gray-600);
+  margin-bottom: var(--space-4);
+}
+
+.patient-info-card__details span {
+  display: block;
+  margin-bottom: var(--space-1);
+}
+
+.patient-info-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.patient-info-card__actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .tab-nav {
@@ -62,12 +150,37 @@
   border: 1px solid var(--color-gray-200);
 }
 
+.vital-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-2);
+}
+
+.vital-card__icon {
+  flex-shrink: 0;
+}
+
+.vital-card__icon--heart-rate {
+  color: var(--color-danger-600);
+}
+
+.vital-card__icon--blood-pressure {
+  color: var(--color-primary-700);
+}
+
+.vital-card__icon--blood-glucose {
+  color: var(--color-primary-500);
+}
+
+.vital-card__icon--weight {
+  color: var(--color-success-700);
+}
+
 .vital-card__status {
-  display: block;
   font-size: var(--text-xs);
   color: var(--color-success-700);
   font-weight: 600;
-  margin-bottom: var(--space-2);
 }
 
 .vital-card__label {
@@ -81,6 +194,12 @@
   font-size: var(--text-xl);
   font-weight: 700;
   color: var(--color-gray-900);
+}
+
+.vital-card__unit {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-gray-500);
 }
 
 .trends-list {
@@ -144,6 +263,27 @@
   font-size: var(--text-base);
   font-weight: 600;
   color: var(--color-gray-900);
+}
+
+@media (max-width: 640px) {
+  .patient-info-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .patient-info-card__details {
+    grid-template-columns: 1fr;
+  }
+
+  .patient-info-card__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .patient-info-card__actions .btn {
+    justify-content: center;
+  }
 }
 
 .achievement-card__subtitle {

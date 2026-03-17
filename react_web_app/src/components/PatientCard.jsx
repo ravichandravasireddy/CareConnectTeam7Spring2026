@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { MessageIcon } from './Icons'
 import './PatientCard.css'
 
 export default function PatientCard({ patient }) {
@@ -43,7 +44,7 @@ export default function PatientCard({ patient }) {
       </div>
       <div className="patient-card__actions">
         <Link
-          to={`/patients/${id}`}
+          to={`/patient/${id}`}
           className="btn btn--primary btn--sm"
           aria-label={`View details for ${name}`}
         >
@@ -54,6 +55,7 @@ export default function PatientCard({ patient }) {
           className="btn btn--secondary btn--sm"
           aria-label={`Message ${name}`}
         >
+          <MessageIcon size={14} />
           Message
         </Link>
       </div>

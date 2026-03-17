@@ -4,6 +4,13 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.stat-card__content {
+  flex: 1;
 }
 
 .stat-card__label {
@@ -17,4 +24,25 @@
   font-size: var(--text-2xl);
   font-weight: 700;
   color: var(--color-gray-900);
+}
+
+.stat-card__icon {
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.stat-card__icon--total-patients {
+  color: var(--color-primary-500);
+}
+
+.stat-card__icon--active-alerts {
+  color: var(--color-danger-600);
+}
+
+.stat-card__icon--avg-adherence {
+  color: var(--color-success-600);
+}
+
+.stat-card__icon--todays-tasks {
+  color: var(--color-success-600);
 }

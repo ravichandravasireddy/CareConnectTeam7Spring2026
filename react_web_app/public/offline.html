@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1e3a8a" />
+  <title>Offline – CareConnect</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: #f3f4f6;
+      color: #111827;
+      text-align: center;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    p { color: #6b7280; margin: 0 0 1rem; }
+    .sync-time { font-size: 0.875rem; color: #9ca3af; }
+  </style>
+</head>
+<body>
+  <h1>You are offline</h1>
+  <p>Limited functionality is available. Patient data and messages will sync when connectivity returns.</p>
+  <p class="sync-time" id="last-sync">Last synced: —</p>
+  <script>
+    try {
+      var stored = localStorage.getItem('careconnect-last-sync');
+      if (stored) {
+        document.getElementById('last-sync').textContent = 'Last synced: ' + new Date(stored).toLocaleString();
+      }
+    } catch (e) {}
+  </script>
+</body>
+</html>
