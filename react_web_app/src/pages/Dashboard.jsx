@@ -67,7 +67,7 @@ export default function Dashboard() {
         description="Monitor patients, track vitals, and manage care tasks with CareConnect."
         path="/"
       />
-      <header role="banner" className="page-header">
+      <header className="page-header">
         <div>
           <h1 className="page-title">Caregiver Dashboard</h1>
           <p className="page-subtitle">Welcome back, Dr. Anderson</p>
@@ -97,7 +97,7 @@ export default function Dashboard() {
       <section aria-label="Patient list" className="section">
         <div className="section-header">
           <h2 className="section-title">Active Patients</h2>
-          <Link to="/" className="link">View All</Link>
+          <Link to="/patients" className="link">View All</Link>
         </div>
         <div className="patient-grid">
           {patients.map((patient) => (

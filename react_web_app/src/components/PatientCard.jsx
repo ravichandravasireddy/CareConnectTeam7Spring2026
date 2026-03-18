@@ -12,9 +12,9 @@ export default function PatientCard({ patient }) {
       aria-label={`Patient: ${name}`}
     >
       <div className="patient-card__header">
-        <h3 className="patient-card__name">
+        <p className="patient-card__name">
           {name}, {age}
-        </h3>
+        </p>
         <span
           className={`patient-card__status patient-card__status--${status === 'Stable' ? 'stable' : 'attention'}`}
           role="status"

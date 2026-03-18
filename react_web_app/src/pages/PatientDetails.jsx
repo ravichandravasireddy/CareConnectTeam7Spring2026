@@ -91,7 +91,7 @@ export default function PatientDetails() {
         description="View vitals, medications, and activity history for your patient."
         path={`/patient/${id}`}
       />
-      <header role="banner" className="patient-details-header">
+      <header className="patient-details-header">
         <nav aria-label="Back navigation">
           <Link to="/" className="back-link" aria-label="Back to dashboard">
             <BackArrowIcon size={20} />

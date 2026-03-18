@@ -46,18 +46,22 @@ export default function Messages() {
         description="Send and receive HIPAA-compliant messages with patients and care teams."
         path="/messages"
       />
-      <div role="main" className="messages-layout">
-        <header role="banner" className="messages-page-header">
-          <nav aria-label="Back navigation">
-            <Link to="/" className="back-link" aria-label="Back to dashboard">
-              <BackArrowIcon size={20} />
-              Messages
-            </Link>
-          </nav>
-          <button type="button" className="btn btn--primary" aria-label="Start new message">
-            New Message
-          </button>
+      <div className="messages-layout">
+        <header>
+        <div>
+          <h1 className="messages-title">Messages</h1>
+        </div>
         </header>
+       <div className="messages-page-header">
+        <nav aria-label="Back navigation">
+          <Link to="/" className="back-link" aria-label="Back to dashboard">
+            <BackArrowIcon size={20} />
+          </Link>
+        </nav>
+        <button type="button" className="btn btn--primary" aria-label="Start new message">
+          New Message
+        </button>
+       </div>
 
         <div className="messages-container">
           <aside role="complementary" aria-label="Conversations list" className="conversations-sidebar">
@@ -75,39 +79,37 @@ export default function Messages() {
                 className="conversations-search__input"
               />
             </form>
-            <div role="list" className="conversations-list">
+            <ul className="conversations-list" aria-label="Conversations">
               {filteredConversations.map((conv) => (
-                <button
-                  key={conv.id}
-                  type="button"
-                  role="listitem"
-                  className={`conversation-item ${selectedConversation === conv.id ? 'conversation-item--active' : ''}`}
-                  onClick={() => setSelectedConversation(conv.id)}
-                  aria-label={`Conversation with ${conv.name}${conv.unread ? `, ${conv.unread} unread` : ''}`}
-                >
-                  <div className="conversation-item__avatar-wrap">
-                    <span className="conversation-item__avatar" aria-hidden="true">
-                      {getInitials(conv.name)}
-                    </span>
-                    {conv.online && (
-                      <span className="conversation-item__online" aria-hidden="true" />
-                    )}
-                  </div>
-                  <div className="conversation-item__content">
-                    <span className="conversation-item__name">{conv.name}</span>
-                    <span className="conversation-item__preview">{conv.lastMessage}</span>
-                </div>
-                  <div className="conversation-item__meta">
-                    <span className="conversation-item__time">{conv.time}</span>
-                    {conv.unread > 0 && (
-                      <span className="conversation-item__unread" aria-label={`${conv.unread} unread`}>
-                        {conv.unread}
+                <li key={conv.id}>
+                  <button
+                    type="button"
+                    className={`conversation-item ${selectedConversation === conv.id ? 'conversation-item--active' : ''}`}
+                    onClick={() => setSelectedConversation(conv.id)}
+                    aria-label={`Conversation with ${conv.name}${conv.unread ? `, ${conv.unread} unread` : ''}`}
+                  >
+                    <div className="conversation-item__avatar-wrap">
+                      <span className="conversation-item__avatar" aria-hidden="true">
+                        {getInitials(conv.name)}
                       </span>
-                    )}
-                  </div>
-                </button>
+                      {conv.online && <span className="conversation-item__online" aria-hidden="true" />}
+                    </div>
+                    <div className="conversation-item__content">
+                      <span className="conversation-item__name">{conv.name}</span>
+                      <span className="conversation-item__preview">{conv.lastMessage}</span>
+                    </div>
+                    <div className="conversation-item__meta">
+                      <span className="conversation-item__time">{conv.time}</span>
+                      {conv.unread > 0 && (
+                        <span className="conversation-item__unread" aria-label={`${conv.unread} unread`}>
+                          {conv.unread}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                </li>
               ))}
-            </div>
+            </ul>
           </aside>
 
           <section role="region" aria-label="Chat messages" className="chat-area">
