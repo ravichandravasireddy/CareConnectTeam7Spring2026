@@ -392,3 +392,27 @@
     max-width: 90%;
   }
 }
+
+/* Extra-small mobile adjustments (e.g. 375px wide) */
+@media (max-width: 375px) {
+  .messages-container {
+    min-height: 0;
+  }
+
+  /* Avoid overly-collapsing the conversation list on very small screens */
+  .conversations-sidebar {
+    max-height: none;
+  }
+
+  .chat-area {
+    min-height: 0;
+  }
+
+  .chat-header {
+    padding: var(--space-3);
+  }
+
+  .chat-footer {
+    padding: var(--space-3);
+  }
+}
