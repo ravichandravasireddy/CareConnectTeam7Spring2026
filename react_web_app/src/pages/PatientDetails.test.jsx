@@ -33,13 +33,13 @@ describe('PatientDetails', () => {
 
   it('switches to medications tab', () => {
     renderWithRoute('1');
-    fireEvent.click(screen.getByRole('button', { name: /Medications/i }));
+    fireEvent.click(screen.getByRole('tab', { name: /Medications/i }));
     expect(screen.getByText(/Medication schedule coming soon/i)).toBeInTheDocument();
   });
 
   it('switches to activity tab', () => {
     renderWithRoute('1');
-    fireEvent.click(screen.getByRole('button', { name: /Activity/i }));
+    fireEvent.click(screen.getByRole('tab', { name: /Activity/i }));
     expect(screen.getByText(/Activity timeline coming soon/i)).toBeInTheDocument();
   });
 
