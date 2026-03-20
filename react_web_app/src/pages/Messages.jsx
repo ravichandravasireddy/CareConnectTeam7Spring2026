@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import PageMeta from '../components/PageMeta'
 import { SearchIcon, PaperclipIcon, SendIcon, PhoneIcon, VideoIcon, MoreIcon, BackArrowIcon } from '../components/Icons'
@@ -31,6 +31,10 @@ export default function Messages() {
   const [messageInput, setMessageInput] = useState('')
   const [selectedConversation, setSelectedConversation] = useState('1')
   const [searchQuery, setSearchQuery] = useState('')
+  const conversationRefs = useRef({})
+  const searchInputRef = useRef(null)
+  const messageInputRef = useRef(null)
+  const shouldFocusMessage = useRef(false)
 
   const selected = conversations.find((c) => c.id === selectedConversation)
   const filteredConversations = searchQuery
@@ -38,6 +42,34 @@ export default function Messages() {
         c.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : conversations
+
+  // Focus the message input only on click/Enter selection, not Tab
+  useEffect(() => {
+    if (shouldFocusMessage.current) {
+      messageInputRef.current?.focus()
+      shouldFocusMessage.current = false
+    }
+  }, [selectedConversation])
+
+  const selectConversation = (id) => {
+    shouldFocusMessage.current = true
+    setSelectedConversation(id)
+  }
+
+  const handleConversationKeyDown = (e, convId) => {
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      searchInputRef.current?.focus()
+    }
+  }
+
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      setSearchQuery('')
+      searchInputRef.current?.blur()
+    }
+  }
 
   return (
     <>
@@ -76,37 +108,47 @@ export default function Messages() {
                 placeholder="Search messages..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                ref={searchInputRef}
                 className="conversations-search__input"
               />
             </form>
             <ul className="conversations-list" aria-label="Conversations">
               {filteredConversations.map((conv) => (
-                <li key={conv.id}>
-                  <button
-                    type="button"
-                    className={`conversation-item ${selectedConversation === conv.id ? 'conversation-item--active' : ''}`}
-                    onClick={() => setSelectedConversation(conv.id)}
-                    aria-label={`Conversation with ${conv.name}${conv.unread ? `, ${conv.unread} unread` : ''}`}
-                  >
-                    <div className="conversation-item__avatar-wrap">
-                      <span className="conversation-item__avatar" aria-hidden="true">
-                        {getInitials(conv.name)}
+              <li key={conv.id}>
+                <button
+                  key={conv.id}
+                  type="button"
+                  role="listitem"
+                  className={`conversation-item ${selectedConversation === conv.id ? 'conversation-item--active' : ''}`}
+                  onClick={() => selectConversation(conv.id)}
+                  onKeyDown={(e) => handleConversationKeyDown(e, conv.id)}
+                  ref={(el) => { conversationRefs.current[conv.id] = el }}
+                  tabIndex={0}
+                  aria-current={selectedConversation === conv.id ? 'true' : undefined}
+                  aria-label={`Conversation with ${conv.name}${conv.unread ? `, ${conv.unread} unread` : ''}`}
+                >
+                  <div className="conversation-item__avatar-wrap">
+                    <span className="conversation-item__avatar" aria-hidden="true">
+                      {getInitials(conv.name)}
+                    </span>
+                    {conv.online && (
+                      <span className="conversation-item__online" aria-hidden="true" />
+                    )}
+                  </div>
+                  <div className="conversation-item__content">
+                    <span className="conversation-item__name">{conv.name}</span>
+                    <span className="conversation-item__preview">{conv.lastMessage}</span>
+                </div>
+                  <div className="conversation-item__meta">
+                    <span className="conversation-item__time">{conv.time}</span>
+                    {conv.unread > 0 && (
+                      <span className="conversation-item__unread" aria-label={`${conv.unread} unread`}>
+                        {conv.unread}
                       </span>
-                      {conv.online && <span className="conversation-item__online" aria-hidden="true" />}
-                    </div>
-                    <div className="conversation-item__content">
-                      <span className="conversation-item__name">{conv.name}</span>
-                      <span className="conversation-item__preview">{conv.lastMessage}</span>
-                    </div>
-                    <div className="conversation-item__meta">
-                      <span className="conversation-item__time">{conv.time}</span>
-                      {conv.unread > 0 && (
-                        <span className="conversation-item__unread" aria-label={`${conv.unread} unread`}>
-                          {conv.unread}
-                        </span>
-                      )}
-                    </div>
-                  </button>
+                    )}
+                  </div>
+                </button>
                 </li>
               ))}
             </ul>
@@ -170,8 +212,9 @@ export default function Messages() {
                   placeholder="Type a message..."
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
+                  ref={messageInputRef}
                   className="message-input"
-              />
+                />
                 <button
                   type="submit"
                   className="chat-footer__send"

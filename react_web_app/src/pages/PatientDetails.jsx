@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import PageMeta from '../components/PageMeta'
 import { BackArrowIcon, VideoIcon, MessageIcon, PhoneIcon, HeartIcon, CircleIcon, DropletIcon, ScaleIcon } from '../components/Icons'
 import '../components/Button.css'
@@ -73,6 +73,16 @@ const patientData = {
 export default function PatientDetails() {
   const { id } = useParams()
   const [activeTab, setActiveTab] = useState('vitals')
+  const tabRefs = useRef({})
+  const panelRef = useRef(null)
+
+  const handleTabKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      panelRef.current?.focus()
+    }
+  }
+
   const patient = patientData[id] || {
     name: 'Patient',
     age: '',
@@ -141,23 +151,29 @@ export default function PatientDetails() {
         </div>
       </div>
 
-      <nav role="navigation" aria-label="Patient details tabs" className="tab-nav">
+      <div role="tablist" aria-label="Patient details tabs" className="tab-nav">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             type="button"
+            role="tab"
+            id={`tab-${tab.id}`}
+            aria-selected={activeTab === tab.id}
+            aria-controls={`tabpanel-${tab.id}`}
+            tabIndex={0}
             className={`tab-nav__item ${activeTab === tab.id ? 'tab-nav__item--active' : ''}`}
             onClick={() => setActiveTab(tab.id)}
-            aria-current={activeTab === tab.id ? 'page' : undefined}
+            onKeyDown={handleTabKeyDown}
+            ref={(el) => { tabRefs.current[tab.id] = el }}
           >
             {tab.label}
           </button>
         ))}
-      </nav>
+      </div>
 
       <main role="main">
         {activeTab === 'vitals' && (
-          <>
+          <div role="tabpanel" id="tabpanel-vitals" aria-labelledby="tab-vitals" tabIndex={0} ref={panelRef}>
             <section aria-label="Current vital signs" className="section">
               <h2 className="section-title">Current Vitals</h2>
               <div className="vitals-grid">
@@ -214,19 +230,23 @@ export default function PatientDetails() {
                 ))}
               </div>
             </section>
-          </>
+          </div>
         )}
 
         {activeTab === 'medications' && (
-          <section aria-label="Medication schedule" className="section">
-            <p className="placeholder">Medication schedule coming soon.</p>
-          </section>
+          <div role="tabpanel" id="tabpanel-medications" aria-labelledby="tab-medications" tabIndex={0} ref={panelRef}>
+            <section aria-label="Medication schedule" className="section">
+              <p className="placeholder">Medication schedule coming soon.</p>
+            </section>
+          </div>
         )}
 
         {activeTab === 'activity' && (
-          <section aria-label="Recent activity" className="section">
-            <p className="placeholder">Activity timeline coming soon.</p>
-          </section>
+          <div role="tabpanel" id="tabpanel-activity" aria-labelledby="tab-activity" tabIndex={0} ref={panelRef}>
+            <section aria-label="Recent activity" className="section">
+              <p className="placeholder">Activity timeline coming soon.</p>
+            </section>
+          </div>
         )}
       </main>
     </>
