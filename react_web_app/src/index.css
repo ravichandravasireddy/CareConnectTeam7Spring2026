@@ -125,9 +125,7 @@ a:focus:not(:focus-visible) {
 
 /* Offline banner - per PWA spec */
 .offline-banner {
-  position: sticky;
-  top: 0;
-  z-index: 60;
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-2);

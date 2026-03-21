@@ -1,0 +1,31 @@
+.simple-page-header {
+  margin-bottom: var(--space-6);
+}
+
+.simple-page-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-gray-900);
+}
+
+.simple-page-subtitle {
+  margin: 0;
+  font-size: var(--text-base);
+  color: var(--color-gray-600);
+}
+
+.simple-placeholder__card {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-6);
+}
+
+.simple-placeholder__text {
+  margin: 0;
+  color: var(--color-gray-700);
+  font-weight: 500;
+}
+

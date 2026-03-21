@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import PageMeta from '../components/PageMeta'
 import { SearchIcon, PaperclipIcon, SendIcon, PhoneIcon, VideoIcon, MoreIcon, BackArrowIcon } from '../components/Icons'
@@ -31,6 +31,10 @@ export default function Messages() {
   const [messageInput, setMessageInput] = useState('')
   const [selectedConversation, setSelectedConversation] = useState('1')
   const [searchQuery, setSearchQuery] = useState('')
+  const conversationRefs = useRef({})
+  const searchInputRef = useRef(null)
+  const messageInputRef = useRef(null)
+  const shouldFocusMessage = useRef(false)
 
   const selected = conversations.find((c) => c.id === selectedConversation)
   const filteredConversations = searchQuery
@@ -39,6 +43,34 @@ export default function Messages() {
       )
     : conversations
 
+  // Focus the message input only on click/Enter selection, not Tab
+  useEffect(() => {
+    if (shouldFocusMessage.current) {
+      messageInputRef.current?.focus()
+      shouldFocusMessage.current = false
+    }
+  }, [selectedConversation])
+
+  const selectConversation = (id) => {
+    shouldFocusMessage.current = true
+    setSelectedConversation(id)
+  }
+
+  const handleConversationKeyDown = (e, convId) => {
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      searchInputRef.current?.focus()
+    }
+  }
+
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      setSearchQuery('')
+      searchInputRef.current?.blur()
+    }
+  }
+
   return (
     <>
       <PageMeta
@@ -46,18 +78,22 @@ export default function Messages() {
         description="Send and receive HIPAA-compliant messages with patients and care teams."
         path="/messages"
       />
-      <div role="main" className="messages-layout">
-        <header role="banner" className="messages-page-header">
-          <nav aria-label="Back navigation">
-            <Link to="/" className="back-link" aria-label="Back to dashboard">
-              <BackArrowIcon size={20} />
-              Messages
-            </Link>
-          </nav>
-          <button type="button" className="btn btn--primary" aria-label="Start new message">
-            New Message
-          </button>
+      <div className="messages-layout">
+        <header>
+        <div>
+          <h1 className="messages-title">Messages</h1>
+        </div>
         </header>
+       <div className="messages-page-header">
+        <nav aria-label="Back navigation">
+          <Link to="/" className="back-link" aria-label="Back to dashboard">
+            <BackArrowIcon size={20} />
+          </Link>
+        </nav>
+        <button type="button" className="btn btn--primary" aria-label="Start new message">
+          New Message
+        </button>
+       </div>
 
         <div className="messages-container">
           <aside role="complementary" aria-label="Conversations list" className="conversations-sidebar">
@@ -72,17 +108,24 @@ export default function Messages() {
                 placeholder="Search messages..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                ref={searchInputRef}
                 className="conversations-search__input"
               />
             </form>
-            <div role="list" className="conversations-list">
+            <ul className="conversations-list" aria-label="Conversations">
               {filteredConversations.map((conv) => (
+              <li key={conv.id}>
                 <button
                   key={conv.id}
                   type="button"
                   role="listitem"
                   className={`conversation-item ${selectedConversation === conv.id ? 'conversation-item--active' : ''}`}
-                  onClick={() => setSelectedConversation(conv.id)}
+                  onClick={() => selectConversation(conv.id)}
+                  onKeyDown={(e) => handleConversationKeyDown(e, conv.id)}
+                  ref={(el) => { conversationRefs.current[conv.id] = el }}
+                  tabIndex={0}
+                  aria-current={selectedConversation === conv.id ? 'true' : undefined}
                   aria-label={`Conversation with ${conv.name}${conv.unread ? `, ${conv.unread} unread` : ''}`}
                 >
                   <div className="conversation-item__avatar-wrap">
@@ -106,8 +149,9 @@ export default function Messages() {
                     )}
                   </div>
                 </button>
+                </li>
               ))}
-            </div>
+            </ul>
           </aside>
 
           <section role="region" aria-label="Chat messages" className="chat-area">
@@ -168,8 +212,9 @@ export default function Messages() {
                   placeholder="Type a message..."
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
+                  ref={messageInputRef}
                   className="message-input"
-              />
+                />
                 <button
                   type="submit"
                   className="chat-footer__send"
