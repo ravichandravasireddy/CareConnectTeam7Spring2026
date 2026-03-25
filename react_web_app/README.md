@@ -1,8 +1,24 @@
-# React Web App (Vite)
+# CareConnect Team7 Spring2026 — React Web Application (Vite)
 
-This project uses [Vite](https://vitejs.dev/) for fast development and optimized production builds.
+## Description
+
+**CareConnect** is a HIPAA-compliant desktop application (Electron) that connects patients (care recipients) and their caregivers for remote health management and coordination. The website app mirrors the core flows of the desktop app: a caregiver dashboard with patient overview, patient detail, and communication center.
+
+The app is built with accessibility in mind (WCAG 2.1 AA), including keyboard navigation, high contrast colors, skip links, focus indicators, and screen reader support, so caregivers who are deaf or hard of hearing can manage tasks and coordinate care without relying on audio.
+
+## Team Members
+
+- Dominique Rattray (Team Lead)
+- Ravichandra Vasireddy
+- Zechariah Hillman
+
+## Team Charter
+
+Link: [Team Charter](https://docs.google.com/document/d/1xMF6upCBABr3dtR3aLjk2lLUWFN1IEbwB-vC6tYJCB8/edit?usp=sharing)
 
 ## Project Structure & Scaffolding
+
+This project uses [Vite](https://vitejs.dev/) for fast development and optimized production builds.
 
 ### Initialized Project Structure
 
