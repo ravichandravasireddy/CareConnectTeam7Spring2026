@@ -19,8 +19,8 @@ describe('Messages', () => {
       </MemoryRouter>
     );
     expect(screen.getAllByText(/Margaret Johnson/).length).toBeGreaterThan(0);
-    expect(screen.getByRole('listitem', { name: /Conversation with Robert Chen/ })).toBeInTheDocument();
-    expect(screen.getByRole('listitem', { name: /Conversation with Sarah Williams/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Conversation with Robert Chen/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Conversation with Sarah Williams/ })).toBeInTheDocument();
   });
 
   it('shows selected conversation in chat header', () => {
@@ -40,8 +40,8 @@ describe('Messages', () => {
     );
     const searchInput = screen.getByPlaceholderText(/Search messages/i);
     fireEvent.change(searchInput, { target: { value: 'Margaret' } });
-    expect(screen.getByRole('listitem', { name: /Conversation with Margaret Johnson/ })).toBeInTheDocument();
-    expect(screen.queryByRole('listitem', { name: /Conversation with Robert Chen/ })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Conversation with Margaret Johnson/ })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Conversation with Robert Chen/ })).not.toBeInTheDocument();
   });
 
   it('renders message history', () => {
@@ -71,7 +71,7 @@ describe('Messages', () => {
         <Messages />
       </MemoryRouter>
     );
-    fireEvent.click(screen.getByRole('listitem', { name: /Conversation with Robert Chen/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Conversation with Robert Chen/i }));
     expect(screen.getByRole('heading', { name: /Robert Chen/i })).toBeInTheDocument();
   });
 
@@ -81,7 +81,7 @@ describe('Messages', () => {
         <Messages />
       </MemoryRouter>
     );
-    fireEvent.click(screen.getByRole('listitem', { name: /Conversation with Dr. Patricia Lee/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Conversation with Dr. Patricia Lee/ }));
     expect(screen.getByText('Offline')).toBeInTheDocument();
   });
 
