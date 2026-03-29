@@ -26,15 +26,18 @@ module.exports = {
     "!scripts/**",
     "!**/_AI/**",
     "!**/.maestro/**",
-
+    "!**/models/TimelineEvent.ts",
+    "!**/screens/test-setup.ts",
 
   ],
+  // Primary gate: lines, statements, functions ≥ 90%. Branches stay lower (~87%):
+  // Istanbul counts both arms of `pressed && styles` on Pressables heavily in RN.
   coverageThreshold: {
     global: {
-      branches: 75,
-      functions: 75,
-      lines: 75,
-      statements: 75,
+      lines: 90,
+      statements: 90,
+      functions: 90,
+      branches: 87,
     },
   },
   coverageReporters: ["text", "lcov", "html"],

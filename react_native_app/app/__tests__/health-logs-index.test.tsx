@@ -73,10 +73,13 @@ jest.mock("@/components/app-bottom-nav-bar", () => {
 });
 
 const mockTypeColors = jest.fn(() => ({ bg: "#eee", fg: "#333" }));
+let mockLatestByType: Partial<
+  Record<import("@/models/HealthLog").HealthLogType, import("@/models/HealthLog").HealthLog>
+> = {};
 jest.mock("../../providers/HealthLogProvider", () => ({
   useHealthLogProvider: () => ({
     logs: [],
-    latestByType: {},
+    latestByType: mockLatestByType,
     typeColors: mockTypeColors,
   }),
 }));
@@ -84,6 +87,10 @@ jest.mock("../../providers/HealthLogProvider", () => ({
 import HealthLogsScreen from "../health-logs/index";
 
 describe("HealthLogsScreen", () => {
+  beforeEach(() => {
+    mockLatestByType = {};
+  });
+
   it("renders Add a Log and Quick Log", () => {
     render(<HealthLogsScreen />);
     expect(screen.getByText("Add a Log")).toBeTruthy();
@@ -112,5 +119,52 @@ describe("HealthLogsScreen", () => {
     // Should show "No Mood logged" or similar for types without logs
     const noLogTexts = screen.queryAllByText(/No .* logged/);
     expect(noLogTexts.length).toBeGreaterThan(0);
+  });
+
+  it("shows blood pressure category chip for latest BP log", () => {
+    mockLatestByType = {
+      [HealthLogType.bloodPressure]: {
+        id: "bp1",
+        type: HealthLogType.bloodPressure,
+        description: "Morning reading",
+        note: null,
+        createdAt: new Date(2026, 2, 28, 8, 30),
+        systolic: 118,
+        diastolic: 76,
+      },
+    };
+    render(<HealthLogsScreen />);
+    expect(screen.getByText("Normal")).toBeTruthy();
+  });
+
+  it("shows heart rate category chip for latest HR log", () => {
+    mockLatestByType = {
+      [HealthLogType.heartRate]: {
+        id: "hr1",
+        type: HealthLogType.heartRate,
+        description: "Resting",
+        createdAt: new Date(2026, 2, 28, 8, 0),
+        heartRateBpm: 72,
+      },
+    };
+    render(<HealthLogsScreen />);
+    expect(screen.getByText("Normal")).toBeTruthy();
+  });
+
+  it("shows note and water progress when latest water log has goal", () => {
+    mockLatestByType = {
+      [HealthLogType.water]: {
+        id: "w1",
+        type: HealthLogType.water,
+        description: "Intake",
+        note: "Feeling good",
+        createdAt: new Date(2026, 2, 28, 7, 0),
+        waterTotal: 48,
+        waterGoal: 64,
+      },
+    };
+    render(<HealthLogsScreen />);
+    expect(screen.getByText(/Feeling good/)).toBeTruthy();
+    expect(screen.getByText(/Goal: 64 oz/)).toBeTruthy();
   });
 });

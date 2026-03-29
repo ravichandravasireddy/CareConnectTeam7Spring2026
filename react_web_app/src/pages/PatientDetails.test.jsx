@@ -67,4 +67,13 @@ describe('PatientDetails', () => {
     expect(screen.getByRole('heading', { name: /Patient/ })).toBeInTheDocument();
     expect(screen.getByText(/Patient ID: —/)).toBeInTheDocument();
   });
+
+  it('Escape on tab moves focus to vitals panel', () => {
+    renderWithRoute('1');
+    const tab = screen.getByRole('tab', { name: /Vitals & Health/i });
+    const panel = document.getElementById('tabpanel-vitals');
+    tab.focus();
+    fireEvent.keyDown(tab, { key: 'Escape' });
+    expect(document.activeElement).toBe(panel);
+  });
 });

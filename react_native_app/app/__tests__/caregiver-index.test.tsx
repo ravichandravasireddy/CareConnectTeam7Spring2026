@@ -31,18 +31,53 @@ jest.mock("expo-linear-gradient", () => {
 });
 
 jest.mock("@/components/app-app-bar", () => ({
-  AppAppBar: ({ title }: { title: string }) => {
+  AppAppBar: ({
+    title,
+    onMenuPress,
+  }: {
+    title: string;
+    onMenuPress?: () => void;
+  }) => {
     const React = require("react");
-    const { Text, View } = require("react-native");
-    return React.createElement(View, { testID: "app-app-bar" }, React.createElement(Text, {}, title));
+    const { Text, View, Pressable } = require("react-native");
+    return React.createElement(
+      View,
+      { testID: "app-app-bar" },
+      React.createElement(Text, {}, title),
+      onMenuPress
+        ? React.createElement(
+            Pressable,
+            { onPress: onMenuPress, accessibilityLabel: "Open dashboard menu" },
+            React.createElement(Text, {}, "Menu"),
+          )
+        : null,
+    );
   },
 }));
 
 jest.mock("@/components/app-menu", () => {
   const React = require("react");
-  const { View } = require("react-native");
+  const { View, Text, Pressable } = require("react-native");
   return {
-    AppMenu: () => React.createElement(View, { testID: "app-menu" }),
+    AppMenu: ({
+      visible,
+      onClose,
+    }: {
+      visible?: boolean;
+      onClose?: () => void;
+    }) =>
+      visible
+        ? React.createElement(
+            View,
+            { testID: "app-menu-visible" },
+            React.createElement(Text, {}, "Menu open"),
+            React.createElement(
+              Pressable,
+              { onPress: onClose, accessibilityLabel: "Close menu" },
+              React.createElement(Text, {}, "Close"),
+            ),
+          )
+        : React.createElement(View, { testID: "app-menu-hidden" }),
   };
 });
 
@@ -75,9 +110,22 @@ jest.mock("@/providers/ThemeProvider", () => {
   };
 });
 
+const sampleTask = {
+  id: "care-task-1",
+  title: "Morning vitals",
+  description: "Check BP",
+  date: new Date(2026, 2, 28, 9, 0),
+  patientName: "Robert Williams",
+  icon: "medication" as const,
+  iconBackground: "#eee",
+  iconColor: "#333",
+};
+
+let mockCaregiverTasksForDay: typeof sampleTask[] = [];
+
 jest.mock("@/providers/TaskProvider", () => ({
   useTaskProvider: () => ({
-    getTasksForDate: () => [],
+    getTasksForDate: () => mockCaregiverTasksForDay,
   }),
 }));
 
@@ -86,6 +134,7 @@ import CaregiverDashboardScreen from "../caregiver/index";
 describe("CaregiverDashboardScreen", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockCaregiverTasksForDay = [];
   });
 
   describe("Rendering - Normal Cases", () => {
@@ -118,6 +167,12 @@ describe("CaregiverDashboardScreen", () => {
       expect(screen.getByText("Tasks")).toBeTruthy();
       expect(screen.getByText("Alerts")).toBeTruthy();
     });
+
+    it("shows empty state when there are no tasks today", () => {
+      mockCaregiverTasksForDay = [];
+      render(<CaregiverDashboardScreen />);
+      expect(screen.getByText("No tasks scheduled for today")).toBeTruthy();
+    });
   });
 
   describe("User Interactions", () => {
@@ -125,6 +180,15 @@ describe("CaregiverDashboardScreen", () => {
       render(<CaregiverDashboardScreen />);
       fireEvent.press(screen.getByText("Manage"));
       expect(mockRouter.push).toHaveBeenCalledWith("/caregiver/tasks");
+    });
+
+    it("menu button opens and closes app menu", () => {
+      render(<CaregiverDashboardScreen />);
+      expect(screen.getByTestId("app-menu-hidden")).toBeTruthy();
+      fireEvent.press(screen.getByLabelText("Open dashboard menu"));
+      expect(screen.getByTestId("app-menu-visible")).toBeTruthy();
+      fireEvent.press(screen.getByLabelText("Close menu"));
+      expect(screen.getByTestId("app-menu-hidden")).toBeTruthy();
     });
 
     it("Patients stat navigates to monitor", () => {
@@ -146,6 +210,35 @@ describe("CaregiverDashboardScreen", () => {
       const alertsCard = screen.getByLabelText(/Alerts.*1 unread/);
       fireEvent.press(alertsCard);
       expect(mockRouter.push).toHaveBeenCalledWith("/emergency-sos");
+    });
+
+    it("renders task cards when today has tasks and navigates on press", () => {
+      mockCaregiverTasksForDay = [sampleTask];
+      render(<CaregiverDashboardScreen />);
+      expect(screen.getByText("Morning vitals")).toBeTruthy();
+      fireEvent.press(
+        screen.getByLabelText(/Morning vitals.*Robert Williams/)
+      );
+      expect(mockRouter.push).toHaveBeenCalledWith({
+        pathname: "/task-details",
+        params: { taskId: "care-task-1" },
+      });
+    });
+
+    it("stat cards respond to pressIn for pressed style branch", () => {
+      render(<CaregiverDashboardScreen />);
+      const patientsCard = screen.getByLabelText(/Patients.*tap to view/);
+      fireEvent(patientsCard, "pressIn");
+      fireEvent(patientsCard, "pressOut");
+      const tasksCard = screen.getByLabelText("Tasks, tap to manage tasks");
+      fireEvent(tasksCard, "pressIn");
+      fireEvent(tasksCard, "pressOut");
+      const alertsCard = screen.getByLabelText(/Alerts.*1 unread/);
+      fireEvent(alertsCard, "pressIn");
+      fireEvent(alertsCard, "pressOut");
+      const manage = screen.getByText("Manage");
+      fireEvent(manage, "pressIn");
+      fireEvent(manage, "pressOut");
     });
   });
 

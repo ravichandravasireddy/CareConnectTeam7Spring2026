@@ -10,11 +10,14 @@ import { Text } from "react-native";
 import { UserProvider, useUser } from "../UserProvider";
 
 function Consumer({ label }: { label: string }) {
-  const { userRole, isPatient, setUserRole } = useUser();
+  const { userRole, isPatient, setUserRole, userName, userEmail, setUserInfo } =
+    useUser();
   return (
     <>
       <Text testID="role">{userRole}</Text>
       <Text testID="isPatient">{String(isPatient)}</Text>
+      <Text testID="userName">{userName ?? ""}</Text>
+      <Text testID="userEmail">{userEmail ?? ""}</Text>
       <Text testID="label">{label}</Text>
       <Text
         testID="set-caregiver"
@@ -27,6 +30,12 @@ function Consumer({ label }: { label: string }) {
         onPress={() => setUserRole("patient")}
       >
         Set patient
+      </Text>
+      <Text
+        testID="set-user-info"
+        onPress={() => setUserInfo("Jane Doe", "jane@example.com")}
+      >
+        Set user info
       </Text>
     </>
   );
@@ -94,6 +103,19 @@ describe("UserProvider", () => {
     fireEvent.press(screen.getByTestId("set-caregiver"));
     expect(screen.getByTestId("role").props.children).toBe("caregiver");
     expect(screen.getByTestId("isPatient").props.children).toBe("false");
+  });
+
+  it("setUserInfo updates name and email", () => {
+    render(
+      <UserProvider>
+        <Consumer label="info" />
+      </UserProvider>
+    );
+    expect(screen.getByTestId("userName").props.children).toBe("");
+    expect(screen.getByTestId("userEmail").props.children).toBe("");
+    fireEvent.press(screen.getByTestId("set-user-info"));
+    expect(screen.getByTestId("userName").props.children).toBe("Jane Doe");
+    expect(screen.getByTestId("userEmail").props.children).toBe("jane@example.com");
   });
 });
 

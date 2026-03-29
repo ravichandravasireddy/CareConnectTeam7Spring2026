@@ -79,6 +79,50 @@ describe('SignInScreen', () => {
     expect(onSignInSuccess).toHaveBeenCalledTimes(1);
   });
 
+  it('signs in as caregiver with demo credentials', () => {
+    const onSignInSuccess = jest.fn();
+    render(<SignInScreen onSignInSuccess={onSignInSuccess} />);
+
+    fireEvent.changeText(
+      screen.getByPlaceholderText('your.email@example.com'),
+      'caregiver@careconnect.demo',
+    );
+    fireEvent.changeText(
+      screen.getByPlaceholderText('Enter your password'),
+      'password123',
+    );
+    fireEvent.press(screen.getByLabelText('Sign in'));
+
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    expect(onSignInSuccess).toHaveBeenCalledWith('caregiver');
+  });
+
+  it('shows alert for invalid credentials after delay', () => {
+    render(<SignInScreen />);
+
+    fireEvent.changeText(
+      screen.getByPlaceholderText('your.email@example.com'),
+      'wrong@test.com',
+    );
+    fireEvent.changeText(
+      screen.getByPlaceholderText('Enter your password'),
+      'badpass',
+    );
+    fireEvent.press(screen.getByLabelText('Sign in'));
+
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    expect(Alert.alert).toHaveBeenCalledWith(
+      'Sign In Failed',
+      'Invalid email or password. Please check your credentials and try again.',
+    );
+  });
+
   it('shows validation errors for empty and invalid inputs', () => {
     render(<SignInScreen />);
 

@@ -174,6 +174,23 @@ void main() {
       expect(find.text('Health Timeline'), findsOneWidget);
     });
 
+    testWidgets('can navigate to health logs route', (tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      await pushRoute(tester, '/health-logs');
+
+      expect(find.text('Health Logs'), findsOneWidget);
+    });
+
+    testWidgets('can navigate to video call route', (tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      await pushRoute(tester, '/video-call');
+
+      expect(find.text('Robert Williams'), findsWidgets);
+      expect(find.text('Sarah Johnson'), findsOneWidget);
+    });
+
     testWidgets('can navigate to navigation hub route', (tester) async {
       await tester.pumpWidget(const MyApp());
 

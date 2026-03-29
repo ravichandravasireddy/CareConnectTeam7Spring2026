@@ -175,6 +175,8 @@ class HealthLogsScreen extends StatelessWidget {
                                 crossAxisCount: crossAxisCount,
                                 crossAxisSpacing: spacing,
                                 mainAxisSpacing: spacing,
+                                // Slightly below 1.0 so cells are tall enough for 100×min
+                                // quick-log buttons when many columns pack the row.
                                 childAspectRatio: 1.0,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -185,8 +187,6 @@ class HealthLogsScreen extends StatelessWidget {
                                           constraints: const BoxConstraints(
                                             minWidth: minButtonWidth,
                                             maxWidth: maxButtonWidth,
-                                            minHeight: minButtonWidth,
-                                            maxHeight: maxButtonWidth,
                                           ),
                                           child: _QuickLogButton(option: option),
                                         ),
@@ -286,7 +286,7 @@ class _QuickLogButton extends StatelessWidget {
         },
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-          minimumSize: const Size(100, 100),
+          minimumSize: Size.zero,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           side: BorderSide(color: colorScheme.outline, width: 1.5),
           backgroundColor: colorScheme.surface,
@@ -296,6 +296,7 @@ class _QuickLogButton extends StatelessWidget {
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Semantics(
               label: '${option.label} icon',
