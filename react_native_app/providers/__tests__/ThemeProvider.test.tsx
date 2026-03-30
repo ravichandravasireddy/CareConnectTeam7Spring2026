@@ -5,7 +5,13 @@
 // =============================================================================
 
 import React from "react";
-import { act, render, screen, fireEvent } from "@testing-library/react-native";
+import {
+  act,
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from "@testing-library/react-native";
 import { View, Text, TouchableOpacity } from "react-native";
 import { ThemeProvider, useTheme } from "../ThemeProvider";
 import { Colors } from "@/constants/theme";
@@ -55,6 +61,8 @@ function Consumer() {
 describe("ThemeProvider", () => {
   beforeEach(() => {
     getUseColorSchemeMock().mockReturnValue("light");
+    const AsyncStorage = require("@react-native-async-storage/async-storage");
+    AsyncStorage.getItem.mockImplementation(() => Promise.resolve(null));
   });
 
   describe("useTheme", () => {
@@ -113,6 +121,17 @@ describe("ThemeProvider", () => {
       );
       expect(screen.getByTestId("colorScheme").props.children).toBe("light");
       expect(screen.getByTestId("themeKey").props.children).toBe("light");
+    });
+
+    it("system preference resolves to dark when OS reports dark", () => {
+      getUseColorSchemeMock().mockReturnValue("dark");
+      render(
+        <ThemeProvider initialPreference="system">
+          <Consumer />
+        </ThemeProvider>
+      );
+      expect(screen.getByTestId("colorScheme").props.children).toBe("dark");
+      expect(screen.getByTestId("themeKey").props.children).toBe("dark");
     });
   });
 
@@ -181,6 +200,50 @@ describe("ThemeProvider", () => {
       expect(screen.getByTestId("background").props.children).toBe(
         Colors.highContrastDark.background
       );
+    });
+  });
+
+  describe("AsyncStorage hydration", () => {
+    it("applies dark preference loaded from storage", async () => {
+      const AsyncStorage = require("@react-native-async-storage/async-storage");
+      AsyncStorage.getItem.mockImplementation((key: string) => {
+        if (key === "careconnect.theme.preference") {
+          return Promise.resolve("dark");
+        }
+        if (key === "careconnect.theme.highContrast") {
+          return Promise.resolve("false");
+        }
+        return Promise.resolve(null);
+      });
+      render(
+        <ThemeProvider>
+          <Consumer />
+        </ThemeProvider>
+      );
+      await waitFor(() => {
+        expect(screen.getByTestId("colorScheme").props.children).toBe("dark");
+      });
+    });
+
+    it("applies high contrast when storage says true", async () => {
+      const AsyncStorage = require("@react-native-async-storage/async-storage");
+      AsyncStorage.getItem.mockImplementation((key: string) => {
+        if (key === "careconnect.theme.preference") {
+          return Promise.resolve("light");
+        }
+        if (key === "careconnect.theme.highContrast") {
+          return Promise.resolve("true");
+        }
+        return Promise.resolve(null);
+      });
+      render(
+        <ThemeProvider>
+          <Consumer />
+        </ThemeProvider>
+      );
+      await waitFor(() => {
+        expect(screen.getByTestId("highContrast").props.children).toBe("true");
+      });
     });
   });
 });

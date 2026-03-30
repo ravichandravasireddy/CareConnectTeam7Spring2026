@@ -61,7 +61,9 @@ describe("NavigationHubScreen", () => {
       render(<NavigationHubScreen />);
       expect(screen.getByText("Auth & onboarding")).toBeTruthy();
       expect(screen.getByText("Caregiver")).toBeTruthy();
+      expect(screen.getByText("Patient")).toBeTruthy();
       expect(screen.getByText("Shared & other")).toBeTruthy();
+      expect(screen.getByText("Settings")).toBeTruthy();
     });
 
     it("renders Welcome button", () => {
@@ -183,6 +185,37 @@ describe("NavigationHubScreen", () => {
       render(<NavigationHubScreen />);
       fireEvent.press(screen.getByText("Video Call"));
       expect(mockRouter.push).toHaveBeenCalledWith("/video-call");
+    });
+
+    it("Patient Dashboard calls router.push /patient", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Patient Dashboard"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/patient");
+    });
+
+    it("Patient Profile calls router.push /patient/profile", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Patient Profile"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/patient/profile");
+    });
+
+    it("Messaging Thread (Patient) calls router.push /patient/messages", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Messaging Thread (Patient)"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/patient/messages");
+    });
+
+    it("Preferences & Accessibility calls router.push /preferences-accessibility", () => {
+      render(<NavigationHubScreen />);
+      fireEvent.press(screen.getByText("Preferences & Accessibility"));
+      expect(mockRouter.push).toHaveBeenCalledWith("/preferences-accessibility");
+    });
+
+    it("NavButton pressIn/pressOut runs pressed style branch", () => {
+      render(<NavigationHubScreen />);
+      const btn = screen.getByLabelText("Welcome");
+      fireEvent(btn, "pressIn");
+      fireEvent(btn, "pressOut");
     });
   });
 

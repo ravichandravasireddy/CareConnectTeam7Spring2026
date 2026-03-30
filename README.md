@@ -10,7 +10,37 @@ The project specifically targets **hearing-impaired caregivers**. The Flutter UI
 ## Team Members
 - Dominique Rattray(Team Lead)
 - Ravichandra Vasireddy
-- Jordene Downer
+- Jordene Downer (1st half)
+- Zechariah Hillman (2nd half)
 
 ## TeamCharter
 Link: [Team Charter](https://docs.google.com/document/d/1xMF6upCBABr3dtR3aLjk2lLUWFN1IEbwB-vC6tYJCB8/edit?usp=sharing)
+
+## Apps in this repo
+
+### Mobile Apps
+
+#### Flutter Mobile App
+Flutter mobile app for HIPAA-compliant patient/caregiver remote care coordination. It includes shared onboarding (welcome/login/registration/role selection) and role-specific experiences like patient dashboards, caregiver dashboards, messaging, tasks, monitoring, notifications, notes, and video call. Designed specifically for hearing-impaired caregivers with accessibility-focused UI feedback.
+
+Platforms: Mobile (Android/iOS via Flutter)
+Readme: [flutter_app/README.md](./flutter_app/README.md)
+
+#### React Native Mobile App
+React Native mobile app (Expo) for HIPAA-compliant remote care coordination. It supports shared onboarding (welcome/login/registration/role selection) plus role-specific caregiver/patient experiences, including monitoring, tasks, analytics, and messaging. The app targets hearing-impaired caregivers with visual-only feedback (no audio dependency).
+
+Platforms: Mobile (Android and iOS via React Native/Expo)
+Readme: [react_native_app/README.md](./react_native_app/README.md)
+
+### Electron App for Windows OS
+Electron desktop app for HIPAA-compliant remote health management. It mirrors core mobile flows (welcome, role selection, sign in, registration) and provides a caregiver dashboard with patient overview/details and communication center, with accessibility support (e.g., keyboard navigation and screen reader support).
+
+Platforms: Desktop (Windows/macOS/Linux via Electron)
+Readme: [electron_app/README.md](./electron_app/README.md)
+
+### React Web App
+React web app (Vite) that provides browser-based patient/caregiver screens with React Router routing (e.g., dashboard, patient details, messages, and login). Useful for quickly accessing the experience from a web browser without installing a native app.
+
+Platforms: Web (any modern browser)
+Readme: [react_web_app/README.md](./react_web_app/README.md)
+

@@ -18,6 +18,7 @@ jest.mock('electron', () => ({
     getName: jest.fn(() => 'CareConnect'),
     getVersion: jest.fn(() => '1.0.0'),
     quit: jest.fn(),
+    isPackaged: false,
     whenReady: jest.fn().mockImplementation(() => Promise.resolve()),
     on: jest.fn((event, handler) => {
       if (event === 'window-all-closed') windowAllClosedHandler = handler;
@@ -61,6 +62,10 @@ describe('Main Process', () => {
 
     it('registers ping handler', () => {
       expect(ipcMain.handle).toHaveBeenCalledWith('ping', expect.any(Function));
+    });
+
+    it('registers get-is-dev handler', () => {
+      expect(ipcMain.handle).toHaveBeenCalledWith('get-is-dev', expect.any(Function));
     });
   });
 
@@ -138,11 +143,27 @@ describe('Main Process', () => {
       Object.defineProperty(process, 'platform', { value: originalPlatform, configurable: true });
     });
 
+    it('window-all-closed does not quit on darwin', () => {
+      const originalPlatform = process.platform;
+      app.quit.mockClear();
+      Object.defineProperty(process, 'platform', { value: 'darwin', configurable: true });
+      windowAllClosedHandler();
+      expect(app.quit).not.toHaveBeenCalled();
+      Object.defineProperty(process, 'platform', { value: originalPlatform, configurable: true });
+    });
+
     it('activate creates window when none exist', () => {
       BrowserWindow.getAllWindows.mockReturnValue([]);
       const callCountBefore = BrowserWindow.mock.calls.length;
       activateHandler();
       expect(BrowserWindow.mock.calls.length).toBe(callCountBefore + 1);
+    });
+
+    it('activate does not create window when windows already exist', () => {
+      BrowserWindow.getAllWindows.mockReturnValue([{}]);
+      const callCountBefore = BrowserWindow.mock.calls.length;
+      activateHandler();
+      expect(BrowserWindow.mock.calls.length).toBe(callCountBefore);
     });
   });
 
@@ -269,6 +290,37 @@ describe('Main Process', () => {
         title: 'Message',
         message: 'Test only',
       });
+    });
+
+    it('passes detail when provided', async () => {
+      await showMessageHandler({}, {
+        type: 'warning',
+        title: 'T',
+        message: 'M',
+        detail: 'Extra detail line',
+      });
+      const last = dialog.showMessageBox.mock.calls[dialog.showMessageBox.mock.calls.length - 1];
+      expect(last[1]).toMatchObject({ detail: 'Extra detail line' });
+    });
+  });
+
+  describe('get-is-dev handler', () => {
+    let getIsDevHandler;
+
+    beforeEach(() => {
+      const call = ipcMain.handle.mock.calls.find((c) => c[0] === 'get-is-dev');
+      getIsDevHandler = call ? call[1] : null;
+    });
+
+    it('returns true when app is not packaged', async () => {
+      app.isPackaged = false;
+      expect(await getIsDevHandler()).toBe(true);
+    });
+
+    it('returns false when app is packaged', async () => {
+      app.isPackaged = true;
+      expect(await getIsDevHandler()).toBe(false);
+      app.isPackaged = false;
     });
   });
 

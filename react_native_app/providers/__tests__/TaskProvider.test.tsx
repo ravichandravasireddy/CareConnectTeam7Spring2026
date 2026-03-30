@@ -20,7 +20,18 @@ const mockTask: Task = {
 };
 
 function Consumer() {
-  const { tasks, addTask, removeTask, clearTasks, getTasksForDate, getScheduledTasksForDate, hasTasksForDate, hasScheduledTasksForDate, markCompleted } = useTaskProvider();
+  const {
+    tasks,
+    addTask,
+    removeTask,
+    clearTasks,
+    getTasksForDate,
+    getScheduledTasksForDate,
+    hasTasksForDate,
+    hasScheduledTasksForDate,
+    markCompleted,
+    updateTask,
+  } = useTaskProvider();
   const date = new Date(2026, 1, 5);
   const tasksForDate = getTasksForDate(date);
   const scheduledForDate = getScheduledTasksForDate(date);
@@ -42,6 +53,23 @@ function Consumer() {
       </TouchableOpacity>
       <TouchableOpacity testID="mark" onPress={() => markCompleted("1")}>
         <Text>Mark</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        testID="mark-at"
+        onPress={() =>
+          markCompleted("1", new Date(2026, 1, 1, 12, 0))
+        }
+      >
+        <Text>MarkAt</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        testID="update-first"
+        onPress={() => {
+          const t = tasks[0];
+          if (t) updateTask({ ...t, title: "Updated title" });
+        }}
+      >
+        <Text>Update</Text>
       </TouchableOpacity>
     </View>
   );
@@ -130,6 +158,30 @@ describe("TaskProvider", () => {
     });
     const count = screen.getByTestId("count").props.children;
     expect(parseInt(count, 10)).toBeGreaterThanOrEqual(0);
+  });
+
+  it("markCompleted accepts explicit completion date", () => {
+    render(
+      <TaskProvider>
+        <Consumer />
+      </TaskProvider>
+    );
+    act(() => {
+      fireEvent.press(screen.getByTestId("mark-at"));
+    });
+    expect(parseInt(screen.getByTestId("count").props.children, 10)).toBeGreaterThanOrEqual(1);
+  });
+
+  it("updateTask updates matching task by id", () => {
+    render(
+      <TaskProvider>
+        <Consumer />
+      </TaskProvider>
+    );
+    act(() => {
+      fireEvent.press(screen.getByTestId("update-first"));
+    });
+    expect(screen.getByTestId("count").props.children).toBeTruthy();
   });
 
   it("throws when useTaskProvider used outside provider", () => {

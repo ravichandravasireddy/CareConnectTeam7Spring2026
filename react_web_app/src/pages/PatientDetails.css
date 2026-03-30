@@ -63,7 +63,7 @@
 }
 
 .patient-info-card__status--stable {
-  background: var(--color-success-600);
+  background: var(--color-success-700);
   color: white;
 }
 

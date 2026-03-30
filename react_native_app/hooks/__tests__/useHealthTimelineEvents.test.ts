@@ -220,4 +220,22 @@ describe("useHealthTimelineEvents", () => {
     renderHook(() => useHealthTimelineEvents());
     expect(mockCategoryColors).toHaveBeenCalledWith(NoteCategory.exercise);
   });
+
+  it.each([
+    [HealthLogType.symptoms, "monitor-heart"],
+    [HealthLogType.meals, "restaurant"],
+    [HealthLogType.water, "water-drop"],
+    [HealthLogType.exercise, "favorite"],
+    [HealthLogType.general, "description"],
+  ] as const)("maps health log type %s to icon %s", (type, expectedIcon) => {
+    mockLogs.push({
+      id: `icon-${type}`,
+      type,
+      description: "x",
+      createdAt: new Date(2026, 1, 5, 9, 0),
+    });
+    const { result } = renderHook(() => useHealthTimelineEvents());
+    expect(result.current[0].icon).toBe(expectedIcon);
+    mockLogs.length = 0;
+  });
 });

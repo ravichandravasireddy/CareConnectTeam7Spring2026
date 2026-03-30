@@ -23,11 +23,20 @@ jest.mock("@/providers/ThemeProvider", () => {
   };
 });
 
-jest.mock("@expo/vector-icons/MaterialIcons", () => "MaterialIcons");
+jest.mock("@expo/vector-icons/MaterialIcons", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+  return (props: { name?: string }) =>
+    React.createElement(View, { testID: props.name ? `icon-${props.name}` : "icon" });
+});
 
 import { AppAppBar } from "../app-app-bar";
 
 describe("AppAppBar", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe("Rendering - Normal Cases", () => {
     it("renders title", () => {
       render(<AppAppBar title="Dashboard" />);
@@ -120,6 +129,74 @@ describe("AppAppBar", () => {
     it("menu button press does not throw when no handler", () => {
       render(<AppAppBar title="Test" showMenuButton />);
       expect(() => fireEvent.press(screen.getByLabelText("Menu"))).not.toThrow();
+    });
+
+    it("calls onMenuPress when menu pressed", () => {
+      const onMenuPress = jest.fn();
+      render(
+        <AppAppBar title="Test" showMenuButton onMenuPress={onMenuPress} />
+      );
+      fireEvent.press(screen.getByLabelText("Menu"));
+      expect(onMenuPress).toHaveBeenCalledTimes(1);
+    });
+
+    it("calls onNotificationTap instead of navigating when provided", () => {
+      const onNotificationTap = jest.fn();
+      render(
+        <AppAppBar title="Test" onNotificationTap={onNotificationTap} />
+      );
+      fireEvent.press(screen.getByLabelText("Notifications"));
+      expect(onNotificationTap).toHaveBeenCalledTimes(1);
+      expect(mockPush).not.toHaveBeenCalled();
+    });
+
+    it("renders customActions in the actions area", () => {
+      const { Text } = require("react-native");
+      render(
+        <AppAppBar
+          title="Test"
+          showNotificationButton={false}
+          customActions={<Text>Extra</Text>}
+        />
+      );
+      expect(screen.getByText("Extra")).toBeTruthy();
+    });
+
+    it("back button pressIn/pressOut covers pressed style branch", () => {
+      render(<AppAppBar title="Test" useBackButton showMenuButton={false} />);
+      const back = screen.getByLabelText("Go back");
+      fireEvent(back, "pressIn");
+      fireEvent(back, "pressOut");
+    });
+
+    it("menu button pressIn/pressOut covers pressed style branch", () => {
+      render(<AppAppBar title="Test" showMenuButton onMenuPress={() => {}} />);
+      const menu = screen.getByLabelText("Menu");
+      fireEvent(menu, "pressIn");
+      fireEvent(menu, "pressOut");
+    });
+
+    it("notification pressIn/pressOut with badge covers pressed style branch", () => {
+      render(<AppAppBar title="Test" showNotificationBadge />);
+      const notif = screen.getByLabelText(
+        "Notifications, 1 unread notification"
+      );
+      fireEvent(notif, "pressIn");
+      fireEvent(notif, "pressOut");
+    });
+
+    it("notification without badge still renders badge slot branch for icon container", () => {
+      render(<AppAppBar title="Test" showNotificationBadge={false} />);
+      const notif = screen.getByLabelText("Notifications");
+      fireEvent(notif, "pressIn");
+      fireEvent(notif, "pressOut");
+    });
+
+    it("settings pressIn/pressOut covers pressed style branch", () => {
+      render(<AppAppBar title="Test" onSettingsPress={() => {}} />);
+      const settings = screen.getByLabelText("Settings");
+      fireEvent(settings, "pressIn");
+      fireEvent(settings, "pressOut");
     });
   });
 

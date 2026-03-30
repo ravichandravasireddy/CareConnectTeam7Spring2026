@@ -23,8 +23,13 @@ jest.mock('@/components/app-app-bar', () => {
       R.createElement(View, { testID: 'app-app-bar' }, title != null ? R.createElement(Text, {}, title) : null),
   };
 });
+const mockUseUser = jest.fn(() => ({
+  isPatient: true,
+  userName: null as string | null,
+}));
+
 jest.mock('@/providers/UserProvider', () => ({
-  useUser: () => ({ isPatient: true, userName: null }),
+  useUser: () => mockUseUser(),
   UserProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 jest.mock('@/components/app-bottom-nav-bar', () => {
@@ -40,9 +45,31 @@ jest.mock('@/components/app-bottom-nav-bar', () => {
 import MessagingThreadPatientScreen from '../MessagingThreadPatientScreen';
 
 describe('MessagingThreadPatientScreen', () => {
+  beforeEach(() => {
+    mockUseUser.mockReturnValue({ isPatient: true, userName: null });
+  });
+
   it('renders doctor name in header', () => {
     render(<MessagingThreadPatientScreen />);
 
     expect(screen.getByText('Dr. Sarah Johnson')).toBeTruthy();
+  });
+
+  it('uses custom userName from provider when set', () => {
+    mockUseUser.mockReturnValue({ isPatient: true, userName: 'Alex Patient' });
+    render(<MessagingThreadPatientScreen />);
+    expect(
+      screen.getByLabelText(/Alex Patient.*Thank you so much/)
+    ).toBeTruthy();
+    expect(screen.getByText('Dr. Sarah Johnson')).toBeTruthy();
+  });
+
+  it('uses caregiver naming when not patient', () => {
+    mockUseUser.mockReturnValue({ isPatient: false, userName: null });
+    render(<MessagingThreadPatientScreen />);
+    expect(screen.getByText('Robert Williams')).toBeTruthy();
+    expect(
+      screen.getByLabelText(/Dr\. Sarah Johnson.*Thank you so much/)
+    ).toBeTruthy();
   });
 });

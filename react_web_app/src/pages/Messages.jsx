@@ -115,11 +115,11 @@ export default function Messages() {
             </form>
             <ul className="conversations-list" aria-label="Conversations">
               {filteredConversations.map((conv) => (
-              <li key={conv.id}>
+              <li key={conv.id} role="listitem">
                 <button
                   key={conv.id}
                   type="button"
-                  role="listitem"
+                  
                   className={`conversation-item ${selectedConversation === conv.id ? 'conversation-item--active' : ''}`}
                   onClick={() => selectConversation(conv.id)}
                   onKeyDown={(e) => handleConversationKeyDown(e, conv.id)}

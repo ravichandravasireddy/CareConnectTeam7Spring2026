@@ -59,4 +59,22 @@ describe('OfflineBanner', () => {
       expect(screen.getByText(/Last synced:/i)).toBeInTheDocument();
     });
   });
+
+  it('hides banner when connection is restored', async () => {
+    Object.defineProperty(window, 'navigator', {
+      value: { ...originalNavigator, onLine: false },
+      configurable: true,
+    });
+    render(<OfflineBanner />);
+    await waitFor(() => {
+      expect(screen.getByText(/You are offline/i)).toBeInTheDocument();
+    });
+    act(() => {
+      Object.defineProperty(window.navigator, 'onLine', { value: true, configurable: true });
+      window.dispatchEvent(new Event('online'));
+    });
+    await waitFor(() => {
+      expect(screen.queryByRole('status', { name: /You are offline/i })).not.toBeInTheDocument();
+    });
+  });
 });

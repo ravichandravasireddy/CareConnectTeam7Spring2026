@@ -11,9 +11,12 @@ let document;
 let window;
 
 function loadApp(options = {}) {
-  const { withElectronAPI = true } = options;
+  const { withElectronAPI = true, stubRunAxe = false, htmlPatches = [] } = options;
   const htmlPath = path.join(__dirname, '../renderer/index.html');
-  const html = fs.readFileSync(htmlPath, 'utf8');
+  let html = fs.readFileSync(htmlPath, 'utf8');
+  htmlPatches.forEach(([from, to]) => {
+    html = html.replace(from, to);
+  });
   const htmlWithoutApp = html.replace('<script src="app.js"></script>', '');
 
   const dom = new JSDOM(htmlWithoutApp, {
@@ -24,6 +27,10 @@ function loadApp(options = {}) {
   window = dom.window;
   global.document = document;
   global.window = window;
+
+  if (stubRunAxe) {
+    window.runAxeCheck = jest.fn();
+  }
 
   if (withElectronAPI) {
     window.electronAPI = {
@@ -184,6 +191,135 @@ describe('Sign In Screen', () => {
   });
 });
 
+describe('Renderer DOM edge cases', () => {
+  it('showScreen skips missing screen nodes', () => {
+    loadApp({
+      htmlPatches: [
+        [
+          /<!-- Role Selection Screen \(between Welcome and Registration\) -->[\s\S]*?<\/section>\s*\n\s*<!-- Sign In Screen -->/,
+          '<!-- Sign In Screen -->',
+        ],
+      ],
+    });
+    expect(() => document.getElementById('btn-get-started').click()).not.toThrow();
+  });
+
+  it('navigation works when status-announce element is missing', () => {
+    loadApp({
+      htmlPatches: [
+        ['<div id="status-announce" aria-live="polite" aria-atomic="true" class="sr-only" role="status"></div>', ''],
+      ],
+    });
+    expect(() => document.getElementById('btn-get-started').click()).not.toThrow();
+  });
+
+  it('sign-in validation skips setting email error when error node is missing', () => {
+    loadApp({
+      htmlPatches: [
+        ['<span class="field-error" id="signin-email-error" aria-live="polite"></span>', ''],
+      ],
+    });
+    document.getElementById('btn-sign-in').click();
+    document.getElementById('form-signin').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+    expect(document.getElementById('signin-password-error').textContent).toContain('required');
+  });
+
+  it('invalid sign-in skips password error text when error node is missing', (done) => {
+    loadApp({
+      htmlPatches: [
+        ['<span class="field-error" id="signin-password-error" aria-live="polite"></span>', ''],
+      ],
+    });
+    document.getElementById('btn-sign-in').click();
+    document.getElementById('signin-email').value = 'notreal@test.com';
+    document.getElementById('signin-password').value = 'bad';
+    document.getElementById('form-signin').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+
+    setTimeout(() => {
+      expect(document.getElementById('status-announce').textContent).toContain('Invalid');
+      done();
+    }, 700);
+  });
+
+  it('registration omits email error text when error node is missing', () => {
+    loadApp({
+      htmlPatches: [
+        ['<span class="field-error" id="reg-email-error" aria-live="polite"></span>', ''],
+      ],
+    });
+    document.getElementById('btn-get-started').click();
+    document.getElementById('role-patient').click();
+    document.getElementById('reg-email').value = 'bad';
+    document.getElementById('reg-password').value = 'password123';
+    document.getElementById('reg-confirm').value = 'password123';
+    document.getElementById('reg-terms').checked = true;
+    document.getElementById('form-registration').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+    expect(document.getElementById('status-announce').textContent).toContain('validation failed');
+  });
+
+  it('registration omits terms error text when error node is missing', () => {
+    loadApp({
+      htmlPatches: [
+        ['<span class="field-error" id="reg-terms-error" aria-live="polite"></span>', ''],
+      ],
+    });
+    document.getElementById('btn-get-started').click();
+    document.getElementById('role-patient').click();
+    document.getElementById('reg-email').value = 'ok@test.com';
+    document.getElementById('reg-password').value = 'password123';
+    document.getElementById('reg-confirm').value = 'password123';
+    document.getElementById('form-registration').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+    expect(document.getElementById('status-announce').textContent).toContain('validation failed');
+  });
+
+  it('registration omits confirm error text when error node is missing', () => {
+    loadApp({
+      htmlPatches: [
+        ['<span class="field-error" id="reg-confirm-error" aria-live="polite"></span>', ''],
+      ],
+    });
+    document.getElementById('btn-get-started').click();
+    document.getElementById('role-patient').click();
+    document.getElementById('reg-email').value = 'ok@test.com';
+    document.getElementById('reg-password').value = 'password123';
+    document.getElementById('reg-confirm').value = 'different';
+    document.getElementById('reg-terms').checked = true;
+    document.getElementById('form-registration').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+    expect(document.getElementById('status-announce').textContent).toContain('validation failed');
+  });
+});
+
+describe('electronAPI without invoke', () => {
+  beforeEach(() => {
+    const htmlPath = path.join(__dirname, '../renderer/index.html');
+    const html = fs.readFileSync(htmlPath, 'utf8');
+    const htmlWithoutApp = html.replace('<script src="app.js"></script>', '');
+    const dom = new JSDOM(htmlWithoutApp, {
+      url: 'file://' + path.join(__dirname, '../renderer/'),
+    });
+    document = dom.window.document;
+    window = dom.window;
+    global.document = document;
+    global.window = window;
+    window.electronAPI = {
+      onMenuAction: (cb) => {
+        window.__menuActionCallback = cb;
+      },
+    };
+    window.alert = jest.fn();
+    global.alert = window.alert;
+    jest.isolateModules(() => {
+      require('../renderer/app.js');
+    });
+  });
+
+  it('forgot password uses alert when invoke is not exposed', () => {
+    document.getElementById('btn-sign-in').click();
+    document.getElementById('btn-forgot-password').click();
+    expect(window.alert).toHaveBeenCalledWith('Forgot password feature coming soon');
+  });
+});
+
 describe('Fallback when electronAPI not available', () => {
   beforeEach(() => {
     loadApp({ withElectronAPI: false });
@@ -253,6 +389,14 @@ describe('Registration Screen', () => {
     expect(document.getElementById('screen-signin').hidden).toBe(false);
   });
 
+  it('Back from registration returns to sign-in when opened from sign-in', () => {
+    document.getElementById('reg-back').click();
+    document.getElementById('btn-sign-in').click();
+    document.getElementById('signin-to-register').click();
+    document.getElementById('reg-back').click();
+    expect(document.getElementById('screen-signin').hidden).toBe(false);
+  });
+
   it('validates password length', () => {
     document.getElementById('reg-email').value = 'test@test.com';
     document.getElementById('reg-password').value = 'short';
@@ -260,6 +404,15 @@ describe('Registration Screen', () => {
     document.getElementById('reg-terms').checked = true;
     document.getElementById('form-registration').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
     expect(document.getElementById('reg-password-error').textContent).toContain('8 characters');
+  });
+
+  it('validates empty password on registration', () => {
+    document.getElementById('reg-email').value = 'test@test.com';
+    document.getElementById('reg-password').value = '';
+    document.getElementById('reg-confirm').value = '';
+    document.getElementById('reg-terms').checked = true;
+    document.getElementById('form-registration').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+    expect(document.getElementById('reg-password-error').textContent).toContain('required');
   });
 
   it('validates empty confirm password', () => {
@@ -295,6 +448,48 @@ describe('Registration Screen', () => {
     document.getElementById('reg-confirm').value = 'password123';
     document.getElementById('form-registration').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
     expect(document.getElementById('reg-terms-error').textContent).toContain('agree');
+  });
+
+  it('registers with empty email using default email in success message', (done) => {
+    document.getElementById('reg-email').value = '';
+    document.getElementById('reg-password').value = 'password123';
+    document.getElementById('reg-confirm').value = 'password123';
+    document.getElementById('reg-terms').checked = true;
+    const invokeSpy = jest.fn().mockResolvedValue({});
+    window.electronAPI.invoke = invokeSpy;
+    document.getElementById('form-registration').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+
+    setTimeout(() => {
+      expect(invokeSpy).toHaveBeenCalledWith(
+        'show-message',
+        expect.objectContaining({
+          message: expect.stringContaining('patient.user@careconnect.demo'),
+        })
+      );
+      done();
+    }, 900);
+  });
+
+  it('registers as caregiver with empty email uses caregiver default email', (done) => {
+    document.getElementById('reg-back').click();
+    document.getElementById('role-caregiver').click();
+    document.getElementById('reg-email').value = '';
+    document.getElementById('reg-password').value = 'password123';
+    document.getElementById('reg-confirm').value = 'password123';
+    document.getElementById('reg-terms').checked = true;
+    const invokeSpy = jest.fn().mockResolvedValue({});
+    window.electronAPI.invoke = invokeSpy;
+    document.getElementById('form-registration').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+
+    setTimeout(() => {
+      expect(invokeSpy).toHaveBeenCalledWith(
+        'show-message',
+        expect.objectContaining({
+          message: expect.stringContaining('caregiver.user@careconnect.demo'),
+        })
+      );
+      done();
+    }, 900);
   });
 
   it('registers successfully and navigates to signin', (done) => {
@@ -365,6 +560,16 @@ describe('Dashboard Navigation', () => {
     setTimeout(() => {
       document.querySelector('[data-screen="messages"]').click();
       expect(document.getElementById('screen-communication').hidden).toBe(false);
+      expect(document.getElementById('breadcrumb-text').textContent).toContain('Communication');
+      done();
+    }, 700);
+  });
+
+  it('sidebar video nav opens communication screen (handleNavClick video branch)', (done) => {
+    signIn();
+    setTimeout(() => {
+      document.querySelector('[data-screen="video"]').click();
+      expect(document.getElementById('screen-communication').hidden).toBe(false);
       done();
     }, 700);
   });
@@ -386,6 +591,17 @@ describe('Dashboard Navigation', () => {
       document.querySelector('[data-screen="patients"]').click();
       document.querySelector('.patient-card[data-patient-id="mary"]').click();
       document.getElementById('patient-detail-back').click();
+      expect(document.getElementById('screen-patients').hidden).toBe(false);
+      done();
+    }, 700);
+  });
+
+  it('patient detail breadcrumb Patients control returns to list', (done) => {
+    signIn();
+    setTimeout(() => {
+      document.querySelector('[data-screen="patients"]').click();
+      document.querySelector('.patient-card[data-patient-id="john"]').click();
+      document.getElementById('breadcrumb-patients').click();
       expect(document.getElementById('screen-patients').hidden).toBe(false);
       done();
     }, 700);
@@ -477,6 +693,54 @@ describe('Menu Actions (electronAPI)', () => {
   it('onMenuAction ignores unknown action without error', () => {
     const cb = window.__menuActionCallback;
     expect(() => cb('unknown-action')).not.toThrow();
+  });
+
+  it('onMenuAction go-schedule and go-reports work from dashboard', (done) => {
+    document.getElementById('btn-sign-in').click();
+    document.getElementById('signin-email').value = 'caregiver@careconnect.demo';
+    document.getElementById('signin-password').value = 'password123';
+    document.getElementById('form-signin').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+
+    setTimeout(() => {
+      const cb = window.__menuActionCallback;
+      cb('go-schedule');
+      expect(document.getElementById('screen-dashboard').hidden).toBe(false);
+      cb('go-reports');
+      expect(document.getElementById('screen-dashboard').hidden).toBe(false);
+      cb('go-messages');
+      expect(document.getElementById('screen-communication').hidden).toBe(false);
+      done();
+    }, 700);
+  });
+});
+
+describe('runAxeCheck integration', () => {
+  beforeEach(() => {
+    loadApp({ stubRunAxe: true });
+  });
+
+  it('calls runAxeCheck on initial welcome screen when stubbed', () => {
+    expect(window.runAxeCheck).toHaveBeenCalledWith('auth:welcome');
+  });
+
+  it('calls runAxeCheck when auth screen changes', () => {
+    window.runAxeCheck.mockClear();
+    document.getElementById('btn-get-started').click();
+    expect(window.runAxeCheck).toHaveBeenCalledWith('auth:role');
+  });
+
+  it('calls runAxeCheck when dashboard screen changes', (done) => {
+    document.getElementById('btn-sign-in').click();
+    document.getElementById('signin-email').value = 'caregiver@careconnect.demo';
+    document.getElementById('signin-password').value = 'password123';
+    document.getElementById('form-signin').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+
+    setTimeout(() => {
+      window.runAxeCheck.mockClear();
+      document.querySelector('[data-screen="patients"]').click();
+      expect(window.runAxeCheck).toHaveBeenCalledWith('dashboard:patients');
+      done();
+    }, 700);
   });
 });
 

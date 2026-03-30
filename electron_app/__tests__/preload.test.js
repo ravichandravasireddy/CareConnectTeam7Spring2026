@@ -95,5 +95,21 @@ describe('Preload (electronAPI)', () => {
       await expect(exposedAPI.invoke('require')).rejects.toThrow('Invalid IPC channel');
       await expect(exposedAPI.invoke('child_process')).rejects.toThrow('Invalid IPC channel');
     });
+
+    it('invokes get-is-dev channel', async () => {
+      mockIpcRenderer.invoke.mockResolvedValue(true);
+      const result = await exposedAPI.invoke('get-is-dev');
+      expect(mockIpcRenderer.invoke).toHaveBeenCalledWith('get-is-dev');
+      expect(result).toBe(true);
+    });
+  });
+
+  describe('getIsDev', () => {
+    it('delegates to ipcRenderer.invoke get-is-dev', async () => {
+      mockIpcRenderer.invoke.mockResolvedValue(false);
+      const result = await exposedAPI.getIsDev();
+      expect(mockIpcRenderer.invoke).toHaveBeenCalledWith('get-is-dev');
+      expect(result).toBe(false);
+    });
   });
 });

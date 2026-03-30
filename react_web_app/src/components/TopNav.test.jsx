@@ -71,4 +71,70 @@ describe('TopNav', () => {
     });
     expect(promptSpy).toHaveBeenCalled();
   });
+
+  it('hides Install button after appinstalled event', async () => {
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <TopNav />
+      </MemoryRouter>
+    );
+    const ev = new CustomEvent('beforeinstallprompt');
+    ev.preventDefault = vi.fn();
+    ev.prompt = vi.fn().mockResolvedValue(undefined);
+    ev.userChoice = Promise.resolve({ outcome: 'accepted' });
+    await act(async () => {
+      window.dispatchEvent(ev);
+    });
+    expect(screen.getByRole('button', { name: /Install CareConnect/i })).toBeInTheDocument();
+    await act(async () => {
+      window.dispatchEvent(new Event('appinstalled'));
+    });
+    expect(screen.queryByRole('button', { name: /Install CareConnect/i })).not.toBeInTheDocument();
+  });
+
+  it('registers display-mode change listener on matchMedia', async () => {
+    let changeHandler;
+    const mql = {
+      matches: false,
+      media: '(display-mode: standalone)',
+      addEventListener: vi.fn((event, cb) => {
+        if (event === 'change') changeHandler = cb;
+      }),
+      removeEventListener: vi.fn(),
+    };
+    window.matchMedia = vi.fn(() => mql);
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <TopNav />
+      </MemoryRouter>
+    );
+    expect(mql.addEventListener).toHaveBeenCalledWith('change', expect.any(Function));
+    await act(async () => {
+      changeHandler?.();
+    });
+  });
+
+  it('still completes install when userChoice rejects', async () => {
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <TopNav />
+      </MemoryRouter>
+    );
+    const promptSpy = vi.fn().mockResolvedValue(undefined);
+    const ev = new CustomEvent('beforeinstallprompt');
+    ev.preventDefault = vi.fn();
+    ev.prompt = promptSpy;
+    Object.defineProperty(ev, 'userChoice', {
+      get: () => Promise.reject(new Error('unsupported')),
+    });
+    await act(async () => {
+      window.dispatchEvent(ev);
+    });
+    const installBtn = screen.getByRole('button', { name: /Install CareConnect/i });
+    await act(async () => {
+      fireEvent.click(installBtn);
+    });
+    expect(promptSpy).toHaveBeenCalled();
+  });
 });

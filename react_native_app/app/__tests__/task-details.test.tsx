@@ -10,9 +10,11 @@ const mockRouter = {
   push: jest.fn(),
   replace: jest.fn(),
 };
+
+let mockSearchParams: { taskId?: string } = { taskId: "task-1" };
 jest.mock("expo-router", () => ({
   useRouter: () => mockRouter,
-  useLocalSearchParams: () => ({ taskId: "task-1" }),
+  useLocalSearchParams: () => mockSearchParams,
 }));
 
 jest.mock("react-native-safe-area-context", () => {
@@ -44,8 +46,12 @@ const mockTask = {
   iconColor: "#333",
 };
 const mockMarkCompleted = jest.fn();
+let mockTasksList: (typeof mockTask)[] = [mockTask];
 jest.mock("@/providers/TaskProvider", () => ({
-  useTaskProvider: () => ({ tasks: [mockTask], markCompleted: mockMarkCompleted }),
+  useTaskProvider: () => ({
+    tasks: mockTasksList,
+    markCompleted: mockMarkCompleted,
+  }),
 }));
 
 jest.mock("@/providers/ThemeProvider", () => {
@@ -61,6 +67,8 @@ import TaskDetailsScreen from "../task-details";
 describe("TaskDetailsScreen", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockSearchParams = { taskId: "task-1" };
+    mockTasksList = [mockTask];
   });
 
   describe("Rendering - Normal Cases", () => {
@@ -126,6 +134,66 @@ describe("TaskDetailsScreen", () => {
     it("renders task-1 when taskId is task-1", () => {
       render(<TaskDetailsScreen />);
       expect(screen.getByText("Metformin 500mg")).toBeTruthy();
+    });
+
+    it("shows empty state when there are no tasks", () => {
+      mockTasksList = [];
+      render(<TaskDetailsScreen />);
+      expect(screen.getByText("No task selected")).toBeTruthy();
+    });
+
+    it("uses first task when taskId is missing", () => {
+      mockSearchParams = {};
+      render(<TaskDetailsScreen />);
+      expect(screen.getByText("Metformin 500mg")).toBeTruthy();
+    });
+
+    it("falls back to first task when taskId does not match", () => {
+      mockSearchParams = { taskId: "missing" };
+      render(<TaskDetailsScreen />);
+      expect(screen.getByText("Metformin 500mg")).toBeTruthy();
+    });
+
+    it("omits patient row when patientName is empty", () => {
+      mockTasksList = [{ ...mockTask, patientName: "" }];
+      render(<TaskDetailsScreen />);
+      expect(screen.queryByText("Patient")).toBeNull();
+    });
+
+    it("omits patient row when patientName is undefined", () => {
+      const task = { ...mockTask };
+      delete (task as { patientName?: string }).patientName;
+      mockTasksList = [task];
+      render(<TaskDetailsScreen />);
+      expect(screen.queryByText("Patient")).toBeNull();
+    });
+
+    it("shows completed banner when task has completedAt", () => {
+      mockTasksList = [
+        { ...mockTask, completedAt: new Date(2026, 1, 7, 10, 0) },
+      ];
+      render(<TaskDetailsScreen />);
+      expect(screen.getByText("Completed")).toBeTruthy();
+      expect(screen.queryByText("Mark as Complete")).toBeNull();
+    });
+
+    it("calls markCompleted when marking an incomplete task", () => {
+      render(<TaskDetailsScreen />);
+      fireEvent.press(screen.getByLabelText("Mark task as complete"));
+      expect(mockMarkCompleted).toHaveBeenCalledWith("task-1");
+    });
+
+    it("Mark complete and outline buttons hit pressed style branches", () => {
+      render(<TaskDetailsScreen />);
+      const complete = screen.getByLabelText("Mark task as complete");
+      fireEvent(complete, "pressIn");
+      fireEvent(complete, "pressOut");
+      const snooze = screen.getByText("Snooze");
+      fireEvent(snooze, "pressIn");
+      fireEvent(snooze, "pressOut");
+      const skip = screen.getByText("Skip Today");
+      fireEvent(skip, "pressIn");
+      fireEvent(skip, "pressOut");
     });
   });
 

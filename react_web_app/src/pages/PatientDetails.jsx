@@ -171,7 +171,7 @@ export default function PatientDetails() {
         ))}
       </div>
 
-      <main role="main">
+      <div className="patient-details-content">
         {activeTab === 'vitals' && (
           <div role="tabpanel" id="tabpanel-vitals" aria-labelledby="tab-vitals" tabIndex={0} ref={panelRef}>
             <section aria-label="Current vital signs" className="section">
@@ -248,7 +248,7 @@ export default function PatientDetails() {
             </section>
           </div>
         )}
-      </main>
+      </div>
     </>
   )
 }

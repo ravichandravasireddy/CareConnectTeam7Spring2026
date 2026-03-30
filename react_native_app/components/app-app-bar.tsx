@@ -54,7 +54,11 @@ export function AppAppBar({
 
   const handleBack = () => router.back();
   const handleNotificationPress = () => {
-    (onNotificationTap ?? (() => router.push(NOTIFICATIONS_ROUTE as any)))();
+    if (onNotificationTap) {
+      onNotificationTap();
+      return;
+    }
+    router.push(NOTIFICATIONS_ROUTE as any);
   };
   const handleMenuPress = () => {
     if (onMenuPress) {

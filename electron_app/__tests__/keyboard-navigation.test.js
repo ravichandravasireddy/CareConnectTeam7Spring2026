@@ -194,6 +194,18 @@ describe('Keyboard Navigation', () => {
       expect(document.activeElement).toBe(focusable[focusable.length - 1]);
     });
 
+    it('Home/End returns when active element has no closest function', () => {
+      const loose = document.createElement('div');
+      loose.tabIndex = 0;
+      document.body.appendChild(loose);
+      Object.defineProperty(loose, 'closest', { value: undefined, configurable: true });
+      loose.focus();
+      const evH = dispatchKeyDocument('Home');
+      const evE = dispatchKeyDocument('End');
+      expect(evH.defaultPrevented).toBe(false);
+      expect(evE.defaultPrevented).toBe(false);
+    });
+
     it('Home/End does nothing when focus is outside list containers', () => {
       const btn = document.getElementById('btn-get-started');
       btn.focus();
@@ -202,6 +214,42 @@ describe('Keyboard Navigation', () => {
       dispatchKeyDocument('Home');
       dispatchKeyDocument('End');
       expect(document.activeElement).toBe(beforeFocus);
+    });
+
+    it('Home does not move focus when list has only one focusable item', () => {
+      const dashboardView = document.getElementById('dashboard-view');
+      const authView = document.getElementById('auth-view');
+      authView.hidden = true;
+      dashboardView.hidden = false;
+
+      const grid = document.querySelector('.stats-grid');
+      const only = document.createElement('button');
+      only.type = 'button';
+      only.textContent = 'Only';
+      grid.appendChild(only);
+      only.focus();
+      const before = document.activeElement;
+
+      dispatchKeyDocument('Home');
+      expect(document.activeElement).toBe(before);
+    });
+
+    it('Home does nothing when focused element is inside container but not focusable-listed', () => {
+      const dashboardView = document.getElementById('dashboard-view');
+      const authView = document.getElementById('auth-view');
+      authView.hidden = true;
+      dashboardView.hidden = false;
+
+      const sidebarNav = document.querySelector('.sidebar-nav');
+      const orphan = document.createElement('div');
+      orphan.setAttribute('tabindex', '-1');
+      sidebarNav.appendChild(orphan);
+      orphan.focus();
+
+      const before = document.activeElement;
+      const ev = dispatchKeyDocument('Home');
+      expect(document.activeElement).toBe(before);
+      expect(ev.defaultPrevented).toBe(false);
     });
 
     it('Home/End does nothing for non-Home/End keys', () => {
